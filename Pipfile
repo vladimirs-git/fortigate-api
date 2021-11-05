@@ -1,0 +1,17 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[packages]
+requests = "2.26.0"
+jupyter = "1.0.0"
+
+[dev-packages]
+coverage = "*"
+mypy = "*"
+pylint = "*"
+pytest = "6.2.5"
+
+[requires]
+python_version = "3.8"
