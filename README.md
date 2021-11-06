@@ -10,14 +10,10 @@ pip install fortigate-api
 ## Known objects
 This package implements create/delete/get/update actions with the following objects. 
 If you want to manipulate objects not in this list, 
-you need to know REST API URL and use [Generic Methods](#Generic Methods).
-You can also ask the author to add the required object to this package.
+you need to know REST API URL and use [Universal Object](#Universal Object).
 
-    Object Name         URL to object on Fortigate GUI v6.4
+    Object Name         GUI and REST API URL to object, FortiOS v6.4
     =================   ======================================================================
-    Object              Universal object, process any Fortigate object pointed by REST API URL
-                        https://hostname/api/v2/cmdb/...
-
     Address             https://hostname/ng/firewall/address
                         https://hostname/api/v2/cmdb/firewall/address/
     AddressGroup        https://hostname/ng/firewall/address
@@ -48,6 +44,12 @@ You can also ask the author to add the required object to this package.
                         https://hostname/api/v2/cmdb/firewall/vip/
     Zone                https://hostnae/ng/interface
                         https://hostname/api/v2/cmdb/system/zone/
+
+## Universal Object
+    Object Name         REST API URL to object
+    =================   ======================================================================
+    Object              Process any Fortigate object pointed by REST API URL
+                        https://hostname/api/v2/cmdb/...
 
 ## Actions for any object
     Action  REST API    Description
@@ -119,16 +121,16 @@ addresses = fgt.address.get(filters=["name=@172.0.0.", "type==ipmask"])
 ### Create address
 ```pycon
 data = dict(type="ipmask", name="172.0.0.100/30", subnet="172.0.0.100 255.255.255.252")
-response = fgt.create_address(data=data)
+response = fgt.address.create(data=data)
 ```
 
 ### Update address
 ```pycon
 data = dict(name="172.0.0.100/30", comment="some description")
-response = fgt.update_address(data=data)
+response = fgt.address.update(data=data)
 ```
 
 ### Delete one address
 ```pycon
-response = fgt.delete_address(name="172.0.0.100/30")
+response = fgt.address.delete(name="172.0.0.100/30")
 ```

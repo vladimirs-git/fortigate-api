@@ -1,9 +1,9 @@
 """Package setup"""
 
-import os
 from distutils.core import setup
+import os
 
-VERSION = os.environ.get("CI_COMMIT_TAG", "0.0.1")
+VERSION = os.environ.get("CI_COMMIT_TAG", "0.0.3")
 PACKAGE = "fortigate-api"
 PACKAGE_ = "fortigate_api"
 URL = "https://github.com/vladimirs-git"
