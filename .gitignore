@@ -133,6 +133,4 @@ dmypy.json
 # Temp
 tmp/
 temp/
-github/
-gitlab/
-tests/
+tools/

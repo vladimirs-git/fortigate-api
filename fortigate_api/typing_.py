@@ -1,7 +1,9 @@
 """Typing"""
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, Iterable, List, Union
 
 DAny = Dict[str, Any]
-StrInt = Union[str, int]
+IStr = Iterable[str]
 LStr = List[str]
+StrInt = Union[str, int]
+
 LDAny = List[DAny]

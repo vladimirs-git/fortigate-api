@@ -95,25 +95,25 @@ fgt = FortigateAPI(host="hostname", username="admin", password="secret",
 
 ### Get all addresses
 ```pycon
-addresses = fgt.get_address()
+addresses = fgt.address.get()
 ```
 
 ### Get one address by name
 ```pycon
-address = fgt.get_address(name="172.0.0.100/30")
+address = fgt.address.get(name="172.0.0.100/30")
 ```
 
 ### Get addresses by one param
 "==" - name is equal to string
 ```pycon
-addresses = fgt.get_address(filter="name==172.0.0.100/30")
+addresses = fgt.address.get(filter="name==172.0.0.100/30")
 ```
 
 ### Get addresses by multiple params
 "=@" - name contains string
 "==" - type is equal to string
 ```pycon
-addresses = fgt.get_address(filters=["name=@172.0.0.", "type==ipmask"])
+addresses = fgt.address.get(filters=["name=@172.0.0.", "type==ipmask"])
 ```
 
 ### Create address
