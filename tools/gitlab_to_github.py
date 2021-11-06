@@ -6,11 +6,11 @@ import shutil
 
 import fortigate_api as packet
 from fortigate_api.typing_ import IStr
-from setup import PACKAGE_
+from setup import PACKAGE, PACKAGE_
 
 ROOT = os.path.split(pathlib.Path(__file__).parent.resolve())[0]
 VERSION = packet.__version__
-GITHUB_URL = "https://github.com/vladimirs-git"
+GITHUB_URL = f"https://github.com/vladimirs-git/{PACKAGE}"
 EMAIL = "vladimir.prusakovs@gmail.com"
 
 README = f"""## Installation
