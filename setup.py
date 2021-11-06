@@ -1,37 +1,41 @@
 """Package setup"""
 
-from distutils.core import setup
 import os
+import pathlib
 
-VERSION = os.environ.get("CI_COMMIT_TAG", "0.0.3")
-PACKAGE = "fortigate-api"
-PACKAGE_ = "fortigate_api"
-URL = "https://github.com/vladimirs-git"
-DOWNLOAD_URL = f"{URL}/archive/refs/tags/{VERSION}.tar.gz"
+from setuptools import setup  # type: ignore
 
-if __name__ == '__main__':
+import fortigate_api as packet
+
+PACKAGE = packet.__title__
+PACKAGE_ = packet.__title__.lower().replace("-", "_")  # PEP 503 normalization
+ROOT = pathlib.Path(__file__).parent.resolve()
+
+if __name__ == "__main__":
     setup(
         name=PACKAGE_,
         packages=[PACKAGE_],
-        version=VERSION,
-        license="MIT",
-        description="Fortigate API",
-        author="Vladimir Prusakov",
-        author_email="vprusakovs@evolution.com",
-        url=f"{URL}/{PACKAGE}",
-        download_url=DOWNLOAD_URL,
-        keywords=["fortigate", "api", "fortios"],
+        version=os.environ.get("CI_COMMIT_TAG", packet.__version__),
+        license=packet.__license__,
+        description=packet.__summary__,
+        long_description=(ROOT / "README.md").read_text(encoding="utf-8"),
+        long_description_content_type="text/markdown",
+        author=packet.__author__,
+        author_email=packet.__email__,
+        url=f"{packet.__url__}/{packet.__title__}",
+        download_url=packet.__download_url__,
+        keywords="fortigate, api, fortios, firewall, networking, telecommunication",
+        python_requires=">=3.8",
         install_requires=["requests"],
         classifiers=[
-            # How mature is this project? Common values are
-            #   3 - Alpha
-            #   4 - Beta
-            #   5 - Production/Stable
-            "Development Status :: 3 - Alpha",
+            # "Development Status :: 3 - Alpha",
+            "Development Status :: 4 - Beta",
+            # "Development Status :: 5 - Production/Stable",
             "Intended Audience :: Developers",
-            "Topic :: Software Development :: Build Tools",
+            "Intended Audience :: System Administrators",
+            "Intended Audience :: Telecommunications Industry",
+            "Topic :: System :: Networking :: Firewalls",
             "License :: OSI Approved :: MIT License",
-            "Programming Language :: Python :: 3",
             "Programming Language :: Python :: 3.8",
         ],
     )

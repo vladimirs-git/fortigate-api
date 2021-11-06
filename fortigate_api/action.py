@@ -5,7 +5,7 @@ from __future__ import annotations
 from abc import abstractmethod
 from urllib.parse import urlencode
 
-from requests import Response
+from requests import Response  # type: ignore
 
 from fortigate_api import helper
 from fortigate_api.typing_ import DAny, LDAny

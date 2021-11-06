@@ -1,5 +1,5 @@
 # fortigate-api
-Python package to configure Fortigate (Fortios) devices using REST API.
+Python package to configure Fortigate (Fortios) devices using REST API
 
 
 ## Installation

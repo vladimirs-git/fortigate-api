@@ -5,13 +5,14 @@ verify_ssl = true
 
 [packages]
 requests = "2.26.0"
-jupyter = "1.0.0"
 
 [dev-packages]
 coverage = "*"
+jupyter = "1.0.0"
 mypy = "*"
 pylint = "*"
 pytest = "6.2.5"
+twine = "==3.4.2"
 
 [requires]
 python_version = "3.8"

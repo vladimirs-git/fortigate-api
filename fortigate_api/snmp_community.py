@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from typing import List
 
-from requests import Response
+from requests import Response  # type: ignore
 
 from fortigate_api import helper
 from fortigate_api.action import Action
-from fortigate_api.typing_ import DAny, LDAny
+from fortigate_api.typing_ import DAny, LDAny, StrInt
 
 
 class SnmpCommunity(Action):
@@ -21,7 +21,7 @@ class SnmpCommunity(Action):
         return self._create(url="api/v2/cmdb/system.snmp/community/", data=data)
 
     # noinspection PyShadowingBuiltins
-    def delete(self, id: int) -> Response:  # pylint: disable=redefined-builtin
+    def delete(self, id: StrInt) -> Response:  # pylint: disable=redefined-builtin
         """Delete snmp-community-object from Fortigate
         :param id: id of snmp-community-object
         :return: session response"""

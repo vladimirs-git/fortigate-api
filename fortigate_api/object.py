@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from requests import Response
+from requests import Response  # type: ignore
 
 from fortigate_api.action import Action
 from fortigate_api.typing_ import DAny, LDAny

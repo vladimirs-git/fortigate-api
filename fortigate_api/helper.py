@@ -5,14 +5,16 @@ from urllib.parse import quote
 from fortigate_api.typing_ import DAny, StrInt
 
 
-def int_(key: StrInt, **kwargs) -> int:
+def int_(key: str, **kwargs) -> int:
     """Get key=value from kwargs and return value as integer"""
-    if value := kwargs.get(key) or 0:
+    value_ = 0
+    value: StrInt
+    if value := kwargs.get(key) or "0":
         try:
-            value = int(value)
+            value_ = int(value)
         except (TypeError, ValueError):
             raise ValueError(f"invalid {key}={value}")
-    return value
+    return value_
 
 
 def str_(key: str, **kwargs) -> str:

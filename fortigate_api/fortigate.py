@@ -5,10 +5,10 @@ import logging
 from typing import Iterable, Optional
 from urllib.parse import urlencode
 
-import requests
+import requests  # type: ignore
 from requests import Session, Response
-from requests.exceptions import SSLError
-from requests.packages import urllib3
+from requests.exceptions import SSLError  # type: ignore
+from requests.packages import urllib3  # type: ignore
 
 from fortigate_api import helper
 from fortigate_api.typing_ import DAny, LDAny

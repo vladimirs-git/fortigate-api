@@ -1,18 +1,21 @@
 """prepare files for GitHub"""
 import os
+import pathlib
 import re
 import shutil
-from setup import PACKAGE, PACKAGE_
+
+import fortigate_api as packet
 from fortigate_api.typing_ import IStr
+from setup import PACKAGE_
 
+ROOT = os.path.split(pathlib.Path(__file__).parent.resolve())[0]
+VERSION = packet.__version__
+GITHUB_URL = "https://github.com/vladimirs-git"
+EMAIL = "vladimir.prusakovs@gmail.com"
 
-ROOT = os.path.split(os.path.dirname(os.path.realpath(__file__)))[0]
-PACKAGE_DIR = os.path.join(ROOT, PACKAGE_)
-
-URL = "https://github.com/vladimirs-git"
-README_INSTALLATION = f"""## Installation
+README = f"""## Installation
 ```bash
-pip install {PACKAGE}
+pip install {packet.__title__}
 ```
 
 ##"""
@@ -26,26 +29,37 @@ def valid_project(dirname: str) -> None:
         raise ValueError(f"absent {dirname=} in {path=}")
 
 
+def modify_init() -> None:
+    """__init__.py"""
+    filepath = os.path.join(ROOT, PACKAGE_, "__init__.py")
+    need_replace = [
+        ("__email__ =.+?\n", f"__email__ = \"{EMAIL}\"\n"),
+        ("__url__ =.+?\n", f"__url__ = \"{GITHUB_URL}\"\n"),
+        ("__download_url__ =.+?\n",
+         f"__download_url__ = \"{GITHUB_URL}/archive/refs/tags/{VERSION}.tar.gz\"\n"),
+        ("__project_urls__ =.+?\n", ""),
+    ]
+    modify_file(filepath, need_replace)
+
+
 def modify_setup() -> None:
-    """modify setup.py"""
+    """setup.py"""
     filepath = os.path.join(ROOT, "setup.py")
     need_replace = [
-        (r"URL =.+?\n", f"URL = \"{URL}\"\n"),
-        (r"DOWNLOAD_URL =.+?\n",
-         f"DOWNLOAD_URL = f\"{{URL}}/archive/refs/tags/{{VERSION}}.tar.gz\"\n"),
+        (r"\s+project_urls=.+?\n", "\n"),
     ]
     modify_file(filepath, need_replace)
 
 
 def modify_readme() -> None:
-    """modify README.md"""
+    """README.md"""
     filepath = os.path.join(ROOT, "README.md")
-    need_replace = [(r"## Installation.+?##", README_INSTALLATION)]
+    need_replace = [(r"## Installation.+?##", README)]
     modify_file(filepath, need_replace)
 
 
 def modify_gitignore():
-    """modify .gitignore"""
+    """.gitignore"""
     filepath = os.path.join(ROOT, ".gitignore")
     need_replace = [("tools/notes.txt", "tools/")]
     modify_file(filepath, need_replace)
@@ -53,13 +67,11 @@ def modify_gitignore():
 
 def modify_file(filepath, need_replace, /) -> None:
     """modify file"""
-    with open(filepath, mode="r+") as f:
-        text = f.read()
-        for regex, new in need_replace:
-            text = re.sub(regex, new, text, flags=re.DOTALL)
-        f.seek(0)
-        f.write(text)
-        f.truncate()
+    file_ = pathlib.Path(filepath)
+    text = file_.read_text(encoding="utf-8")
+    for regex, new in need_replace:
+        text = re.sub(regex, new, text, flags=re.DOTALL)
+    file_.write_text(text)
 
 
 def delete_files(files: IStr) -> None:
@@ -80,6 +92,7 @@ def delete_dirs(dirs: IStr) -> None:
 
 if __name__ == '__main__':
     valid_project(dirname="GitHub")
+    modify_init()
     modify_setup()
     modify_readme()
     modify_gitignore()

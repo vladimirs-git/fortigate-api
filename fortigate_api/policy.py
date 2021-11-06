@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import List
 from urllib.parse import urlencode, parse_qsl
 
-from requests import Response
+from requests import Response  # type: ignore
 
 from fortigate_api import helper
 from fortigate_api.action import Action
