@@ -61,7 +61,7 @@ class Policy(Action):
     # noinspection PyShadowingBuiltins
     def move(self, id: StrInt,  # pylint: disable=redefined-builtin
              position: str, neighbor: StrInt) -> Response:
-        """Move policy to before/after other policy
+        """Move policy to before/after other neighbor-policy
         :param id: id of policy being moved
         :param position: "before" or "after" neighbor
         :param neighbor: policy will be moved near to this neighbor-policy

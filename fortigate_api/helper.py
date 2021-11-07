@@ -9,7 +9,7 @@ def int_(key: str, **kwargs) -> int:
     """Get key=value from kwargs and return value as integer"""
     value_ = 0
     value: StrInt
-    if value := kwargs.get(key) or "0":
+    if value := kwargs.get(key) or "":
         try:
             value_ = int(value)
         except (TypeError, ValueError):
