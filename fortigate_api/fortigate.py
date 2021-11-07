@@ -21,6 +21,12 @@ class Fortigate:
     """Fortigate Connector"""
 
     def __init__(self, host: str, username: str, password: str, **kwargs):
+        """ Fortigate Connector
+        :param host: firewall ip address or hostname
+        :param username: administrator name
+        :param password: administrator password
+        :param kwargs: port=443, timeout=15, vdom="root"
+        """
         self.host = host
         self.username = username
         self.password = password
@@ -36,24 +42,24 @@ class Fortigate:
 
     @staticmethod
     def _port(**kwargs) -> int:
-        """Return tcp port for API URL"""
+        """Return HTTPS port to REST API interface, default 443"""
         return helper.int_(key="port", **kwargs) or 443
 
     @staticmethod
     def _timeout(**kwargs) -> int:
-        """Return session timeout (minutes)"""
+        """Return session timeout (minutes), default 15"""
         return helper.int_(key="timeout", **kwargs) or 15
 
     @staticmethod
     def _vdom(**kwargs) -> str:
-        """Return name of virtual domain"""
+        """Return name of virtual domain, default "root" """
         return helper.str_(key="vdom", **kwargs) or "root"
 
     # ======================= generic methods ========================
 
     @property
     def url(self):
-        """Return URL to API"""
+        """Return URL to Fortigate"""
         if self.port == 443:
             return f"https://{self.host}"
         return f"https://{self.host}:{self.port}"

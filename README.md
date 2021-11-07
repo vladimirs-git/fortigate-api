@@ -3,8 +3,18 @@ Python package to configure Fortigate (Fortios) devices using REST API
 
 
 ## Installation
+To install last version in shell
 ```bash
-pip install fortigate-api
+pip install https://rms.evolutiongaming.com/evo-pypi/noc/fortigate-api/fortigate_api.tar.gz
+```
+To install specific version in shell
+```bash
+pip install https://rms.evolutiongaming.com/evo-pypi/noc/fortigate-api/fortigate_api-0.0.4.tar.gz
+```
+To make dependency in pipenv Pipfile
+```text
+[packages]
+  fortigate-api = {file="https://rms.evolutiongaming.com/evo-pypi/noc/fortigate-api/fortigate_api-0.0.4.tar.gz"}
 ```
 
 ## Known objects
@@ -52,6 +62,10 @@ you need to know REST API URL and use [Universal Object](#Universal Object).
                         https://hostname/api/v2/cmdb/...
 
 ## Actions for any object
+All objects have methods: create, delete, get, update. 
+Params for objets _policy_ and _snmp_community_ are different from the others (id instead name).
+More details in method docstrings (in code).
+
     Action  REST API    Description
     ======  ==========  ==================================================================================
     create  POST        Create new object on Fortigate              param: data
@@ -61,9 +75,13 @@ you need to know REST API URL and use [Universal Object](#Universal Object).
     update  PUT         Update existing object on Fortigate         param: data
 
 ## Actions for specific objects
+Some objects have specific methods. For example method _move_ is implemented only for object policy.
+Policy can be moved up/down and change order in configured policies list. 
+More details in method docstrings (in code).
+
     Objects                 Action      Description
     ======================  ==========  ==========================================
-    interface, zone         get_all     Get objects in all vdoms
+    interface, zone         get_all     Get objects from all vdoms
     policy, snmp_community  delete_name Delete multiple objects with the same name
     policy                  move        Move policy to before/after other policy
 
@@ -79,58 +97,145 @@ you need to know REST API URL and use [Universal Object](#Universal Object).
     exist(url)                  Check does object exists on Fortigate
 
 ## Examples
-[Jupiter markdown examples_address](examples_address.ipynb)
+Jupiter markdown example [examples_address.ipynb](examples/examples_address.ipynb)
 
-### Create firewall connector
-firewall connector with mandatory params
+### Firewall API connector
+    param       Required/Optional   Default value  Description
+    ==========  ==================  =============  ===========
+    host        mandatory                           Firewall ip address or hostname
+    username    mandatory                           Administrator name
+    password    mandatory                           Administrator password
+    port        optional            443             HTTPS port to REST API interface
+    timeout     optional            15              Ssession timeout (minutes)
+    vdom        optional            root            Name of virtual domain
+
+Firewall connector with minimum required params
 
 ```pycon
 from fortigate_api import FortigateAPI
 fgt = FortigateAPI(host="hostname", username="admin", password="secret")
 ```
 
-firewall connector with optional params (displayed default values)
+Firewall connector with optional params
 ```pycon
 fgt = FortigateAPI(host="hostname", username="admin", password="secret",
-                   port=443, timeout=15, vdom="root")
+                   port=1443, timeout=60, vdom="name")
 ```
 
-### Get all addresses
+
+
+### Configuring Address objects on Fortigate
+Unique identifier for address object is _name_. 
+Pointing address by _name_ you will get only one object.
+Default data example for FortiOS v6.4 [examples/address.yml](examples/address.yml)
+
+#### Get all addresses
 ```pycon
 addresses = fgt.address.get()
 ```
 
-### Get one address by name
+#### Get address by name
 ```pycon
-address = fgt.address.get(name="172.0.0.100/30")
+address = fgt.address.get(name="127.0.0.100_30")
 ```
 
-### Get addresses by one param
-"==" - name is equal to string
+#### Get addresses by one param
+Get all addresses with type _ipmask_. 
+Filters: 
+"==" - type is equal to _ipmask_.
 ```pycon
-addresses = fgt.address.get(filter="name==172.0.0.100/30")
+addresses = fgt.address.get(filter="type==ipmask")
 ```
 
-### Get addresses by multiple params
-"=@" - name contains string
-"==" - type is equal to string
+#### Get addresses by multiple params
+Get all addresses where type is _fqdn_ and comment field contains _description_.
+Filters: 
+"==" - type is equal to _fqdn_, 
+"=@" - comment field contains _description_ string.
 ```pycon
-addresses = fgt.address.get(filters=["name=@172.0.0.", "type==ipmask"])
+addresses = fgt.address.get(filters=["type==fqdn", "comment=@description", ])
 ```
 
-### Create address
+#### Create address
 ```pycon
-data = dict(type="ipmask", name="172.0.0.100/30", subnet="172.0.0.100 255.255.255.252")
+data = dict(type="ipmask", name="127.0.0.100_30", subnet="127.0.0.100 255.255.255.252")
 response = fgt.address.create(data=data)
 ```
 
-### Update address
+#### Update address
 ```pycon
-data = dict(name="172.0.0.100/30", comment="some description")
+data = dict(name="127.0.0.100_30", comment="description")
 response = fgt.address.update(data=data)
 ```
 
-### Delete one address
+#### Delete address
 ```pycon
-response = fgt.address.delete(name="172.0.0.100/30")
+response = fgt.address.delete(name="127.0.0.100_30")
+```
+
+
+
+### Configuring Policy objects on Fortigate
+Unique identifier for policy object is _id_. 
+Pointing policy by _id_ you will get only one object. 
+Pointing policy by _name_ you can get multiple objects.
+Default data example for FortiOS v6.4 [examples/policy.yml](examples/policy.yml) 
+
+#### Get all policies
+```pycon
+policies = fgt.policy.get()
+```
+
+#### Get policy by id
+Pointing policy by _id_ you will get only one object. 
+```pycon
+policy = fgt.policy.get(id=1)
+```
+
+#### Get policies by name
+Pointing policy by _name_ you can get multiple object.
+```pycon
+policy = fgt.policy.get(name="policy1")
+```
+
+#### Get policies by one param
+Get all policies with status _enable_. Filters: "==" - status is equal to _fqdn_.
+```pycon
+policies = fgt.policy.get(filter="status==enable")
+```
+
+#### Get policies by multiple params
+Get all policies where status is _disable_ and comments field contains _description_.
+Filters:
+"==" - status is equal to _disable_,
+"=@" - comments field contains _description_ string.
+```pycon
+policies = fgt.policy.get(filters=["status==disable", "comments=@description"])
+```
+
+#### Create policy
+```pycon
+data = dict(name="policy1", srcaddr="127.0.0.100_30", dstaddr="127.0.0.104_30")
+response = fgt.policy.create(data=data)
+```
+
+#### Update policy
+```pycon
+data = dict(id=1, comment="description")
+response = fgt.policy.update(data=data)
+```
+
+#### Delete policy by id
+```pycon
+response = fgt.policy.delete(id=1)
+```
+
+#### Delete all policies with name
+```pycon
+response = fgt.policy.delete(name="policy1")
+```
+
+#### Move policy to before/after other neighbor-policy
+```pycon
+response = fgt.policy.move(id=1, position="after", neighbor=2)
 ```
