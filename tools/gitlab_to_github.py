@@ -36,7 +36,7 @@ def modify_init() -> None:
         ("__email__ =.+?\n", f"__email__ = \"{EMAIL}\"\n"),
         ("__url__ =.+?\n", f"__url__ = \"{GITHUB_URL}\"\n"),
         ("__download_url__ =.+?\n",
-         f"__download_url__ = \"{GITHUB_URL}/archive/refs/tags/{VERSION}.tar.gz\"\n"),
+         f"__download_url__ = f\"{{__url__}}/archive/refs/tags/{{__version__}}.tar.gz\"\n"),
         ("__project_urls__ =.+?\n", ""),
     ]
     modify_file(filepath, need_replace)

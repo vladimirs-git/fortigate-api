@@ -9,5 +9,5 @@ __summary__ = "Python package to configure Fortigate (Fortios) devices using RES
 __author__ = "Vladimir Prusakov"
 __email__ = "vladimir.prusakovs@gmail.com"
 __url__ = "https://github.com/vladimirs-git/fortigate-api"
-__download_url__ = "https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/0.0.21.tar.gz"
+__download_url__ = f"{__url__}/archive/refs/tags/{__version__}.tar.gz"
 __license__ = "MIT"
