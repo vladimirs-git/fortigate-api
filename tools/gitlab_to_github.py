@@ -3,7 +3,7 @@ import os
 import pathlib
 import re
 import shutil
-
+import logging
 import fortigate_api as packet
 from fortigate_api.typing_ import IStr
 from setup import PACKAGE, PACKAGE_
@@ -72,6 +72,7 @@ def modify_file(filepath, need_replace, /) -> None:
     for regex, new in need_replace:
         text = re.sub(regex, new, text, flags=re.DOTALL)
     file_.write_text(text)
+    logging.info("modified %s", file_)
 
 
 def delete_files(files: IStr) -> None:
@@ -80,6 +81,7 @@ def delete_files(files: IStr) -> None:
         filepath = os.path.join(ROOT, filename)
         if os.path.exists(filepath):
             os.remove(filepath)
+            logging.info("deleted %s", filepath)
 
 
 def delete_dirs(dirs: IStr) -> None:
@@ -88,6 +90,7 @@ def delete_dirs(dirs: IStr) -> None:
         path = os.path.join(ROOT, dirname)
         if os.path.exists(path):
             shutil.rmtree(path)
+            logging.info("deleted %s", path)
 
 
 if __name__ == '__main__':

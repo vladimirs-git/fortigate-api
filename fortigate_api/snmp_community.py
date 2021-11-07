@@ -23,7 +23,7 @@ class SnmpCommunity(Action):
     # noinspection PyShadowingBuiltins
     def delete(self, id: StrInt) -> Response:  # pylint: disable=redefined-builtin
         """Delete snmp-community-object from Fortigate
-        :param id: id of snmp-community-object
+        :param id: unique identifier of snmp-community-object
         :return: session response"""
         id_ = helper.int_(key="id", **{"id": id})
         url = f"api/v2/cmdb/system.snmp/community/{id_}"

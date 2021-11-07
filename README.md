@@ -53,15 +53,18 @@ you need to know REST API URL and use [Universal Object](#Universal Object).
 
 ## Actions for any object
 All objects have methods: create, delete, get, update. 
-Params for objets _policy_ and _snmp_community_ are different from the others (id instead name).
+Params for objets _policy_ and _snmp_community_ are different from the others (id instead of name).
 More details in method docstrings (in code).
 
     Action  REST API    Description
     ======  ==========  ==================================================================================
     create  POST        Create new object on Fortigate              param: data
     delete  DELETE      Delete object from Fortigate                param: name
-                                                                    param: id (for policy, snmp_community)
-    get     GET         Get one or list of objets from Fortigate    params: id, name, filter, filters
+                                                                    param for policy: policyid
+                                                                    param for snmp_community: id 
+    get     GET         Get one or list of objets from Fortigate    params: name, filter, filters
+                                                                    params for policy: policyid, filter, filters 
+                                                                    params for snmp_community: id, filter, filters
     update  PUT         Update existing object on Fortigate         param: data
 
 ## Actions for specific objects
@@ -90,14 +93,14 @@ More details in method docstrings (in code).
 Jupiter markdown example [examples_address.ipynb](examples/examples_address.ipynb)
 
 ### Firewall API connector
-    param       Required/Optional   Default value  Description
-    ==========  ==================  =============  ===========
-    host        mandatory                           Firewall ip address or hostname
-    username    mandatory                           Administrator name
-    password    mandatory                           Administrator password
-    port        optional            443             HTTPS port to REST API interface
-    timeout     optional            15              Ssession timeout (minutes)
-    vdom        optional            root            Name of virtual domain
+    param       Required/Optional   Defaul  Description
+    ==========  ==================  ======  ===========
+    host        mandatory                   Firewall ip address or hostname
+    username    mandatory                   Administrator name
+    password    mandatory                   Administrator password
+    port        optional            443     HTTPS port to REST API interface
+    timeout     optional            15      Ssession timeout (minutes)
+    vdom        optional            root    Name of virtual domain
 
 Firewall connector with minimum required params
 
@@ -117,7 +120,7 @@ fgt = FortigateAPI(host="hostname", username="admin", password="secret",
 ### Configuring Address objects on Fortigate
 Unique identifier for address object is _name_. 
 Pointing address by _name_ you will get only one object.
-Default data example for FortiOS v6.4 [examples/address.yml](examples/address.yml)
+Address data example for FortiOS v6.4 [examples/address.yml](examples/address.yml)
 
 #### Get all addresses
 ```pycon
@@ -169,7 +172,7 @@ response = fgt.address.delete(name="127.0.0.100_30")
 Unique identifier for policy object is _id_. 
 Pointing policy by _id_ you will get only one object. 
 Pointing policy by _name_ you can get multiple objects.
-Default data example for FortiOS v6.4 [examples/policy.yml](examples/policy.yml) 
+Policy data example for FortiOS v6.4 [examples/policy.yml](examples/policy.yml) 
 
 #### Get all policies
 ```pycon
@@ -177,9 +180,9 @@ policies = fgt.policy.get()
 ```
 
 #### Get policy by id
-Pointing policy by _id_ you will get only one object. 
+Pointing policy by _policyid_ you will get only one object. 
 ```pycon
-policy = fgt.policy.get(id=1)
+policy = fgt.policy.get(policyid=1)
 ```
 
 #### Get policies by name
@@ -211,13 +214,14 @@ response = fgt.policy.create(data=data)
 
 #### Update policy
 ```pycon
-data = dict(id=1, comment="description")
+data = dict(policyid=1, comment="description")
 response = fgt.policy.update(data=data)
 ```
 
 #### Delete policy by id
+
 ```pycon
-response = fgt.policy.delete(id=1)
+response = fgt.policy.delete(policyid=1)
 ```
 
 #### Delete all policies with name
@@ -227,5 +231,5 @@ response = fgt.policy.delete(name="policy1")
 
 #### Move policy to before/after other neighbor-policy
 ```pycon
-response = fgt.policy.move(id=1, position="after", neighbor=2)
+response = fgt.policy.move(policyid=1, position="after", neighbor=2)
 ```
