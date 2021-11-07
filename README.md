@@ -229,3 +229,4 @@ response = fgt.policy.delete(name="policy1")
 ```pycon
 response = fgt.policy.move(id=1, position="after", neighbor=2)
 ```
+
