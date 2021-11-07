@@ -34,7 +34,7 @@ if __name__ == "__main__":
             "Intended Audience :: Developers",
             "Intended Audience :: System Administrators",
             "Intended Audience :: Telecommunications Industry",
-            "Operating System :: FortiOS",
+            # "Operating System :: FortiOS",
             "Topic :: System :: Networking :: Firewalls",
             "License :: OSI Approved :: MIT License",
             "Programming Language :: Python :: 3.8",
