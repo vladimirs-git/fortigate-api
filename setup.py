@@ -24,7 +24,6 @@ if __name__ == "__main__":
         author_email=packet.__email__,
         url=f"{packet.__url__}/{packet.__title__}",
         download_url=packet.__download_url__,
-        project_urls=packet.__project_urls__,
         keywords="fortigate, api, fortios, firewall, networking, telecommunication",
         python_requires=">=3.8",
         install_requires=["requests"],
