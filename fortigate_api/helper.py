@@ -2,7 +2,7 @@
 from typing import Any
 from urllib.parse import quote
 
-from fortigate_api.typing_ import DAny, StrInt
+from fortigate_api.types_ import DAny, StrInt
 
 
 def int_(key: str, **kwargs) -> int:

@@ -11,7 +11,7 @@ from requests.exceptions import SSLError  # type: ignore
 from requests.packages import urllib3  # type: ignore
 
 from fortigate_api import helper
-from fortigate_api.typing_ import DAny, LDAny
+from fortigate_api.types_ import DAny, LDAny
 
 # noinspection PyUnresolvedReferences
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

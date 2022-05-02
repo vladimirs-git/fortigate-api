@@ -8,7 +8,7 @@ from requests import Response  # type: ignore
 
 from fortigate_api import helper
 from fortigate_api.action import Action
-from fortigate_api.typing_ import DAny, LDAny, StrInt
+from fortigate_api.types_ import DAny, LDAny, StrInt
 
 
 class SnmpCommunity(Action):
