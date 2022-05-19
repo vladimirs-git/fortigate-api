@@ -1,14 +1,14 @@
 """unittest fortigate_api.py"""
 
-from __future__ import annotations
-
 import unittest
 
-from fortigate_api import helper
+from fortigate_api import helper as h
 
 
 class Test(unittest.TestCase):
     """unittest fortigate_api.py"""
+
+    # =============================== int ================================
 
     def test_valid__int(self):
         """int_()"""
@@ -19,7 +19,7 @@ class Test(unittest.TestCase):
             ("port", {"port": 1}, 1),
             ("port", {"port": "1"}, 1),
         ]:
-            result = helper.int_(key=key, **kwargs)
+            result = h.int_(key=key, **kwargs)
             self.assertEqual(result, req_int, msg=f"{key=} {kwargs=}")
 
     def test_invalid__int(self):
@@ -29,9 +29,22 @@ class Test(unittest.TestCase):
             ("port", {"port": {"port": "1"}}),
         ]:
             with self.assertRaises(ValueError, msg=f"{key=} {kwargs=}"):
-                helper.int_(key=key, **kwargs)
+                h.int_(key=key, **kwargs)
 
-    def test_valid__str(self):
+    # =============================== str ================================
+
+    def test_valid__add_params_to_url(self):
+        """add_params_to_url()"""
+        for url, params, req in [
+            ("https://domain.com", {}, "https://domain.com"),
+            ("https://domain.com", dict(b="b"), "https://domain.com?b=b"),
+            ("https://domain.com?a=a", dict(b="b"), "https://domain.com?a=a&b=b"),
+            ("https://domain.com?a=a", dict(b=["b", "B"]), "https://domain.com?a=a&b=b&b=B"),
+        ]:
+            result = h.add_params_to_url(url=url, params=params)
+            self.assertEqual(result, req, msg=f"{url=} {params=}")
+
+    def test_valid__str_l(self):
         """str_()"""
         for key, kwargs, req_str in [
             ("vdom", {"vdom": ""}, ""),
@@ -39,38 +52,27 @@ class Test(unittest.TestCase):
             ("vdom", {"vdom": None}, ""),
             ("vdom", {"vdom": "1"}, "1"),
         ]:
-            result = helper.str_(key=key, **kwargs)
+            result = h.str_(key=key, **kwargs)
             self.assertEqual(result, req_str, msg=f"{key=} {kwargs=}")
 
-    def test_invalid__str(self):
+    def test_invalid__str_(self):
         """str_()"""
         for key, kwargs in [
             ("vdom", {"vdom": 1}),
             ("vdom", {"vdom": {"vdom": "name"}}),
         ]:
             with self.assertRaises(ValueError, msg=f"{key=} {kwargs=}"):
-                helper.str_(key=key, **kwargs)
+                h.str_(key=key, **kwargs)
 
-    def test_valid__quote(self):
+    def test_valid__quote_(self):
         """quote_()"""
         for string, req_string in [
             ("", ""),
             ("10.0.0.0_8", "10.0.0.0_8"),
             ("10.0.0.0/8", "10.0.0.0%2F8"),
         ]:
-            result = helper.quote_(string=string)
+            result = h.quote_(string=string)
             self.assertEqual(result, req_string, msg=f"{string=}")
-
-    def test_valid__name_to_filter(self):
-        """name_to_filter()"""
-        name = "NAME"
-        for kwargs, req_kwargs in [
-            ({}, {}),
-            ({"id": 1}, {"id": 1}),
-            ({"name": name}, {"filter": f"name=={name}"}),
-        ]:
-            helper.name_to_filter(kwargs=kwargs)
-            self.assertEqual(kwargs, req_kwargs, msg=f"{kwargs=}")
 
 
 if __name__ == "__main__":

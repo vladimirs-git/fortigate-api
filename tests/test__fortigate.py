@@ -1,80 +1,22 @@
 """unittest firewall/fortigate.py"""
 
-from __future__ import annotations
-
 import unittest
 from unittest.mock import patch
 
-import requests  # type: ignore
+import requests
 
 from fortigate_api.fortigate import Fortigate
-from tests.helper__tst import NAME1, NAME2, NAME3
-from tests.mock_session import MockSession
+from tests.helper__tst import NAME1, NAME2, NAME3, MockSession
 
 
 class Test(unittest.TestCase):
     """unittest firewall/fortigate.py"""
 
     def setUp(self):
+        """setUp"""
         patch.object(Fortigate, "login", return_value=MockSession()).start()
-        self.fgt = Fortigate(host="", username="", password="")
+        self.fgt = Fortigate(host="host", username="username", password="")
         self.url_policy = f"{self.fgt.url}/api/v2/cmdb/firewall/policy/"
-
-    def test_valid__port(self):
-        """Fortigate._port()"""
-        for port, req_port in [
-            ("", 443),
-            (443, 443),
-            ("443", 443),
-        ]:
-            result = self.fgt._port(port=port)
-            self.assertEqual(result, req_port, msg=f"{port=}")
-
-    def test_invalid__port(self):
-        """Fortigate._port()"""
-        for port in [
-            "port=443",
-            dict(port=443),
-        ]:
-            with self.assertRaises(ValueError, msg=f"{port=}"):
-                self.fgt._port(port=port)
-
-    def test_valid__timeout(self):
-        """Fortigate._timeout()"""
-        for timeout, req_timeout in [
-            ("", 15),
-            (1, 1),
-            ("1", 1),
-        ]:
-            result = self.fgt._timeout(timeout=timeout)
-            self.assertEqual(result, req_timeout, msg=f"{timeout=}")
-
-    def test_invalid__timeout(self):
-        """Fortigate._timeout()"""
-        for timeout in [
-            "timeout=10",
-            dict(timeout=10),
-        ]:
-            with self.assertRaises(ValueError, msg=f"{timeout=}"):
-                self.fgt._timeout(timeout=timeout)
-
-    def test_valid__vdom(self):
-        """Fortigate._vdom()"""
-        for kwargs, req_vdom in [
-            ({"vdom": ""}, "root"),
-            ({"vdom": None}, "root"),
-            ({"vdom": "name"}, "name"),
-        ]:
-            result = self.fgt._vdom(**kwargs)
-            self.assertEqual(result, req_vdom, msg=f"{kwargs=}")
-
-    def test_invalid__vdom(self):
-        """Fortigate._vdom()"""
-        for kwargs in [
-            {"vdom": {"vdom": "name"}},
-        ]:
-            with self.assertRaises(ValueError, msg=f"{kwargs=}"):
-                self.fgt._vdom(**kwargs)
 
     def test_valid__url(self):
         """Fortigate._init_url()"""
@@ -159,6 +101,27 @@ class Test(unittest.TestCase):
             self.fgt.password = password
             result = self.fgt._hide_secret(string=string)
             self.assertEqual(result, req_hidden, msg=f"{string=}, {password=}")
+
+    def test_valid__valid_url(self):
+        """Fortigate._valid_url()"""
+        for kwargs, url, req in [
+            (dict(host="host", username="username", password="", port=443),
+             "api/v2/cmdb/firewall/address/",
+             "https://host/api/v2/cmdb/firewall/address/"),
+            (dict(host="host", username="username", password="", port=444),
+             "api/v2/cmdb/firewall/address/",
+             "https://host:444/api/v2/cmdb/firewall/address/"),
+            (dict(host="host", username="username", password="", port=443),
+             "https://host/api/v2/cmdb/firewall/address/",
+             "https://host/api/v2/cmdb/firewall/address/"),
+            (dict(host="host", username="username", password="", port=444),
+             "https://host:444/api/v2/cmdb/firewall/address/",
+             "https://host:444/api/v2/cmdb/firewall/address/"),
+
+        ]:
+            fgt = Fortigate(**kwargs)
+            result = fgt._valid_url(url=url)
+            self.assertEqual(result, req, msg=f"{url=}")
 
 
 if __name__ == "__main__":

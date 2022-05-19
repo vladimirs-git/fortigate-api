@@ -1,6 +1,5 @@
 """Package setup"""
 
-import os
 import pathlib
 
 from setuptools import setup  # type: ignore
@@ -11,6 +10,7 @@ VERSION = "0.1.2"
 PACKAGE = package.__title__
 PACKAGE_ = package.__title__.lower().replace("-", "_")  # PEP 503 normalization
 ROOT = pathlib.Path(__file__).parent.resolve()
+README = "README.rst"
 
 if __name__ == "__main__":
     setup(
@@ -19,7 +19,7 @@ if __name__ == "__main__":
         version=VERSION,
         license=package.__license__,
         description=package.__summary__,
-        long_description=(ROOT / "README.md").read_text(encoding="utf-8"),
+        long_description=(ROOT / README).read_text(encoding="utf-8"),
         long_description_content_type="text/markdown",
         author=package.__author__,
         author_email=package.__email__,

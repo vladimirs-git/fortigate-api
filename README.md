@@ -1,7 +1,7 @@
 # fortigate-api
 
 Python package to configure Fortigate (Fortios) devices using REST API. With this package, you can
-create, delete, get, update the any objects on the firewall. The most commonly used objects
+create, delete, get, update the any objects in the firewall. The most commonly used objects
 implemented in the methods of this package, but you can manipulate any other objects that you can
 access via the API.
 
@@ -13,7 +13,7 @@ pip install fortigate-api
 
 ## Object
 
-    Object Name         GUI and REST API URL to object, FortiOS v6.4
+    Object Name         GUI and REST API URL to the object, FortiOS v6.4
     =================   ======================================================================
     Object              Process any Fortigate object pointed by REST API URL
                         https://hostname/api/v2/cmdb/...
@@ -88,7 +88,7 @@ docstrings (in code).
     get(url)                    GET object configured on Fortigate
     post(url, data)             POST (create) object on Fortigate based on data
     put(url, data)              PUT (update) existing object on Fortigate
-    exist(url)                  Check does object exists on Fortigate
+    exist(url)                  Check does an object exists on Fortigate
 
 ## Examples
 
@@ -127,13 +127,13 @@ object. Address data example for FortiOS v6.4 [examples/address.yml](examples/ad
 #### Get all addresses
 
 ```pycon
-addresses = fgt.address.get()
+addresses = fgt.address_groups.get()
 ```
 
 #### Get address by name
 
 ```pycon
-address = fgt.address.get(name="127.0.0.100_30")
+address = fgt.address_groups.get(name="127.0.0.100_30")
 ```
 
 #### Get addresses by one param
@@ -142,7 +142,7 @@ Get all addresses with type _ipmask_. Filters:
 "==" - type is equal to _ipmask_.
 
 ```pycon
-addresses = fgt.address.get(filter="type==ipmask")
+addresses = fgt.address_groups.get(filter="type==ipmask")
 ```
 
 #### Get addresses by multiple params
@@ -152,27 +152,27 @@ Get all addresses where type is _fqdn_ and comment field contains _description_.
 "=@" - comment field contains _description_ string.
 
 ```pycon
-addresses = fgt.address.get(filters=["type==fqdn", "comment=@description", ])
+addresses = fgt.address_groups.get(filters=["type==fqdn", "comment=@description", ])
 ```
 
 #### Create address
 
 ```pycon
 data = dict(type="ipmask", name="127.0.0.100_30", subnet="127.0.0.100 255.255.255.252")
-response = fgt.address.create(data=data)
+response = fgt.address_groups.create(data=data)
 ```
 
 #### Update address
 
 ```pycon
 data = dict(name="127.0.0.100_30", comment="description")
-response = fgt.address.update(data=data)
+response = fgt.address_groups.update(data=data)
 ```
 
 #### Delete address
 
 ```pycon
-response = fgt.address.delete(name="127.0.0.100_30")
+response = fgt.address_groups.delete(name="127.0.0.100_30")
 ```
 
 ### Configuring Policy objects on Fortigate
@@ -238,7 +238,7 @@ response = fgt.policy.update(data=data)
 #### Delete policy by id
 
 ```pycon
-response = fgt.policy.delete(policyid=1)
+response = fgt.policy.delete(id=1)
 ```
 
 #### Delete all policies with name
@@ -250,5 +250,5 @@ response = fgt.policy.delete(name="policy1")
 #### Move policy to before/after other neighbor-policy
 
 ```pycon
-response = fgt.policy.move(policyid=1, position="after", neighbor=2)
+response = fgt.policy.move(id=1, position="after", neighbor=2)
 ```

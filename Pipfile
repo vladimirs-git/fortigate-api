@@ -5,6 +5,8 @@ verify_ssl = true
 
 [packages]
 requests = "2.26.0"
+pylint = "*"
+mypy = "*"
 
 [dev-packages]
 coverage = "*"

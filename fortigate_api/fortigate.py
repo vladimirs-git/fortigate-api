@@ -1,65 +1,76 @@
-"""Fortigate Connector"""
+"""**Fortigate** - Firewall Connector to login and logout.
+Calls generic methods for working with objects: delete, get, post, put, exist.
+"""
 
 import json
 import logging
 from typing import Iterable, Optional
 from urllib.parse import urlencode
 
-import requests  # type: ignore
+import requests
 from requests import Session, Response
 from requests.exceptions import SSLError  # type: ignore
 from requests.packages import urllib3  # type: ignore
 
-from fortigate_api import helper
+from fortigate_api import helper as h
 from fortigate_api.types_ import DAny, LDAny
 
 # noinspection PyUnresolvedReferences
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+PORT = 443
+TIMEOUT = 15
+VDOM = "root"
+
 
 class Fortigate:
-    """Fortigate Connector"""
+    """**Fortigate** - Firewall Connector to login and logout.
+    Calls generic methods for working with objects: delete, get, post, put, exist.
+    """
 
     def __init__(self, host: str, username: str, password: str, **kwargs):
-        """ Fortigate Connector
-        :param host: firewall ip address or hostname
-        :param username: administrator name
-        :param password: administrator password
-        :param kwargs: port=443, timeout=15, vdom="root"
+        """**Fortigate** - Firewall Connector
+        :param host: Firewall ip address or hostname
+        :param username: Administrator name
+        :param password: Administrator password
+        :param port: HTTPS port, by default 443
+        :param timeout: Session timeout (minutes), by default 15
+        :param vdom: Name of virtual domain, by default "root"
         """
         self.host = host
         self.username = username
         self.password = password
-        self.port = self._port(**kwargs)
-        self.timeout = self._timeout(**kwargs)
-        self.vdom = self._vdom(**kwargs)
+        self.port: int = h.int_(key="port", **kwargs) or PORT
+        self.timeout: int = h.int_(key="timeout", **kwargs) or TIMEOUT
+        self.vdom: str = h.str_(key="vdom", **kwargs) or VDOM
         self._session: Optional[Session] = None
 
     def __repr__(self):
-        return f"{self.url} vdom={self.vdom}"
+        host = self.host
+        username = self.username
+        password = ""
+        port = self.port
+        timeout = self.timeout
+        vdom = self.vdom
+        params = [
+            f"{host=!r}",
+            f"{username=!r}",
+            f"{password=!r}",
+        ]
+        params_optional = [
+            f"{port=!r}" if port != PORT else "",
+            f"{timeout=!r}" if timeout != TIMEOUT else "",
+            f"{vdom=!r}" if vdom != VDOM else "",
+        ]
+        params.extend([s for s in params_optional if s])
+        params_ = ", ".join([s for s in params if s])
+        return f"{self.__class__.__name__}({params_})"
 
-    # ============================= init =============================
-
-    @staticmethod
-    def _port(**kwargs) -> int:
-        """Return HTTPS port to REST API interface, default 443"""
-        return helper.int_(key="port", **kwargs) or 443
-
-    @staticmethod
-    def _timeout(**kwargs) -> int:
-        """Return session timeout (minutes), default 15"""
-        return helper.int_(key="timeout", **kwargs) or 15
-
-    @staticmethod
-    def _vdom(**kwargs) -> str:
-        """Return name of virtual domain, default "root" """
-        return helper.str_(key="vdom", **kwargs) or "root"
-
-    # ======================= generic methods ========================
+    # =========================== methods ============================
 
     @property
     def url(self):
-        """Return URL to Fortigate"""
+        """Returns URL to Fortigate"""
         if self.port == 443:
             return f"https://{self.host}"
         return f"https://{self.host}:{self.port}"
@@ -97,8 +108,10 @@ class Fortigate:
 
     def delete(self, url: str) -> Response:
         """DELETE object from Fortigate
-        :param url: REST API URL to object
-        :return: session response"""
+        :param url: REST API URL to the object
+        :return: Session response
+        """
+        url = self._valid_url(url)
         session: Session = self._get_session()
         try:
             response: Response = session.delete(url=url,
@@ -112,9 +125,11 @@ class Fortigate:
         return response
 
     def get(self, url: str) -> LDAny:
-        """GET object configured on Fortigate
-        :param url: REST API URL to object
-        :return: return list of objects data"""
+        """GET object configured in the Fortigate
+        :param url: REST API URL to the object
+        :return: return list of the objects data
+        """
+        url = self._valid_url(url)
         session: Session = self._get_session()
         try:
             response: Response = session.get(url=url,
@@ -130,10 +145,12 @@ class Fortigate:
         return result
 
     def post(self, url: str, data: DAny) -> Response:
-        """POST (create) object on Fortigate based on data
-        :param url: REST API URL to object
+        """POST (create) object in the Fortigate based on the data
+        :param url: REST API URL to the object
         :param data: data of new object
-        :return: session response"""
+        :return: Session response
+        """
+        url = self._valid_url(url)
         session: Session = self._get_session()
         try:
             response: Response = session.post(url=url,
@@ -148,10 +165,12 @@ class Fortigate:
         return response
 
     def put(self, url: str, data: DAny) -> Response:
-        """PUT (update) existing object on Fortigate
-        :param url: REST API URL to object
-        :param data: data of object
-        :return: session response"""
+        """PUT (update) existing object in the Fortigate
+        :param url: REST API URL to the object
+        :param data: Data of the object
+        :return: Session response
+        """
+        url = self._valid_url(url)
         session: Session = self._get_session()
         try:
             response: Response = session.put(url=url,
@@ -166,9 +185,11 @@ class Fortigate:
         return response
 
     def exist(self, url: str) -> Response:
-        """Check does object exists on Fortigate
-        :param url: REST API URL to object
-        :return: session response, if object exist status_code==200"""
+        """Checks does an object exists in the Fortigate
+        :param url: REST API URL to the object
+        :return: Session response, if object exist status_code==200
+        """
+        url = self._valid_url(url)
         session: Session = self._get_session()
         response: Response = session.get(url=url,
                                          params=urlencode([("vdom", self.vdom)]),
@@ -179,7 +200,7 @@ class Fortigate:
     # =========================== helpers ============================
 
     def _get_session(self) -> Session:
-        """return an existing session or create a new one"""
+        """Returns an existing session or create a new one"""
         return self._session if self._session else self.login()
 
     def _logging(self, resp: Response) -> None:
@@ -193,16 +214,16 @@ class Fortigate:
             logging.debug("text=%s", resp.text)
 
     def _hide_secret(self, string: str) -> str:
-        """hide password, secretkey in text (for safe logging)"""
+        """Hides password, secretkey in text (for safe logging)"""
         if not self.password:
             return string
         result = string.replace(self.password, "<hidden>")
-        quoted_password = helper.quote(self.password)
+        quoted_password = h.quote(self.password)
         result = result.replace(quoted_password, "<hidden>")
         return result
 
     def _hide_secret_ex(self, ex):
-        """hide secretkey in exception (for safe logging)"""
+        """Hides secretkey in exception (for safe logging)"""
         if hasattr(ex, "args"):
             if (args := getattr(ex, "args")) and isinstance(args, Iterable):
                 msgs = list()  # result
@@ -213,3 +234,9 @@ class Fortigate:
                         msgs.append(arg)
                 return type(ex)(tuple(msgs))
         return ex
+
+    def _valid_url(self, url: str) -> str:
+        """Add "https://" if absent in url"""
+        if not url.startswith("https://"):
+            url = f"{self.url}/{url}"
+        return url
