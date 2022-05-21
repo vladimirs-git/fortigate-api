@@ -24,7 +24,7 @@ __all__ = [
     "FortigateAPI",
 ]
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __date__ = "2022-05-21"
 __title__ = "fortigate-api"
 

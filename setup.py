@@ -6,7 +6,7 @@ from setuptools import setup  # type: ignore
 
 import fortigate_api as package
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 PACKAGE = package.__title__
 PACKAGE_ = package.__title__.lower().replace("-", "_")  # PEP 503 normalization
 ROOT = pathlib.Path(__file__).parent.resolve()
