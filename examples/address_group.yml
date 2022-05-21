@@ -1,0 +1,14 @@
+allow-routing: disable
+color: 0
+comment: some description
+exclude: disable
+exclude-member: []
+fabric-object: disable
+member:
+- name: ADDRESS_NAME
+  q_origin_key: ADDRESS_NAME
+name: ADDR_GROUP_NAME
+q_origin_key: ADDR_GROUP_NAME
+tagging: []
+type: default
+uuid: c44ff5aa-7961-51ec-ccdd-ba2ad8dc69c3

@@ -61,11 +61,11 @@ internet-service-src-negate: disable
 ippool: disable
 ips-sensor: ''
 label: ''
-logtraffic: all
+logtraffic: utm
 logtraffic-start: disable
 match-vip: disable
 match-vip-only: disable
-name: 'policy1'
+name: POLICY_NAME
 nat: disable
 natinbound: disable
 natip: 0.0.0.0 0.0.0.0
@@ -78,13 +78,13 @@ outbound: enable
 per-ip-shaper: ''
 permit-any-host: disable
 permit-stun-host: disable
-policyid: 1
+policyid: 23
 poolname: []
 poolname6: []
 profile-group: ''
 profile-protocol-options: default
 profile-type: single
-q_origin_key: 1
+q_origin_key: 23
 radius-mac-auth-bypass: disable
 redirect-url: ''
 replacemsg-override-group: ''
@@ -112,7 +112,7 @@ srcintf:
 ssh-filter-profile: ''
 ssh-policy-redirect: disable
 ssl-ssh-profile: no-inspection
-status: enable
+status: disable
 tcp-mss-receiver: 0
 tcp-mss-sender: 0
 tcp-session-without-syn: disable
@@ -124,7 +124,7 @@ traffic-shaper: ''
 traffic-shaper-reverse: ''
 users: []
 utm-status: disable
-#uuid: 0000-0000-0000-0000-0000
+uuid: 1d34d556-51cf-51ec-0a55-8f9fb4bee764
 vlan-cos-fwd: 255
 vlan-cos-rev: 255
 vlan-filter: ''

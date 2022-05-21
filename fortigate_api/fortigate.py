@@ -12,8 +12,8 @@ from requests import Session, Response
 from requests.exceptions import SSLError  # type: ignore
 from requests.packages import urllib3  # type: ignore
 
-from fortigate_api import helper as h
-from fortigate_api.types_ import DAny, LDAny
+from fortigate_api.tools import str_
+from fortigate_api.tools.types_ import DAny, LDAny
 
 # noinspection PyUnresolvedReferences
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -40,9 +40,9 @@ class Fortigate:
         self.host = host
         self.username = username
         self.password = password
-        self.port: int = h.int_(key="port", **kwargs) or PORT
-        self.timeout: int = h.int_(key="timeout", **kwargs) or TIMEOUT
-        self.vdom: str = h.str_(key="vdom", **kwargs) or VDOM
+        self.port: int = int(kwargs.get("port") or PORT)
+        self.timeout: int = int(kwargs.get("timeout") or TIMEOUT)
+        self.vdom: str = str(kwargs.get("vdom") or VDOM)
         self._session: Optional[Session] = None
 
     def __repr__(self):
@@ -66,14 +66,67 @@ class Fortigate:
         params_ = ", ".join([s for s in params if s])
         return f"{self.__class__.__name__}({params_})"
 
-    # =========================== methods ============================
-
     @property
     def url(self):
         """Returns URL to Fortigate"""
         if self.port == 443:
             return f"https://{self.host}"
         return f"https://{self.host}:{self.port}"
+
+    # =========================== methods ============================
+
+    def delete(self, url: str) -> Response:
+        """DELETE object from Fortigate
+        :param url: REST API URL to the object
+        :return: Session response. *<Response [200]>* Object successfully deleted,
+            *<Response [404]>* Object absent in the Fortigate
+        """
+        url = self._valid_url(url)
+        session: Session = self._get_session()
+        try:
+            response: Response = session.delete(url=url,
+                                                params=urlencode([("vdom", self.vdom)]),
+                                                timeout=self.timeout,
+                                                verify=False)
+        except Exception as ex:
+            raise self._hide_secret_ex(ex)
+        if not response.ok:
+            self._logging(response)
+        return response
+
+    def exist(self, url: str) -> Response:
+        """Checks does an object exists in the Fortigate
+        :param url: REST API URL to the object
+        :return: Session response. *<Response [200]>* Object exist,
+            *<Response [404]>* Object does not exist
+        """
+        url = self._valid_url(url)
+        session: Session = self._get_session()
+        response: Response = session.get(url=url,
+                                         params=urlencode([("vdom", self.vdom)]),
+                                         timeout=self.timeout,
+                                         verify=False)
+        return response
+
+    def get(self, url: str) -> LDAny:
+        """GET object configured in the Fortigate
+        :param url: REST API URL to the object
+        :return: *List[dict_]* of the objects data
+        """
+        url = self._valid_url(url)
+        session: Session = self._get_session()
+        try:
+            response: Response = session.get(url=url,
+                                             params=urlencode([("vdom", self.vdom)]),
+                                             timeout=self.timeout,
+                                             verify=False)
+        except Exception as ex:
+            raise self._hide_secret_ex(ex)
+        if not response.ok:
+            logging.info("code=%s, reason=%s, str_=%s", response.status_code, response.reason, url)
+            return []
+        result: LDAny = response.json()["results"]
+        return result
 
     def login(self) -> Session:
         """Login to Fortigate"""
@@ -106,49 +159,12 @@ class Fortigate:
                 pass
             self._session = None
 
-    def delete(self, url: str) -> Response:
-        """DELETE object from Fortigate
-        :param url: REST API URL to the object
-        :return: Session response
-        """
-        url = self._valid_url(url)
-        session: Session = self._get_session()
-        try:
-            response: Response = session.delete(url=url,
-                                                params=urlencode([("vdom", self.vdom)]),
-                                                timeout=self.timeout,
-                                                verify=False)
-        except Exception as ex:
-            raise self._hide_secret_ex(ex)
-        if not response.ok:
-            self._logging(response)
-        return response
-
-    def get(self, url: str) -> LDAny:
-        """GET object configured in the Fortigate
-        :param url: REST API URL to the object
-        :return: return list of the objects data
-        """
-        url = self._valid_url(url)
-        session: Session = self._get_session()
-        try:
-            response: Response = session.get(url=url,
-                                             params=urlencode([("vdom", self.vdom)]),
-                                             timeout=self.timeout,
-                                             verify=False)
-        except Exception as ex:
-            raise self._hide_secret_ex(ex)
-        if not response.ok:
-            logging.info("code=%s, reason=%s, url=%s", response.status_code, response.reason, url)
-            return list()
-        result: LDAny = response.json()["results"]
-        return result
-
     def post(self, url: str, data: DAny) -> Response:
         """POST (create) object in the Fortigate based on the data
         :param url: REST API URL to the object
-        :param data: data of new object
-        :return: Session response
+        :param data: Data of the object
+        :return: Session response. *<Response [200]>* Object successfully created or already exists,
+            *<Response [500]>* Object already exist in the Fortigate
         """
         url = self._valid_url(url)
         session: Session = self._get_session()
@@ -168,7 +184,8 @@ class Fortigate:
         """PUT (update) existing object in the Fortigate
         :param url: REST API URL to the object
         :param data: Data of the object
-        :return: Session response
+        :return: Session response. *<Response [200]>* Object successfully updated,
+            *<Response [404]>* Object has not been updated
         """
         url = self._valid_url(url)
         session: Session = self._get_session()
@@ -182,19 +199,6 @@ class Fortigate:
             raise self._hide_secret_ex(ex)
         if not response.ok:
             self._logging(response)
-        return response
-
-    def exist(self, url: str) -> Response:
-        """Checks does an object exists in the Fortigate
-        :param url: REST API URL to the object
-        :return: Session response, if object exist status_code==200
-        """
-        url = self._valid_url(url)
-        session: Session = self._get_session()
-        response: Response = session.get(url=url,
-                                         params=urlencode([("vdom", self.vdom)]),
-                                         timeout=self.timeout,
-                                         verify=False)
         return response
 
     # =========================== helpers ============================
@@ -218,7 +222,7 @@ class Fortigate:
         if not self.password:
             return string
         result = string.replace(self.password, "<hidden>")
-        quoted_password = h.quote(self.password)
+        quoted_password = str_.quote(self.password)
         result = result.replace(quoted_password, "<hidden>")
         return result
 
@@ -226,7 +230,7 @@ class Fortigate:
         """Hides secretkey in exception (for safe logging)"""
         if hasattr(ex, "args"):
             if (args := getattr(ex, "args")) and isinstance(args, Iterable):
-                msgs = list()  # result
+                msgs = []  # result
                 for arg in args:
                     if isinstance(arg, str):
                         msgs.append(self._hide_secret(string=arg))
@@ -236,7 +240,7 @@ class Fortigate:
         return ex
 
     def _valid_url(self, url: str) -> str:
-        """Add "https://" if absent in url"""
+        """If absent "https://" Add it to `url`"""
         if not url.startswith("https://"):
             url = f"{self.url}/{url}"
         return url
