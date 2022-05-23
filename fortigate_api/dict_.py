@@ -2,7 +2,7 @@
 
 from urllib.parse import quote
 
-from fortigate_api.tools.types_ import DAny, IStr, LStr, IStrs
+from fortigate_api.types_ import DAny, IStr, LStr, IStrs
 
 
 def check_mandatory(keys: IStr, **kwargs) -> None:

@@ -237,7 +237,7 @@ Examples - Address
 	# Updates address data in the Fortigate
 	data = dict(name="ADDRESS", subnet="127.0.0.255 255.255.255.255", color=6)
 	response = fgt.address.update(uid="ADDRESS", data=data)
-	print("address.update", response)  # address.update <Response [200]>
+	print("address.update", response, response.ok)  # address.update <Response [200]> True
 
 	# Checks for presence of address in the Fortigate
 	response = fgt.address.is_exist(uid="ADDRESS")
@@ -245,17 +245,18 @@ Examples - Address
 
 	# Deletes address from Fortigate by name
 	response = fgt.address.delete(uid="ADDRESS")
-	print("address.delete", response)  # address.delete <Response [200]>
+	print("address.delete", response, response.ok)  # address.delete <Response [200]> True
 
-	# Deletes addresses from Fortigate by filter
+	# Deletes addresses from Fortigate by filter (address was deleted before)
 	response = fgt.address.delete(filter="name=@ADDRESS")
-	print("address.delete", response)  # address.delete <Response [200]>
+	print("address.delete", response, response.ok)  # address.delete <Response [500]> False
 
 	# Checks for absence of address in the Fortigate
 	response = fgt.address.is_exist(uid="ADDRESS")
 	print("address.is_exist", response)  # address.is_exist False
 
 	fgt.logout()
+
 
 AddressGroup
 ------------
@@ -505,7 +506,7 @@ Examples - Interface
 - Filters interface by multiple conditions
 - Updates interface data in the Fortigate
 - Checks for presence of interface in the Fortigate
-- Gets all interfaces in vdom "vdom2"
+- Gets all interfaces in vdom "VDOM"
 
 .. code:: python
 
@@ -552,10 +553,15 @@ Examples - Interface
 	response = fgt.interface.is_exist(uid="dmz")
 	print("interface.is_exist", response)  # interface.is_exist True
 
-	# Gets all interfaces in vdom "vdom2"
-	fgt = FortigateAPI(host="host", username="username", password="password", vdom="vdom2")
+	# Changes virtual domain to "VDOM" and gets all interfaces inside this vdom
+	fgt.fgt.vdom = "VDOM"
+	print(f"{fgt!r}")
+	# Fortigate(host='host', username='username', password='********', vdom='VDOM')
 	interfaces = fgt.interface.get()
 	print("interfaces count", len(interfaces))  # interfaces count 0
+	fgt.vdom = "root"
+	print(f"{fgt!r}")
+	# Fortigate(host='host', username='username', password='********')
 
 	fgt.logout()
 
@@ -774,21 +780,20 @@ Examples - Policy
 		for address in addresses:
 			if address["name"] in dstaddr:
 				policies.append(policy)
-	pprint(policies)
 	print("policies count", len(policies))  # policies count 2
 
 	# Moves policy to top
 	neighbor = fgt.policy.get()[0]
 	response = fgt.policy.move(uid=policyid, position="before", neighbor=neighbor["policyid"])
-	print("policy.move", response)  # policy.move <Response [200]>
+	print("policy.move", response, response.ok)  # policy.move <Response [200]> False
 
 	# Deletes policy from Fortigate by policyid (unique identifier)
 	response = fgt.policy.delete(uid=policyid)
-	print("policy.delete", response)  # policy.delete <Response [200]>
+	print("policy.delete", response, response.ok)  # policy.delete <Response [200]> True
 
 	# Deletes policies from Fortigate by filter (by name)
 	response = fgt.policy.delete(filter="name==POLICY")
-	print("policy.delete", response)  # policy.delete <Response [200]>
+	print("policy.delete", response, response.ok)  # policy.delete <Response [200]> True
 
 	# Checks for absence of policy in the Fortigate
 	response = fgt.policy.is_exist(uid=policyid)
@@ -803,6 +808,7 @@ Examples - Policy extended filter
 - Gets the rules where source addresses are in subnets of 127.0.1.0/24
 - Gets the rules where source prefixes are supernets of address 127.0.1.1/32
 - Gets the rules where source prefix are equals 127.0.1.0/30 and destination prefix are equals 127.0.2.0/30
+- Delete policy, address-group, addresses from Fortigate (order is important)
 
 .. code:: python
 
@@ -813,21 +819,21 @@ Examples - Policy extended filter
 	fgt.login()
 
 	# Creates address and address_groupin the Fortigate
-	data = {"name": f"ADDRESS1",
+	data = {"name": "ADDRESS1",
 			"obj-type": "ip",
-			"subnet": f"127.0.1.0 255.255.255.252",
+			"subnet": "127.0.1.0 255.255.255.252",
 			"type": "ipmask"}
 	response = fgt.address.create(data=data)
-	print("address create", response)  # post <Response [200]>
-	data = {"name": f"ADDRESS2",
+	print("address.create", response)  # post <Response [200]>
+	data = {"name": "ADDRESS2",
 			"obj-type": "ip",
-			"subnet": f"127.0.2.0 255.255.255.252",
+			"subnet": "127.0.2.0 255.255.255.252",
 			"type": "ipmask"}
 	response = fgt.address.create(data=data)
-	print("address create", response)  # post <Response [200]>
+	print("address.create", response)  # post <Response [200]>
 	data = {"name": "ADDR_GROUP", "member": [{"name": "ADDRESS2"}]}
 	response = fgt.address_group.create(data=data)
-	print("post", response)  # post <Response [200]>
+	print("address_group.create", response)  # post <Response [200]>
 
 	# Creates policy in the Fortigate
 	data = dict(
@@ -842,7 +848,7 @@ Examples - Policy extended filter
 		schedule="always",
 	)
 	response = fgt.policy.create(data=data)
-	print("post", response)  # post <Response [200]>
+	print("policy.create", response)  # post <Response [200]>
 
 	# Gets the rules where source prefix is equals 127.0.1.0/30
 	efilter = "srcaddr==127.0.1.0/30"
@@ -867,9 +873,23 @@ Examples - Policy extended filter
 	# Gets the rules where source prefix are equals 127.0.1.0/30 and destination prefix are equals 127.0.2.0/30
 	efilters = ["srcaddr==127.0.1.0/30", "dstaddr==127.0.2.0/30"]
 	policies = fgt.policy.get(efilter=efilters)
-	print(f"{efilters=}", len(policies))  # efilters=['srcaddr==127.0.1.0/30', 'dstaddr==127.0.2.0/30'] 1
+	print(f"{efilters=}",
+		  len(policies))  # efilters=['srcaddr==127.0.1.0/30', 'dstaddr==127.0.2.0/30'] 1
+
+	# Delete policy, address-group, addresses from Fortigate (order is important)
+	response = fgt.address.delete(uid="ADDRESS1")
+	print("address.delete", response.ok)  # address.delete <Response [200]>
+	response = fgt.policy.delete(filter="name==POLICY")
+	print("policy.delete", response.ok)  # policy.delete <Response [200]>
+	response = fgt.address_group.delete(uid="ADDR_GROUP")
+	print("address_group.delete", response.ok)  # address_group.delete <Response [200]>
+	response = fgt.address.delete(uid="ADDRESS1")
+	print("address.delete", response.ok)  # address.delete <Response [200]>
+	response = fgt.address.delete(uid="ADDRESS2")
+	print("address.delete", response.ok)  # address.delete <Response [200]>
 
 	fgt.logout()
+
 
 Schedule
 --------
@@ -1106,8 +1126,7 @@ Examples - Fortigate
 			"subnet": "127.0.0.100 255.255.255.252",
 			"type": "ipmask"}
 	response = fgt.post(url="api/v2/cmdb/firewall/address/", data=data)
-	print("post", response)
-	# post <Response [200]>
+	print("post", response)  # post <Response [200]>
 
 	# Gets address data from Fortigate
 	addresses = fgt.get(url="api/v2/cmdb/firewall/address/")
@@ -1123,27 +1142,22 @@ Examples - Fortigate
 	# Update address data in the Fortigate
 	data = dict(subnet="127.0.0.255 255.255.255.255")
 	response = fgt.put(url="api/v2/cmdb/firewall/address/ADDRESS", data=data)
-	print("put", response)
-	# put <Response [200]>
+	print("put", response)  # put <Response [200]>
 	addresses = fgt.get(url="api/v2/cmdb/firewall/address/")
 	addresses = [d for d in addresses if d["name"] == "ADDRESS"]
-	print(addresses[0]["subnet"])
-	# 127.0.0.255 255.255.255.255
+	print(addresses[0]["subnet"])  # 127.0.0.255 255.255.255.255
 
 	# Checks for presence of address in the Fortigate
 	response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
-	print("exist", response)
-	# <Response [200]>
+	print("exist", response)  # <Response [200]>
 
 	# Deletes address from Fortigate
 	response = fgt.delete(url="api/v2/cmdb/firewall/address/ADDRESS")
-	print("delete", response)
-	# <Response [200]>
+	print("delete", response)  # <Response [200]>
 
 	# Checks for absence of address in the Fortigate
 	response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
-	print("exist", response)
-	# <Response [404]>
+	print("exist", response)  # <Response [404]>
 
 	fgt.logout()
 

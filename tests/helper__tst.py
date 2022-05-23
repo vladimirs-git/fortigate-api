@@ -49,6 +49,7 @@ class MockFortigate(unittest.TestCase):
     def setUp(self):
         """setUp"""
         patch.object(Fortigate, "login", return_value=MockSession()).start()
+        patch.object(Fortigate, "_get_session", return_value=MockSession()).start()
         self.fgt = Fortigate(host="domain.com", username="", password="")
 
 

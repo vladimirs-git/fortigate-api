@@ -18,6 +18,23 @@ class Test(unittest.TestCase):
         self.fgt = Fortigate(host="host", username="username", password="")
         self.url_policy = f"{self.fgt.url}/api/v2/cmdb/firewall/policy/"
 
+    def test_valid__repr__(self):
+        """Fortigate.__repr__()"""
+        for fgt, req in [
+            (Fortigate(host="a", username="b", password="c"),
+             "Fortigate(host='a', username='b', password='*')"),
+            (Fortigate(host="a", username="b", password="c", port=1),
+             "Fortigate(host='a', username='b', password='*', port=1)"),
+            (Fortigate(host="a", username="b", password="c", timeout=1),
+             "Fortigate(host='a', username='b', password='*', timeout=1)"),
+            (Fortigate(host="a", username="b", password="c", vdom="d"),
+             "Fortigate(host='a', username='b', password='*', vdom='d')"),
+            (Fortigate(host="a", username="b", password="c", vdom="d", timeout=1, port=1),
+             "Fortigate(host='a', username='b', password='*', port=1, timeout=1, vdom='d')"),
+        ]:
+            result = f"{fgt!r}"
+            self.assertEqual(result, req, msg=f"{fgt=}")
+
     def test_valid__url(self):
         """Fortigate._init_url()"""
         domain, ip_ = "domain.com", "127.0.0.255"

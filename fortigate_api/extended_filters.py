@@ -7,9 +7,8 @@ from typing import Tuple
 
 from fortigate_api.address import Address
 from fortigate_api.address_group import AddressGroup
-from fortigate_api.tools import dict_
-from fortigate_api.tools.str_ import findall3
-from fortigate_api.tools.types_ import LDAny, LStr, DLStr, DLInet
+from fortigate_api import dict_, str_
+from fortigate_api.types_ import LDAny, LStr, DLStr, DLInet
 
 EFILTER_KEYS = ["dstaddr", "srcaddr"]
 EFILTER_OPERATORS = [
@@ -70,7 +69,7 @@ def _split_efilter(efilter: str) -> Tuple[str, str, IPv4Network]:
     """Parse `key`, `operator`, `value` from `efilter` for "srcaddr", "dstaddr"
     :param efilter: Extended filter
     """
-    key, operator, value = findall3(pattern=r"(\w+)(..)(.+)", string=efilter)
+    key, operator, value = str_.findall3(pattern=r"(\w+)(..)(.+)", string=efilter)
     if key not in ["srcaddr", "dstaddr"]:
         return "", "", IPv4Network("0.0.0.0")
     ipnet = ip_network(value)
@@ -134,7 +133,7 @@ def _valid_efilters(efilters: LStr) -> None:
     regex = r"(\w+?)({})(.+)".format(re_operators)
     keys: LStr = []
     for efilter in efilters:
-        key, operator, value = findall3(pattern=regex, string=efilter)
+        key, operator, value = str_.findall3(pattern=regex, string=efilter)
         keys.append(key)
         expected = EFILTER_KEYS
         if key not in expected:

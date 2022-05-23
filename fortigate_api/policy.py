@@ -4,8 +4,8 @@ from requests import Response
 
 from fortigate_api.extended_filters import wrapp_efilters
 from fortigate_api.base import Base
-from fortigate_api.tools import str_
-from fortigate_api.tools.types_ import LDAny, StrInt
+from fortigate_api import str_
+from fortigate_api.types_ import LDAny, StrInt
 
 
 class Policy(Base):

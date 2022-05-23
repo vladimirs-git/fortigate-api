@@ -3,7 +3,12 @@
 CHANGELOG
 =========
 
-0.2.1 (2022-05-21)
+0.2.2 (2022-05-23)
+------------------
+* [change] Fortigate.login() - return: Fortigate (before was Session)
+* [new] FortigateAPI.vdom - Gets the ability to change the vdom in the same session
+
+0.2.2 (2022-05-21)
 ------------------
 * [change] README.nd changed to README.rst
 * [change] renamed unique identifier "name" and "id" replaced to "uid"

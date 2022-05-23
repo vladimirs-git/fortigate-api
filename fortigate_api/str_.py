@@ -4,7 +4,7 @@ from typing import Any
 from urllib import parse
 from urllib.parse import urlencode, urlparse, parse_qs, ParseResult
 
-from fortigate_api.tools.types_ import DAny, T2Str, T3Str
+from fortigate_api.types_ import DAny, T2Str, T3Str
 
 
 def findall(pattern: str, string: str, flags=0) -> str:

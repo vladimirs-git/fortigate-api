@@ -3,9 +3,8 @@
 from operator import attrgetter
 
 from requests import Response
-
-from fortigate_api.tools import dict_, str_
-from fortigate_api.tools.types_ import DAny, LDAny, LStr, LResponse, StrInt
+from fortigate_api import dict_, str_
+from fortigate_api.types_ import DAny, LDAny, LStr, LResponse, StrInt
 
 IMPLEMENTED_OBJECTS = (
     "api/v2/cmdb/antivirus/profile/",

@@ -1,8 +1,8 @@
 """Interface Object"""
 
 from fortigate_api.base import Base
-from fortigate_api.tools import dict_
-from fortigate_api.tools.types_ import LDAny
+from fortigate_api import dict_
+from fortigate_api.types_ import LDAny
 
 
 class Interface(Base):

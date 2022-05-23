@@ -2,7 +2,7 @@
 
 import unittest
 
-from fortigate_api.tools import dict_ as tool
+from fortigate_api import dict_
 
 
 class Test(unittest.TestCase):
@@ -16,7 +16,7 @@ class Test(unittest.TestCase):
             (["a"], dict(a=1)),
             (["a", "b"], dict(a=1, b=2, c=3)),
         ]:
-            tool.check_mandatory(keys=keys, **kwargs)
+            dict_.check_mandatory(keys=keys, **kwargs)
 
     def test_invalid__check_mandatory(self):
         """check_mandatory()"""
@@ -26,7 +26,7 @@ class Test(unittest.TestCase):
             (["a", "b"], dict(a=1, c=3), KeyError),
         ]:
             with self.assertRaises(error, msg=f"{kwargs=}"):
-                tool.check_mandatory(keys=keys, **kwargs)
+                dict_.check_mandatory(keys=keys, **kwargs)
 
     def test_valid__check_only_one(self):
         """check_only_one()"""
@@ -39,7 +39,7 @@ class Test(unittest.TestCase):
             (["a", "b"], dict(a=1, c=3)),
             (["a", "b"], dict(b=2, c=3)),
         ]:
-            tool.check_only_one(keys=keys, **kwargs)
+            dict_.check_only_one(keys=keys, **kwargs)
 
     def test_invalid__check_only_one(self):
         """check_only_one()"""
@@ -47,7 +47,7 @@ class Test(unittest.TestCase):
             (["a", "b"], dict(a=1, b=2), KeyError),
         ]:
             with self.assertRaises(error, msg=f"{kwargs=}"):
-                tool.check_only_one(keys=keys, **kwargs)
+                dict_.check_only_one(keys=keys, **kwargs)
 
     def test_valid__check_one_of(self):
         """check_one_of()"""
@@ -59,7 +59,7 @@ class Test(unittest.TestCase):
             (["a", "b"], dict(a=1, c=3)),
             (["a", "b"], dict(b=2, c=3)),
         ]:
-            tool.check_one_of(keys=keys, **kwargs)
+            dict_.check_one_of(keys=keys, **kwargs)
 
     def test_invalid__check_one_of(self):
         """check_one_of()"""
@@ -68,7 +68,7 @@ class Test(unittest.TestCase):
             (["a", "b"], dict(c=3), KeyError),
         ]:
             with self.assertRaises(error, msg=f"{kwargs=}"):
-                tool.check_one_of(keys=keys, **kwargs)
+                dict_.check_one_of(keys=keys, **kwargs)
 
     def test_valid__get_quoted(self):
         """get_quoted()"""
@@ -78,7 +78,7 @@ class Test(unittest.TestCase):
             (dict(name="10.0.0.0_8"), "10.0.0.0_8"),
             (dict(name="10.0.0.0/8"), "10.0.0.0%2F8"),
         ]:
-            result = tool.get_quoted(key=key, **kwargs)
+            result = dict_.get_quoted(key=key, **kwargs)
             self.assertEqual(result, req, msg=f"{kwargs=}")
 
     def test_invalid__get_quoted(self):
@@ -89,7 +89,7 @@ class Test(unittest.TestCase):
             ({}, KeyError),
         ]:
             with self.assertRaises(error, msg=f"{kwargs=}"):
-                tool.get_quoted(key=key, **kwargs)
+                dict_.get_quoted(key=key, **kwargs)
 
     def test_valid__pop_int(self):
         """pop_int()"""
@@ -100,7 +100,7 @@ class Test(unittest.TestCase):
             (dict(id=1), 1),
             (dict(id="1"), 1),
         ]:
-            result = tool.pop_int(key=key, data=data)
+            result = dict_.pop_int(key=key, data=data)
             self.assertEqual(result, req, msg=f"{data=}")
             result_ = data.get(key)
             self.assertIsNone(result_, msg=f"{data=}")
@@ -113,7 +113,7 @@ class Test(unittest.TestCase):
             (dict(id=[1]), TypeError),
         ]:
             with self.assertRaises(error, msg=f"{data=}"):
-                tool.pop_int(key=key, data=data)
+                dict_.pop_int(key=key, data=data)
 
     def test_valid__pop_lstr(self):
         """pop_lstr()"""
@@ -126,7 +126,7 @@ class Test(unittest.TestCase):
             (dict(filter=["a"]), ["a"]),
             (dict(filter=["b", "a"]), ["b", "a"]),
         ]:
-            result = tool.pop_lstr(key=key, data=data)
+            result = dict_.pop_lstr(key=key, data=data)
             self.assertEqual(result, req, msg=f"{data=}")
             result_ = data.get(key)
             self.assertIsNone(result_, msg=f"{data=}")
@@ -139,7 +139,7 @@ class Test(unittest.TestCase):
             (dict(filter=[1]), TypeError),
         ]:
             with self.assertRaises(error, msg=f"{data=}"):
-                tool.pop_lstr(key=key, data=data)
+                dict_.pop_lstr(key=key, data=data)
 
     def test_valid__pop_str(self):
         """pop_str()"""
@@ -150,7 +150,7 @@ class Test(unittest.TestCase):
             (dict(name="a"), "a"),
             (dict(name=1), "1"),
         ]:
-            result = tool.pop_str(key=key, data=data)
+            result = dict_.pop_str(key=key, data=data)
             self.assertEqual(result, req, msg=f"{data=}")
             result_ = data.get(key)
             self.assertIsNone(result_, msg=f"{data=}")

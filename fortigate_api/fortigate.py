@@ -1,6 +1,7 @@
 """**Fortigate** - Firewall Connector to login and logout.
 Calls generic methods for working with objects: delete, get, post, put, exist.
 """
+from __future__ import annotations
 
 import json
 import logging
@@ -12,8 +13,8 @@ from requests import Session, Response
 from requests.exceptions import SSLError  # type: ignore
 from requests.packages import urllib3  # type: ignore
 
-from fortigate_api.tools import str_
-from fortigate_api.tools.types_ import DAny, LDAny
+from fortigate_api import str_
+from fortigate_api.types_ import DAny, LDAny
 
 # noinspection PyUnresolvedReferences
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -48,7 +49,7 @@ class Fortigate:
     def __repr__(self):
         host = self.host
         username = self.username
-        password = ""
+        password = "*" * len(self.password)
         port = self.port
         timeout = self.timeout
         vdom = self.vdom
@@ -128,8 +129,10 @@ class Fortigate:
         result: LDAny = response.json()["results"]
         return result
 
-    def login(self) -> Session:
-        """Login to Fortigate"""
+    def login(self) -> Fortigate:
+        """Login to Fortigate. Save logged-in session
+        :return: self *Fortigate* object
+        """
         session: Session = requests.session()
         try:
             session.post(url=f"{self.url}/logincheck",
@@ -148,10 +151,10 @@ class Fortigate:
         response: Response = session.get(url=f"{self.url}/api/v2/cmdb/system/vdom")
         response.raise_for_status()
         self._session = session
-        return session
+        return self
 
     def logout(self) -> None:
-        """Logout Fortigate"""
+        """Logout Fortigate. Delete logged-in session"""
         if self._session:
             try:
                 self._session.get(url=f"{self.url}/logout", timeout=self.timeout, verify=False)
@@ -205,7 +208,11 @@ class Fortigate:
 
     def _get_session(self) -> Session:
         """Returns an existing session or create a new one"""
-        return self._session if self._session else self.login()
+        if not self._session:
+            self.login()
+        if isinstance(self._session, Session):
+            return self._session
+        raise ValueError(f"absent session={self._session}")
 
     def _logging(self, resp: Response) -> None:
         """Logging response"""

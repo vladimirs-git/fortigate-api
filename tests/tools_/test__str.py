@@ -2,7 +2,7 @@
 
 import unittest
 
-from fortigate_api.tools import str_ as tool
+from fortigate_api import str_
 
 
 class Test(unittest.TestCase):
@@ -18,7 +18,7 @@ class Test(unittest.TestCase):
             ("https://domain.com?a=a", dict(b="b"), "https://domain.com?a=a&b=b"),
             ("https://domain.com?a=a", dict(b=["b", "B"]), "https://domain.com?a=a&b=b&b=B"),
         ]:
-            result = tool.make_url(url=url, **params)
+            result = str_.make_url(url=url, **params)
             self.assertEqual(result, req, msg=f"{url=} {params=}")
 
     def test_valid__quote_(self):
@@ -29,7 +29,7 @@ class Test(unittest.TestCase):
             ("10.0.0.0_8", "10.0.0.0_8"),
             ("10.0.0.0/8", "10.0.0.0%2F8"),
         ]:
-            result = tool.quote(string=string)
+            result = str_.quote(string=string)
             self.assertEqual(result, req, msg=f"{string=}")
 
 
