@@ -7,6 +7,7 @@ CHANGELOG
 ------------------
 * [change] Fortigate.login() - return: Fortigate (before was Session)
 * [new] FortigateAPI.vdom - Gets the ability to change the vdom in the same session
+* [fix] py.typed, setup.py
 
 0.2.2 (2022-05-21)
 ------------------

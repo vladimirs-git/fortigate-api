@@ -16,11 +16,12 @@ if __name__ == "__main__":
     setup(
         name=PACKAGE_,
         packages=[PACKAGE_],
+        package_data={PACKAGE_: ["py.typed"]},
         version=VERSION,
-        license=package.__license__,
         description=package.__summary__,
-        long_description=(ROOT / README).read_text(encoding="utf-8"),
-        long_description_content_type="text/markdown",
+        license=package.__license__,
+        long_description=open(README).read(),
+        long_description_content_type="text/x-rst",
         author=package.__author__,
         author_email=package.__email__,
         url=package.__url__,
@@ -37,5 +38,6 @@ if __name__ == "__main__":
             "Topic :: System :: Networking :: Firewalls",
             "License :: OSI Approved :: MIT License",
             "Programming Language :: Python :: 3.8",
+            "Natural Language :: English",
         ],
     )

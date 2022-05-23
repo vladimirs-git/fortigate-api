@@ -92,7 +92,7 @@ vdom            *str*   Name of virtual domain, by default "root"
 
 Address
 -------
-FortiOS v6.4 data example `./examples/address.yml`_
+FortiOS v6.4 data example `./examples/yml/address.yml`_
 
 
 create(data)
@@ -260,7 +260,7 @@ Examples - Address
 
 AddressGroup
 ------------
-FortiOS v6.4 data example `./examples/address_group.yml`_
+FortiOS v6.4 data example `./examples/yml/address_group.yml`_
 
 create(data)
 ............
@@ -435,7 +435,7 @@ Antivirus
 ---------
 **Antivirus** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/antivirus.yml`_
+FortiOS v6.4 data example `./examples/yml/antivirus.yml`_
 
 **FortigateAPI.antivirus.create(data)**
 
@@ -452,7 +452,7 @@ Application
 -----------
 **Application** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/application.yml`_
+FortiOS v6.4 data example `./examples/yml/application.yml`_
 
 **FortigateAPI.application.create(data)**
 
@@ -469,7 +469,7 @@ Interface
 ---------
 **Interface** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/interface.yml`_
+FortiOS v6.4 data example `./examples/yml/interface.yml`_
 
 **FortigateAPI.interface.create(data)**
 
@@ -570,7 +570,7 @@ InternetService
 ---------------
 **InternetService** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/internet_service.yml`_
+FortiOS v6.4 data example `./examples/yml/internet_service.yml`_
 
 **FortigateAPI.internet_service.create(data)**
 
@@ -587,7 +587,7 @@ IpPool
 ------
 **IpPool** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/ip_pool.yml`_
+FortiOS v6.4 data example `./examples/yml/ip_pool.yml`_
 
 **FortigateAPI.ip_pool.create(data)**
 
@@ -602,7 +602,7 @@ FortiOS v6.4 data example `./examples/ip_pool.yml`_
 
 Policy
 ------
-FortiOS v6.4 data example `./examples/policy.yml`_
+FortiOS v6.4 data example `./examples/yml/policy.yml`_
 
 create(data)
 ............
@@ -895,7 +895,7 @@ Schedule
 --------
 **Schedule** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/schedule.yml`_
+FortiOS v6.4 data example `./examples/yml/schedule.yml`_
 
 **FortigateAPI.schedule.create(data)**
 
@@ -912,7 +912,7 @@ Service
 -------
 **Service** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/service.yml`_
+FortiOS v6.4 data example `./examples/yml/service.yml`_
 
 **FortigateAPI.service.create(data)**
 
@@ -929,7 +929,7 @@ ServiceCategory
 ---------------
 **ServiceCategory** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/service_category.yml`_
+FortiOS v6.4 data example `./examples/yml/service_category.yml`_
 
 **FortigateAPI.service_category.create(data)**
 
@@ -946,7 +946,7 @@ ServiceGroup
 ------------
 **ServiceGroup** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/service_group.yml`_
+FortiOS v6.4 data example `./examples/yml/service_group.yml`_
 
 **FortigateAPI.service_group.create(data)**
 
@@ -963,7 +963,7 @@ SnmpCommunity
 -------------
 **SnmpCommunity**
 
-FortiOS v6.4 data example `./examples/snmp_community.yml`_
+FortiOS v6.4 data example `./examples/yml/snmp_community.yml`_
 **FortigateAPI.snmp_community.create(data)**
 
 **FortigateAPI.snmp_community.delete(uid, filter)**
@@ -979,7 +979,7 @@ VirtualIP
 ---------
 **VirtualIP** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/virtual_ip.yml`_
+FortiOS v6.4 data example `./examples/yml/virtual_ip.yml`_
 
 **FortigateAPI.virtual_ip.create(data)**
 
@@ -996,7 +996,7 @@ Zone
 ----
 **Zone** object has the same parameters and methods as `Address`_
 
-FortiOS v6.4 data example `./examples/zone.yml`_
+FortiOS v6.4 data example `./examples/yml/zone.yml`_
 
 **FortigateAPI.zone.create(data)**
 
@@ -1162,18 +1162,18 @@ Examples - Fortigate
 	fgt.logout()
 
 
-.. _`./examples/address.yml`: ./examples/address.yml
-.. _`./examples/address_group.yml`: ./examples/address_group.yml
-.. _`./examples/antivirus.yml`: ./examples/antivirus.yml
-.. _`./examples/application.yml`: ./examples/application.yml
-.. _`./examples/interface.yml`: ./examples/interface.yml
-.. _`./examples/internet_service.yml`: ./examples/internet_service.yml
-.. _`./examples/ip_pool.yml`: ./examples/ip_pool.yml
-.. _`./examples/policy.yml`: ./examples/policy.yml
-.. _`./examples/schedule.yml`: ./examples/schedule.yml
-.. _`./examples/service.yml`: ./examples/service.yml
-.. _`./examples/service_category.yml`: ./examples/service_category.yml
-.. _`./examples/service_group.yml`: ./examples/service_group.yml
-.. _`./examples/snmp_community.yml`: ./examples/snmp_community.yml
-.. _`./examples/virtual_ip.yml`: ./examples/virtual_ip.yml
-.. _`./examples/zone.yml`: ./examples/zone.yml
+.. _`./examples/yml/address.yml`: ./examples/yml/address.yml
+.. _`./examples/yml/address_group.yml`: ./examples/yml/address_group.yml
+.. _`./examples/yml/antivirus.yml`: ./examples/yml/antivirus.yml
+.. _`./examples/yml/application.yml`: ./examples/yml/application.yml
+.. _`./examples/yml/interface.yml`: ./examples/yml/interface.yml
+.. _`./examples/yml/internet_service.yml`: ./examples/yml/internet_service.yml
+.. _`./examples/yml/ip_pool.yml`: ./examples/yml/ip_pool.yml
+.. _`./examples/yml/policy.yml`: ./examples/yml/policy.yml
+.. _`./examples/yml/schedule.yml`: ./examples/yml/schedule.yml
+.. _`./examples/yml/service.yml`: ./examples/yml/service.yml
+.. _`./examples/yml/service_category.yml`: ./examples/yml/service_category.yml
+.. _`./examples/yml/service_group.yml`: ./examples/yml/service_group.yml
+.. _`./examples/yml/snmp_community.yml`: ./examples/yml/snmp_community.yml
+.. _`./examples/yml/virtual_ip.yml`: ./examples/yml/virtual_ip.yml
+.. _`./examples/yml/zone.yml`: ./examples/yml/zone.yml
