@@ -28,7 +28,8 @@ class FortigateAPI:
         :param host: Firewall ip address or hostname
         :param username: Administrator name
         :param password: Administrator password
-        :param port: HTTPS port, by default 443
+        :param scheme: "https" or "http", by default "https"
+        :param port: TCP port, by default 443 for "https", 80 for "http"
         :param timeout: Session timeout (minutes), by default 15
         :param vdom: Name of virtual domain, by default "root"
         """
