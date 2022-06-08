@@ -72,6 +72,8 @@ class Fortigate:
         """Returns URL to Fortigate"""
         if self.port == 443:
             return f"https://{self.host}"
+        elif self.port == 80:
+            return f"http://{self.host}"
         return f"https://{self.host}:{self.port}"
 
     # =========================== methods ============================
