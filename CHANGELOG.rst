@@ -20,7 +20,7 @@ CHANGELOG
 * [fix] py.typed, setup.py
 
 
-0.2.2 (2022-05-21)
+0.2.1 (2022-05-21)
 ------------------
 * [change] README.nd changed to README.rst
 * [change] renamed unique identifier "name" and "id" replaced to "uid"
