@@ -3,6 +3,7 @@
 from operator import attrgetter
 
 from requests import Response
+
 from fortigate_api import dict_, str_
 from fortigate_api.types_ import DAny, LDAny, LStr, LResponse, StrInt
 
