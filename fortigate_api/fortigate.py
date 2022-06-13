@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from typing import Iterable, Optional
 from urllib.parse import urlencode
 
@@ -19,7 +20,9 @@ from fortigate_api.types_ import DAny, LDAny
 # noinspection PyUnresolvedReferences
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-PORT = 443
+PORT_80 = 80
+PORT_443 = 443
+HTTPS = "https"
 TIMEOUT = 15
 VDOM = "root"
 
@@ -34,14 +37,16 @@ class Fortigate:
         :param host: Firewall ip address or hostname
         :param username: Administrator name
         :param password: Administrator password
-        :param port: HTTPS port, by default 443
+        :param scheme: "https" or "http", by default "https"
+        :param port: TCP port, by default 443 for "https", 80 for "http"
         :param timeout: Session timeout (minutes), by default 15
         :param vdom: Name of virtual domain, by default "root"
         """
         self.host = host
         self.username = username
         self.password = password
-        self.port: int = int(kwargs.get("port") or PORT)
+        self.scheme: str = self._init_scheme(**kwargs)
+        self.port: int = self._init_port(**kwargs)
         self.timeout: int = int(kwargs.get("timeout") or TIMEOUT)
         self.vdom: str = str(kwargs.get("vdom") or VDOM)
         self._session: Optional[Session] = None
@@ -50,7 +55,8 @@ class Fortigate:
         host = self.host
         username = self.username
         password = "*" * len(self.password)
-        port = self.port
+        scheme = self.scheme
+        port = self.port if not (scheme == HTTPS and self.port == PORT_443) else ""
         timeout = self.timeout
         vdom = self.vdom
         params = [
@@ -59,7 +65,8 @@ class Fortigate:
             f"{password=!r}",
         ]
         params_optional = [
-            f"{port=!r}" if port != PORT else "",
+            f"{scheme=!r}" if scheme != HTTPS else "",
+            f"{port=!r}" if port else "",
             f"{timeout=!r}" if timeout != TIMEOUT else "",
             f"{vdom=!r}" if vdom != VDOM else "",
         ]
@@ -67,12 +74,33 @@ class Fortigate:
         params_ = ", ".join([s for s in params if s])
         return f"{self.__class__.__name__}({params_})"
 
+    # ============================= init =============================
+
+    @staticmethod
+    def _init_scheme(**kwargs) -> str:
+        """Init scheme "https" or "http" """
+        scheme = str(kwargs.get("scheme") or HTTPS)
+        expected = ["https", "http"]
+        if scheme not in expected:
+            raise ValueError(f"{scheme=}, {expected=}")
+        return scheme
+
+    def _init_port(self, **kwargs) -> int:
+        """Init port, 443 for "https", 80 for "http" """
+        if port := int(kwargs.get("port") or 0):
+            return port
+        if self.scheme == "http":
+            return PORT_80
+        return PORT_443
+
+    # =========================== property ===========================
+
     @property
     def url(self):
         """Returns URL to Fortigate"""
         if self.port == 443:
-            return f"https://{self.host}"
-        return f"https://{self.host}:{self.port}"
+            return f"{self.scheme}://{self.host}"
+        return f"{self.scheme}://{self.host}:{self.port}"
 
     # =========================== methods ============================
 
@@ -247,7 +275,8 @@ class Fortigate:
         return ex
 
     def _valid_url(self, url: str) -> str:
-        """If absent "https://" Add it to `url`"""
-        if not url.startswith("https://"):
-            url = f"{self.url}/{url}"
-        return url
+        """Adds "https://" to `url`"""
+        if re.match("http(s)?://", url):
+            return url
+        url = url.strip("/")
+        return f"{self.url}/{url}/"

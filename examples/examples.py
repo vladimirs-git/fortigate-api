@@ -4,7 +4,6 @@ from pprint import pprint
 
 from fortigate_api import FortigateAPI, Fortigate
 
-
 fgt = FortigateAPI(host="host", username="username", password="password").login()
 
 print("\n\nExamples - Address\n"

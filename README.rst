@@ -100,7 +100,6 @@ create(data)
 **FortigateAPI.address.create(data)**
 Creates address-object in the Fortigate.
 
-
 =============== ======= ============================================================================
 Parameter       Type    Description
 =============== ======= ============================================================================
