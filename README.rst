@@ -14,13 +14,19 @@ manipulate any other objects that can be accessed through the REST API using the
 Installation
 ------------
 
-Install the package by running
+Install the package from pypi.org release
 
 .. code:: bash
 
     pip install fortigate-api
 
-or
+or install the package from github.com release
+
+.. code:: bash
+
+    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/0.2.3.tar.gz
+
+or install the package from github.com repository
 
 .. code:: bash
 
