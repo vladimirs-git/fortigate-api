@@ -4,7 +4,6 @@ import unittest
 from unittest.mock import patch
 
 import requests
-
 from fortigate_api.fortigate import Fortigate
 from tests.helper__tst import NAME1, NAME2, NAME3, POL1, MockSession
 
@@ -41,6 +40,8 @@ class Test(unittest.TestCase):
         ]:
             result = f"{fgt!r}"
             self.assertEqual(result, req, msg=f"{fgt=}")
+
+    # ============================= init =============================
 
     def test_valid__init_scheme(self):
         """Fortigate._init_scheme()"""
@@ -89,6 +90,18 @@ class Test(unittest.TestCase):
             with self.assertRaises(error, msg=f"{kwargs=}"):
                 self.fgt._init_port(**kwargs)
 
+    # =========================== property ===========================
+
+    def test_valid__is_connected(self):
+        """Fortigate.is_connected()"""
+        for session, req in [
+            ("<Sesion>", True),
+            (None, False),
+        ]:
+            self.fgt._session = session
+            result = self.fgt.is_connected
+            self.assertEqual(result, req, msg=f"{session=}")
+
     def test_valid__url(self):
         """Fortigate._init_url()"""
         https, domain, ip_ = "https", "domain.com", "127.0.0.255"
@@ -101,6 +114,8 @@ class Test(unittest.TestCase):
             self.fgt.scheme, self.fgt.host, self.fgt.port = scheme, host, port
             result = self.fgt.url
             self.assertEqual(result, req, msg=f"{host=} {port=}")
+
+    # =========================== methods ============================
 
     def test_valid__delete(self):
         """Fortigate.delete()"""

@@ -2,10 +2,9 @@
 
 from operator import attrgetter
 
-from requests import Response
-
 from fortigate_api import dict_, str_
 from fortigate_api.types_ import DAny, LDAny, LStr, LResponse, StrInt
+from requests import Response
 
 IMPLEMENTED_OBJECTS = (
     "api/v2/cmdb/antivirus/profile/",
@@ -42,7 +41,8 @@ class Base:
     def create(self, data: DAny) -> Response:
         """Creates fortigate-object in the Fortigate
         :param data: Data of the fortigate-object
-        :return: Session response. *<Response [200]>* Object successfully created or already exists,
+        :return: Session response
+            *<Response [200]>* Object successfully created or already exists
             *<Response [500]>* Object already exist in the Fortigate
         """
         dict_.check_mandatory(keys=["name"], **data)
@@ -59,7 +59,8 @@ class Base:
         :param str uid: Identifier of the fortigate-object. Used to delete a single object
         :param list filter: Filters fortigate-objects by one or multiple conditions: equals "==",
             not equals "!=", contains "=@". Used to delete multiple objects
-        :return: Session response. *<Response [200]>* Object successfully deleted,
+        :return: Session response
+            *<Response [200]>* Object successfully deleted
             *<Response [404]>* Object absent in the Fortigate
         """
         dict_.check_only_one(["uid", "filter"], **kwargs)
@@ -114,20 +115,20 @@ class Base:
             return response.ok
         raise ValueError(f"invalid {uid=}")
 
-    def update(self, uid: StrInt, data: DAny) -> Response:
-        """Updates fortigate-object in the Fortigate
-        :param uid: Identifier of the fortigate-object
+    def update(self, data: DAny, uid: StrInt = "") -> Response:
+        """Updates address, address-group, etc. object, where `uid` is data["name"]
         :param data: Data of the fortigate-object
-        :return: Session response. *<Response [200]>* Object successfully updated,
+        :param uid: Name of the fortigate-object,
+            taken from the `uid` parameter or from data["name"]
+        :return: Session response
+            *<Response [200]>* Object successfully updated
             *<Response [404]>* Object has not been updated
         """
-        if uid := str_.quote(uid):
-            url = f"{self.url_}{uid}"
-            exist = self.fgt.exist(url=url)
-            if not exist.ok:
-                return exist
-            return self.fgt.put(url=url, data=data)
-        raise ValueError(f"invalid {uid=}")
+        if not uid:
+            uid = data.get("name") or ""
+            if not uid:
+                raise ValueError(f"absent {uid=} and data[\"name\"]")
+        return self._update(data=data, uid=uid)
 
     # =========================== helpers ===========================
 
@@ -152,3 +153,19 @@ class Base:
                 end = url.replace(known, "", 1)
                 return known + str_.quote(end)
         return url
+
+    def _update(self, data: DAny, uid: StrInt) -> Response:
+        """Updates fortigate-object in the Fortigate
+        :param data: Data of the fortigate-object
+        :param uid: Identifier of the fortigate-object
+        :return: Session response
+            *<Response [200]>* Object successfully updated
+            *<Response [404]>* Object has not been updated
+        """
+        if uid := str_.quote(uid):
+            url = f"{self.url_}{uid}"
+            exist = self.fgt.exist(url=url)
+            if not exist.ok:
+                return exist
+            return self.fgt.put(url=url, data=data)
+        raise ValueError(f"invalid {uid=}")

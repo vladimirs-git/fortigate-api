@@ -5,9 +5,7 @@ import re
 import unittest
 from datetime import datetime
 
-# noinspection PyProtectedMember
-from fortigate_api import __title__
-from setup import PACKAGE_, ROOT, README
+from setup import PACKAGE, PACKAGE_, ROOT, README
 
 CHANGELOG = "CHANGELOG.rst"
 
@@ -79,10 +77,14 @@ class Test(unittest.TestCase):
         path = os.path.join(ROOT, README)
         with open(path) as fh:
             text = fh.read()
-            regex = __title__ + r"-(.+)\.tar\.gz"
-            versions_readme = re.findall(regex, text, re.M)
-            for version_readme in versions_readme:
-                self.assertEqual(version_readme, version, msg=f"version in {path=}")
+            regexes = [
+                PACKAGE + r".+/(.+?)\.tar\.gz",
+                PACKAGE + r"@(.+?)$",
+            ]
+            for regex in regexes:
+                versions_readme = re.findall(regex, text, re.M)
+                for version_readme in versions_readme:
+                    self.assertEqual(version_readme, version, msg=f"version in {path=}")
 
         path = os.path.join(ROOT, CHANGELOG)
         with open(path) as fh:

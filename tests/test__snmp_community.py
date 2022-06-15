@@ -64,8 +64,12 @@ class Test(MockFortigate):
     def test_valid__update(self):
         """SnmpCommunity.update()"""
         for kwargs, req in [
-            (dict(uid=NAME1, data=dict(name=NAME1)), 200),
-            (dict(uid="NAME9", data=dict(name="NAME9")), 500),
+            (dict(uid=1, data=dict(name=NAME1, id=1)), 200),
+            (dict(uid=9, data=dict(name="NAME9", id=9)), 500),
+            (dict(uid="1", data=dict(name=NAME1, id=1)), 200),
+            (dict(uid="9", data=dict(name="NAME9", id=9)), 500),
+            (dict(data=dict(name=NAME1, id=1)), 200),
+            (dict(data=dict(name="NAME9", id=9)), 500),
         ]:
             result = self.obj.update(**kwargs).status_code
             self.assertEqual(result, req, msg=f"{kwargs=}")

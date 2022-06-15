@@ -2,9 +2,8 @@
 
 import unittest
 
-from requests import Response
-
 from fortigate_api.base import Base
+from requests import Response
 from tests.helper__tst import NAME1, SLASH, SLASH_, MockFortigate
 
 

@@ -138,6 +138,10 @@ class Test(MockFortigate):
         for kwargs, req in [
             (dict(uid=1, data=dict(name=POL1, policyid=1)), 200),
             (dict(uid=9, data=dict(name="POL9", policyid=9)), 500),
+            (dict(uid="1", data=dict(name=POL1, policyid=1)), 200),
+            (dict(uid="9", data=dict(name="POL9", policyid=9)), 500),
+            (dict(data=dict(name=POL1, policyid=1)), 200),
+            (dict(data=dict(name="POL9", policyid=9)), 500),
         ]:
             result = self.obj.update(**kwargs).status_code
             self.assertEqual(result, req, msg=f"{kwargs=}")

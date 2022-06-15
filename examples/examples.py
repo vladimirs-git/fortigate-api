@@ -7,7 +7,7 @@ from fortigate_api import FortigateAPI, Fortigate
 fgt = FortigateAPI(host="host", username="username", password="password").login()
 
 print("\n\nExamples - Address\n"
-      "...........................................................................")
+      ".................................................................")
 
 data = {"name": "ADDRESS",
         "obj-type": "ip",
@@ -68,7 +68,7 @@ response = fgt.address.is_exist(uid="ADDRESS")
 print("address.is_exist", response)  # address.is_exist False
 
 print("\n\nExamples - AddressGroup\n"
-      "...........................................................................")
+      ".................................................................")
 
 print("\nCreates address and address-group in the Fortigate")
 data = {"name": "ADDRESS",
@@ -137,7 +137,7 @@ response = fgt.address_group.is_exist(uid="ADDR_GROUP")
 print("address_group.is_exist", response)  # address_group.is_exist False
 
 print("\n\nExamples - Interface\n"
-      "...........................................................................")
+      ".................................................................")
 
 print("\nGets all interfaces in vdom \"root\" from Fortigate")
 interfaces = fgt.interface.get()
@@ -189,7 +189,7 @@ print(f"{fgt!r}")  # Fortigate(host='host', username='username', password='*****
 print(fgt.vdom)  # root
 
 print("\n\nExamples - Policy\n"
-      "...........................................................................")
+      ".................................................................")
 
 print("\nCreates policy in the Fortigate")
 data = dict(
@@ -274,7 +274,7 @@ response = fgt.policy.is_exist(uid=policyid)
 print("policy.is_exist", response)  # policy.is_exist False
 
 print("\n\nExamples - Policy extended filter\n"
-      "...........................................................................\n")
+      ".................................................................")
 
 print("\nCreates address and address_groupin the Fortigate")
 data = {"name": "ADDRESS1",
@@ -350,7 +350,7 @@ print("address.delete", response.ok)  # address.delete <Response [200]>
 fgt.logout()
 
 print("\n\nExamples - Fortigate\n"
-      "...........................................................................\n")
+      ".................................................................")
 
 fgt = Fortigate(host="host", username="username", password="password").login()
 
@@ -394,3 +394,7 @@ response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
 print("exist", response)  # <Response [404]>
 
 fgt.logout()
+
+print("\n\nExamples - HTTP\n"
+      ".................................................................")
+fgt = Fortigate(host="host", username="username", password="password").login()

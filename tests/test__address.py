@@ -72,6 +72,8 @@ class Test(MockFortigate):
         for kwargs, req in [
             (dict(uid=ADDR1, data=dict(name=ADDR1)), 200),
             (dict(uid="ADDR9", data=dict(name="ADDR9")), 500),
+            (dict(data=dict(name=ADDR1)), 200),
+            (dict(data=dict(name="ADDR9")), 500),
         ]:
             result = self.obj.update(**kwargs).status_code
             self.assertEqual(result, req, msg=f"{kwargs=}")

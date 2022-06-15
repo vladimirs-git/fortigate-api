@@ -10,12 +10,11 @@ from typing import Iterable, Optional
 from urllib.parse import urlencode
 
 import requests
+from fortigate_api import str_
+from fortigate_api.types_ import DAny, LDAny
 from requests import Session, Response
 from requests.exceptions import SSLError  # type: ignore
 from requests.packages import urllib3  # type: ignore
-
-from fortigate_api import str_
-from fortigate_api.types_ import DAny, LDAny
 
 # noinspection PyUnresolvedReferences
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -96,6 +95,14 @@ class Fortigate:
     # =========================== property ===========================
 
     @property
+    def is_connected(self) -> bool:
+        """Check connection to Fortigate
+        :return: True if session is connected to Fortigate"""
+        if bool(self._session):
+            return True
+        return False
+
+    @property
     def url(self):
         """Returns URL to Fortigate"""
         if self.port == 443:
@@ -107,7 +114,8 @@ class Fortigate:
     def delete(self, url: str) -> Response:
         """DELETE object from Fortigate
         :param url: REST API URL to the object
-        :return: Session response. *<Response [200]>* Object successfully deleted,
+        :return: Session response
+            *<Response [200]>* Object successfully deleted
             *<Response [404]>* Object absent in the Fortigate
         """
         url = self._valid_url(url)
@@ -126,7 +134,8 @@ class Fortigate:
     def exist(self, url: str) -> Response:
         """Checks does an object exists in the Fortigate
         :param url: REST API URL to the object
-        :return: Session response. *<Response [200]>* Object exist,
+        :return: Session response
+            *<Response [200]>* Object exist
             *<Response [404]>* Object does not exist
         """
         url = self._valid_url(url)
@@ -158,7 +167,7 @@ class Fortigate:
         return result
 
     def login(self) -> Fortigate:
-        """Login to Fortigate. Save logged-in session
+        """Login to Fortigate. Save logged-in session to self._session
         :return: self *Fortigate* object
         """
         session: Session = requests.session()
@@ -194,7 +203,8 @@ class Fortigate:
         """POST (create) object in the Fortigate based on the data
         :param url: REST API URL to the object
         :param data: Data of the object
-        :return: Session response. *<Response [200]>* Object successfully created or already exists,
+        :return: Session response
+            *<Response [200]>* Object successfully created or already exists
             *<Response [500]>* Object already exist in the Fortigate
         """
         url = self._valid_url(url)
@@ -215,7 +225,8 @@ class Fortigate:
         """PUT (update) existing object in the Fortigate
         :param url: REST API URL to the object
         :param data: Data of the object
-        :return: Session response. *<Response [200]>* Object successfully updated,
+        :return: Session response
+            *<Response [200]>* Object successfully updated
             *<Response [404]>* Object has not been updated
         """
         url = self._valid_url(url)

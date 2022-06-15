@@ -24,13 +24,13 @@ or install the package from github.com release
 
 .. code:: bash
 
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/0.2.3.tar.gz
+    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/0.2.4.tar.gz
 
 or install the package from github.com repository
 
 .. code:: bash
 
-    pip install git+https://github.com/vladimirs-git/fortigate-api
+    pip install git+https://github.com/vladimirs-git/fortigate-api@0.2.4
 
 
 Objects
@@ -164,16 +164,16 @@ Return
 	*bool* True - object exist, False - object does not exist
 
 
-update(uid, data)
-............
-**FortigateAPI.address.update(uid, data)**
+update(data, uid)
+.................
+**FortigateAPI.address.update(data, uid)**
 Updates address-object in the Fortigate
 
 =============== ======= ============================================================================
 Parameter       Type    Description
 =============== ======= ============================================================================
-uid             *str*   Name of the address-object
 data            *dict*  Data of the address-object
+uid             *str*   Name of the address-object, taken from the `uid` parameter or from data["name"]
 =============== ======= ============================================================================
 
 Return
@@ -331,16 +331,16 @@ Return
 	*bool* True - object exist, False - object does not exist
 
 
-update(uid, data)
-............
-**FortigateAPI.address_group.update(uid, data)**
+update(data, uid)
+.................
+**FortigateAPI.address_group.update(data, uid)**
 Updates address-group-object in the Fortigate
 
 =============== ======= ============================================================================
 Parameter       Type    Description
 =============== ======= ============================================================================
-uid             *str*   Name of the address-group-object
 data            *dict*  Data of the address-group-object
+uid             *str*   Name of the address-group-object, taken from the `uid` parameter or from data["name"]
 =============== ======= ============================================================================
 
 Return
@@ -452,7 +452,7 @@ FortiOS v6.4 data example `./examples/yml/antivirus.yml`_
 
 **FortigateAPI.antivirus.is_exist(uid)**
 
-**FortigateAPI.antivirus.update(uid, data)**
+**FortigateAPI.antivirus.update(data, uid)**
 
 
 Application
@@ -469,7 +469,7 @@ FortiOS v6.4 data example `./examples/yml/application.yml`_
 
 **FortigateAPI.application.is_exist(uid)**
 
-**FortigateAPI.antivirus.update(uid, data)**
+**FortigateAPI.antivirus.update(data, uid)**
 
 
 Interface
@@ -500,7 +500,7 @@ Return
 
 **FortigateAPI.interface.is_exist(uid)**
 
-**FortigateAPI.interface.update(uid, data)**
+**FortigateAPI.interface.update(data, uid)**
 
 
 Examples - Interface
@@ -587,7 +587,7 @@ FortiOS v6.4 data example `./examples/yml/internet_service.yml`_
 
 **FortigateAPI.internet_service.is_exist(uid)**
 
-**FortigateAPI.internet_service.update(uid, data)**
+**FortigateAPI.internet_service.update(data, uid)**
 
 
 IpPool
@@ -604,7 +604,7 @@ FortiOS v6.4 data example `./examples/yml/ip_pool.yml`_
 
 **FortigateAPI.ip_pool.is_exist(uid)**
 
-**FortigateAPI.ip_pool.update(uid, data)**
+**FortigateAPI.ip_pool.update(data, uid)**
 
 
 Policy
@@ -688,14 +688,15 @@ neighbor        *str*, *int*        Policy will be moved near to this neighbor-p
 Return
 	Session response. *<Response [200]>* Policy successfully moved, *<Response [500]>* Policy has not been moved
 
-update(uid, data)
-............
-**FortigateAPI.policy.update(uid, data)** Updates policy-object in the Fortigate
+update(data, uid)
+.................
+**FortigateAPI.policy.update(data, uid)** Updates policy-object in the Fortigate
 
 =============== ======= ============================================================================
 Parameter       Type    Description
 =============== ======= ============================================================================
 data            *dict*  Data of the policy-object
+uid             *int*   Policyid of the policy-object, taken from the `uid` parameter or from data["policyid"]
 =============== ======= ============================================================================
 
 Return
@@ -912,7 +913,7 @@ FortiOS v6.4 data example `./examples/yml/schedule.yml`_
 
 **FortigateAPI.schedule.is_exist(uid)**
 
-**FortigateAPI.schedule.update(uid, data)**
+**FortigateAPI.schedule.update(data, uid)**
 
 
 Service
@@ -929,7 +930,7 @@ FortiOS v6.4 data example `./examples/yml/service.yml`_
 
 **FortigateAPI.service.is_exist(uid)**
 
-**FortigateAPI.service.update(uid, data)**
+**FortigateAPI.service.update(data, uid)**
 
 
 ServiceCategory
@@ -946,7 +947,7 @@ FortiOS v6.4 data example `./examples/yml/service_category.yml`_
 
 **FortigateAPI.service_category.is_exist(uid)**
 
-**FortigateAPI.service_category.update(uid, data)**
+**FortigateAPI.service_category.update(data, uid)**
 
 
 ServiceGroup
@@ -963,7 +964,7 @@ FortiOS v6.4 data example `./examples/yml/service_group.yml`_
 
 **FortigateAPI.service_group.is_exist(uid)**
 
-**FortigateAPI.service_group.update(uid, data)**
+**FortigateAPI.service_group.update(data, uid)**
 
 
 SnmpCommunity
@@ -979,8 +980,18 @@ FortiOS v6.4 data example `./examples/yml/snmp_community.yml`_
 
 **FortigateAPI.snmp_community.is_exist(uid)**
 
-**FortigateAPI.snmp_community.update(uid, data)**
+**FortigateAPI.snmp_community.update(data, uid)**
+Updates snmp-community-object in the Fortigate
 
+=============== ======= ============================================================================
+Parameter       Type    Description
+=============== ======= ============================================================================
+data            *dict*  Data of the snmp-community-object
+uid             *str*   Name of the snmp-community-object, taken from the `uid` parameter or from data["id"]
+=============== ======= ============================================================================
+
+Return
+	Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
 
 VirtualIP
 ---------
@@ -996,7 +1007,7 @@ FortiOS v6.4 data example `./examples/yml/virtual_ip.yml`_
 
 **FortigateAPI.virtual_ip.is_exist(uid)**
 
-**FortigateAPI.virtual_ip.update(uid, data)**
+**FortigateAPI.virtual_ip.update(data, uid)**
 
 
 Zone
@@ -1013,7 +1024,7 @@ FortiOS v6.4 data example `./examples/yml/zone.yml`_
 
 **FortigateAPI.zone.is_exist(uid)**
 
-**FortigateAPI.zone.update(uid, data)**
+**FortigateAPI.zone.update(data, uid)**
 
 
 Fortigate

@@ -4,6 +4,12 @@
 CHANGELOG
 =========
 
+0.2.4 (2022-06-15)
+------------------
+* [change] update(data, uid), uid is optional
+* [new] fortigate.py Fortigate.is_connected
+
+
 0.2.3 (2022-06-13)
 ------------------
 * [change] Fortigate._valid_url()

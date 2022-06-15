@@ -1,15 +1,14 @@
 """Package setup"""
 
-import pathlib
-
-from setuptools import setup  # type: ignore
+from pathlib import Path
 
 import fortigate_api as package
+from setuptools import setup  # type: ignore
 
-VERSION = "0.2.3"
+VERSION = "0.2.4"
 PACKAGE = package.__title__
 PACKAGE_ = package.__title__.lower().replace("-", "_")  # PEP 503 normalization
-ROOT = pathlib.Path(__file__).parent.resolve()
+ROOT = Path(__file__).parent.resolve()
 README = "README.rst"
 
 if __name__ == "__main__":

@@ -8,8 +8,8 @@ __all__ = [
     "FortigateAPI",
 ]
 
-__version__ = "0.2.3"
-__date__ = "2022-06-13"
+__version__ = "0.2.4"
+__date__ = "2022-06-15"
 __title__ = "fortigate-api"
 
 __summary__ = "Python package to configure Fortigate (Fortios) devices using REST API"

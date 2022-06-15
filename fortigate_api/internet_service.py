@@ -2,8 +2,6 @@
 
 from fortigate_api.base import Base
 
-URL = "api/v2/cmdb/firewall/internet-service/"
-
 
 class InternetService(Base):
     """InternetService Object"""

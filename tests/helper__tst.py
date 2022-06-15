@@ -5,9 +5,8 @@ import json
 import unittest
 from unittest.mock import patch
 
-from requests import Response
-
 from fortigate_api.fortigate import Fortigate
+from requests import Response
 
 NAME3 = "NAME3"  # used for post <Response 200>
 NAME1, NAME2, NAME4, SLASH, SLASH_ = "NAME1", "NAME2", "NAME4", "A/B", "A%2FB"
