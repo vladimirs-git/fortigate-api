@@ -2,10 +2,11 @@
 
 from pathlib import Path
 
-import fortigate_api as package
 from setuptools import setup  # type: ignore
 
-VERSION = "0.2.4"
+import fortigate_api as package
+
+VERSION = "0.2.5"
 PACKAGE = package.__title__
 PACKAGE_ = package.__title__.lower().replace("-", "_")  # PEP 503 normalization
 ROOT = Path(__file__).parent.resolve()

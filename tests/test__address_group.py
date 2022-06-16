@@ -39,6 +39,7 @@ class Test(MockFortigate):
     def test_invalid__delete(self):
         """AddressGroup.delete()"""
         for kwargs, error in [
+            (dict(uid=""), ValueError),
             (dict(uid=ADDGR1, filter=f"name=={ADDGR1}"), KeyError),
         ]:
             with self.assertRaises(error, msg=f"{kwargs=}"):

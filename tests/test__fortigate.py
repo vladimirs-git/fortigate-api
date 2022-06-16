@@ -4,6 +4,7 @@ import unittest
 from unittest.mock import patch
 
 import requests
+
 from fortigate_api.fortigate import Fortigate
 from tests.helper__tst import NAME1, NAME2, NAME3, POL1, MockSession
 

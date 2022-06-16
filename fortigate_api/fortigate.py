@@ -10,11 +10,12 @@ from typing import Iterable, Optional
 from urllib.parse import urlencode
 
 import requests
+from requests import Session, Response
+from requests.exceptions import SSLError
+from requests.packages import urllib3  # type: ignore
+
 from fortigate_api import str_
 from fortigate_api.types_ import DAny, LDAny
-from requests import Session, Response
-from requests.exceptions import SSLError  # type: ignore
-from requests.packages import urllib3  # type: ignore
 
 # noinspection PyUnresolvedReferences
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

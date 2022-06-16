@@ -24,13 +24,13 @@ or install the package from github.com release
 
 .. code:: bash
 
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/0.2.4.tar.gz
+    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/0.2.5.tar.gz
 
 or install the package from github.com repository
 
 .. code:: bash
 
-    pip install git+https://github.com/vladimirs-git/fortigate-api@0.2.4
+    pip install git+https://github.com/vladimirs-git/fortigate-api@0.2.5
 
 
 Objects

@@ -30,11 +30,14 @@ class Test(MockFortigate):
         for kwargs, req in [
             (dict(uid="1"), 200),
             (dict(uid=1), 200),
+            (dict(uid="0"), 500),
             (dict(uid=9), 500),
             (dict(filter="policyid==1"), 200),
             (dict(filter="policyid==9"), 200),
             (dict(filter=f"name=={POL1}"), 200),
             (dict(filter="name==POL9"), 200),
+            (dict(uid="", filter="policyid==1"), 200),
+            (dict(uid=0, filter="policyid==1"), 200),
         ]:
             result = self.obj.delete(**kwargs).status_code
             self.assertEqual(result, req, msg=f"{kwargs=}")
@@ -42,7 +45,10 @@ class Test(MockFortigate):
     def test_invalid__delete(self):
         """Policy.delete()"""
         for kwargs, error in [
+            (dict(uid=""), ValueError),
+            (dict(uid=0), ValueError),
             (dict(uid=1, filter="policyid==1"), KeyError),
+            (dict(uid="0", filter="policyid==1"), KeyError),
         ]:
             with self.assertRaises(error, msg=f"{kwargs=}"):
                 self.obj.delete(**kwargs)

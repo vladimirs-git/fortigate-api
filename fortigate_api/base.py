@@ -2,9 +2,10 @@
 
 from operator import attrgetter
 
+from requests import Response
+
 from fortigate_api import dict_, str_
 from fortigate_api.types_ import DAny, LDAny, LStr, LResponse, StrInt
-from requests import Response
 
 IMPLEMENTED_OBJECTS = (
     "api/v2/cmdb/antivirus/profile/",
@@ -54,7 +55,7 @@ class Base:
         return self.fgt.post(url=self.url_, data=data)
 
     # noinspection PyIncorrectDocstring
-    def delete(self, **kwargs) -> Response:
+    def delete(self, uid: StrInt = "", **kwargs) -> Response:
         """Deletes the fortigate-object from Fortigate
         :param str uid: Identifier of the fortigate-object. Used to delete a single object
         :param list filter: Filters fortigate-objects by one or multiple conditions: equals "==",
@@ -63,6 +64,8 @@ class Base:
             *<Response [200]>* Object successfully deleted
             *<Response [404]>* Object absent in the Fortigate
         """
+        if uid:
+            kwargs["uid"] = uid
         dict_.check_only_one(["uid", "filter"], **kwargs)
         if uid := dict_.pop_str("uid", kwargs):
             uid = str_.quote(uid)
@@ -70,7 +73,7 @@ class Base:
             return self.fgt.delete(url=url)
         if "filter" in kwargs:
             return self._delete_by_filter(kwargs)
-        raise KeyError(f"invalid {kwargs=}")
+        raise ValueError(f"invalid {uid=} {kwargs=}")
 
     def _delete_by_filter(self, kwargs):
         """Deletes the fortigate-objects from Fortigate by `filter`

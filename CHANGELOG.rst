@@ -4,6 +4,10 @@
 CHANGELOG
 =========
 
+0.2.5 (2022-06-16)
+------------------
+* [change] delete(uid, kwargs), uid is optional
+
 0.2.4 (2022-06-15)
 ------------------
 * [change] update(data, uid), uid is optional

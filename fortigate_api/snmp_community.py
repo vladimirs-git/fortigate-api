@@ -1,8 +1,9 @@
 """SNMP Community Object"""
 
+from requests import Response
+
 from fortigate_api.base import Base
 from fortigate_api.types_ import DAny, StrInt
-from requests import Response
 
 
 class SnmpCommunity(Base):
