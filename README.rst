@@ -39,6 +39,7 @@ The objects implemented in `FortigateAPI`_.
 To get an idea of the objects, change *hostname* in the following URLs and
 look it in Fortigate web management interface.
 The first URL is for the Web GUI, the second one is for the REST API.
+(Access to any other objects is available via `Fortigate`_)
 
 =================== ================================================================================
 Object              GUI and REST API URL to the object, FortiOS v6.4
@@ -81,7 +82,6 @@ FortigateAPI
 **FortigateAPI(host, username, password, scheme, port, timeout, vdom)**
 Set of methods for working with the most commonly used `Objects`_.
 Code usage examples in *./examples/examples.py*
-
 
 =============== ======= ============================================================================
 Parameter        Type    Description
@@ -267,6 +267,7 @@ Examples - Address
 AddressGroup
 ------------
 FortiOS v6.4 data example `./examples/yml/address_group.yml`_
+
 
 create(data)
 ............
@@ -809,6 +810,7 @@ Examples - Policy
 
 	fgt.logout()
 
+
 Examples - Policy extended filter
 .................................
 - Gets the rules where source prefix is equals 127.0.1.0/30
@@ -992,6 +994,7 @@ uid             *str*   Name of the snmp-community-object, taken from the `uid` 
 
 Return
 	Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
+
 
 VirtualIP
 ---------
