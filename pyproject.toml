@@ -1,27 +1,45 @@
-[tool.poetry]
-name = "fortigate-api"
+[project]
+name = "fortigate_api"
 version = "0.2.5"
+authors = [
+  { name="Vladimir Prusakov", email="vladimir.prusakovs@gmail.com" },
+]
 description = "Python package to configure Fortigate (Fortios) devices using REST API"
-authors = ["Vladimir Prusakov <vladimir.prusakovs@gmail.com>"]
 readme = "README.rst"
-packages = [{include = "fortigate_api"}]
+license = { text="MIT" }
+requires-python = ">=3.8"
+dependencies = [
+    'certifi == 2022.5.18.1',
+    'charset-normalizer = 2.0.12',
+    'idna = 3.3',
+    'requests ~= 2.28',
+    'urllib3 = 1.26.9',
+]
+keywords = ["fortigate, api, fortios, firewall, networking, telecommunication"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Telecommunications Industry",
+    # "Operating System :: FortiOS",
+    "Topic :: System :: Networking :: Firewalls",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.8",
+    "Natural Language :: English",
+]
 
-[tool.poetry.dependencies]
-python = "^3.8"
-certifi = "2022.5.18.1"
-charset-normalizer = "2.0.12"
-idna = "3.3"
-requests = "2.28.*"
-urllib3 = "1.26.9"
+[project.urls]
+"Homepage" = "https://github.com/vladimirs-git/fortigate-api"
+"Repository" = "https://github.com/vladimirs-git/fortigate-api"
+"Bug Tracker" = "https://github.com/vladimirs-git/fortigate-api/issues"
+"Download URL" = "https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/0.2.5.tar.gz"
 
-[tool.poetry.dev-dependencies]
-mypy = "^0.*"
-pylint = "^2.13.*"
-pytest = "^7.1.*"
-restructuredtext-lint = "^1.4.*"
-twine = "^4.0.*"
-types-requests = "^2.27.*"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[project.optional-dependencies]
+dev = [
+    'mypy < 1',
+    'pylint ~= 2.13',
+    'pytest ~= 7.1',
+    'restructuredtext-lint ~= 1.4',
+    'twine ~= 4.0',
+    'types-requests ~= 2.27'
+]
