@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "fortigate-api"
+version = "0.2.5"
+description = "Python package to configure Fortigate (Fortios) devices using REST API"
+authors = ["Vladimir Prusakov <vladimir.prusakovs@gmail.com>"]
+readme = "README.rst"
+packages = [{include = "fortigate_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+certifi = "2022.5.18.1"
+charset-normalizer = "2.0.12"
+idna = "3.3"
+requests = "2.28.*"
+urllib3 = "1.26.9"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.*"
+pylint = "^2.13.*"
+pytest = "^7.1.*"
+restructuredtext-lint = "^1.4.*"
+twine = "^4.0.*"
+types-requests = "^2.27.*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
