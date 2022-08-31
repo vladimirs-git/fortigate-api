@@ -6,6 +6,7 @@ from fortigate_api.address import Address
 from fortigate_api.address_group import AddressGroup
 from fortigate_api.antivirus import Antivirus
 from fortigate_api.application import Application
+from fortigate_api.dhcp_server import DhcpServer
 from fortigate_api.fortigate import Fortigate, VDOM
 from fortigate_api.interface import Interface
 from fortigate_api.internet_service import InternetService
@@ -39,6 +40,7 @@ class FortigateAPI:
         self.address_group = AddressGroup(self.fgt)
         self.antivirus = Antivirus(self.fgt)
         self.application = Application(self.fgt)
+        self.dhcp_server = DhcpServer(self.fgt)
         self.interface = Interface(self.fgt)
         self.internet_service = InternetService(self.fgt)
         self.ip_pool = IpPool(self.fgt)
