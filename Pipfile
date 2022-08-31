@@ -3,16 +3,17 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
+[requires]
+python_version = "3.8"
+
 [packages]
 requests = "==2.28.*"
 
 [dev-packages]
+PyYAML = "==6.*"  # 6.0
 mypy = "==0.*"  # 0.961
 pylint = "==2.13.*"  # 2.13.9 need to update to 2.14
 pytest = "==7.1.*"  # 7.1.2
 restructuredtext-lint = "==1.4.*"  # 1.4.0
 twine = "==4.0.*"  # 4.0.1
 types-requests = "==2.27.*"  # 2.27.30
-
-[requires]
-python_version = "3.8"
