@@ -13,9 +13,8 @@ With this package, you can create, delete, get, update any objects in the Fortig
 The most commonly used `Objects`_ are implemented in the `FortigateAPI`_ methods, but you can
 manipulate any other objects that can be accessed through the REST API using the `Fortigate`_ methods.
 
-.. contents::
-
-.. sectnum::
+.. contents:: **Contents**
+	:local:
 
 
 Requirements
