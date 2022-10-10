@@ -1,3 +1,10 @@
+
+
+.. image:: https://img.shields.io/pypi/v/fortigate-api.svg
+   :target: https://pypi.python.org/pypi/fortigate-api
+.. image:: https://img.shields.io/pypi/pyversions/fortigate-api.svg
+   :target: https://pypi.python.org/pypi/fortigate-api
+
 fortigate-api
 =============
 
@@ -9,6 +16,12 @@ manipulate any other objects that can be accessed through the REST API using the
 .. contents::
 
 .. sectnum::
+
+
+Requirements
+------------
+
+Python >=3.8
 
 
 Installation
