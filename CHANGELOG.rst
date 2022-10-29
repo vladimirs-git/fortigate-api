@@ -9,6 +9,7 @@ CHANGELOG
 * [new] SSH
 * [new] HTTPS SSL verify
 * [new] *with* statement for FortigateAPI and Fortigate
+* [fix] setup.py, ModuleNotFoundError: No module named requests
 
 
 0.2.6 (2022-09-01)
