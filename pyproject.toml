@@ -1,0 +1,44 @@
+[project]
+name = "fortigate_api"
+version = "1.0.0"
+authors = [
+  { name="Vladimir Prusakov", email="vladimir.prusakovs@gmail.com" },
+]
+description = "Python package to configure Fortigate (Fortios) devices using REST API and SSH"
+readme = "README.rst"
+license = { text="MIT" }
+requires-python = ">=3.8"
+dependencies = [
+    "requests",
+    "netmiko ~= 4.1",
+]
+keywords = ["fortigate", "api", "fortios", "firewall", "networking", "telecommunication"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Telecommunications Industry",
+    # "Operating System :: FortiOS",
+    "Topic :: System :: Networking :: Firewalls",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Natural Language :: English",
+]
+[project.urls]
+"Homepage" = "https://github.com/vladimirs-git/fortigate-api"
+"Repository" = "https://github.com/vladimirs-git/fortigate-api"
+"Bug Tracker" = "https://github.com/vladimirs-git/fortigate-api/issues"
+"Download URL" = "https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.0.0.tar.gz"
+[tool.setuptools.packages.find]
+include = ["fortigate_api"]
+[project.optional-dependencies]
+dev = [
+    "mypy < 1",
+    "pylint == 2.13.9",
+    "pytest ~= 7.2",
+    "restructuredtext-lint ~= 1.4",
+    "twine ~= 4.0",
+    "types-requests ~= 2.28"
+]

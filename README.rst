@@ -1,5 +1,4 @@
 
-
 .. image:: https://img.shields.io/pypi/v/fortigate-api.svg
    :target: https://pypi.python.org/pypi/fortigate-api
 .. image:: https://img.shields.io/pypi/pyversions/fortigate-api.svg
@@ -8,13 +7,14 @@
 fortigate-api
 =============
 
-Python package for configuring Fortigate (Fortios) devices using REST API.
+Python package to configure Fortigate (Fortios) devices using REST API and SSH.
 With this package, you can create, delete, get, update any objects in the Fortigate.
 The most commonly used `Objects`_ are implemented in the `FortigateAPI`_ methods, but you can
-manipulate any other objects that can be accessed through the REST API using the `Fortigate`_ methods.
+manipulate any other objects that can be accessed through the REST API using the `Fortigate`_
+methods. You can also get and change the Fortigate configuration through SSH.
 
 .. contents:: **Contents**
-	:local:
+    :local:
 
 
 Requirements
@@ -36,58 +36,58 @@ or install the package from github.com release
 
 .. code:: bash
 
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/0.2.6.tar.gz
+    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.0.0.tar.gz
 
 or install the package from github.com repository
 
 .. code:: bash
 
-    pip install git+https://github.com/vladimirs-git/fortigate-api@0.2.6
+    pip install git+https://github.com/vladimirs-git/fortigate-api
 
 
 Objects
 -------
 The objects implemented in `FortigateAPI`_.
-To get an idea of the objects, change *hostname* in the following URLs and
-look it in Fortigate web management interface.
-The first URL is for the Web GUI, the second one is for the REST API.
-(Access to any other objects is available via `Fortigate`_)
+To get an idea of the objects, you can change the *hostname* in the following URLs and
+look it in the Fortigate web management interface. The first URL is for the Web GUI, the second
+one is for the REST API. Not all object implemented in `FortigateAPI`_ (only the most used by me),
+access to any other objects is available via `Fortigate`_.
 
 =================== ================================================================================
 Object              GUI and REST API URL to the object, FortiOS v6.4
 =================== ================================================================================
 `Address`_          https://hostname/ng/firewall/address
-					https://hostname/api/v2/cmdb/firewall/address/
+                    https://hostname/api/v2/cmdb/firewall/address/
 `AddressGroup`_     https://hostname/ng/firewall/address
-					https://hostname/api/v2/cmdb/firewall/addrgrp/
+                    https://hostname/api/v2/cmdb/firewall/addrgrp/
 `Antivirus`_        https://hostname/ng/utm/antivirus/profile
-					https://hostname/api/v2/cmdb/antivirus/profile/
+                    https://hostname/api/v2/cmdb/antivirus/profile/
 `Application`_      https://hostname/ng/utm/appctrl/sensor
-					https://hostname/api/v2/cmdb/application/list/
+                    https://hostname/api/v2/cmdb/application/list/
 `DhcpServer`_       https://hostname/ng/interface/edit/{name}
-					https://hostname/api/v2/cmdb/system.dhcp/server/
+                    https://hostname/api/v2/cmdb/system.dhcp/server/
 `Interface`_        https://hostname/ng/interface
-					https://hostname/api/v2/cmdb/system/interface/
+                    https://hostname/api/v2/cmdb/system/interface/
 `InternetService`_  https://hostname/ng/firewall/internet_service
-					https://hostname/api/v2/cmdb/firewall/internet-service/
+                    https://hostname/api/v2/cmdb/firewall/internet-service/
 `IpPool`_           https://hostname/ng/firewall/ip-pool
-					https://hostname/api/v2/cmdb/firewall/ippool/
+                    https://hostname/api/v2/cmdb/firewall/ippool/
 `Policy`_           https://hostname/ng/firewall/policy/policy/standard
-					https://hostname/api/v2/cmdb/firewall/policy/
+                    https://hostname/api/v2/cmdb/firewall/policy/
 `Schedule`_         https://hostname/ng/firewall/schedule
-					https://hostname/api/v2/cmdb/firewall.schedule/onetime/
+                    https://hostname/api/v2/cmdb/firewall.schedule/onetime/
 `Service`_          https://hostname/ng/firewall/service
-					https://hostname/api/v2/cmdb/firewall.service/custom/
+                    https://hostname/api/v2/cmdb/firewall.service/custom/
 `ServiceCategory`_  https://hostname/ng/firewall/service
-					https://hostname/api/v2/cmdb/firewall.service/category/
+                    https://hostname/api/v2/cmdb/firewall.service/category/
 `ServiceGroup`_     https://hostname/ng/firewall/service
-					https://hostname/api/v2/cmdb/firewall.service/group/
+                    https://hostname/api/v2/cmdb/firewall.service/group/
 `SnmpCommunity`_    https://hostname/ng/system/snmp
-					https://hostname/api/v2/cmdb/system.snmp/community/
+                    https://hostname/api/v2/cmdb/system.snmp/community/
 `VirtualIp`_        https://hostname/ng/firewall/virtual-ip
-					https://hostname/api/v2/cmdb/firewall/vip/
+                    https://hostname/api/v2/cmdb/firewall/vip/
 `Zone`_             https://hostname/ng/interface
-					https://hostname/api/v2/cmdb/system/zone/
+                    https://hostname/api/v2/cmdb/system/zone/
 =================== ================================================================================
 
 
@@ -103,10 +103,11 @@ Parameter        Type    Description
 host            *str*   Firewall ip address or hostname
 username        *str*   Administrator name
 password        *str*   Administrator password
-scheme          *str*   "https" or "http", by default "https"
-port            *int*   TCP port, by default 443 for "https", 80 for "http"
-timeout         *int*   Session timeout (minutes), by default 15
-vdom            *str*   Name of virtual domain, by default "root"
+scheme          *str*   (optional) "https" (default) or "http"
+port            *int*   (optional) TCP port, by default 443 for "https", 80 for "http"
+timeout         *int*   (optional) Session timeout minutes (default 15)
+verify          *str*   (optional) Enable SSL certificate verification for HTTPS requests. True -  enable, False - disable (default)
+vdom            *str*   Name of virtual domain (default "root")
 =============== ======= ============================================================================
 
 
@@ -116,8 +117,8 @@ Address
 FortiOS v6.4 data example `./examples/yml/address.yml`_
 
 
-create(data)
-............
+create()
+........
 **FortigateAPI.address.create(data)**
 Creates address-object in the Fortigate.
 
@@ -128,13 +129,13 @@ data            *dict*  Data of the address-object
 =============== ======= ============================================================================
 
 Return
-	Session response. *<Response [200]>* Object successfully created or already exists, *<Response [500]>* Object has not been created in the Fortigate
+    Session response. *<Response [200]>* Object successfully created or already exists, *<Response [500]>* Object has not been created in the Fortigate
 
 
-delete(uid, filter)
-...................
+delete()
+........
 **FortigateAPI.address.delete(uid, filter)**
-Deletes address-object from Fortigate.
+Deletes address-object from the Fortigate.
 Only one of the parameters *uid* or *filter* can be used in the same time.
 
 =============== =================== ================================================================
@@ -145,11 +146,11 @@ filter          *str*, *List[str]*  Filters address-objects by one or multiple c
 =============== =================== ================================================================
 
 Return
-	Session response. *<Response [200]>* Object successfully deleted, *<Response [404]>* Object absent in the Fortigate
+    Session response. *<Response [200]>* Object successfully deleted, *<Response [404]>* Object absent in the Fortigate
 
 
-get(uid, filter)
-................
+get()
+.....
 **FortigateAPI.address.get(uid, filter)**
 Gets address-objects, all or filtered by some of params.
 
@@ -164,8 +165,8 @@ Return
     *List[dict]* List of address-objects
 
 
-is_exist(uid)
-.............
+is_exist()
+..........
 **FortigateAPI.address.is_exist(uid)**
 Checks does an address-object exists in the Fortigate
 
@@ -179,8 +180,8 @@ Return
     *bool* True - object exist, False - object does not exist
 
 
-update(data, uid)
-.................
+update()
+........
 **FortigateAPI.address.update(data, uid)**
 Updates address-object in the Fortigate
 
@@ -197,90 +198,23 @@ Return
 
 Examples
 ........
-Examples Address `./examples/address.py`_
+
+Address examples:
 
 - Creates address in the Fortigate
-- Gets all addresses from Fortigate
+- Gets all addresses from the Fortigate
 - Gets filtered address by name (unique identifier)
 - Filters address by operator *equals* "=="
 - Filters address by operator *contains* "=@"
 - Filters address by operator *not equals* "!="
 - Updates address data in the Fortigate
 - Checks for presence of address in the Fortigate
-- Deletes address from Fortigate by name
-- Deletes addresses from Fortigate by filter
+- Deletes address from the Fortigate by name
+- Deletes addresses from the Fortigate by filter
 - Checks for absence of address in the Fortigate
+- FortigateAPI *with* statement
 
-.. code:: python
-
-    from pprint import pprint
-
-    from fortigate_api import FortigateAPI
-
-    fgt = FortigateAPI(host="host", username="username", password="password")
-    fgt.login()
-
-    # Create Address
-    data = {"name": "ADDRESS",
-            "obj-type": "ip",
-            "subnet": "127.0.0.100 255.255.255.252",
-            "type": "ipmask"}
-    response = fgt.address.create(data=data)
-    print("address.create", response)  # address.create <Response [200]>
-
-    print("\nGets all addresses from Fortigate")
-    addresses = fgt.address.get()
-    print(f"addresses count={len(addresses)}")  # addresses count=1727
-
-    print("\nGets filtered address by name (unique identifier)")
-    addresses = fgt.address.get(uid="ADDRESS")
-    pprint(addresses)
-    #  [{"comment": "",
-    #    "name": "ADDRESS",
-    #    "subnet": "127.0.0.100 255.255.255.252",
-    #    "uuid": "a386e4b0-d6cb-51ec-1e28-01e0bc0de43c",
-    #    ...
-    #    }]
-
-    print("\nFilters address by operator equals \"==\"")
-    addresses = fgt.address.get(filter="name==ADDRESS")
-    print(f"addresses count={len(addresses)}")  # addresses count=1
-
-    print("\nFilters address by operator contains \"=@\"")
-    addresses = fgt.address.get(filter="subnet=@127.0")
-    print(f"addresses count={len(addresses)}")  # addresses count=4
-
-    print("\nFilters address by operator not equals \"!=\"")
-    addresses = fgt.address.get(filter="name!=ADDRESS")
-    print(f"addresses count={len(addresses)}")  # addresses count=1726
-
-    print("\nFilters address by multiple conditions")
-    addresses = fgt.address.get(filter=["subnet=@127.0", "type==ipmask"])
-    print(f"addresses count={len(addresses)}")  # addresses count=1
-
-    print("\nUpdates address data in the Fortigate")
-    data = dict(name="ADDRESS", subnet="127.0.0.255 255.255.255.255", color=6)
-    response = fgt.address.update(uid="ADDRESS", data=data)
-    print("address.update", response, response.ok)  # address.update <Response [200]> True
-
-    print("\nChecks for presence of address in the Fortigate")
-    response = fgt.address.is_exist(uid="ADDRESS")
-    print("address.is_exist", response)  # address.is_exist True
-
-    print("\nDeletes address from Fortigate by name")
-    response = fgt.address.delete(uid="ADDRESS")
-    print("address.delete", response, response.ok)  # address.delete <Response [200]> True
-
-    print("\nDeletes addresses: ADDRESS, FIREWALL_AUTH_PORTAL_ADDRESS from Fortigate by filter. "
-          "Returns <Response [500]> because FIREWALL_AUTH_PORTAL_ADDRESS cannot be deleted")
-    response = fgt.address.delete(filter="name=@ADDRESS")
-    print("address.delete", response, response.ok)  # address.delete <Response [500]> False
-
-    print("\nChecks for absence of address in the Fortigate")
-    response = fgt.address.is_exist(uid="ADDRESS")
-    print("address.is_exist", response)  # address.is_exist False
-
-    fgt.logout()
+`./examples/address.py`_
 
 
 
@@ -289,8 +223,8 @@ AddressGroup
 FortiOS v6.4 data example `./examples/yml/address_group.yml`_
 
 
-create(data)
-............
+create()
+........
 **FortigateAPI.address_group.create(data)**
 Creates address-group-object in the Fortigate
 
@@ -304,10 +238,10 @@ Return
     Session response. *<Response [200]>* Object successfully created or already exists, *<Response [500]>* Object has not been created in the Fortigate
 
 
-delete(uid, filter)
-...................
+delete()
+........
 **FortigateAPI.address_group.delete(uid, filter)**
-Deletes address-group-object from Fortigate
+Deletes address-group-object from the Fortigate
 Only one of the parameters *uid* or *filter* can be used in the same time.
 
 =============== =================== ================================================================
@@ -321,8 +255,8 @@ Return
     Session response. *<Response [200]>* Object successfully deleted, *<Response [404]>* Object absent in the Fortigate
 
 
-get(uid, filter)
-................
+get()
+.....
 **FortigateAPI.address_group.get(uid, filter)**
 Gets address-group-objects, all or filtered by some of params.
 
@@ -337,8 +271,8 @@ Return
     *List[dict]* List of address-group-objects
 
 
-is_exist(uid)
-.............
+is_exist()
+..........
 **FortigateAPI.address_group.is_exist(uid)**
 Checks does an address-group-object exists in the Fortigate
 
@@ -352,8 +286,8 @@ Return
     *bool* True - object exist, False - object does not exist
 
 
-update(data, uid)
-.................
+update()
+........
 **FortigateAPI.address_group.update(data, uid)**
 Updates address-group-object in the Fortigate
 
@@ -370,96 +304,21 @@ Return
 
 Examples
 ........
-Examples AddressGroup `./examples/address_group.py`_
+AddressGroup examples:
 
 - Creates address-group in the Fortigate
-- Gets all address-groups from Fortigate
+- Gets all address-groups from the Fortigate
 - Gets filtered address-group by name (unique identifier)
 - Filters address-group by operator *equals* "=="
 - Filters address-group by operator *contains* "=@"
 - Filters address-group by operator *not equals* "!="
 - Updates address-group data in the Fortigate
 - Checks for presence of address-group in the Fortigate
-- Deletes address-group from Fortigate by name
-- Deletes address-groups from Fortigate by filter
+- Deletes address-group from the Fortigate by name
+- Deletes address-groups from the Fortigate by filter
 - Checks for absence of address-group in the Fortigate
 
-.. code:: python
-
-    from pprint import pprint
-
-    from fortigate_api import FortigateAPI
-
-    fgt = FortigateAPI(host="host", username="username", password="password")
-    fgt.login()
-
-    print("\nCreates address and address-group in the Fortigate")
-    data = {"name": "ADDRESS",
-            "obj-type": "ip",
-            "subnet": "127.0.0.100 255.255.255.255",
-            "type": "ipmask"}
-    response = fgt.address.create(data=data)
-    print("address.create", response)  # address.create <Response [200]>
-    data = {"name": "ADDR_GROUP", "member": [{"name": "ADDRESS"}]}
-    response = fgt.address_group.create(data=data)
-    print("address_group.creat", response)  # address_group.creat <Response [200]>
-
-    print("\nGets all address-groups from Fortigate")
-    address_groups = fgt.address_group.get()
-    print(f"address_groups count={len(address_groups)}")  # address_groups count=115
-
-    print("\nGets filtered address_group by name (unique identifier)")
-    address_groups = fgt.address_group.get(uid="ADDR_GROUP")
-    pprint(address_groups)
-    #  [{"comment": "",
-    #    "name": "ADDR_GROUP",
-    #    "member": [{"name": "ADDRESS", "q_origin_key": "ADDRESS"}],
-    #    "uuid": "d346aeca-d76a-51ec-7005-541cf3b816f5",
-    #    ...
-    #    }]
-
-    print("\nFilters address_group by operator equals \"==\"")
-    address_groups = fgt.address_group.get(filter="name==ADDR_GROUP")
-    print(f"address_groups count={len(address_groups)}")  # address_groups count=1
-
-    print("\nFilters address_group by operator contains \"=@\"")
-    address_groups = fgt.address_group.get(filter="name=@MS")
-    print("address_groups count", len(address_groups))  # address_groups count 6
-
-    print("\nFilters address_group by operator not equals \"!=\"")
-    address_groups = fgt.address_group.get(filter="name!=ADDR_GROUP")
-    print(f"address_groups count={len(address_groups)}")  # address_groups count=114
-
-    print("\nFilters address_group by multiple conditions")
-    address_groups = fgt.address_group.get(filter=["name=@MS", "color==6"])
-    print(f"address_groups count={len(address_groups)}")  # address_groups count=2
-
-    print("\nUpdates address_group data in the Fortigate")
-    data = dict(name="ADDR_GROUP", color=6)
-    response = fgt.address_group.update(uid="ADDR_GROUP", data=data)
-    print("address_group.update", response)  # address_group.update <Response [200]>
-
-    print("\nChecks for presence of address_group in the Fortigate")
-    response = fgt.address_group.is_exist(uid="ADDR_GROUP")
-    print("address_group.is_exist", response)  # address_group.is_exist True
-
-    print("\nDeletes address_group from Fortigate by name")
-    response = fgt.address_group.delete(uid="ADDR_GROUP")
-    print("address_group.delete", response)  # address_group.delete <Response [200]>
-
-    print("\nDeletes address_groups by filter by filter")
-    response = fgt.address_group.delete(filter="name=@ADDR_GROUP")
-    print("address_group.delete", response)  # address_group.delete <Response [200]>
-
-    print("\nDeletes address object")
-    response = fgt.address.delete(uid="ADDRESS")
-    print("address.delete", response)  # address.delete <Response [200]>
-
-    print("\nChecks for absence of address_group in the Fortigate")
-    response = fgt.address_group.is_exist(uid="ADDR_GROUP")
-    print("address_group.is_exist", response)  # address_group.is_exist False
-
-    fgt.logout()
+`./examples/address_group.py`_
 
 
 
@@ -515,7 +374,7 @@ FortiOS v6.4 data example `./examples/yml/dhcp_server.yml`_
 
 **FortigateAPI.dhcp_server.update(data, uid)**
 
-Examples `./examples/dhcp_server.py`_
+DhcpServer examples `./examples/dhcp_server.py`_
 
 
 
@@ -529,8 +388,9 @@ FortiOS v6.4 data example `./examples/yml/interface.yml`_
 
 **FortigateAPI.interface.delete(uid, filter)**
 
-get(uid, filter, all)
-.....................
+
+get()
+.....
 **FortigateAPI.interface.get(uid, filter, all)**
 Gets interface-objects in specified vdom, all or filtered by some of params.
 
@@ -552,9 +412,9 @@ Return
 
 Examples
 ........
-Examples Interface `./examples/interface.py`_
+Interface examples:
 
-- Gets all interfaces in vdom "root" from Fortigate
+- Gets all interfaces in vdom "root" from the Fortigate
 - Gets filtered interface by name (unique identifier)
 - Filters interface by operator *equals* "=="
 - Filters interface by operator contains "=@"
@@ -564,65 +424,7 @@ Examples Interface `./examples/interface.py`_
 - Checks for presence of interface in the Fortigate
 - Gets all interfaces in vdom "VDOM"
 
-.. code:: python
-
-    from pprint import pprint
-
-    from fortigate_api import FortigateAPI
-
-    fgt = FortigateAPI(host="host", username="username", password="password")
-    fgt.login()
-
-    print("\nGets all interfaces in vdom \"root\" from Fortigate")
-    interfaces = fgt.interface.get()
-    print(f"interfaces count={len(interfaces)}")  # interfaces count=21
-
-    print("\nGets filtered interface by name (unique identifier)")
-    interfaces = fgt.interface.get(uid="dmz")
-    pprint(interfaces)
-    #  [{"name": "dmz",
-    #    "ip": "0.0.0.0 0.0.0.0",
-    #    ...
-    #    }]
-
-    print("\nFilters interface by operator equals \"==\"")
-    interfaces = fgt.interface.get(filter="name==dmz")
-    print(f"interfaces count={len(interfaces)}")  # interfaces count=1
-
-    print("\nFilters interface by operator contains \"=@\"")
-    interfaces = fgt.interface.get(filter="name=@wan")
-    print(f"interfaces count={len(interfaces)}")  # interfaces count=2
-
-    print("\nFilters interface by operator not equals \"!=\"")
-    interfaces = fgt.interface.get(filter="name!=dmz")
-    print(f"interfaces count={len(interfaces)}")  # interfaces count=20
-
-    print("\nFilters interface by multiple conditions")
-    interfaces = fgt.interface.get(filter=["allowaccess=@ping", "detectprotocol==ping"])
-    print(f"interfaces count={len(interfaces)}")  # interfaces count=8
-
-    print("\nUpdates interface data in the Fortigate")
-    data = dict(name="dmz", description="dmz")
-    response = fgt.interface.update(uid="dmz", data=data)
-    print("interface.update", response)  # interface.update <Response [200]>
-
-    print("\nChecks for presence of interface in the Fortigate")
-    response = fgt.interface.is_exist(uid="dmz")
-    print("interface.is_exist", response)  # interface.is_exist True
-
-    print("\nChanges virtual domain to \"VDOM\" and gets all interfaces inside this vdom")
-    fgt.fgt.vdom = "VDOM"
-    print(f"{fgt!r}")  # Fortigate(host='host', username='username', password='********', vdom='VDOM')
-    print(fgt.vdom)  # VDOM
-    interfaces = fgt.interface.get()
-    print(f"interfaces count={len(interfaces)}")  # interfaces count=0
-
-    print("\nChanges virtual domain to \"root\"")
-    fgt.vdom = "root"
-    print(f"{fgt!r}")  # Fortigate(host='host', username='username', password='********')
-    print(fgt.vdom)  # root
-
-    fgt.logout()
+`./examples/interface.py`_
 
 
 
@@ -666,8 +468,9 @@ Policy
 ------
 FortiOS v6.4 data example `./examples/yml/policy.yml`_
 
-create(data)
-............
+
+create()
+........
 **FortigateAPI.policy.create(data)**
 Creates policy-object in the Fortigate
 
@@ -681,9 +484,9 @@ Return
     Session response. *<Response [200]>* Object successfully created or already exists, *<Response [500]>* Object has not been created in the Fortigate
 
 
-delete(uid, filter)
-...................
-Deletes policy-object from Fortigate
+delete()
+........
+Deletes policy-object from the Fortigate
 Only one of the parameters *uid* or *filter* can be used in the same time.
 
 =============== =================== ================================================================
@@ -697,8 +500,8 @@ Return
     Session response. *<Response [200]>* Object successfully deleted, *<Response [404]>* Object absent in the Fortigate
 
 
-get(uid, filter, efilter)
-.........................
+get()
+.....
 **FortigateAPI.policy.get(uid, filter)**
 Gets policy-objects, all or filtered by some of params.
 Only one of the parameters *uid* or *filter* can be used in the same time.
@@ -715,8 +518,9 @@ efilter         *str*, *List[str]*  Extended filter: "srcaddr", "dstaddr" by con
 Return
     *List[dict]* List of policy-objects
 
-is_exist(uid)
-.............
+
+is_exist()
+..........
 **FortigateAPI.policy.is_exist(uid)** Checks does an policy-object exists in the Fortigate
 
 =============== =================== ================================================================
@@ -728,8 +532,9 @@ uid             *str*, *int*        Identifier of the policy-object
 Return
     *bool* True - object exist, False - object does not exist
 
-move(uid, position, neighbor)
-.............................
+
+move()
+......
 **FortigateAPI.policy.move(uid, position, neighbor)** Move policy to before/after other neighbor-policy
 
 =============== =================== ================================================================
@@ -743,8 +548,9 @@ neighbor        *str*, *int*        Policy will be moved near to this neighbor-p
 Return
     Session response. *<Response [200]>* Policy successfully moved, *<Response [500]>* Policy has not been moved
 
-update(data, uid)
-.................
+
+update()
+........
 **FortigateAPI.policy.update(data, uid)** Updates policy-object in the Fortigate
 
 =============== ======= ============================================================================
@@ -757,12 +563,13 @@ uid             *int*   Policyid of the policy-object, taken from the `uid` para
 Return
     Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
 
+
 Examples
 ........
-Examples Policy `./examples/policy.py`_
+Policy examples:
 
 - Creates policy in the Fortigate
-- Gets all policies from Fortigate
+- Gets all policies from the Fortigate
 - Gets filtered policy by policyid (unique identifier)
 - Filters policies by name, by operator *equals* "=="
 - Filters policies by operator *contains* "=@"
@@ -770,194 +577,23 @@ Examples Policy `./examples/policy.py`_
 - Updates policy data in the Fortigate
 - Checks for presence of policy in the Fortigate
 - Gets all policies with destination address == "192.168.1.2/32"
-- Deletes policy from Fortigate by policyid (unique identifier)
-- Deletes policies from Fortigate by filter (by name)
+- Deletes policy from the Fortigate by policyid (unique identifier)
+- Deletes policies from the Fortigate by filter (by name)
 - Checks for absence of policy in the Fortigate
 
-.. code:: python
-
-    from pprint import pprint
-
-    from fortigate_api import FortigateAPI
-
-    fgt = FortigateAPI(host="host", username="username", password="password")
-    fgt.login()
-
-    print("\nCreates policy in the Fortigate")
-    data = dict(
-        name="POLICY",
-        status="enable",
-        action="accept",
-        srcintf=[{"name": "any"}],
-        dstintf=[{"name": "any"}],
-        srcaddr=[{"name": "all"}],
-        dstaddr=[{"name": "all"}],
-        service=[{"name": "ALL"}],
-        schedule="always",
-    )
-    response = fgt.policy.create(data=data)
-    print("policy.create", response)  # policy.create <Response [200]>
-
-    print("\nGets all policies from Fortigate")
-    policies = fgt.policy.get()
-    print(f"policies count={len(policies)}")  # policies count=244
-
-    print("\nGets filtered policy by policyid (unique identifier)")
-    policies = fgt.policy.get(uid="POLICY")
-    pprint(policies)
-    #  [{"name": "POLICY",
-    #    "policyid": 323,
-    #    "uuid": "521390dc-d771-51ec-9dc2-32467e1bc561",
-    #    ...
-    #    }]
-
-    print("\nFilters policies by name, by operator equals \"==\"")
-    policies = fgt.policy.get(filter="name==POLICY")
-    print(f"policies count={len(policies)}")  # policies count=1
-    policyid = policies[0]["policyid"]
-    print("policyid", policyid)  # policyid 323
-
-    print("\nFilters policies by operator contains \"=@\"")
-    policies = fgt.policy.get(filter="name=@POL")
-    print(f"policies count={len(policies)}")  # policies count=6
-
-    print("\nFilters policies by operator not equals \"!=\"")
-    policies = fgt.policy.get(filter="name!=POLICY")
-    print(f"policies count={len(policies)}")  # policies count=243
-
-    print("\nFilters policies by multiple conditions")
-    policies = fgt.policy.get(filter=["name=@POL", "color==6"])
-    print(f"policies count={len(policies)}")  # policies count=2
-
-    print("\nUpdates policy data in the Fortigate")
-    data = dict(policyid=policyid, status="disable")
-    response = fgt.policy.update(uid="POLICY", data=data)
-    print("policy.update", response)  # policy.update <Response [200]>
-
-    print("\nChecks for presence of policy in the Fortigate")
-    response = fgt.policy.is_exist(uid=policyid)
-    print("policy.is_exist", response)  # policy.is_exist True
-
-    print("\nGets all policies with destination address == \"192.168.1.2/32\"")
-    policies = []
-    addresses = fgt.address.get(filter="subnet==192.168.1.2 255.255.255.255")
-    for policy in fgt.policy.get():
-        dstaddr = [d["name"] for d in policy["dstaddr"]]
-        for address in addresses:
-            if address["name"] in dstaddr:
-                policies.append(policy)
-    print(f"policies count={len(policies)}")  # policies count=2
-
-    print("\nMoves policy to top")
-    neighbor = fgt.policy.get()[0]
-    response = fgt.policy.move(uid=policyid, position="before", neighbor=neighbor["policyid"])
-    print("policy.move", response, response.ok)  # policy.move <Response [200]> False
-
-    print("\nDeletes policy from Fortigate by policyid (unique identifier)")
-    response = fgt.policy.delete(uid=policyid)
-    print("policy.delete", response, response.ok)  # policy.delete <Response [200]> True
-
-    print("\nDeletes policies from Fortigate by filter (by name)")
-    response = fgt.policy.delete(filter="name==POLICY")
-    print("policy.delete", response, response.ok)  # policy.delete <Response [200]> True
-
-    print("\nChecks for absence of policy in the Fortigate")
-    response = fgt.policy.is_exist(uid=policyid)
-    print("policy.is_exist", response)  # policy.is_exist False
-
-    fgt.logout()
+`./examples/policy.py`_
 
 
-Examples Policy Extended Filter `./examples/policy_extended_filter.py`_
+Policy Extended Filter examples:
 
 - Gets the rules where source prefix is equals 127.0.1.0/30
 - Gets the rules where source prefix is not equals 127.0.1.0/30
 - Gets the rules where source addresses are in subnets of 127.0.1.0/24
 - Gets the rules where source prefixes are supernets of address 127.0.1.1/32
 - Gets the rules where source prefix are equals 127.0.1.0/30 and destination prefix are equals 127.0.2.0/30
-- Delete policy, address-group, addresses from Fortigate (order is important)
+- Delete policy, address-group, addresses from the Fortigate (order is important)
 
-.. code:: python
-
-    from pprint import pprint
-
-    from fortigate_api import FortigateAPI, Fortigate
-
-    fgt = FortigateAPI(host="host", username="username", password="password")
-    fgt.login()
-
-    print("\nCreates address and address_group in the Fortigate")
-    data = {"name": "ADDRESS1",
-            "obj-type": "ip",
-            "subnet": "127.0.1.0 255.255.255.252",
-            "type": "ipmask"}
-    response = fgt.address.create(data=data)
-    print("address.create", response)  # post <Response [200]>
-    data = {"name": "ADDRESS2",
-            "obj-type": "ip",
-            "subnet": "127.0.2.0 255.255.255.252",
-            "type": "ipmask"}
-    response = fgt.address.create(data=data)
-    print("address.create", response)  # post <Response [200]>
-    data = {"name": "ADDR_GROUP", "member": [{"name": "ADDRESS2"}]}
-    response = fgt.address_group.create(data=data)
-    print("address_group.create", response)  # post <Response [200]>
-
-    print("\nCreates policy in the Fortigate")
-    data = dict(
-        name="POLICY",
-        status="enable",
-        action="accept",
-        srcintf=[{"name": "any"}],
-        dstintf=[{"name": "any"}],
-        srcaddr=[{"name": "ADDRESS1"}],
-        dstaddr=[{"name": "ADDR_GROUP"}],
-        service=[{"name": "ALL"}],
-        schedule="always",
-    )
-    response = fgt.policy.create(data=data)
-    print("policy.create", response)  # post <Response [200]>
-
-    print("\nGets the rules where source prefix is equals 127.0.1.0/30")
-    efilter = "srcaddr==127.0.1.0/30"
-    policies = fgt.policy.get(efilter=efilter)
-    print(f"{efilter=}", len(policies))  # efilter='srcaddr==127.0.1.0/30' 1
-
-    print("\nGets the rules where source prefix is not equals 127.0.1.0/30")
-    efilter = "srcaddr!=127.0.1.0/30"
-    policies = fgt.policy.get(efilter=efilter)
-    print(f"{efilter=}", len(policies))  # efilter='srcaddr!=127.0.1.0/30' 35
-
-    print("\nGets the rules where source addresses are in subnets of 127.0.1.0/24")
-    efilter = "srcaddr<=127.0.1.0/24"
-    policies = fgt.policy.get(efilter=efilter)
-    print(f"{efilter=}", len(policies))  # efilter='srcaddr<=127.0.1.0/24' 1
-
-    print("\nGets the rules where source prefixes are supernets of address 127.0.1.1/32")
-    efilter = "srcaddr>=127.0.1.1/32"
-    policies = fgt.policy.get(efilter=efilter)
-    print(f"{efilter=}", len(policies))  # efilter='srcaddr>=127.0.1.1/32' 7
-
-    print("\nGets the rules where source prefix are equals 127.0.1.0/30 and")
-    print("\ndestination prefix are equals 127.0.2.0/30")
-    efilters = ["srcaddr==127.0.1.0/30", "dstaddr==127.0.2.0/30"]
-    policies = fgt.policy.get(efilter=efilters)
-    print(f"{efilters=}", len(policies))
-    print("\nefilters=['srcaddr==127.0.1.0/30', 'dstaddr==127.0.2.0/30'] 1")
-
-    print("\nDelete policy, address-group, addresses from Fortigate (order is important)")
-    response = fgt.address.delete(uid="ADDRESS1")
-    print("address.delete", response.ok)  # address.delete <Response [200]>
-    response = fgt.policy.delete(filter="name==POLICY")
-    print("policy.delete", response.ok)  # policy.delete <Response [200]>
-    response = fgt.address_group.delete(uid="ADDR_GROUP")
-    print("address_group.delete", response.ok)  # address_group.delete <Response [200]>
-    response = fgt.address.delete(uid="ADDRESS1")
-    print("address.delete", response.ok)  # address.delete <Response [200]>
-    response = fgt.address.delete(uid="ADDRESS2")
-    print("address.delete", response.ok)  # address.delete <Response [200]>
-
-    fgt.logout()
+`./examples/policy_extended_filter.py`_
 
 
 
@@ -1060,7 +696,10 @@ uid             *str*   Name of the snmp-community-object, taken from the `uid` 
 Return
     Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
 
-Examples `./examples/snmp_community.py`_
+
+Examples
+........
+SnmpCommunity examples `./examples/snmp_community.py`_
 
 
 
@@ -1103,9 +742,9 @@ FortiOS v6.4 data example `./examples/yml/zone.yml`_
 Fortigate
 ---------
 **Fortigate(host, username, password, scheme, port, timeout, vdom)**
-Firewall Connector to login and logout.
-Contains generic methods for working with objects.
-This object is useful for working with objects that are not implemented in `FortigateAPI`_
+REST API connector to the Fortigate. Contains generic methods (get, put, delete, etc.)
+to work with any objects available through the REST API. `Fortigate`_ is useful for working with
+objects that are not implemented in `FortigateAPI`_
 
 =============== ======= ============================================================================
 Parameter       Type    Description
@@ -1113,26 +752,41 @@ Parameter       Type    Description
 host            *str*   Firewall ip address or hostname
 username        *str*   Administrator name
 password        *str*   Administrator password
-scheme          *str*   "https" or "http", by default "https"
-port            *int*   TCP port, by default 443 for "https", 80 for "http"
-timeout         *int*   Session timeout (minutes), by default 15
-vdom            *str*   Name of virtual domain, by default "root"
+scheme          *str*   (optional) "https" (default) or "http"
+port            *int*   (optional) TCP port, by default 443 for "https", 80 for "http"
+timeout         *int*   (optional) Session timeout minutes (default 15)
+verify          *str*   (optional) Enable SSL certificate verification for HTTPS requests. True -  enable, False - disable (default)
+vdom            *str*   Name of virtual domain (default "root")
 =============== ======= ============================================================================
 
 
 login()
 .......
-**Fortigate.login()** Login to Fortigate
+**Fortigate.login()** Login to the Fortigate using REST API
 
 
 logout()
 ........
-**Fortigate.logout()** Logout Fortigate
+**Fortigate.logout()** Logout from the Fortigate using REST API
 
 
-delete(url)
-...........
-**Fortigate.delete(url)** DELETE object from Fortigate
+send_command()
+..............
+**Fortigate.delete(url)** Sends show command to the Fortigate
+
+=============== ======= ============================================================================
+Parameter       Type    Description
+=============== ======= ============================================================================
+cmd             *str*   Show command to send to the Fortigate
+=============== ======= ============================================================================
+
+Return
+    Session response. *<Response [200]>* Object successfully deleted, *<Response [404]>* Object absent in the Fortigate
+
+
+exist()
+.......
+**Fortigate.exist(url)** Check does an object exists in the Fortigate
 
 =============== ======= ============================================================================
 Parameter       Type    Description
@@ -1141,11 +795,11 @@ url             *str*   REST API URL to the object
 =============== ======= ============================================================================
 
 Return
-    Session response. *<Response [200]>* Object successfully deleted, *<Response [404]>* Object absent in the Fortigate
+    Session response. *<Response [200]>* Object exist, *<Response [404]>* Object does not exist
 
 
-get(url)
-........
+get()
+.....
 **Fortigate.get(url)** GET object configured in the Fortigate
 
 =============== ======= ============================================================================
@@ -1158,9 +812,9 @@ Return
     *List[dict]* of the objects data
 
 
-post(url, data)
-...............
-**Fortigate.post(url, data)** POST (create) object in the Fortigate
+post()
+......
+**Fortigate.post(url, data)** POST (create) object in the Fortigate based on the data
 
 =============== ======= ============================================================================
 Parameter       Type    Description
@@ -1173,8 +827,8 @@ Return
     Session response. *<Response [200]>* Object successfully created or already exists, *<Response [500]>* Object has not been created or already exist in the Fortigate
 
 
-put(url, data)
-..............
+put()
+.....
 **Fortigate.put(url, data)** PUT (update) existing object in the Fortigate
 
 =============== ======= ============================================================================
@@ -1188,73 +842,88 @@ Return
     Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
 
 
-exist(url)
-..........
-**Fortigate.exist(url)** Check does an object exists in the Fortigate
+Examples
+........
+Fortigate examples:
+
+- Creates address in the Fortigate
+- Gets address data from the Fortigate
+- Updates address data in the Fortigate
+- Checks for presence of address in the Fortigate
+- Deletes address from the Fortigate
+- Checks for absence of address in the Fortigate
+- Fortigate *with* statement
+
+`./examples/fortigate.py`_
+
+
+
+SSH
+---
+**SSH(host, username, password, ssh)**
+SSH connector to the Fortigate. Contains methods to get and put configuration commands using ssh.
 
 =============== ======= ============================================================================
 Parameter       Type    Description
 =============== ======= ============================================================================
-url             *str*   REST API URL to the object
+host            *str*   Firewall ip address or hostname
+username        *str*   Administrator name
+password        *str*   Administrator password
+ssh             *dict*  Netmiko *ConnectHandler* parameters
 =============== ======= ============================================================================
 
+
+login()
+.......
+**SSH.login()** Login to the Fortigate using SSH
+
+
+logout()
+........
+**SSH.logout()** Logout from the Fortigate using SSH
+
+
+send_command()
+..............
+**SSH.send_command(str, kwargs)** Sends the command to the Fortigate
+
+=============== ============= ======================================================================
+Parameter       Type          Description
+=============== ============= ======================================================================
+cmd             *str*         The command to be executed on the Fortigate
+kwargs          *dict*        (optional) Netmiko parameters
+=============== ============= ======================================================================
+
 Return
-    Session response. *<Response [200]>* Object exist, *<Response [404]>* Object does not exist
+    Output of the command
+
+
+send_config_set()
+.................
+**SSH.send_config_set(cmds, kwargs)** Sends configuration commands to the Fortigate
+
+=============== ============= ======================================================================
+Parameter       Type          Description
+=============== ============= ======================================================================
+cmds            *List[str]*   Configuration commands to be executed on the Fortigate
+kwargs          *dict*        (optional) Netmiko parameters
+=============== ============= ======================================================================
+
+Return
+    Output of the commands
 
 
 Examples
 ........
-Examples Fortigate `./examples/fortigate.py`_
+SSH examples:
 
-.. code:: python
+- Show interface config
+- Change interface description from "dmz" to "DMZ"
+- Check interface description is changed
+- Change read-timeout timer for long awaited commands
 
-    from pprint import pprint
+`./examples/ssh.py`_
 
-    from fortigate_api import Fortigate
-
-    fgt = Fortigate(host="host", username="username", password="password")
-    fgt.login()
-
-    # Creates address in the Fortigate
-    data = {"name": "ADDRESS",
-            "obj-type": "ip",
-            "subnet": "127.0.0.100 255.255.255.252",
-            "type": "ipmask"}
-    response = fgt.post(url="api/v2/cmdb/firewall/address/", data=data)
-    print("post", response)  # post <Response [200]>
-
-    print("\nGets address data from Fortigate")
-    addresses = fgt.get(url="api/v2/cmdb/firewall/address/")
-    addresses = [d for d in addresses if d["name"] == "ADDRESS"]
-    pprint(addresses)
-    #  [{"comment": "",
-    #    "name": "ADDRESS",
-    #    "subnet": "127.0.0.100 255.255.255.252",
-    #    "uuid": "a386e4b0-d6cb-51ec-1e28-01e0bc0de43c",
-    #    ...
-    #    }]
-
-    print("\nUpdate address data in the Fortigate")
-    data = dict(subnet="127.0.0.255 255.255.255.255")
-    response = fgt.put(url="api/v2/cmdb/firewall/address/ADDRESS", data=data)
-    print("put", response)  # put <Response [200]>
-    addresses = fgt.get(url="api/v2/cmdb/firewall/address/")
-    addresses = [d for d in addresses if d["name"] == "ADDRESS"]
-    print(addresses[0]["subnet"])  # 127.0.0.255 255.255.255.255
-
-    print("\nChecks for presence of address in the Fortigate")
-    response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
-    print("exist", response)  # <Response [200]>
-
-    print("\nDeletes address from Fortigate")
-    response = fgt.delete(url="api/v2/cmdb/firewall/address/ADDRESS")
-    print("delete", response)  # <Response [200]>
-
-    print("\nChecks for absence of address in the Fortigate")
-    response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
-    print("exist", response)  # <Response [404]>
-
-    fgt.logout()
 
 
 .. _`./examples/yml/address.yml`: ./examples/yml/address.yml
@@ -1276,9 +945,10 @@ Examples Fortigate `./examples/fortigate.py`_
 
 .. _`./examples/address.py`: ./examples/address.py
 .. _`./examples/address_group.py`: ./examples/address_group.py
+.. _`./examples/dhcp_server.py`: ./examples/dhcp_server.py
+.. _`./examples/fortigate.py`: ./examples/fortigate.py
 .. _`./examples/interface.py`: ./examples/interface.py
 .. _`./examples/policy.py`: ./examples/policy.py
 .. _`./examples/policy_extended_filter.py`: ./examples/policy_extended_filter.py
-.. _`./examples/dhcp_server.py`: ./examples/dhcp_server.py
 .. _`./examples/snmp_community.py`: ./examples/snmp_community.py
-.. _`./examples/fortigate.py`: ./examples/fortigate.py
+.. _`./examples/ssh.py`: ./examples/ssh.py

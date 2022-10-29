@@ -4,6 +4,13 @@
 CHANGELOG
 =========
 
+1.0.0 (2022-10-29)
+------------------
+* [new] SSH
+* [new] HTTPS SSL verify
+* [new] *with* statement for FortigateAPI and Fortigate
+
+
 0.2.6 (2022-09-01)
 ------------------
 * [new] dhcp_server

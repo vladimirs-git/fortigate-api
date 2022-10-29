@@ -1,4 +1,4 @@
-"""unittest firewall/base.py"""
+"""unittest base.py"""
 
 import unittest
 
@@ -9,7 +9,7 @@ from tests.helper__tst import NAME1, SLASH, SLASH_, MockFortigate
 
 
 class Test(MockFortigate):
-    """unittest firewall/base.py"""
+    """Base"""
 
     def setUp(self):
         """setUp"""

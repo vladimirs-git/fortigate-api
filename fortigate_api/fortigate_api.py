@@ -17,6 +17,7 @@ from fortigate_api.service import Service
 from fortigate_api.service_category import ServiceCategory
 from fortigate_api.service_group import ServiceGroup
 from fortigate_api.snmp_community import SnmpCommunity
+from fortigate_api.ssh import SSH
 from fortigate_api.virtual_ip import VirtualIP
 from fortigate_api.zone import Zone
 
@@ -27,14 +28,36 @@ class FortigateAPI:
     def __init__(self, **kwargs):
         """**FortigateAPI** - a set of methods for working with the most commonly used objects
         :param host: Firewall ip address or hostname
+        :type host: str
+
         :param username: Administrator name
+        :type username: str
+
         :param password: Administrator password
-        :param scheme: "https" or "http", by default "https"
-        :param port: TCP port, by default 443 for "https", 80 for "http"
-        :param timeout: Session timeout (minutes), by default 15
-        :param vdom: Name of virtual domain, by default "root"
+        :type password: str
+
+        :param scheme: (optional) "https" (default) or "http"
+        :type scheme: str
+
+        :param port: (optional) TCP port, by default 443 for "https", 80 for "http"
+        :type port: str
+
+        :param timeout: (optional) Session timeout minutes (default 15)
+        :type timeout: int
+
+        :param verify: (optional) Enable SSL certificate verification for HTTPS requests.
+            True -  enable
+            False - disable (default)
+        :type verify: bool
+
+        :param vdom: Name of virtual domain (default "root")
+        :type vdom: str
+
+        :param ssh: Netmiko ConnectHandler parameters
+        :type ssh: Dict[str, Any]
         """
         self.fgt = Fortigate(**kwargs)
+        self.ssh = SSH(**kwargs)
 
         self.address = Address(self.fgt)
         self.address_group = AddressGroup(self.fgt)
@@ -56,15 +79,22 @@ class FortigateAPI:
     def __repr__(self):
         return self.fgt.__repr__()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.fgt.__exit__()
+        self.ssh.__exit__()
+
     # =========================== methods ============================
 
     def login(self) -> FortigateAPI:
-        """Login to Fortigate"""
+        """Login to the Fortigate using REST API """
         self.fgt.login()
         return self
 
     def logout(self) -> None:
-        """Logout Fortigate"""
+        """Logout from the Fortigate using REST API"""
         self.fgt.logout()
 
     @property

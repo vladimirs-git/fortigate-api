@@ -1,5 +1,7 @@
-"""**Fortigate** - Firewall Connector to login and logout.
-Calls generic methods for working with objects: delete, get, post, put, exist.
+"""**Fortigate(host, username, password, scheme, port, timeout, vdom)**
+REST API connector to the Fortigate. Contains generic methods (get, put, delete, etc.)
+to work with any objects available through the REST API. `Fortigate`_ is useful for working with
+objects that are not implemented in `FortigateAPI`_
 """
 from __future__ import annotations
 
@@ -20,27 +22,47 @@ from fortigate_api.types_ import DAny, LDAny
 # noinspection PyUnresolvedReferences
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-PORT_80 = 80
-PORT_443 = 443
 HTTPS = "https"
+PORT_443 = 443
+PORT_80 = 80
 TIMEOUT = 15
 VDOM = "root"
 
 
 class Fortigate:
-    """**Fortigate** - Firewall Connector to login and logout.
-    Calls generic methods for working with objects: delete, get, post, put, exist.
+    """**Fortigate(host, username, password, scheme, port, timeout, vdom)**
+    REST API connector to the Fortigate. Contains generic methods (get, put, delete, etc.)
+    to work with any objects available through the REST API. `Fortigate`_ is useful for working with
+    objects that are not implemented in `FortigateAPI`_
     """
 
     def __init__(self, host: str, username: str, password: str, **kwargs):
         """**Fortigate** - Firewall Connector
         :param host: Firewall ip address or hostname
+        :type host: str
+
         :param username: Administrator name
+        :type username: str
+
         :param password: Administrator password
-        :param scheme: "https" or "http", by default "https"
-        :param port: TCP port, by default 443 for "https", 80 for "http"
-        :param timeout: Session timeout (minutes), by default 15
-        :param vdom: Name of virtual domain, by default "root"
+        :type password: str
+
+        :param scheme: (optional) "https" (default) or "http"
+        :type scheme: str
+
+        :param port: (optional) TCP port, by default 443 for "https", 80 for "http"
+        :type port: str
+
+        :param timeout: (optional) Session timeout minutes (default 15)
+        :type timeout: int
+
+        :param verify: (optional) Enable SSL certificate verification for HTTPS requests.
+            True -  enable
+            False - disable (default)
+        :type verify: bool
+
+        :param vdom: Name of virtual domain (default "root")
+        :type vdom: str
         """
         self.host = host
         self.username = username
@@ -49,6 +71,7 @@ class Fortigate:
         self.port: int = self._init_port(**kwargs)
         self.timeout: int = int(kwargs.get("timeout") or TIMEOUT)
         self.vdom: str = str(kwargs.get("vdom") or VDOM)
+        self.verify: bool = bool(kwargs.get("verify") or False)
         self._session: Optional[Session] = None
 
     def __repr__(self):
@@ -58,6 +81,7 @@ class Fortigate:
         scheme = self.scheme
         port = self.port if not (scheme == HTTPS and self.port == PORT_443) else ""
         timeout = self.timeout
+        verify = self.verify
         vdom = self.vdom
         params = [
             f"{host=!r}",
@@ -68,11 +92,19 @@ class Fortigate:
             f"{scheme=!r}" if scheme != HTTPS else "",
             f"{port=!r}" if port else "",
             f"{timeout=!r}" if timeout != TIMEOUT else "",
+            f"{verify=!r}" if verify is True else "",
             f"{vdom=!r}" if vdom != VDOM else "",
         ]
         params.extend([s for s in params_optional if s])
         params_ = ", ".join([s for s in params if s])
         return f"{self.__class__.__name__}({params_})"
+
+    def __enter__(self):
+        self.login()
+        return self
+
+    def __exit__(self, *args):
+        self.logout()
 
     # ============================= init =============================
 
@@ -97,23 +129,57 @@ class Fortigate:
 
     @property
     def is_connected(self) -> bool:
-        """Check connection to Fortigate
-        :return: True if session is connected to Fortigate"""
-        if bool(self._session):
-            return True
-        return False
+        """Check connection to the Fortigate
+        :return: True if session is connected to the Fortigate"""
+        return isinstance(self._session, Session)
 
     @property
     def url(self):
-        """Returns URL to Fortigate"""
+        """Returns URL to the Fortigate"""
         if self.port == 443:
             return f"{self.scheme}://{self.host}"
         return f"{self.scheme}://{self.host}:{self.port}"
 
+    # ============================ login =============================
+
+    def login(self) -> None:
+        """Login to the Fortigate using REST API
+        :return: self *Fortigate* object
+        """
+        session: Session = requests.session()
+        try:
+            session.post(url=f"{self.url}/logincheck",
+                         data=urlencode([("username", self.username),
+                                         ("secretkey", self.password)]),
+                         timeout=self.timeout,
+                         verify=self.verify)
+        except Exception as ex:
+            raise self._hide_secret_ex(ex)
+        for cookie in session.cookies:
+            if cookie.name == "ccsrftoken" and isinstance(cookie.value, str):
+                session.headers.update({"X-CSRFTOKEN": cookie.value[1:-1]})
+                break
+        else:
+            raise ValueError("invalid login credentials, absent cookie ccsrftoken")
+        response: Response = session.get(url=f"{self.url}/api/v2/cmdb/system/vdom")
+        response.raise_for_status()
+        self._session = session
+
+    def logout(self) -> None:
+        """Logout from the Fortigate using REST API"""
+        if isinstance(self._session, Session):
+            try:
+                self._session.get(url=f"{self.url}/logout",
+                                  timeout=self.timeout,
+                                  verify=self.verify)
+            except SSLError:
+                pass
+        self._session = None
+
     # =========================== methods ============================
 
     def delete(self, url: str) -> Response:
-        """DELETE object from Fortigate
+        """DELETE object from the Fortigate
         :param url: REST API URL to the object
         :return: Session response
             *<Response [200]>* Object successfully deleted
@@ -125,7 +191,7 @@ class Fortigate:
             response: Response = session.delete(url=url,
                                                 params=urlencode([("vdom", self.vdom)]),
                                                 timeout=self.timeout,
-                                                verify=False)
+                                                verify=self.verify)
         except Exception as ex:
             raise self._hide_secret_ex(ex)
         if not response.ok:
@@ -144,7 +210,7 @@ class Fortigate:
         response: Response = session.get(url=url,
                                          params=urlencode([("vdom", self.vdom)]),
                                          timeout=self.timeout,
-                                         verify=False)
+                                         verify=self.verify)
         return response
 
     def get(self, url: str) -> LDAny:
@@ -158,7 +224,7 @@ class Fortigate:
             response: Response = session.get(url=url,
                                              params=urlencode([("vdom", self.vdom)]),
                                              timeout=self.timeout,
-                                             verify=False)
+                                             verify=self.verify)
         except Exception as ex:
             raise self._hide_secret_ex(ex)
         if not response.ok:
@@ -166,39 +232,6 @@ class Fortigate:
             return []
         result: LDAny = response.json()["results"]
         return result
-
-    def login(self) -> Fortigate:
-        """Login to Fortigate. Save logged-in session to self._session
-        :return: self *Fortigate* object
-        """
-        session: Session = requests.session()
-        try:
-            session.post(url=f"{self.url}/logincheck",
-                         data=urlencode([("username", self.username),
-                                         ("secretkey", self.password)]),
-                         timeout=self.timeout,
-                         verify=False)
-        except Exception as ex:
-            raise self._hide_secret_ex(ex)
-        for cookie in session.cookies:
-            if cookie.name == "ccsrftoken" and isinstance(cookie.value, str):
-                session.headers.update({"X-CSRFTOKEN": cookie.value[1:-1]})
-                break
-        else:
-            raise ValueError("invalid login credentials, absent cookie ccsrftoken")
-        response: Response = session.get(url=f"{self.url}/api/v2/cmdb/system/vdom")
-        response.raise_for_status()
-        self._session = session
-        return self
-
-    def logout(self) -> None:
-        """Logout Fortigate. Delete logged-in session"""
-        if self._session:
-            try:
-                self._session.get(url=f"{self.url}/logout", timeout=self.timeout, verify=False)
-            except SSLError:
-                pass
-            self._session = None
 
     def post(self, url: str, data: DAny) -> Response:
         """POST (create) object in the Fortigate based on the data
@@ -215,7 +248,7 @@ class Fortigate:
                                               params=urlencode([("vdom", self.vdom)]),
                                               data=json.dumps(data),
                                               timeout=self.timeout,
-                                              verify=False)
+                                              verify=self.verify)
         except Exception as ex:
             raise self._hide_secret_ex(ex)
         if not response.ok:
@@ -237,7 +270,7 @@ class Fortigate:
                                              params=urlencode([("vdom", self.vdom)]),
                                              data=json.dumps(data),
                                              timeout=self.timeout,
-                                             verify=False)
+                                             verify=self.verify)
         except Exception as ex:
             raise self._hide_secret_ex(ex)
         if not response.ok:
@@ -248,11 +281,12 @@ class Fortigate:
 
     def _get_session(self) -> Session:
         """Returns an existing session or create a new one"""
-        if not self._session:
+        if not self.is_connected:
             self.login()
-        if isinstance(self._session, Session):
-            return self._session
-        raise ValueError(f"absent session={self._session}")
+        session = self._session
+        if not isinstance(session, Session):
+            raise TypeError(f"{session=} {Session} expected")
+        return session
 
     def _logging(self, resp: Response) -> None:
         """Logging response"""

@@ -53,7 +53,7 @@ def efilter_by_sdst(policies: LDAny, efilter: str, fgt) -> None:
     """
     if not _split_efilter(efilter)[0]:
         return
-    # get addresses and address-groups from Fortigate
+    # get addresses and address-groups from the Fortigate
     addresses: LDAny = Address(fgt).get()
     addr_groups: LDAny = AddressGroup(fgt).get()
     names_subnets_d: DLStr = _get_names_subnets(addresses, addr_groups)
@@ -79,7 +79,7 @@ def _split_efilter(efilter: str) -> Tuple[str, str, IPv4Network]:
 
 
 def _get_names_subnets(addresses: LDAny, addr_groups: LDAny) -> DLStr:
-    """Get all IPv4Networks from Fortigate address-objects and address-group-objects.
+    """Get all IPv4Networks from the Fortigate address-objects and address-group-objects.
     Skip IPv6Networks
     :param addresses: Fortigate address-objects
     :param addr_groups: Fortigate address-group-objects

@@ -1,16 +1,16 @@
-"""unittest firewall/fortigate.py"""
+"""unittest fortigate.py"""
 
 import unittest
 from unittest.mock import patch
 
 import requests
 
-from fortigate_api.fortigate import Fortigate
+from fortigate_api import Fortigate
 from tests.helper__tst import NAME1, NAME2, NAME3, POL1, MockSession
 
 
 class Test(unittest.TestCase):
-    """unittest firewall/fortigate.py"""
+    """Fortigate"""
 
     def setUp(self):
         """setUp"""
@@ -21,26 +21,41 @@ class Test(unittest.TestCase):
     def test_valid__repr__(self):
         """Fortigate.__repr__()"""
         default = dict(scheme="https", port=443, timeout=15, vdom="root")
-        for fgt, req in [
-            (Fortigate(host="a", username="b", password="c"),
+        for kwargs, req in [
+            (dict(host="a", username="b", password="c"),
              "Fortigate(host='a', username='b', password='*')"),
-            (Fortigate(host="a", username="b", password="c", **default),
+            (dict(host="a", username="b", password="c", **default),
              "Fortigate(host='a', username='b', password='*')"),
-            (Fortigate(host="a", username="b", password="c", port=80),
+            (dict(host="a", username="b", password="c", port=80),
              "Fortigate(host='a', username='b', password='*', port=80)"),
-            (Fortigate(host="a", username="b", password="c", scheme="https", port=80),
+            (dict(host="a", username="b", password="c", scheme="https", port=80),
              "Fortigate(host='a', username='b', password='*', port=80)"),
-            (Fortigate(host="a", username="b", password="c", scheme="http", port=80),
+            (dict(host="a", username="b", password="c", scheme="http", port=80),
              "Fortigate(host='a', username='b', password='*', scheme='http', port=80)"),
-            (Fortigate(host="a", username="b", password="c", timeout=1),
+            (dict(host="a", username="b", password="c", timeout=1),
              "Fortigate(host='a', username='b', password='*', timeout=1)"),
-            (Fortigate(host="a", username="b", password="c", vdom="d"),
+            (dict(host="a", username="b", password="c", vdom="d"),
              "Fortigate(host='a', username='b', password='*', vdom='d')"),
-            (Fortigate(host="a", username="b", password="c", vdom="d", timeout=1, port=80),
+            (dict(host="a", username="b", password="c", vdom="d", timeout=1, port=80),
              "Fortigate(host='a', username='b', password='*', port=80, timeout=1, vdom='d')"),
+            (dict(host="a", username="b", password="c", verify=True),
+             "Fortigate(host='a', username='b', password='*', verify=True)"),
+            (dict(host="a", username="b", password="c", verify=False),
+             "Fortigate(host='a', username='b', password='*')"),
         ]:
+            fgt = Fortigate(**kwargs)
             result = f"{fgt!r}"
             self.assertEqual(result, req, msg=f"{fgt=}")
+
+    def test_valid__enter__(self):
+        """Fortigate.__enter__() Fortigate.__exit__()"""
+        with patch("requests.session", return_value=MockSession()):
+            with Fortigate(host="host", username="username", password="") as fgt:
+                session = fgt._session
+                if session is not None:
+                    result = session.__class__.__name__
+                    req = "MockSession"
+                    self.assertEqual(result, req, msg="MockSession")
 
     # ============================= init =============================
 
@@ -96,7 +111,7 @@ class Test(unittest.TestCase):
     def test_valid__is_connected(self):
         """Fortigate.is_connected()"""
         for session, req in [
-            ("<Sesion>", True),
+            (requests.session(), True),
             (None, False),
         ]:
             self.fgt._session = session

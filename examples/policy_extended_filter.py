@@ -1,8 +1,20 @@
-"""Examples Policy Extended Filter"""
+"""Policy Extended Filter examples:
+
+- Gets the rules where source prefix is equals 127.0.1.0/30
+- Gets the rules where source prefix is not equals 127.0.1.0/30
+- Gets the rules where source addresses are in subnets of 127.0.1.0/24
+- Gets the rules where source prefixes are supernets of address 127.0.1.1/32
+- Gets the rules where source prefix are equals 127.0.1.0/30 and destination prefix are equals 127.0.2.0/30
+- Delete policy, address-group, addresses from the Fortigate (order is important)
+"""
 
 from fortigate_api import FortigateAPI
 
-fgt = FortigateAPI(host="host", username="username", password="password")
+HOST = "host"
+USERNAME = "username"
+PASSWORD = "password"
+
+fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
 fgt.login()
 
 print("\nCreates address and address_group in the Fortigate")
@@ -64,7 +76,7 @@ policies = fgt.policy.get(efilter=efilters)
 print(f"{efilters=}", len(policies))
 print("\nefilters=['srcaddr==127.0.1.0/30', 'dstaddr==127.0.2.0/30'] 1")
 
-print("\nDelete policy, address-group, addresses from Fortigate (order is important)")
+print("\nDelete policy, address-group, addresses from the Fortigate (order is important)")
 response = fgt.address.delete(uid="ADDRESS1")
 print("address.delete", response.ok)  # address.delete <Response [200]>
 response = fgt.policy.delete(filter="name==POLICY")

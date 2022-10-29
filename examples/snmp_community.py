@@ -1,10 +1,15 @@
-"""Examples SNMP Community"""
+"""SnmpCommunity examples"""
 
 from pprint import pprint
 
 from fortigate_api import FortigateAPI
 
-fgt = FortigateAPI(host="host", username="username", password="password").login()
+HOST = "host"
+USERNAME = "username"
+PASSWORD = "password"
+
+fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
+fgt.login()
 
 print("\n\n========================= snmp_community =========================")
 data = {
@@ -51,11 +56,11 @@ print("\nChecks for presence of snmp_community in the Fortigate")
 response = fgt.snmp_community.is_exist(uid="3")
 print("snmp_community.is_exist", response)  # snmp_community.is_exist True
 
-print("\nDeletes snmp_community from Fortigate by name")
+print("\nDeletes snmp_community from the Fortigate by name")
 response = fgt.snmp_community.delete(uid="3")
 print("snmp_community.delete", response, response.ok)  # snmp_community.delete <Response [200]> True
 
-print("\nDeletes snmp_community from Fortigate by filter")
+print("\nDeletes snmp_community from the Fortigate by filter")
 response = fgt.snmp_community.delete(filter="name=@SNMP_")
 print("snmp_community.delete", response, response.ok)  # snmp_community.delete <Response [200]> True
 

@@ -2,10 +2,12 @@
 from __future__ import annotations
 
 import json
+import re
 import unittest
 from unittest.mock import patch
 
 from requests import Response
+from requests.cookies import RequestsCookieJar
 
 from fortigate_api.fortigate import Fortigate
 
@@ -56,33 +58,53 @@ class MockFortigate(unittest.TestCase):
 class MockSession:
     """mocked Session"""
 
+    def __init__(self):
+        self._headers = {}
+
+    @property
+    def headers(self):
+        """Mocked headers"""
+        return self._headers
+
+    @headers.setter
+    def headers(self, data):
+        self._headers = data
+
+    @property
+    def cookies(self):
+        """Mocked cookies"""
+        cookie = RequestsCookieJar()
+        cookie.name = "ccsrftoken"
+        cookie.value = ".secret."
+        return [cookie]
+
     # noinspection PyUnusedLocal
     @staticmethod
     def delete(url: str, **kwargs) -> Response:
-        """mocked Session.delete()"""
+        """Mocked Session.delete()"""
         return MockResponse.delete(url=url)
 
     # noinspection PyUnusedLocal
     @staticmethod
     def get(url: str, **kwargs) -> Response:
-        """mocked Session.get()"""
+        """Mocked Session.get()"""
         return MockResponse.get(url=url)
 
     # noinspection PyUnusedLocal
     @staticmethod
     def post(url: str, **kwargs) -> Response:
-        """mocked Session.post()"""
+        """Mocked Session.post()"""
         return MockResponse().post(url=url, **kwargs)
 
     # noinspection PyUnusedLocal
     @staticmethod
     def put(url: str, **kwargs) -> Response:
-        """mocked Session.put()"""
+        """Mocked Session.put()"""
         return MockResponse().put(url=url, **kwargs)
 
 
 class MockResponse(Response):
-    """mocked Response"""
+    """Mocked Response"""
     exist_objects = {
         "api/v2/cmdb/firewall/address/": [D_ADDR1, D_ADDR2, D_ADDR3, D_ADDR4, D_ADDR5],
         "api/v2/cmdb/firewall/addrgrp/": [D_ADDGR1],
@@ -139,6 +161,17 @@ class MockResponse(Response):
         """session.get(), return data, status_code=200 if object is configured in the Fortigate"""
         resp = cls(url=url)
         url_ = cls._url(url=url)
+
+        # login
+        if url_ == "api/v2/cmdb/system/vdom":
+            resp.status_code = 200
+            return resp
+        # logout
+        if url_ == "logout":
+            resp.status_code = 200
+            return resp
+
+        # data
         if url_ in cls.exist_objects:
             data = cls.exist_objects[url_]
             text = json.dumps({**GET, **{"results": data}})
@@ -153,11 +186,20 @@ class MockResponse(Response):
         """session.post() (create), return status_code==200 (created successfully) only for
         supported objects with names: NAME1, NAME3"""
         resp = cls(url=url)
-        if data_s := kwargs.get("data"):
-            data_d = json.loads(data_s)
-            name = data_d.get("name") or ""
-            if name == NAME3:
-                resp.status_code = 200
+        data_s = kwargs.get("data")
+        if not data_s:
+            return resp
+
+        # login
+        if data_s == "username=username&secretkey=":
+            resp.status_code = 200
+            return resp
+
+        # new data
+        data_d = json.loads(data_s)
+        name = data_d.get("name") or ""
+        if name == NAME3:
+            resp.status_code = 200
         return resp
 
     @classmethod
@@ -187,4 +229,9 @@ class MockResponse(Response):
     @staticmethod
     def _url(url: str) -> str:
         """remove https://{hostname}/ from REST API URL"""
-        return "api/v2/cmdb/" + url.split("/api/v2/cmdb/")[1]
+        pattern = "/api/v2/cmdb/"
+        if re.search(pattern, url):
+            url_ = "api/v2/cmdb/" + url.split(pattern)[1]
+        else:
+            url_ = url.split("/host/")[1]
+        return url_

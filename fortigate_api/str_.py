@@ -7,7 +7,7 @@ from urllib.parse import urlencode, urlparse, parse_qs, ParseResult
 from fortigate_api.types_ import DAny, T2Str, T3Str
 
 
-def findall(pattern: str, string: str, flags=0) -> str:
+def findall1(pattern: str, string: str, flags=0) -> str:
     """Return 1st item of re.findall(). If nothing is found, return an empty string.
     Group with parentheses in pattern is required.
     """

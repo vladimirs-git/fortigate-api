@@ -1,10 +1,15 @@
-"""Examples DHCP Server"""
+"""DhcpServer examples"""
 
 from pprint import pprint
 
 from fortigate_api import FortigateAPI
 
-fgt = FortigateAPI(host="host", username="username", password="password").login()
+HOST = "host"
+USERNAME = "username"
+PASSWORD = "password"
+
+fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
+fgt.login()
 
 print("\n\n========================= dhcp_server =========================")
 data = {
@@ -58,11 +63,11 @@ print("\nChecks for presence of dhcp_server in the Fortigate")
 response = fgt.dhcp_server.is_exist(uid="1")
 print("dhcp_server.is_exist", response)  # dhcp_server.is_exist True
 
-print("\nDeletes dhcp_server from Fortigate by name")
+print("\nDeletes dhcp_server from the Fortigate by name")
 response = fgt.dhcp_server.delete(uid="1")
 print("dhcp_server.delete", response, response.ok)  # dhcp_server.delete <Response [200]> True
 
-print("\nDeletes dhcp_server from Fortigate by filter")
+print("\nDeletes dhcp_server from the Fortigate by filter")
 response = fgt.dhcp_server.delete(filter="interface==vlan.123")
 print("dhcp_server.delete", response, response.ok)  # dhcp_server.delete <Response [200]> True
 

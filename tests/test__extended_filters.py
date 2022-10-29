@@ -7,7 +7,7 @@ from tests.helper__tst import MockFortigate
 
 
 class Test(MockFortigate):
-    """unittest extended_filters.py"""
+    """extended_filters"""
 
     def test_valid__valid_efilters(self):
         """Policy._valid_efilters()"""

@@ -1,10 +1,28 @@
-"""Examples Policy"""
+"""Policy examples:
+
+- Creates policy in the Fortigate
+- Gets all policies from the Fortigate
+- Gets filtered policy by policyid (unique identifier)
+- Filters policies by name, by operator *equals* "=="
+- Filters policies by operator *contains* "=@"
+- Filters policies by operator *not equals* "!="
+- Updates policy data in the Fortigate
+- Checks for presence of policy in the Fortigate
+- Gets all policies with destination address == "192.168.1.2/32"
+- Deletes policy from the Fortigate by policyid (unique identifier)
+- Deletes policies from the Fortigate by filter (by name)
+- Checks for absence of policy in the Fortigate
+"""
 
 from pprint import pprint
 
 from fortigate_api import FortigateAPI
 
-fgt = FortigateAPI(host="host", username="username", password="password")
+HOST = "host"
+USERNAME = "username"
+PASSWORD = "password"
+
+fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
 fgt.login()
 
 print("\nCreates policy in the Fortigate")
@@ -22,7 +40,7 @@ data = dict(
 response = fgt.policy.create(data=data)
 print("policy.create", response)  # policy.create <Response [200]>
 
-print("\nGets all policies from Fortigate")
+print("\nGets all policies from the Fortigate")
 policies = fgt.policy.get()
 print(f"policies count={len(policies)}")  # policies count=244
 
@@ -77,11 +95,11 @@ neighbor = fgt.policy.get()[0]
 response = fgt.policy.move(uid=policyid, position="before", neighbor=neighbor["policyid"])
 print("policy.move", response, response.ok)  # policy.move <Response [200]> False
 
-print("\nDeletes policy from Fortigate by policyid (unique identifier)")
+print("\nDeletes policy from the Fortigate by policyid (unique identifier)")
 response = fgt.policy.delete(uid=policyid)
 print("policy.delete", response, response.ok)  # policy.delete <Response [200]> True
 
-print("\nDeletes policies from Fortigate by filter (by name)")
+print("\nDeletes policies from the Fortigate by filter (by name)")
 response = fgt.policy.delete(filter="name==POLICY")
 print("policy.delete", response, response.ok)  # policy.delete <Response [200]> True
 

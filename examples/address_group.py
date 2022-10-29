@@ -1,10 +1,27 @@
-"""Examples AddressGroup"""
+"""AddressGroup examples:
+
+- Creates address-group in the Fortigate
+- Gets all address-groups from the Fortigate
+- Gets filtered address-group by name (unique identifier)
+- Filters address-group by operator *equals* "=="
+- Filters address-group by operator *contains* "=@"
+- Filters address-group by operator *not equals* "!="
+- Updates address-group data in the Fortigate
+- Checks for presence of address-group in the Fortigate
+- Deletes address-group from the Fortigate by name
+- Deletes address-groups from the Fortigate by filter
+- Checks for absence of address-group in the Fortigate
+"""
 
 from pprint import pprint
 
 from fortigate_api import FortigateAPI
 
-fgt = FortigateAPI(host="host", username="username", password="password")
+HOST = "host"
+USERNAME = "username"
+PASSWORD = "password"
+
+fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
 fgt.login()
 
 print("\nCreates address and address-group in the Fortigate")
@@ -18,7 +35,7 @@ data = {"name": "ADDR_GROUP", "member": [{"name": "ADDRESS"}]}
 response = fgt.address_group.create(data=data)
 print("address_group.creat", response)  # address_group.creat <Response [200]>
 
-print("\nGets all address-groups from Fortigate")
+print("\nGets all address-groups from the Fortigate")
 address_groups = fgt.address_group.get()
 print(f"address_groups count={len(address_groups)}")  # address_groups count=115
 
@@ -57,7 +74,7 @@ print("\nChecks for presence of address_group in the Fortigate")
 response = fgt.address_group.is_exist(uid="ADDR_GROUP")
 print("address_group.is_exist", response)  # address_group.is_exist True
 
-print("\nDeletes address_group from Fortigate by name")
+print("\nDeletes address_group from the Fortigate by name")
 response = fgt.address_group.delete(uid="ADDR_GROUP")
 print("address_group.delete", response)  # address_group.delete <Response [200]>
 

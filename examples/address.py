@@ -1,10 +1,28 @@
-"""Examples Address"""
+"""Address examples:
+
+- Creates address in the Fortigate
+- Gets all addresses from the Fortigate
+- Gets filtered address by name (unique identifier)
+- Filters address by operator *equals* "=="
+- Filters address by operator *contains* "=@"
+- Filters address by operator *not equals* "!="
+- Updates address data in the Fortigate
+- Checks for presence of address in the Fortigate
+- Deletes address from the Fortigate by name
+- Deletes addresses from the Fortigate by filter
+- Checks for absence of address in the Fortigate
+- FortigateAPI *with* statement
+"""
 
 from pprint import pprint
 
 from fortigate_api import FortigateAPI
 
-fgt = FortigateAPI(host="host", username="username", password="password")
+HOST = "host"
+USERNAME = "username"
+PASSWORD = "password"
+
+fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
 fgt.login()
 
 # Create Address
@@ -15,7 +33,7 @@ data = {"name": "ADDRESS",
 response = fgt.address.create(data=data)
 print("address.create", response)  # address.create <Response [200]>
 
-print("\nGets all addresses from Fortigate")
+print("\nGets all addresses from the Fortigate")
 addresses = fgt.address.get()
 print(f"addresses count={len(addresses)}")  # addresses count=1727
 
@@ -54,11 +72,11 @@ print("\nChecks for presence of address in the Fortigate")
 response = fgt.address.is_exist(uid="ADDRESS")
 print("address.is_exist", response)  # address.is_exist True
 
-print("\nDeletes address from Fortigate by name")
+print("\nDeletes address from the Fortigate by name")
 response = fgt.address.delete(uid="ADDRESS")
 print("address.delete", response, response.ok)  # address.delete <Response [200]> True
 
-print("\nDeletes addresses: ADDRESS, FIREWALL_AUTH_PORTAL_ADDRESS from Fortigate by filter. "
+print("\nDeletes addresses: ADDRESS, FIREWALL_AUTH_PORTAL_ADDRESS from the Fortigate by filter. "
       "Returns <Response [500]> because FIREWALL_AUTH_PORTAL_ADDRESS cannot be deleted")
 response = fgt.address.delete(filter="name=@ADDRESS")
 print("address.delete", response, response.ok)  # address.delete <Response [500]> False
@@ -68,3 +86,9 @@ response = fgt.address.is_exist(uid="ADDRESS")
 print("address.is_exist", response)  # address.is_exist False
 
 fgt.logout()
+
+# FortigateAPI *with* statement
+print("\nFortigateAPI *with* statement")
+with FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD) as fgt:
+    response = fgt.address.is_exist(uid="ADDRESS")
+    print("address.is_exist", response)  # address.is_exist False

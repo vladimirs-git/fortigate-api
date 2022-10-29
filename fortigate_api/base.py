@@ -56,7 +56,7 @@ class Base:
 
     # noinspection PyIncorrectDocstring
     def delete(self, uid: StrInt = "", **kwargs) -> Response:
-        """Deletes the fortigate-object from Fortigate
+        """Deletes the fortigate-object from the Fortigate
         :param str uid: Identifier of the fortigate-object. Used to delete a single object
         :param list filter: Filters fortigate-objects by one or multiple conditions: equals "==",
             not equals "!=", contains "=@". Used to delete multiple objects
@@ -76,7 +76,7 @@ class Base:
         raise ValueError(f"invalid {uid=} {kwargs=}")
 
     def _delete_by_filter(self, kwargs):
-        """Deletes the fortigate-objects from Fortigate by `filter`
+        """Deletes the fortigate-objects from the Fortigate by `filter`
         :param kwargs: Filters fortigate-objects by one or multiple conditions: equals "==",
             not equals "!=", contains "=@". Used to delete multiple objects
         :return: Session response with the highest status_code

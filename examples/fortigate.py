@@ -1,13 +1,27 @@
-"""Examples Fortigate"""
+"""Fortigate examples:
+
+- Creates address in the Fortigate
+- Gets address data from the Fortigate
+- Updates address data in the Fortigate
+- Checks for presence of address in the Fortigate
+- Deletes address from the Fortigate
+- Checks for absence of address in the Fortigate
+- Fortigate *with* statement
+"""
 
 from pprint import pprint
 
 from fortigate_api import Fortigate
 
-fgt = Fortigate(host="host", username="username", password="password")
+HOST = "host"
+USERNAME = "username"
+PASSWORD = "password"
+
+fgt = Fortigate(host=HOST, username=USERNAME, password=PASSWORD)
 fgt.login()
 
 # Creates address in the Fortigate
+print("\nCreates address in the Fortigate")
 data = {"name": "ADDRESS",
         "obj-type": "ip",
         "subnet": "127.0.0.100 255.255.255.252",
@@ -15,7 +29,8 @@ data = {"name": "ADDRESS",
 response = fgt.post(url="api/v2/cmdb/firewall/address/", data=data)
 print("post", response)  # post <Response [200]>
 
-print("\nGets address data from Fortigate")
+# Gets address data from the Fortigate
+print("\nGets address data from the Fortigate")
 addresses = fgt.get(url="api/v2/cmdb/firewall/address/")
 addresses = [d for d in addresses if d["name"] == "ADDRESS"]
 pprint(addresses)
@@ -26,7 +41,8 @@ pprint(addresses)
 #    ...
 #    }]
 
-print("\nUpdate address data in the Fortigate")
+# Updates address data in the Fortigate
+print("\nUpdates address data in the Fortigate")
 data = dict(subnet="127.0.0.255 255.255.255.255")
 response = fgt.put(url="api/v2/cmdb/firewall/address/ADDRESS", data=data)
 print("put", response)  # put <Response [200]>
@@ -34,16 +50,25 @@ addresses = fgt.get(url="api/v2/cmdb/firewall/address/")
 addresses = [d for d in addresses if d["name"] == "ADDRESS"]
 print(addresses[0]["subnet"])  # 127.0.0.255 255.255.255.255
 
+# Checks for presence of address in the Fortigate
 print("\nChecks for presence of address in the Fortigate")
 response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
 print("exist", response)  # <Response [200]>
 
-print("\nDeletes address from Fortigate")
+# Deletes address from the Fortigate
+print("\nDeletes address from the Fortigate")
 response = fgt.delete(url="api/v2/cmdb/firewall/address/ADDRESS")
 print("delete", response)  # <Response [200]>
 
+# Checks for absence of address in the Fortigate
 print("\nChecks for absence of address in the Fortigate")
 response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
 print("exist", response)  # <Response [404]>
 
 fgt.logout()
+
+# Fortigate *with* statement
+print("\nFortigate *with* statement")
+with Fortigate(host=HOST, username=USERNAME, password=PASSWORD) as fgt:
+    response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
+    print("exist", response)  # <Response [404]>

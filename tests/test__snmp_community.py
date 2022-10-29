@@ -8,7 +8,7 @@ from tests.helper__tst import NAME1, NAME3, MockFortigate
 
 # noinspection DuplicatedCode
 class Test(MockFortigate):
-    """unittest snmp_community.py"""
+    """SnmpCommunity"""
 
     def setUp(self):
         """setUp"""

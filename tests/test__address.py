@@ -8,7 +8,7 @@ from tests.helper__tst import ADDR1, NAME3, SLASH, MockFortigate
 
 # noinspection DuplicatedCode
 class Test(MockFortigate):
-    """unittest address.py"""
+    """Address"""
 
     def setUp(self):
         """setUp"""
