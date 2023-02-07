@@ -155,13 +155,19 @@ class Fortigate:
                          verify=self.verify)
         except Exception as ex:
             raise self._hide_secret_ex(ex)
-        csrf_token_name = f"ccsrftoken_{self.port}"
-        for cookie in session.cookies:
-            if cookie.name == csrf_token_name and isinstance(cookie.value, str):
-                session.headers.update({"X-CSRFTOKEN": cookie.value[1:-1]})
-                break
-        else:
-            raise ValueError(f"invalid login credentials, absent cookie {csrf_token_name}")
+
+        cookie_name = "ccsrftoken"
+        cookies = [o for o in session.cookies if o.name == cookie_name]
+        if not cookies:
+            regex = cookie_name + r"_\d+$"
+            cookies = [o for o in session.cookies if re.match(regex, o.name)]
+        cookies = [o for o in cookies if isinstance(o.value, str)]
+        if not cookies:
+            raise ValueError("invalid login credentials, absent cookie ccsrftoken")
+        cookie = cookies[0]
+        token = cookie.value.strip("\"")
+        session.headers.update({"X-CSRFTOKEN": token})
+
         response: Response = session.get(url=f"{self.url}/api/v2/cmdb/system/vdom")
         response.raise_for_status()
         self._session = session
