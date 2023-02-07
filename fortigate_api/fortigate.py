@@ -157,7 +157,7 @@ class Fortigate:
             raise self._hide_secret_ex(ex)
 
         cookie_name = "ccsrftoken"
-        cookies = [o for o in session.cookies if o.name == cookie_name]
+        cookies = [o for o in session.cookies if o and o.name == cookie_name]
         if not cookies:
             regex = cookie_name + r"_\d+$"
             cookies = [o for o in session.cookies if re.match(regex, o.name)]
@@ -165,7 +165,7 @@ class Fortigate:
         if not cookies:
             raise ValueError("invalid login credentials, absent cookie ccsrftoken")
         cookie = cookies[0]
-        token = cookie.value.strip("\"")
+        token = str(cookie.value).strip("\"")
         session.headers.update({"X-CSRFTOKEN": token})
 
         response: Response = session.get(url=f"{self.url}/api/v2/cmdb/system/vdom")
