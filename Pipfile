@@ -9,6 +9,7 @@ python_version = "3.8"
 [packages]
 requests = "==2.28.*"  # 2.28.1
 netmiko = "==4.1.*"  # 4.1.2
+ciscoconfparse = "==1.7.*"  # 1.7.18
 
 [dev-packages]
 mypy = "==0.*"  # 0.982

@@ -3,19 +3,31 @@
    :target: https://pypi.python.org/pypi/fortigate-api
 .. image:: https://img.shields.io/pypi/pyversions/fortigate-api.svg
    :target: https://pypi.python.org/pypi/fortigate-api
+.. image:: https://img.shields.io/github/last-commit/vladimirs-git/fortigate-api
+   :target: https://pypi.python.org/pypi/fortigate-api
 
 fortigate-api
 =============
 
 Python package to configure Fortigate (Fortios) devices using REST API and SSH.
-With this package, you can create, delete, get, update any objects in the Fortigate.
-The most commonly used `Objects`_ are implemented in the `FortigateAPI`_ methods, but you can
-manipulate any other objects that can be accessed through the REST API using the `Fortigate`_
-methods. You can also get and change the Fortigate configuration through SSH.
+With this package, you can change objects in the Fortigate. The most commonly used `Objects`_
+are implemented in the `FortigateAPI`_ methods, but you can manipulate any other objects
+that can be accessed through the REST API using the `Fortigate`_ methods.
+You can also get and change the Fortigate configuration through SSH.
+
+Main features:
+
+- REST API to create, delete, get, update objects. Move policy before, after other policy.
+- SSH Netmiko connector to work with CLI commands.
+- CiscoConfParse to search and modify commands in config.
+- Usage examples in `./examples`_
+
+----------------------------------------------------------------------------------------------------
 
 .. contents:: **Contents**
     :local:
 
+----------------------------------------------------------------------------------------------------
 
 Requirements
 ------------
@@ -36,7 +48,7 @@ or install the package from github.com release
 
 .. code:: bash
 
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.0.2.tar.gz
+    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.1.0.tar.gz
 
 or install the package from github.com repository
 
@@ -44,6 +56,8 @@ or install the package from github.com repository
 
     pip install git+https://github.com/vladimirs-git/fortigate-api
 
+
+----------------------------------------------------------------------------------------------------
 
 Objects
 -------
@@ -57,39 +71,72 @@ access to any other objects is available via `Fortigate`_.
 Object              GUI and REST API URL to the object, FortiOS v6.4
 =================== ================================================================================
 `Address`_          https://hostname/ng/firewall/address
+
                     https://hostname/api/v2/cmdb/firewall/address/
+
 `AddressGroup`_     https://hostname/ng/firewall/address
+
                     https://hostname/api/v2/cmdb/firewall/addrgrp/
+
 `Antivirus`_        https://hostname/ng/utm/antivirus/profile
+
                     https://hostname/api/v2/cmdb/antivirus/profile/
+
 `Application`_      https://hostname/ng/utm/appctrl/sensor
+
                     https://hostname/api/v2/cmdb/application/list/
+
 `DhcpServer`_       https://hostname/ng/interface/edit/{name}
+
                     https://hostname/api/v2/cmdb/system.dhcp/server/
+
 `Interface`_        https://hostname/ng/interface
+
                     https://hostname/api/v2/cmdb/system/interface/
+
 `InternetService`_  https://hostname/ng/firewall/internet_service
+
                     https://hostname/api/v2/cmdb/firewall/internet-service/
+
 `IpPool`_           https://hostname/ng/firewall/ip-pool
+
                     https://hostname/api/v2/cmdb/firewall/ippool/
+
 `Policy`_           https://hostname/ng/firewall/policy/policy/standard
+
                     https://hostname/api/v2/cmdb/firewall/policy/
+
 `Schedule`_         https://hostname/ng/firewall/schedule
+
                     https://hostname/api/v2/cmdb/firewall.schedule/onetime/
+
 `Service`_          https://hostname/ng/firewall/service
+
                     https://hostname/api/v2/cmdb/firewall.service/custom/
+
 `ServiceCategory`_  https://hostname/ng/firewall/service
+
                     https://hostname/api/v2/cmdb/firewall.service/category/
+
 `ServiceGroup`_     https://hostname/ng/firewall/service
+
                     https://hostname/api/v2/cmdb/firewall.service/group/
+
 `SnmpCommunity`_    https://hostname/ng/system/snmp
+
                     https://hostname/api/v2/cmdb/system.snmp/community/
+
 `VirtualIp`_        https://hostname/ng/firewall/virtual-ip
+
                     https://hostname/api/v2/cmdb/firewall/vip/
+
 `Zone`_             https://hostname/ng/interface
+
                     https://hostname/api/v2/cmdb/system/zone/
 =================== ================================================================================
 
+
+----------------------------------------------------------------------------------------------------
 
 FortigateAPI
 ------------
@@ -111,6 +158,7 @@ vdom            *str*   Name of virtual domain (default "root")
 =============== ======= ============================================================================
 
 
+----------------------------------------------------------------------------------------------------
 
 Address
 -------
@@ -217,6 +265,7 @@ Address examples:
 `./examples/address.py`_
 
 
+----------------------------------------------------------------------------------------------------
 
 AddressGroup
 ------------
@@ -321,6 +370,7 @@ AddressGroup examples:
 `./examples/address_group.py`_
 
 
+----------------------------------------------------------------------------------------------------
 
 Antivirus
 ---------
@@ -339,6 +389,7 @@ FortiOS v6.4 data example `./examples/yml/antivirus.yml`_
 **FortigateAPI.antivirus.update(data, uid)**
 
 
+----------------------------------------------------------------------------------------------------
 
 Application
 -----------
@@ -357,6 +408,7 @@ FortiOS v6.4 data example `./examples/yml/application.yml`_
 **FortigateAPI.antivirus.update(data, uid)**
 
 
+----------------------------------------------------------------------------------------------------
 
 DhcpServer
 ----------
@@ -377,6 +429,7 @@ FortiOS v6.4 data example `./examples/yml/dhcp_server.yml`_
 DhcpServer examples `./examples/dhcp_server.py`_
 
 
+----------------------------------------------------------------------------------------------------
 
 Interface
 ---------
@@ -427,6 +480,7 @@ Interface examples:
 `./examples/interface.py`_
 
 
+----------------------------------------------------------------------------------------------------
 
 InternetService
 ---------------
@@ -445,6 +499,7 @@ FortiOS v6.4 data example `./examples/yml/internet_service.yml`_
 **FortigateAPI.internet_service.update(data, uid)**
 
 
+----------------------------------------------------------------------------------------------------
 
 IpPool
 ------
@@ -463,6 +518,14 @@ FortiOS v6.4 data example `./examples/yml/ip_pool.yml`_
 **FortigateAPI.ip_pool.update(data, uid)**
 
 
+Examples
+........
+IpPool examples:
+
+`./examples/ip_pool.py`_
+
+
+----------------------------------------------------------------------------------------------------
 
 Policy
 ------
@@ -596,6 +659,7 @@ Policy Extended Filter examples:
 `./examples/policy_extended_filter.py`_
 
 
+----------------------------------------------------------------------------------------------------
 
 Schedule
 --------
@@ -614,6 +678,7 @@ FortiOS v6.4 data example `./examples/yml/schedule.yml`_
 **FortigateAPI.schedule.update(data, uid)**
 
 
+----------------------------------------------------------------------------------------------------
 
 Service
 -------
@@ -632,6 +697,7 @@ FortiOS v6.4 data example `./examples/yml/service.yml`_
 **FortigateAPI.service.update(data, uid)**
 
 
+----------------------------------------------------------------------------------------------------
 
 ServiceCategory
 ---------------
@@ -650,6 +716,7 @@ FortiOS v6.4 data example `./examples/yml/service_category.yml`_
 **FortigateAPI.service_category.update(data, uid)**
 
 
+----------------------------------------------------------------------------------------------------
 
 ServiceGroup
 ------------
@@ -668,6 +735,7 @@ FortiOS v6.4 data example `./examples/yml/service_group.yml`_
 **FortigateAPI.service_group.update(data, uid)**
 
 
+----------------------------------------------------------------------------------------------------
 
 SnmpCommunity
 -------------
@@ -702,6 +770,7 @@ Examples
 SnmpCommunity examples `./examples/snmp_community.py`_
 
 
+----------------------------------------------------------------------------------------------------
 
 VirtualIP
 ---------
@@ -720,6 +789,7 @@ FortiOS v6.4 data example `./examples/yml/virtual_ip.yml`_
 **FortigateAPI.virtual_ip.update(data, uid)**
 
 
+----------------------------------------------------------------------------------------------------
 
 Zone
 ----
@@ -738,6 +808,7 @@ FortiOS v6.4 data example `./examples/yml/zone.yml`_
 **FortigateAPI.zone.update(data, uid)**
 
 
+----------------------------------------------------------------------------------------------------
 
 Fortigate
 ---------
@@ -857,6 +928,7 @@ Fortigate examples:
 `./examples/fortigate.py`_
 
 
+----------------------------------------------------------------------------------------------------
 
 SSH
 ---
@@ -925,7 +997,30 @@ SSH examples:
 `./examples/ssh.py`_
 
 
+----------------------------------------------------------------------------------------------------
 
+CiscoConfParse
+--------------
+Helper that parses the Fortigate configuration to find and modify command lines.
+CiscoConfParse doesn't natively support Fortigate configuration,
+but after some tweaking in this package it has become a good tool to play with Fortigate config lines.
+For more information, see the documentation for the JunosCfgLine object at https://github.com/mpenning/ciscoconfparse
+
+
+Examples
+........
+CiscoConfParse examples:
+
+- get config from the Fortigate by SSH
+- create CiscoConfParse object
+- filter all JunosCfgLine objects of wan interfaces
+- print some data in CiscoConfParse objects
+- filter all wan interfaces blocks
+
+`./examples/ccp.py`_
+
+
+.. _`./examples`: ./examples
 .. _`./examples/yml/address.yml`: ./examples/yml/address.yml
 .. _`./examples/yml/address_group.yml`: ./examples/yml/address_group.yml
 .. _`./examples/yml/antivirus.yml`: ./examples/yml/antivirus.yml
@@ -945,9 +1040,11 @@ SSH examples:
 
 .. _`./examples/address.py`: ./examples/address.py
 .. _`./examples/address_group.py`: ./examples/address_group.py
+.. _`./examples/ccp.py`: ./examples/ccp.py
 .. _`./examples/dhcp_server.py`: ./examples/dhcp_server.py
 .. _`./examples/fortigate.py`: ./examples/fortigate.py
 .. _`./examples/interface.py`: ./examples/interface.py
+.. _`./examples/ip_pool.py`: ./examples/ip_pool.py
 .. _`./examples/policy.py`: ./examples/policy.py
 .. _`./examples/policy_extended_filter.py`: ./examples/policy_extended_filter.py
 .. _`./examples/snmp_community.py`: ./examples/snmp_community.py

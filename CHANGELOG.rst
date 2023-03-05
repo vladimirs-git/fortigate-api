@@ -4,6 +4,11 @@
 CHANGELOG
 =========
 
+1.1.0 (2023-03-05)
+------------------
+* [new] ciscoconfparse
+
+
 1.0.2 (2023-02-07)
 ------------------
 * [fix] ccsrftoken for fortios v7
