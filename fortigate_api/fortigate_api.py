@@ -50,7 +50,8 @@ class FortigateAPI:
             False - disable (default)
         :type verify: bool
 
-        :param vdom: Name of virtual domain (default "root")
+        :param vdom: Name of virtual domain (default "root").
+            Used in REST API (Not used in SSH)
         :type vdom: str
 
         :param ssh: Netmiko ConnectHandler parameters

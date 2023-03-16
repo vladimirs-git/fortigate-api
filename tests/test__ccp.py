@@ -3,7 +3,7 @@
 import unittest
 
 from fortigate_api import ccp
-from tests.ccp_.helpers__ccp import (
+from tests.helpers__ccp import (
     BLOCK_A1,
     BLOCK_A2,
     BLOCK_E2,

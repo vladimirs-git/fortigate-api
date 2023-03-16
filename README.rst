@@ -48,7 +48,7 @@ or install the package from github.com release
 
 .. code:: bash
 
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.1.0.tar.gz
+    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.1.1.tar.gz
 
 or install the package from github.com repository
 
@@ -934,6 +934,8 @@ SSH
 ---
 **SSH(host, username, password, ssh)**
 SSH connector to the Fortigate. Contains methods to get and put configuration commands using ssh.
+Note, FortigateAPI parameter "vdom" used in REST API only and not used in SSH.
+In order to send cli commands to a specific vdom, you need "config vdom" before.
 
 =============== ======= ============================================================================
 Parameter       Type    Description
@@ -996,6 +998,12 @@ SSH examples:
 
 `./examples/ssh.py`_
 
+SSH examples for working with vdom:
+
+- get system arp from interfaces associated with vdom="VDOM"
+- get system arp from interfaces associated with vdom="root"
+
+`./examples/ssh_vdom.py`_
 
 ----------------------------------------------------------------------------------------------------
 
@@ -1049,3 +1057,4 @@ CiscoConfParse examples:
 .. _`./examples/policy_extended_filter.py`: ./examples/policy_extended_filter.py
 .. _`./examples/snmp_community.py`: ./examples/snmp_community.py
 .. _`./examples/ssh.py`: ./examples/ssh.py
+.. _`./examples/ssh_vdom.py`: ./examples/ssh_vdom.py

@@ -4,6 +4,12 @@
 CHANGELOG
 =========
 
+1.1.1 (2023-03-16)
+------------------
+* [new] ./examples/ssh_vdom.py
+* [change] README.rst ssh
+
+
 1.1.0 (2023-03-05)
 ------------------
 * [new] ciscoconfparse
