@@ -1,4 +1,4 @@
-"""DHCP Server Object"""
+"""DHCP Server Object."""
 
 from requests import Response
 
@@ -7,13 +7,20 @@ from fortigate_api.types_ import DAny, StrInt
 
 
 class DhcpServer(Base):
-    """DHCP Server Object"""
+    """DHCP Server Object."""
 
     def __init__(self, fgt):
+        """DHCP Server Object.
+
+        ::
+            :param fgt: Fortigate connector
+            :type fgt: Fortigate
+        """
         super().__init__(fgt=fgt, url_obj="api/v2/cmdb/system.dhcp/server/", uid_key="id")
 
     def create(self, data: DAny) -> Response:
-        """Creates dhcp-server-object in the Fortigate.
+        """Create dhcp-server-object in the Fortigate.
+
         Note, in Fortigate is possible to create multiple DHCP servers with the same settings,
         you need control duplicates
         ::
@@ -27,7 +34,8 @@ class DhcpServer(Base):
         return self.fgt.post(url=self.url_, data=data)
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
-        """Updates dhcp-server-object, where `uid` is data["id"]
+        """Update dhcp-server-object, where `uid` is data["id"].
+
         ::
             :param data: Data of the dhcp-server-object
             :type data: dict

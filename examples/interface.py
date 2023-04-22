@@ -1,14 +1,14 @@
-"""Interface examples:
+"""Interface examples.
 
-- Gets all interfaces in vdom "root" from the Fortigate
-- Gets filtered interface by name (unique identifier)
-- Filters interface by operator *equals* "=="
-- Filters interface by operator contains "=@"
-- Filters interface by operator *not equals* "!="
-- Filters interface by multiple conditions
-- Updates interface data in the Fortigate
-- Checks for presence of interface in the Fortigate
-- Gets all interfaces in vdom "VDOM"
+- Get all interfaces in vdom "root" from the Fortigate
+- Get filtered interface by name (unique identifier)
+- Filter interface by operator *equals* "=="
+- Filter interface by operator contains "=@"
+- Filter interface by operator *not equals* "!="
+- Filter interface by multiple conditions
+- Update interface data in the Fortigate
+- Check for presence of interface in the Fortigate
+- Get all interfaces in vdom "VDOM"
 """
 
 from pprint import pprint

@@ -1,4 +1,4 @@
-"""Helper functions"""
+"""Helper functions."""
 
 import os
 import re
@@ -13,7 +13,8 @@ from fortigate_api.types_ import Any, DAny, T2Str, T3Str, IStr, IStrs, LStr, SDa
 # =============================== dict ===============================
 
 def check_mandatory(keys: IStr, **kwargs) -> None:
-    """Check all of `keys` are mandatory in `kwargs`
+    """Check all of `keys` are mandatory in `kwargs`.
+
     ::
         :param keys: Interested keys, all of them should be in `kwargs`
         :param kwargs: Checked data
@@ -29,7 +30,8 @@ def check_mandatory(keys: IStr, **kwargs) -> None:
 
 
 def check_only_one(keys: IStr, **kwargs) -> None:
-    """Check only one of keys should be in `kwargs`
+    """Check only one of keys should be in `kwargs`.
+
     ::
         :param keys: Interested keys, only one of them should be in `kwargs`
         :param kwargs: Checked data
@@ -43,7 +45,8 @@ def check_only_one(keys: IStr, **kwargs) -> None:
 
 
 def check_one_of(keys: IStr, **kwargs) -> None:
-    """Check one of key is mandatory in `kwargs`
+    """Check one of key is mandatory in `kwargs`.
+
     ::
         :param keys: Interested keys, one of them should be in `kwargs`
         :param kwargs: Checked data
@@ -59,7 +62,8 @@ def check_one_of(keys: IStr, **kwargs) -> None:
 
 
 def get_quoted(key: str, **kwargs) -> str:
-    """Get mandatory key/value from `kwargs` and returns quoted value as *str_*
+    """Get mandatory key/value from `kwargs` and return quoted value as *str*.
+
     ::
         :param key: Interested `key` in `kwargs`
         :param kwargs: Data
@@ -72,7 +76,8 @@ def get_quoted(key: str, **kwargs) -> str:
 
 
 def pop_int(key: str, data: DAny) -> int:
-    """Pops key/value from `data` and returns value as *int*
+    """Pop key/value from `data` and return value as *int*.
+
     ::
         :param key: Interested `key` in `data`
         :param data: Data
@@ -90,7 +95,8 @@ def pop_int(key: str, data: DAny) -> int:
 
 
 def pop_lstr(key: str, data: DAny) -> LStr:
-    """Pops key/value from `data` and returns value as *List[str_]*
+    """Pop key/value from `data` and return value as *List[str]*.
+
     ::
         :param key: Interested `key` in `data`
         :param data: Data
@@ -109,7 +115,8 @@ def pop_lstr(key: str, data: DAny) -> LStr:
 
 
 def pop_str(key: str, data: DAny) -> str:
-    """Pops key/value from `data` and returns value as *str_*
+    """Pop key/value from `data` and return value as *str*.
+
     ::
         :param key: Interested `key` in `data`
         :param data: Data
@@ -124,7 +131,8 @@ def pop_str(key: str, data: DAny) -> str:
 
 
 def pop_quoted(key: str, data: DAny) -> str:
-    """Pops key/value from `data` and returns quoted value as *str_*
+    """Pop key/value from `data` and return quoted value as *str*.
+
     ::
         :param key: Interested `key` in `data`
         :param data: Data
@@ -141,7 +149,8 @@ def pop_quoted(key: str, data: DAny) -> str:
 # =============================== str ================================
 
 def findall1(pattern: str, string: str, flags=0) -> str:
-    """Parses 1st item of re.findall(). If nothing is found, returns an empty string
+    """Parse 1st item of re.findall(). If nothing is found, return an empty string.
+
     ::
         :param pattern: Regex pattern, where 1 group with parentheses in pattern is required
         :param string: String where need to find pattern
@@ -161,7 +170,8 @@ def findall1(pattern: str, string: str, flags=0) -> str:
 
 
 def findall2(pattern: str, string: str, flags=0) -> T2Str:
-    """Parses 2 items of re.findall(). If nothing is found, returns empty strings
+    """Parse 2 items of re.findall(). If nothing is found, return empty strings.
+
     ::
         :param pattern: Regex pattern, where 2 groups with parentheses in pattern are required
         :param string: String where need to find pattern
@@ -179,7 +189,8 @@ def findall2(pattern: str, string: str, flags=0) -> T2Str:
 
 
 def findall3(pattern: str, string: str, flags=0) -> T3Str:
-    """Parses 3 items of re.findall(). If nothing is found, returns empty strings
+    """Parse 3 items of re.findall(). If nothing is found, return empty strings.
+
     ::
         :param pattern: Regex pattern, where 3 groups with parentheses in pattern are required
         :param string: String where need to find pattern
@@ -197,14 +208,15 @@ def findall3(pattern: str, string: str, flags=0) -> T3Str:
 
 
 def make_url(url: str, **params) -> str:
-    """Adds params to URL
+    """Add params to URL.
+
     ::
         :param url: URL with old params
         :param params: New params
         :return: URL with old and new params
 
         :example:
-            str_: "https://fomain.com?a=a"
+            url: "https://fomain.com?a=a"
             params: {"b": ["b", "B"]}
             return: "https://fomain.com?a=a&b=b&b=B"
     """
@@ -217,7 +229,8 @@ def make_url(url: str, **params) -> str:
 
 
 def quote(string: Any) -> str:
-    """Quote name of the string
+    """Quote name of the string.
+
     ::
         :param string: Line to by quoted
         :example: "10.0.0.0/8" > "10.0.0.0%2F8"
@@ -229,10 +242,10 @@ def quote(string: Any) -> str:
 # ============================= wrapper ==============================
 
 def time_spent(func):
-    """Wrapper measure function execution time"""
+    """Wrap measure function execution time."""
 
     def wrap(*args, **kwargs):
-        """Wrapper"""
+        """Wrap."""
         started = time.time()
         pattern = "====== {:s}, spent {:.3f}s ======"
         try:
@@ -251,7 +264,7 @@ def time_spent(func):
 # ============================= unsorted =============================
 
 def files_py(root: str) -> LStr:
-    """Paths to .py file"""
+    """Paths to .py file."""
     paths: LStr = []
     for root_i, _, files_i in os.walk(root):
         for file_ in files_i:
@@ -262,7 +275,7 @@ def files_py(root: str) -> LStr:
 
 
 def last_modified_date(root: str) -> str:
-    """Paths to .py files with last modified dates"""
+    """Paths to .py files with last modified dates."""
     dates: SDate = set()
     paths = files_py(root)
     for path in paths:

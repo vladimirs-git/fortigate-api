@@ -1,4 +1,4 @@
-"""Object Base"""
+"""Parent of FortigateAPI objects: Address, AddressGroup, Policy, etc."""
 
 from operator import attrgetter
 
@@ -29,10 +29,11 @@ IMPLEMENTED_OBJECTS = (
 
 
 class Base:
-    """Object Base"""
+    """Parent of FortigateAPI objects: Address, AddressGroup, Policy, etc."""
 
     def __init__(self, fgt, url_obj: str, uid_key: str = "name"):
-        """Object Base
+        """Parent of FortigateAPI objects: Address, AddressGroup, Policy, etc.
+
         ::
             :param fgt: Fortigate connector
             :type fgt: Fortigate
@@ -48,7 +49,8 @@ class Base:
         self.uid_key = uid_key
 
     def create(self, data: DAny) -> Response:
-        """Creates fortigate-object in the Fortigate
+        """Create fortigate-object in the Fortigate.
+
         ::
             :param data: Data of the fortigate-object
             :type data: dict
@@ -68,7 +70,8 @@ class Base:
 
     # noinspection PyIncorrectDocstring
     def delete(self, uid: StrInt = "", **kwargs) -> Response:
-        """Deletes the fortigate-object from the Fortigate
+        """Delete the fortigate-object from the Fortigate.
+
         ::
             :param uid: Identifier of the fortigate-object. Used to delete a single object
             :type uid: str or int
@@ -94,7 +97,8 @@ class Base:
         raise ValueError(f"invalid {uid=} {kwargs=}")
 
     def _delete_by_filter(self, kwargs) -> Response:
-        """Deletes the fortigate-objects from the Fortigate by `filter`
+        """Delete the fortigate-objects from the Fortigate by `filter`.
+
         ::
             :param kwargs: Filters fortigate-objects by one or multiple conditions: equals "==",
                 not equals "!=", contains "=@". Used to delete multiple objects
@@ -114,7 +118,8 @@ class Base:
 
     # noinspection PyIncorrectDocstring
     def get(self, **kwargs) -> LDAny:
-        """Gets fortigate-objects, all or filtered by some of params
+        """Get fortigate-objects, all or filtered by some of params.
+
         ::
             :param uid: Filters fortigate-object by unique identifier. Used to get a single object
             :type uid: str or int
@@ -135,7 +140,8 @@ class Base:
         return datas
 
     def is_exist(self, uid: StrInt) -> bool:
-        """Checks does a fortigate-object exists in the Fortigate
+        """Check does a fortigate-object exists in the Fortigate.
+
         ::
             :param uid: Identifier of the fortigate-object
             :type uid: str or int
@@ -150,7 +156,8 @@ class Base:
         raise ValueError(f"invalid {uid=}")
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
-        """Updates address, address-group, etc. object, where `uid` is data["name"]
+        """Update address, address-group, etc. object, where `uid` is data["name"].
+
         ::
             :param data: Data of the fortigate-object
             :type data: dict
@@ -174,7 +181,8 @@ class Base:
 
     @staticmethod
     def _highest_response(responses: LResponse) -> Response:
-        """Return *Response* with the highest status_code, else returns *<Response [200]>*
+        """Return Response object with the highest status_code, else return <Response [200]>.
+
         ::
             :param responses: List of Response objects
             :type responses: List[Response]
@@ -191,7 +199,7 @@ class Base:
 
     @staticmethod
     def _quote_url(url: str) -> str:
-        """Quote end of url"""
+        """Quote end of url."""
         for known in IMPLEMENTED_OBJECTS:
             if url.startswith(known):
                 end = url.replace(known, "", 1)
@@ -199,7 +207,8 @@ class Base:
         return url
 
     def _update(self, data: DAny, uid: StrInt) -> Response:
-        """Updates fortigate-object in the Fortigate
+        """Update fortigate-object in the Fortigate.
+
         ::
             :param data: Data of the fortigate-object
             :type data: dict

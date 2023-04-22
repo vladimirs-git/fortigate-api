@@ -1,12 +1,12 @@
-"""Fortigate examples:
+"""Fortigate examples.
 
 - User-Based Authentication
-- Creates address in the Fortigate
-- Gets address data from the Fortigate
-- Updates address data in the Fortigate
-- Checks for presence of address in the Fortigate
-- Deletes address from the Fortigate
-- Checks for absence of address in the Fortigate
+- Create address in the Fortigate
+- Get address data from the Fortigate
+- Update address data in the Fortigate
+- Check for presence of address in the Fortigate
+- Delete address from the Fortigate
+- Check for absence of address in the Fortigate
 - Fortigate *with* statement
 """
 

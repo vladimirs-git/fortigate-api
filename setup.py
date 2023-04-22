@@ -1,4 +1,4 @@
-"""Package setup"""
+"""Package setup."""
 
 from setuptools import setup  # type: ignore
 

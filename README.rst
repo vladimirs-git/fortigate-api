@@ -198,7 +198,7 @@ FortiOS v6.4 data example `./examples/yml/address.yml`_
 create()
 ........
 **FortigateAPI.address.create(data)**
-Creates address-object in the Fortigate.
+Create address-object in the Fortigate.
 
 =============== ======= ============================================================================
 Parameter       Type    Description
@@ -213,14 +213,14 @@ Return
 delete()
 ........
 **FortigateAPI.address.delete(uid, filter)**
-Deletes address-object from the Fortigate.
+Delete address-object from the Fortigate.
 Only one of the parameters *uid* or *filter* can be used in the same time.
 
 =============== =================== ================================================================
 Parameter       Type                Description
 =============== =================== ================================================================
 uid             *str*               Unique identifier. Name of the address-object. Used to delete a single object
-filter          *str*, *List[str]*  Filters address-objects by one or multiple conditions: equals "==", not equals "!=", contains "=@". Used to delete multiple objects. *Response* with the highest *status_code* (most important error) will be returned. If no address-objects was found and deleted than returns *<Response [200]>*
+filter          *str*, *List[str]*  Filters address-objects by one or multiple conditions: equals "==", not equals "!=", contains "=@". Used to delete multiple objects. *Response* with the highest *status_code* (most important error) will be returned. If no address-objects was found and deleted than return *<Response [200]>*
 =============== =================== ================================================================
 
 Return
@@ -307,7 +307,7 @@ FortiOS v6.4 data example `./examples/yml/address_group.yml`_
 create()
 ........
 **FortigateAPI.address_group.create(data)**
-Creates address-group-object in the Fortigate
+Create address-group-object in the Fortigate
 
 =============== ======= ============================================================================
 Parameter       Type    Description
@@ -322,14 +322,14 @@ Return
 delete()
 ........
 **FortigateAPI.address_group.delete(uid, filter)**
-Deletes address-group-object from the Fortigate
+Delete address-group-object from the Fortigate
 Only one of the parameters *uid* or *filter* can be used in the same time.
 
 =============== =================== ================================================================
 Parameter       Type                Description
 =============== =================== ================================================================
 uid             *str*               Name of the address-group-object (unique identifier). Used to delete a single object
-filter          *str*, *List[str]*  Filters address-group-objects by one or multiple conditions: equals "==", not equals "!=", contains "=@". Used to delete multiple objects. *Response* with the highest *status_code* (most important error) will be returned. If no address-objects was found and deleted than returns *<Response [200]>*
+filter          *str*, *List[str]*  Filters address-group-objects by one or multiple conditions: equals "==", not equals "!=", contains "=@". Used to delete multiple objects. *Response* with the highest *status_code* (most important error) will be returned. If no address-objects was found and deleted than return *<Response [200]>*
 =============== =================== ================================================================
 
 Return
@@ -614,7 +614,7 @@ FortiOS v6.4 data example `./examples/yml/policy.yml`_
 create()
 ........
 **FortigateAPI.policy.create(data)**
-Creates policy-object in the Fortigate
+Create policy-object in the Fortigate
 
 =============== ======= ============================================================================
 Parameter       Type    Description
@@ -628,14 +628,14 @@ Return
 
 delete()
 ........
-Deletes policy-object from the Fortigate
+Delete policy-object from the Fortigate
 Only one of the parameters *uid* or *filter* can be used in the same time.
 
 =============== =================== ================================================================
 Parameter       Type                Description
 =============== =================== ================================================================
 uid             *str*, *int*        Identifier of the policy-object. Used to delete a single object
-filter          *str*, *List[str]*  Filters policy-objects by one or multiple conditions: equals "==", not equals "!=", contains "=@". Used to delete multiple objects. *Response* with the highest *status_code* (most important error) will be returned. If no address-objects was found and deleted than returns *<Response [200]>*
+filter          *str*, *List[str]*  Filters policy-objects by one or multiple conditions: equals "==", not equals "!=", contains "=@". Used to delete multiple objects. *Response* with the highest *status_code* (most important error) will be returned. If no address-objects was found and deleted than return *<Response [200]>*
 =============== =================== ================================================================
 
 Return

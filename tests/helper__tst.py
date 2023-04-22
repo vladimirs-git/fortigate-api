@@ -1,4 +1,4 @@
-"""Helper for unittests"""
+"""Helper for unittests."""
 from __future__ import annotations
 
 import json
@@ -46,24 +46,25 @@ D_ZONE = {"name": NAME1, "interface": [{"interface-name": NAME1}]}
 
 
 class MockFortigate(unittest.TestCase):
-    """mocked Fortigate"""
+    """Mock Fortigate."""
 
     def setUp(self):
-        """setUp"""
+        """Set Up."""
         patch.object(Fortigate, "login", return_value=MockSession()).start()
         patch.object(Fortigate, "_get_session", return_value=MockSession()).start()
         self.fgt = Fortigate(host="domain.com", username="", password="")
 
 
 class MockSession:
-    """mocked Session"""
+    """Mock Session."""
 
     def __init__(self):
+        """Mock Session."""
         self._headers = {}
 
     @property
     def headers(self):
-        """Mocked headers"""
+        """Mock headers."""
         return self._headers
 
     @headers.setter
@@ -72,7 +73,7 @@ class MockSession:
 
     @property
     def cookies(self):
-        """Mocked cookies"""
+        """Mock cookies."""
         cookie = RequestsCookieJar()
         cookie.name = "ccsrftoken"
         cookie.value = ".secret."
@@ -81,30 +82,31 @@ class MockSession:
     # noinspection PyUnusedLocal
     @staticmethod
     def delete(url: str, **kwargs) -> Response:
-        """Mocked Session.delete()"""
+        """Mock Session delete."""
         return MockResponse.delete(url=url)
 
     # noinspection PyUnusedLocal
     @staticmethod
     def get(url: str, **kwargs) -> Response:
-        """Mocked Session.get()"""
+        """Mock Session get."""
         return MockResponse.get(url=url)
 
     # noinspection PyUnusedLocal
     @staticmethod
     def post(url: str, **kwargs) -> Response:
-        """Mocked Session.post()"""
+        """Mock Session post."""
         return MockResponse().post(url=url, **kwargs)
 
     # noinspection PyUnusedLocal
     @staticmethod
     def put(url: str, **kwargs) -> Response:
-        """Mocked Session.put()"""
+        """Mock Session put."""
         return MockResponse().put(url=url, **kwargs)
 
 
 class MockResponse(Response):
-    """Mocked Response"""
+    """Mock Response."""
+
     exist_objects = {
         f"api/v2/cmdb/antivirus/profile/{NAME1}": [D_NAME1],
         f"api/v2/cmdb/application/list/{NAME1}": [D_NAME1],
@@ -162,6 +164,7 @@ class MockResponse(Response):
     }
 
     def __init__(self, url=""):
+        """Mock Response."""
         super().__init__()
         self.url = url
         self.reason = "unittest"
@@ -169,7 +172,11 @@ class MockResponse(Response):
 
     @classmethod
     def get(cls, url: str) -> MockResponse:
-        """session.get(), return data, status_code=200 if object is configured in the Fortigate"""
+        """Mock Session get.
+
+        ::
+            :return: status_code=200 if object is configured in the Fortigate
+        """
         resp = cls(url=url)
         url_ = cls._url(url=url)
 
@@ -193,8 +200,12 @@ class MockResponse(Response):
     # noinspection PyProtectedMember
     @classmethod
     def post(cls, url: str, **kwargs) -> MockResponse:
-        """session.post() (create), return status_code==200 (created successfully) only for
-        supported objects with names: NAME1, NAME3"""
+        """Mock Session post.
+
+        ::
+            :return: status_code==200 (created successfully) only for supported objects
+                with names: NAME1, NAME3
+        """
         resp = cls(url=url)
         data_s = kwargs.get("data")
         if not data_s:
@@ -214,7 +225,11 @@ class MockResponse(Response):
 
     @classmethod
     def delete(cls, url: str) -> MockResponse:
-        """session.delete(), object is configured in firewall, status_code==200"""
+        """Mock Session delete.
+
+        ::
+            :return: Object is configured in firewall, status_code==200
+        """
         resp = cls(url=url)
         url_ = cls._url(url=url)
         if url_ in resp.exist_objects:
@@ -223,7 +238,11 @@ class MockResponse(Response):
 
     @classmethod
     def put(cls, url: str, **kwargs) -> MockResponse:
-        """session.put() (update), object is configured in firewall, status_code==200"""
+        """Mock Session put.
+
+        ::
+            :return: Object is configured in firewall, status_code==200
+        """
         resp = cls(url=url)
         url_ = cls._url(url=url)
         if (data_s := kwargs.get("data")) and data_s != "{}":
@@ -238,7 +257,7 @@ class MockResponse(Response):
 
     @staticmethod
     def _url(url: str) -> str:
-        """remove https://{hostname}/ from REST API URL"""
+        """Remove https://{hostname}/ from REST API URL."""
         pattern = "/api/v2/cmdb/"
         if re.search(pattern, url):
             url_ = "api/v2/cmdb/" + url.split(pattern)[1]

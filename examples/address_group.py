@@ -1,16 +1,16 @@
-"""AddressGroup examples:
+"""AddressGroup examples.
 
-- Creates address-group in the Fortigate
-- Gets all address-groups from the Fortigate
-- Gets filtered address-group by name (unique identifier)
-- Filters address-group by operator *equals* "=="
-- Filters address-group by operator *contains* "=@"
-- Filters address-group by operator *not equals* "!="
-- Updates address-group data in the Fortigate
-- Checks for presence of address-group in the Fortigate
-- Deletes address-group from the Fortigate by name
-- Deletes address-groups from the Fortigate by filter
-- Checks for absence of address-group in the Fortigate
+- Create address-group in the Fortigate
+- Get all address-groups from the Fortigate
+- Get filtered address-group by name (unique identifier)
+- Filter address-group by operator *equals* "=="
+- Filter address-group by operator *contains* "=@"
+- Filter address-group by operator *not equals* "!="
+- Update address-group data in the Fortigate
+- Check for presence of address-group in the Fortigate
+- Delete address-group from the Fortigate by name
+- Delete address-groups from the Fortigate by filter
+- Check for absence of address-group in the Fortigate
 """
 
 from pprint import pprint

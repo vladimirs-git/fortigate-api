@@ -1,4 +1,4 @@
-"""Helpers"""
+"""Helpers."""
 
 CONFIG_JUNOS = """
 A1 {

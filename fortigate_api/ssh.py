@@ -1,5 +1,6 @@
 """SSH connector to the Fortigate.
-Contains methods to get and put configuration commands using ssh
+
+Contains methods to get and put configuration commands using ssh.
 """
 
 from netmiko import ConnectHandler  # type: ignore
@@ -9,11 +10,13 @@ from fortigate_api.types_ import DAny, UStr
 
 class SSH:
     """SSH connector to the Fortigate.
-    Contains methods to get and put configuration commands using ssh
+
+    Contains methods to get and put configuration commands using ssh.
     """
 
     def __init__(self, host: str, username: str = "", password: str = "", **kwargs):
-        """SSH
+        """SSH connector to the Fortigate.
+
         ::
             :param host: Firewall ip address or hostname
             :type host: str
@@ -38,16 +41,18 @@ class SSH:
                                       **ssh_kwargs)
 
     def __enter__(self):
+        """Enter the runtime context related to this object."""
         self.login()
         return self
 
     def __exit__(self, *args):
+        """Exit the runtime context related to this object."""
         self.logout()
 
     # ============================ login =============================
 
     def login(self) -> None:
-        """Login to Fortigate using SSH"""
+        """Login to Fortigate using SSH."""
         if self.session.remote_conn:
             return
         # noinspection PyProtectedMember
@@ -56,7 +61,7 @@ class SSH:
             raise ConnectionError("Cannot open remote connection")
 
     def logout(self) -> None:
-        """Logout from the Fortigate using SSH"""
+        """Logout from the Fortigate using SSH."""
         if self.session.remote_conn:
             self.session.cleanup()
             self.session.remote_conn = None
@@ -64,7 +69,8 @@ class SSH:
     # =========================== methods ============================
 
     def send_command(self, cmd: str, **kwargs) -> str:
-        """Sends the command to the Fortigate
+        """Send the command to the Fortigate.
+
         ::
             :param cmd: The command to be executed on the Fortigate
             :type cmd: str
@@ -80,7 +86,8 @@ class SSH:
         return str(output)
 
     def send_config_set(self, cmds: UStr, **kwargs) -> str:
-        """Sends configuration commands to the Fortigate
+        """Send configuration commands to the Fortigate.
+
         ::
             :param cmds: Configuration commands to be executed on the Fortigate
             :type cmds: List[str], str

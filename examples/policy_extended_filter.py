@@ -1,10 +1,10 @@
-"""Policy Extended Filter examples:
+"""Policy Extended Filter examples.
 
-- Gets the rules where source prefix is equals 127.0.1.0/30
-- Gets the rules where source prefix is not equals 127.0.1.0/30
-- Gets the rules where source addresses are in subnets of 127.0.1.0/24
-- Gets the rules where source prefixes are supernets of address 127.0.1.1/32
-- Gets the rules where source prefix are equals 127.0.1.0/30 and destination prefix are equals 127.0.2.0/30
+- Get the rules where source prefix is equals 127.0.1.0/30
+- Get the rules where source prefix is not equals 127.0.1.0/30
+- Get the rules where source addresses are in subnets of 127.0.1.0/24
+- Get the rules where source prefixes are supernets of address 127.0.1.1/32
+- Get the rules where source prefix are equals 127.0.1.0/30 and destination prefix are equals 127.0.2.0/30
 - Delete policy, address-group, addresses from the Fortigate (order is important)
 """
 

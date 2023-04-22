@@ -1,15 +1,15 @@
-"""External Resources examples:
+"""External Resources examples.
 
-- Creates external_resource in the Fortigate
-- Gets all external_resources from the Fortigate
-- Gets filtered external_resource by name (unique identifier)
-- Filters external_resource by operator *equals* "=="
-- Filters external_resource by operator *contains* "=@"
-- Filters external_resource by operator *not equals* "!="
-- Updates external_resource data in the Fortigate
-- Checks for presence of external_resource in the Fortigate
-- Deletes external_resource from the Fortigate by name
-- Checks for absence of external_resource in the Fortigate
+- Create external_resource in the Fortigate
+- Get all external_resources from the Fortigate
+- Get filtered external_resource by name (unique identifier)
+- Filter external_resource by operator *equals* "=="
+- Filter external_resource by operator *contains* "=@"
+- Filter external_resource by operator *not equals* "!="
+- Update external_resource data in the Fortigate
+- Check for presence of external_resource in the Fortigate
+- Delete external_resource from the Fortigate by name
+- Check for absence of external_resource in the Fortigate
 """
 
 from pprint import pprint

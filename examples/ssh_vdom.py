@@ -1,6 +1,7 @@
-"""SSH examples for working with vdom:
-- get system arp from interfaces associated with vdom="VDOM"
-- get system arp from interfaces associated with vdom="root"
+"""SSH examples for working with vdom.
+
+- Get system arp from interfaces associated with vdom="VDOM"
+- Get system arp from interfaces associated with vdom="root"
 """
 
 from fortigate_api import FortigateAPI

@@ -1,4 +1,4 @@
-"""SNMP Community Object"""
+"""SNMP Community Object."""
 
 from requests import Response
 
@@ -7,13 +7,20 @@ from fortigate_api.types_ import DAny, StrInt
 
 
 class SnmpCommunity(Base):
-    """SNMP Community Object"""
+    """SNMP Community Object."""
 
     def __init__(self, fgt):
+        """SNMP Community Object.
+
+        ::
+            :param fgt: Fortigate connector
+            :type fgt: Fortigate
+        """
         super().__init__(fgt=fgt, url_obj="api/v2/cmdb/system.snmp/community/", uid_key="id")
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
-        """Updates snmp-community-object, where `uid` is data["id"]
+        """Update snmp-community-object, where `uid` is data["id"].
+
         ::
             :param data: Data of the snmp-community-object
             :type data: dict

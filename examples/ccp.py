@@ -1,9 +1,10 @@
-"""CiscoConfParse examples
-- get config from the Fortigate by SSH
-- create CiscoConfParse object
-- filter all JunosCfgLine objects of wan interfaces
-- print some data in CiscoConfParse objects
-- filter all wan interfaces blocks
+"""CiscoConfParse examples.
+
+- Get config from the Fortigate by SSH
+- Create CiscoConfParse object
+- Filter all JunosCfgLine objects of wan interfaces
+- Print some data in CiscoConfParse objects
+- Filter all wan interfaces blocks
 
 for more details see https://github.com/mpenning/ciscoconfparse
 """

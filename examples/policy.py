@@ -1,17 +1,17 @@
-"""Policy examples:
+"""Policy examples.
 
-- Creates policy in the Fortigate
-- Gets all policies from the Fortigate
-- Gets filtered policy by policyid (unique identifier)
-- Filters policies by name, by operator *equals* "=="
-- Filters policies by operator *contains* "=@"
-- Filters policies by operator *not equals* "!="
-- Updates policy data in the Fortigate
-- Checks for presence of policy in the Fortigate
-- Gets all policies with destination address == "192.168.1.2/32"
-- Deletes policy from the Fortigate by policyid (unique identifier)
-- Deletes policies from the Fortigate by filter (by name)
-- Checks for absence of policy in the Fortigate
+- Create policy in the Fortigate
+- Get all policies from the Fortigate
+- Get filtered policy by policyid (unique identifier)
+- Filter policies by name, by operator *equals* "=="
+- Filter policies by operator *contains* "=@"
+- Filter policies by operator *not equals* "!="
+- Update policy data in the Fortigate
+- Check for presence of policy in the Fortigate
+- Get all policies with destination address == "192.168.1.2/32"
+- Delete policy from the Fortigate by policyid (unique identifier)
+- Delete policies from the Fortigate by filter (by name)
+- Check for absence of policy in the Fortigate
 """
 
 from pprint import pprint

@@ -1,4 +1,4 @@
-"""Interface Object"""
+"""Interface Object."""
 
 from fortigate_api import helpers as h
 from fortigate_api.base import Base
@@ -6,14 +6,21 @@ from fortigate_api.types_ import LDAny
 
 
 class Interface(Base):
-    """Interface Object"""
+    """Interface Object."""
 
     def __init__(self, fgt):
+        """Interface Object.
+
+        ::
+            :param fgt: Fortigate connector
+            :type fgt: Fortigate
+        """
         super().__init__(fgt=fgt, url_obj="api/v2/cmdb/system/interface/")
 
     # noinspection PyIncorrectDocstring
     def get(self, **kwargs) -> LDAny:
-        """Gets interface-objects in specified vdom, all or filtered by some of params
+        """Get interface-objects in specified vdom, all or filtered by some of params.
+
         ::
             :param uid: Filters interface-object by unique identifier. Used to get a single object
             :type uid: str

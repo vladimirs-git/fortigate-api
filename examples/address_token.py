@@ -1,9 +1,9 @@
-"""Address examples:
+"""Address examples.
 
 - Token-Based Authentication
-- Creates address in the Fortigate
-- Gets all addresses from the Fortigate
-- Deletes address from the Fortigate
+- Create address in the Fortigate
+- Get all addresses from the Fortigate
+- Delete address from the Fortigate
 """
 
 from pprint import pprint

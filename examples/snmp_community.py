@@ -1,4 +1,4 @@
-"""SnmpCommunity examples"""
+"""SnmpCommunity examples."""
 
 from pprint import pprint
 

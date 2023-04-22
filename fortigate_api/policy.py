@@ -1,4 +1,4 @@
-"""Policy Object"""
+"""Policy Object."""
 
 from requests import Response
 
@@ -10,15 +10,22 @@ from fortigate_api.types_ import LDAny, StrInt
 
 
 class Policy(Base):
-    """Policy Object"""
+    """Policy Object."""
 
     def __init__(self, fgt):
+        """Policy Object.
+
+        ::
+            :param fgt: Fortigate connector
+            :type fgt: Fortigate
+        """
         super().__init__(fgt=fgt, url_obj="api/v2/cmdb/firewall/policy/", uid_key="policyid")
 
     # noinspection PyIncorrectDocstring
     @wrapp_efilters
     def get(self, **kwargs) -> LDAny:
-        """Gets fortigate-objects, all or filtered by some of params.
+        """Get fortigate-objects, all or filtered by some of params.
+
         Need to use only one of params
         ::
             :param uid: Filters fortigate-object by identifier. Used to get a single object
@@ -38,7 +45,8 @@ class Policy(Base):
         return super().get(**kwargs)
 
     def move(self, uid: StrInt, position: str, neighbor: StrInt) -> Response:
-        """Move policy to before/after other neighbor-policy
+        """Move policy to before/after other neighbor-policy.
+
         ::
             :param uid: Identifier of policy being moved
             :type uid: str or int
@@ -61,7 +69,8 @@ class Policy(Base):
         return self.fgt.put(url=url, data={})
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
-        """Updates policy-object in the Fortigate
+        """Update policy-object in the Fortigate.
+
         ::
             :param data: Data of the policy-object
             :type data: dict

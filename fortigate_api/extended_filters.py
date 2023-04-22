@@ -1,4 +1,4 @@
-"""Extended Filters"""
+"""Extended Filters."""
 import logging
 from collections import Counter
 from functools import wraps
@@ -20,12 +20,12 @@ EFILTER_OPERATORS = [
 
 
 def wrapp_efilters(func):
-    """Wrapper. Extended Filters"""
-
+    """Wrapp Extended Filters."""
     # noinspection PyIncorrectDocstring
     @wraps(func)
     def wrapper(fgt_api, **kwargs):
-        """Wrapper. Extended Filters
+        """Wrapp Extended Filters.
+
         ::
             :param fgt_api: Wrapped object
             :type fgt_api: FortigateAPI
@@ -52,7 +52,8 @@ def wrapp_efilters(func):
 
 
 def efilter_by_sdst(policies: LDAny, efilter: str, fgt) -> None:
-    """Filter policies by efilter "srcaddr", "dstaddr"
+    """Filter policies by efilter "srcaddr", "dstaddr".
+
     ::
         :param policies: Policies (side effect)
         :type policies: List[dict]
@@ -80,7 +81,8 @@ def efilter_by_sdst(policies: LDAny, efilter: str, fgt) -> None:
 
 
 def _split_efilter(efilter: str) -> Tuple[str, str, IPv4Network]:
-    """Parse `key`, `operator`, `value` from `efilter` for "srcaddr", "dstaddr"
+    """Parse `key`, `operator`, `value` from `efilter` for "srcaddr", "dstaddr".
+
     ::
         :param efilter: Extended filter
         :type efilter: str
@@ -97,8 +99,8 @@ def _split_efilter(efilter: str) -> Tuple[str, str, IPv4Network]:
 
 
 def _get_names_subnets(addresses: LDAny, addr_groups: LDAny) -> DLStr:
-    """Get all IPv4Networks from the Fortigate address-objects and address-group-objects.
-    Skip IPv6Networks
+    """Get all IPv4Networks from the Fortigate address-objects, address-group-objects.
+
     ::
         :param addresses: Fortigate address-objects
         :param addr_groups: Fortigate address-group-objects
@@ -118,7 +120,8 @@ def _get_names_subnets(addresses: LDAny, addr_groups: LDAny) -> DLStr:
 
 
 def _convert_subnets_to_ipnets(members_d: DLStr) -> DLInet:
-    """Converts subnets to IPv4Networks
+    """Convert subnets to IPv4Networks.
+
     ::
         :param members_d: Members names and subnets (in policies)
         :return: Members names and IPv4Networks
@@ -145,7 +148,8 @@ def _convert_subnets_to_ipnets(members_d: DLStr) -> DLInet:
 
 
 def _valid_efilters(efilters: LStr) -> None:
-    """Validate efilters key, operator, value
+    """Validate efilters key, operator, value.
+
     ::
         :param efilters: Extended filters keys
         :return: None. efilters has valid format
@@ -170,7 +174,8 @@ def _valid_efilters(efilters: LStr) -> None:
 
 
 def _filter_policy_by_ipnets(efilter: str, policies: LDAny, names_ipnets_d: DLInet) -> LDAny:
-    """Filter `policies` by `efilter` "srcaddr", "dstaddr"
+    """Filter `policies` by `efilter` "srcaddr", "dstaddr".
+
     ::
         :param efilter: Extended filter
         :param policies: Policies

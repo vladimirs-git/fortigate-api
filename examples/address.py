@@ -1,16 +1,16 @@
-"""Address examples:
+"""Address examples.
 
-- Creates address in the Fortigate
-- Gets all addresses from the Fortigate
-- Gets filtered address by name (unique identifier)
-- Filters address by operator *equals* "=="
-- Filters address by operator *contains* "=@"
-- Filters address by operator *not equals* "!="
-- Updates address data in the Fortigate
-- Checks for presence of address in the Fortigate
-- Deletes address from the Fortigate by name
-- Deletes addresses from the Fortigate by filter
-- Checks for absence of address in the Fortigate
+- Create address in the Fortigate
+- Get all addresses from the Fortigate
+- Get filtered address by name (unique identifier)
+- Filter address by operator *equals* "=="
+- Filter address by operator *contains* "=@"
+- Filter address by operator *not equals* "!="
+- Update address data in the Fortigate
+- Check for presence of address in the Fortigate
+- Delete address from the Fortigate by name
+- Delete addresses from the Fortigate by filter
+- Check for absence of address in the Fortigate
 - FortigateAPI *with* statement
 """
 

@@ -1,4 +1,4 @@
-"""Typing"""
+"""Types."""
 
 from datetime import date
 from ipaddress import IPv4Network

@@ -1,4 +1,5 @@
-"""CiscoConfParse
+"""CiscoConfParse.
+
 Helper that parses the Fortigate config to find and change config commands.
 For more details see https://github.com/mpenning/ciscoconfparse
 """
@@ -14,10 +15,11 @@ LJunosCfgLine = List[JunosCfgLine]
 
 
 class FgtConfParse(CiscoConfParse):
-    """CiscoConfParse adapted for Fortigate"""
+    """CiscoConfParse adapted for Fortigate."""
 
     def __init__(self, config: UStr, comment="#", encoding="UTF-8", **kwargs):
-        """FgtConfParse
+        """FgtConfParse.
+
         ::
             :param config: Fortigate config
             :type config: str, List[str]
@@ -34,7 +36,7 @@ class FgtConfParse(CiscoConfParse):
 
     @staticmethod
     def _init_config(config: UStr) -> str:
-        """Init Fortigate config"""
+        """Init Fortigate config."""
         if isinstance(config, str):
             return config
         if not isinstance(config, (list, tuple)):
@@ -48,7 +50,8 @@ class FgtConfParse(CiscoConfParse):
 # ============================= function =============================
 
 def convert_fgt_to_junos(config: str) -> str:
-    """Convert Fortigate commands to Junos syntax, to parse by ciscoconfparse
+    """Convert Fortigate commands to Junos syntax, to parse by ciscoconfparse.
+
     ::
         :param config: Fortigate syntax config
         :return config: CiscoConfParse junos syntax config
@@ -104,7 +107,8 @@ def convert_fgt_to_junos(config: str) -> str:
 
 
 def findall(regex: str, obj: JunosCfgLine, flags=0) -> LStr:
-    """Parses substrings from *JunosCfgLine* objects by regex
+    """Parse substrings from *JunosCfgLine* objects by regex.
+
     ::
         :param regex: Regex pattern with 1 group
         :param obj: JunosCfgLine object
@@ -117,7 +121,8 @@ def findall(regex: str, obj: JunosCfgLine, flags=0) -> LStr:
 
 
 def findall1(regex: str, obj: JunosCfgLine, flags=0) -> str:
-    """Parses substring from *JunosCfgLine* objects by regex
+    """Parse substring from *JunosCfgLine* objects by regex.
+
     ::
         :param regex: Regex pattern with 1 group
         :param obj: JunosCfgLine object
@@ -132,7 +137,8 @@ def findall1(regex: str, obj: JunosCfgLine, flags=0) -> str:
 
 
 def findall2(regex: str, obj: JunosCfgLine, flags=0) -> T2Str:
-    """Parses 2 substrings from *JunosCfgLine* objects by regex
+    """Parse 2 substrings from *JunosCfgLine* objects by regex.
+
     ::
         :param regex: Regex pattern with 2 groups
         :param obj: JunosCfgLine object
@@ -148,7 +154,8 @@ def findall2(regex: str, obj: JunosCfgLine, flags=0) -> T2Str:
 
 
 def findall3(regex: str, obj: JunosCfgLine) -> T3Str:
-    """Parses 3 substrings from *JunosCfgLine* objects by regex
+    """Parse 3 substrings from *JunosCfgLine* objects by regex.
+
     ::
         :param regex: Regex pattern with 3 groups
         :param obj: JunosCfgLine object
@@ -163,7 +170,8 @@ def findall3(regex: str, obj: JunosCfgLine) -> T3Str:
 
 
 def find_by_keys(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
-    """Finds object by keys in geneology
+    r"""Find object by keys in geneology.
+
     ::
         :param ccp: CiscoConfParse object
         :param keys: Geneology keys to find object
@@ -193,7 +201,8 @@ def find_by_keys(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
 
 
 def find_by_re_keys(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
-    """Finds object by keys regex in geneology
+    """Find object by keys regex in geneology.
+
     ::
         :param ccp: CiscoConfParse object
         :param keys: Geneology regex keys to find object
@@ -236,7 +245,8 @@ def find_by_re_keys(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
 
 
 def find_children(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
-    """Finds children object by geneology keys
+    r"""Find children object by geneology keys.
+
     ::
         :param ccp: CiscoConfParse object
         :param keys: Geneology keys to find object
@@ -252,7 +262,8 @@ def find_children(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
 
 
 def join_children(obj: JunosCfgLine) -> str:
-    """Join all children of JunosCfgLine object
+    """Join all children of JunosCfgLine object.
+
     ::
         :param obj: JunosCfgLine object
         :return: joined text lines of all children
@@ -263,7 +274,8 @@ def join_children(obj: JunosCfgLine) -> str:
 
 
 def find_re_blocks(ccp: CiscoConfParse, regex: str) -> LStr:
-    """Works similar to CiscoConfParse.find_block(), but returns list of config sections"
+    r"""Work similar to CiscoConfParse.find_block(), but return list of config sections".
+
     ::
         :param ccp: CiscoConfParse object
         :param regex: Regex pattern to find

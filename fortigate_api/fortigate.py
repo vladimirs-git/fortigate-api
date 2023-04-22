@@ -1,4 +1,5 @@
-"""**Fortigate(host, username, password, scheme, port, timeout, vdom)**
+"""**Fortigate(host, username, password, scheme, port, timeout, vdom)**.
+
 REST API connector to the Fortigate. Contains generic methods (get, put, delete, etc.)
 to work with any objects available through the REST API. `Fortigate`_ is useful for working with
 objects that are not implemented in `FortigateAPI`_
@@ -30,14 +31,16 @@ VDOM = "root"
 
 
 class Fortigate:
-    """**Fortigate(host, username, password, scheme, port, timeout, vdom)**
+    """**Fortigate(host, username, password, scheme, port, timeout, vdom)**.
+
     REST API connector to the Fortigate. Contains generic methods (get, put, delete, etc.)
     to work with any objects available through the REST API. `Fortigate`_ is useful for working with
     objects that are not implemented in `FortigateAPI`_
     """
 
     def __init__(self, host: str, **kwargs):
-        """**Fortigate** - Firewall Connector
+        """**Fortigate** - Firewall Connector.
+
         ::
             :param host: Firewall ip address or hostname
             :type host: str
@@ -80,6 +83,7 @@ class Fortigate:
         self._session: Optional[Session] = None
 
     def __repr__(self):
+        """Return a string representation related to this object."""
         host = self.host
         username = self.username
         scheme = self.scheme
@@ -103,16 +107,18 @@ class Fortigate:
         return f"{self.__class__.__name__}({params_})"
 
     def __enter__(self):
+        """Enter the runtime context related to this object."""
         self.login()
         return self
 
     def __exit__(self, *args):
+        """Exit the runtime context related to this object."""
         self.logout()
 
     # ============================= init =============================
 
     def _init_port(self, **kwargs) -> int:
-        """Init port, 443 for "https", 80 for "http" """
+        """Init port, 443 for "https", 80 for "http"."""
         if port := int(kwargs.get("port") or 0):
             return port
         if self.scheme == "http":
@@ -121,7 +127,7 @@ class Fortigate:
 
     @staticmethod
     def _init_scheme(**kwargs) -> str:
-        """Init scheme "https" or "http" """
+        """Init scheme "https" or "http"."""
         scheme = str(kwargs.get("scheme") or HTTPS)
         expected = ["https", "http"]
         if scheme not in expected:
@@ -129,7 +135,7 @@ class Fortigate:
         return scheme
 
     def _init_token(self, **kwargs) -> str:
-        """Init token"""
+        """Init token."""
         token = str(kwargs.get("token") or "")
         if not token:
             return ""
@@ -143,7 +149,8 @@ class Fortigate:
 
     @property
     def is_connected(self) -> bool:
-        """Check connection to the Fortigate
+        """Check connection to the Fortigate.
+
         ::
             :return: True if session is connected to the Fortigate
             :rtype: bool
@@ -152,7 +159,7 @@ class Fortigate:
 
     @property
     def url(self) -> str:
-        """Returns URL to the Fortigate"""
+        """Return URL to the Fortigate."""
         if self.port == 443:
             return f"{self.scheme}://{self.host}"
         return f"{self.scheme}://{self.host}:{self.port}"
@@ -160,7 +167,8 @@ class Fortigate:
     # ============================ login =============================
 
     def login(self) -> None:
-        """Login to the Fortigate using REST API, creates Session object
+        """Login to the Fortigate using REST API, creates Session object.
+
         ::
             :return: None. Creates Session object
         """
@@ -208,7 +216,8 @@ class Fortigate:
         self._session = session
 
     def logout(self) -> None:
-        """Logout from the Fortigate using REST API, deletes Session object
+        """Logout from the Fortigate using REST API, deletes Session object.
+
         ::
             :return: None. Deletes Session object
         """
@@ -226,7 +235,8 @@ class Fortigate:
     # =========================== methods ============================
 
     def delete(self, url: str) -> Response:
-        """DELETE object from the Fortigate
+        """DELETE object from the Fortigate.
+
         ::
             :param url: REST API URL to the object
             :type url: str
@@ -242,7 +252,8 @@ class Fortigate:
         return response
 
     def exist(self, url: str) -> Response:
-        """Checks does an object exists in the Fortigate
+        """Check does an object exists in the Fortigate.
+
         ::
             :param url: REST API URL to the object
             :type url: str
@@ -255,7 +266,8 @@ class Fortigate:
         return self._response("get", url)
 
     def get(self, url: str) -> LDAny:
-        """GET object configured in the Fortigate
+        """GET object configured in the Fortigate.
+
         ::
             :param url: REST API URL to the object
             :type url: str
@@ -271,7 +283,8 @@ class Fortigate:
         return results
 
     def post(self, url: str, data: DAny) -> Response:
-        """POST (create) object in the Fortigate based on the data
+        """POST (create) object in the Fortigate based on the data.
+
         ::
             :param url: REST API URL to the object
             :type url: str
@@ -290,7 +303,8 @@ class Fortigate:
         return response
 
     def put(self, url: str, data: DAny) -> Response:
-        """PUT (update) existing object in the Fortigate
+        """PUT (update) existing object in the Fortigate.
+
         ::
             :param url: REST API URL to the object
             :type url: str
@@ -311,11 +325,11 @@ class Fortigate:
     # =========================== helpers ============================
 
     def _bearer_token(self) -> DStr:
-        """Returns bearer token"""
+        """Return bearer token."""
         return {"Authorization": f"Bearer {self.token}"}
 
     def _get_session(self) -> Session:
-        """Returns an existing session or create a new one"""
+        """Return an existing session or create a new one."""
         if not self.is_connected:
             self.login()
         session = self._session
@@ -324,7 +338,7 @@ class Fortigate:
         return session
 
     def _logging(self, resp: Response) -> None:
-        """Logging response"""
+        """Log response."""
         code = resp.status_code
         reason = resp.reason
         url = self._hide_secret(string=resp.url)
@@ -334,7 +348,7 @@ class Fortigate:
             logging.debug("text=%s", resp.text)
 
     def _hide_secret(self, string: str) -> str:
-        """Hides password, secretkey in text (for safe logging)"""
+        """Hide password, secretkey in text (for safe logging)."""
         if not self.password:
             return string
         result = string.replace(self.password, "<hidden>")
@@ -343,7 +357,7 @@ class Fortigate:
         return result
 
     def _hide_secret_ex(self, ex):
-        """Hides secretkey in exception (for safe logging)"""
+        """Hide secretkey in exception (for safe logging)."""
         if hasattr(ex, "args"):
             if (args := getattr(ex, "args")) and isinstance(args, Iterable):
                 msgs = []  # result
@@ -356,7 +370,8 @@ class Fortigate:
         return ex
 
     def _response(self, method: Method, url: str, data: DAny = None) -> Response:
-        """Calls Session method and returns Response
+        """Call Session method and return Response.
+
         ::
             :param method: Session method: "delete", "get", "post", "put"
             :type method: str
@@ -389,7 +404,7 @@ class Fortigate:
         return response
 
     def _valid_url(self, url: str) -> str:
-        """Adds "https://" to `url` if absent"""
+        """Add "https://" to `url` if absent."""
         if re.match("http(s)?://", url):
             return url
         url = url.strip("/")

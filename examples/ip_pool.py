@@ -1,5 +1,4 @@
-"""IP-Pool examples
-"""
+"""IP-Pool examples."""
 
 from pprint import pprint
 

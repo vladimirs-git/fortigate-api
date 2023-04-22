@@ -1,4 +1,4 @@
-"""fortigate-api"""
+"""**FortigateAPI** - a set of methods for working with the most commonly used objects."""
 
 from __future__ import annotations
 
@@ -24,10 +24,11 @@ from fortigate_api.zone import Zone
 
 
 class FortigateAPI:
-    """**FortigateAPI** - a set of methods for working with the most commonly used objects"""
+    """**FortigateAPI** - a set of methods for working with the most commonly used objects."""
 
     def __init__(self, **kwargs):
-        """**FortigateAPI** - a set of methods for working with the most commonly used objects
+        """**FortigateAPI** - a set of methods for working with the most commonly used objects.
+
         ::
             :param host: Firewall ip address or hostname
             :type host: str
@@ -84,24 +85,27 @@ class FortigateAPI:
         self.zone = Zone(self.fgt)
 
     def __repr__(self):
+        """Return a string representation related to this object."""
         return self.fgt.__repr__()
 
     def __enter__(self):
+        """Enter the runtime context related to this object."""
         return self
 
     def __exit__(self, *args):
+        """Exit the runtime context related to this object."""
         self.fgt.__exit__()
         self.ssh.__exit__()
 
     # =========================== methods ============================
 
     def login(self) -> FortigateAPI:
-        """Login to the Fortigate using REST API """
+        """Login to the Fortigate using REST API."""
         self.fgt.login()
         return self
 
     def logout(self) -> None:
-        """Logout from the Fortigate using REST API"""
+        """Logout from the Fortigate using REST API."""
         self.fgt.logout()
 
     @property

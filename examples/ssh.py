@@ -1,4 +1,5 @@
-"""SSH examples:
+"""SSH examples.
+
 - Show interface config
 - Change interface description from "dmz" to "DMZ"
 - Check interface description is changed
