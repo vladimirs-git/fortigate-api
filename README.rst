@@ -6,6 +6,7 @@
 .. image:: https://img.shields.io/github/last-commit/vladimirs-git/fortigate-api
    :target: https://pypi.python.org/pypi/fortigate-api
 
+
 fortigate-api
 =============
 
@@ -19,7 +20,6 @@ Main features:
 
 - REST API to create, delete, get, update objects. Move policy before, after other policy.
 - SSH Netmiko connector to work with CLI commands.
-- CiscoConfParse to search and modify commands in config.
 - Usage examples in `./examples`_
 
 ----------------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ or install the package from github.com release
 
 .. code:: bash
 
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.1.1.tar.gz
+    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.2.0.tar.gz
 
 or install the package from github.com repository
 
@@ -67,73 +67,77 @@ look it in the Fortigate web management interface. The first URL is for the Web 
 one is for the REST API. Not all object implemented in `FortigateAPI`_ (only the most used by me),
 access to any other objects is available via `Fortigate`_.
 
-=================== ================================================================================
-Object              GUI and REST API URL to the object, FortiOS v6.4
-=================== ================================================================================
-`Address`_          https://hostname/ng/firewall/address
+===================== ==============================================================================
+Object                GUI and REST API URL to the object (FortiOS v6.4)
+===================== ==============================================================================
+`Address`_            https://hostname/ng/firewall/address
 
-                    https://hostname/api/v2/cmdb/firewall/address/
+                      https://hostname/api/v2/cmdb/firewall/address/
 
-`AddressGroup`_     https://hostname/ng/firewall/address
+`AddressGroup`_       https://hostname/ng/firewall/address
 
-                    https://hostname/api/v2/cmdb/firewall/addrgrp/
+                      https://hostname/api/v2/cmdb/firewall/addrgrp/
 
-`Antivirus`_        https://hostname/ng/utm/antivirus/profile
+`Antivirus`_          https://hostname/ng/utm/antivirus/profile
 
-                    https://hostname/api/v2/cmdb/antivirus/profile/
+                      https://hostname/api/v2/cmdb/antivirus/profile/
 
-`Application`_      https://hostname/ng/utm/appctrl/sensor
+`Application`_        https://hostname/ng/utm/appctrl/sensor
 
-                    https://hostname/api/v2/cmdb/application/list/
+                      https://hostname/api/v2/cmdb/application/list/
 
-`DhcpServer`_       https://hostname/ng/interface/edit/{name}
+`DhcpServer`_         https://hostname/ng/interface/edit/{name}
 
-                    https://hostname/api/v2/cmdb/system.dhcp/server/
+                      https://hostname/api/v2/cmdb/system.dhcp/server/
 
-`Interface`_        https://hostname/ng/interface
+`ExternalResource`_   https://hostname/ng/external-connector
 
-                    https://hostname/api/v2/cmdb/system/interface/
+                      https://hostname/api/v2/cmdb/system/external-resource/
 
-`InternetService`_  https://hostname/ng/firewall/internet_service
+`Interface`_          https://hostname/ng/interface
 
-                    https://hostname/api/v2/cmdb/firewall/internet-service/
+                      https://hostname/api/v2/cmdb/system/interface/
 
-`IpPool`_           https://hostname/ng/firewall/ip-pool
+`InternetService`_    https://hostname/ng/firewall/internet_service
 
-                    https://hostname/api/v2/cmdb/firewall/ippool/
+                      https://hostname/api/v2/cmdb/firewall/internet-service/
 
-`Policy`_           https://hostname/ng/firewall/policy/policy/standard
+`IpPool`_             https://hostname/ng/firewall/ip-pool
 
-                    https://hostname/api/v2/cmdb/firewall/policy/
+                      https://hostname/api/v2/cmdb/firewall/ippool/
 
-`Schedule`_         https://hostname/ng/firewall/schedule
+`Policy`_             https://hostname/ng/firewall/policy/policy/standard
 
-                    https://hostname/api/v2/cmdb/firewall.schedule/onetime/
+                      https://hostname/api/v2/cmdb/firewall/policy/
 
-`Service`_          https://hostname/ng/firewall/service
+`Schedule`_           https://hostname/ng/firewall/schedule
 
-                    https://hostname/api/v2/cmdb/firewall.service/custom/
+                      https://hostname/api/v2/cmdb/firewall.schedule/onetime/
 
-`ServiceCategory`_  https://hostname/ng/firewall/service
+`Service`_            https://hostname/ng/firewall/service
 
-                    https://hostname/api/v2/cmdb/firewall.service/category/
+                      https://hostname/api/v2/cmdb/firewall.service/custom/
 
-`ServiceGroup`_     https://hostname/ng/firewall/service
+`ServiceCategory`_    https://hostname/ng/firewall/service
 
-                    https://hostname/api/v2/cmdb/firewall.service/group/
+                      https://hostname/api/v2/cmdb/firewall.service/category/
 
-`SnmpCommunity`_    https://hostname/ng/system/snmp
+`ServiceGroup`_       https://hostname/ng/firewall/service
 
-                    https://hostname/api/v2/cmdb/system.snmp/community/
+                      https://hostname/api/v2/cmdb/firewall.service/group/
 
-`VirtualIp`_        https://hostname/ng/firewall/virtual-ip
+`SnmpCommunity`_      https://hostname/ng/system/snmp
 
-                    https://hostname/api/v2/cmdb/firewall/vip/
+                      https://hostname/api/v2/cmdb/system.snmp/community/
 
-`Zone`_             https://hostname/ng/interface
+`VirtualIp`_          https://hostname/ng/firewall/virtual-ip
 
-                    https://hostname/api/v2/cmdb/system/zone/
-=================== ================================================================================
+                      https://hostname/api/v2/cmdb/firewall/vip/
+
+`Zone`_               https://hostname/ng/interface
+
+                      https://hostname/api/v2/cmdb/system/zone/
+===================== ==============================================================================
 
 
 ----------------------------------------------------------------------------------------------------
@@ -142,14 +146,14 @@ FortigateAPI
 ------------
 **FortigateAPI(host, username, password, scheme, port, timeout, vdom)**
 Set of methods for working with the most commonly used `Objects`_.
-Code usage examples in *./examples/examples.py*
 
 =============== ======= ============================================================================
 Parameter        Type    Description
 =============== ======= ============================================================================
 host            *str*   Firewall ip address or hostname
-username        *str*   Administrator name
-password        *str*   Administrator password
+username        *str*   Administrator name. Mutually exclusive with token
+password        *str*   Administrator password. Mutually exclusive with token
+token           *str*   Administrator token. Mutually exclusive with username and password
 scheme          *str*   (optional) "https" (default) or "http"
 port            *int*   (optional) TCP port, by default 443 for "https", 80 for "http"
 timeout         *int*   (optional) Session timeout minutes (default 15)
@@ -162,7 +166,33 @@ vdom            *str*   Name of virtual domain (default "root")
 
 Address
 -------
+Python examples `./examples/address.py`_
+
+Python examples `./examples/address_token.py`_
+
 FortiOS v6.4 data example `./examples/yml/address.yml`_
+
+.. code:: python
+
+    from fortigate_api import FortigateAPI
+
+    fgt = FortigateAPI(host="host", username="username", password="password")
+
+    # Create address
+    data = {"name": "ADDRESS",
+            "obj-type": "ip",
+            "subnet": "127.0.0.100 255.255.255.252",
+            "type": "ipmask"}
+    response = fgt.address.create(data)
+
+    # Get all addresses
+    addresses_all = fgt.address.get()
+
+    # Get address by name
+    addresses_by_name = fgt.address.get(uid="ADDRESS")
+
+    # Get address by operator contains \"=@\"
+    addresses_contains = fgt.address.get(filter="subnet=@127.0")
 
 
 create()
@@ -244,32 +274,34 @@ Return
     Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
 
 
-Examples
-........
-
-Address examples:
-
-- Creates address in the Fortigate
-- Gets all addresses from the Fortigate
-- Gets filtered address by name (unique identifier)
-- Filters address by operator *equals* "=="
-- Filters address by operator *contains* "=@"
-- Filters address by operator *not equals* "!="
-- Updates address data in the Fortigate
-- Checks for presence of address in the Fortigate
-- Deletes address from the Fortigate by name
-- Deletes addresses from the Fortigate by filter
-- Checks for absence of address in the Fortigate
-- FortigateAPI *with* statement
-
-`./examples/address.py`_
-
-
 ----------------------------------------------------------------------------------------------------
 
 AddressGroup
 ------------
+Python examples `./examples/address_group.py`_
+
 FortiOS v6.4 data example `./examples/yml/address_group.yml`_
+
+.. code:: python
+
+    from fortigate_api import FortigateAPI
+
+    fgt = FortigateAPI(host="host", username="username", password="password")
+
+    # Create address and address-group in the Fortigate
+    data = {"name": "ADDRESS",
+            "obj-type": "ip",
+            "subnet": "127.0.0.100 255.255.255.255",
+            "type": "ipmask"}
+    fgt.address.create(data)
+    data = {"name": "ADDR_GROUP", "member": [{"name": "ADDRESS"}]}
+    fgt.address_group.create(data)
+
+    # Get all address-groups from the Fortigate
+    address_groups_all = fgt.address_group.get()
+
+    # Get filtered address_group by name (unique identifier)
+    address_groups_name = fgt.address_group.get(uid="ADDR_GROUP")
 
 
 create()
@@ -351,25 +383,6 @@ Return
     Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
 
 
-Examples
-........
-AddressGroup examples:
-
-- Creates address-group in the Fortigate
-- Gets all address-groups from the Fortigate
-- Gets filtered address-group by name (unique identifier)
-- Filters address-group by operator *equals* "=="
-- Filters address-group by operator *contains* "=@"
-- Filters address-group by operator *not equals* "!="
-- Updates address-group data in the Fortigate
-- Checks for presence of address-group in the Fortigate
-- Deletes address-group from the Fortigate by name
-- Deletes address-groups from the Fortigate by filter
-- Checks for absence of address-group in the Fortigate
-
-`./examples/address_group.py`_
-
-
 ----------------------------------------------------------------------------------------------------
 
 Antivirus
@@ -414,7 +427,28 @@ DhcpServer
 ----------
 **DhcpServer** object has the same parameters and methods as `Address`_
 
+Python examples `./examples/dhcp_server.py`_
+
 FortiOS v6.4 data example `./examples/yml/dhcp_server.yml`_
+
+.. code:: python
+
+    from fortigate_api import FortigateAPI
+
+    fgt = FortigateAPI(host="host", username="username", password="password")
+
+    # Create dhcp server
+    data = {
+        "default-gateway": "192.168.255.1",
+        "netmask": "255.255.255.0",
+        "interface": "vlan.123",
+        "ip-range": [{"start-ip": "192.168.255.2", "end-ip": "192.168.255.254", }],
+    }
+    fgt.dhcp_server.create(data)
+
+    # Get all dhcp servers
+    dhcp_servers = fgt.dhcp_server.get()
+
 
 **FortigateAPI.dhcp_server.create(data)** Note, in Fortigate is possible to create multiple DHCP servers with the same settings, you need control duplicates
 
@@ -426,7 +460,27 @@ FortiOS v6.4 data example `./examples/yml/dhcp_server.yml`_
 
 **FortigateAPI.dhcp_server.update(data, uid)**
 
-DhcpServer examples `./examples/dhcp_server.py`_
+
+----------------------------------------------------------------------------------------------------
+
+ExternalResource
+----------------
+**ExternalResource** object has the same parameters and methods as `Address`_
+
+Python examples `./examples/external_resource.py`_
+
+FortiOS v6.4 data example `./examples/yml/external_resource.yml`_
+
+**FortigateAPI.external_resource.create(data)**
+
+**FortigateAPI.external_resource.delete(uid, filter)**
+
+**FortigateAPI.external_resource.get(uid, filter)**
+
+**FortigateAPI.external_resource.is_exist(uid)**
+
+**FortigateAPI.external_resource.update(data, uid)**
+
 
 
 ----------------------------------------------------------------------------------------------------
@@ -435,7 +489,24 @@ Interface
 ---------
 **Interface** object has the same parameters and methods as `Address`_
 
+Python examples `./examples/interface.py`_
+
 FortiOS v6.4 data example `./examples/yml/interface.yml`_
+
+.. code:: python
+
+    from fortigate_api import FortigateAPI
+
+    fgt = FortigateAPI(host="host", username="username", password="password")
+
+
+    # Get all interfaces in vdom \"root\" from the Fortigate
+    interfaces = fgt.interface.get()
+    print(f"interfaces count={len(interfaces)}")  # interfaces count=21
+
+    # Gets filtered interface by name (unique identifier)
+    interfaces = fgt.interface.get(uid="dmz")
+
 
 **FortigateAPI.interface.create(data)**
 
@@ -463,23 +534,6 @@ Return
 **FortigateAPI.interface.update(data, uid)**
 
 
-Examples
-........
-Interface examples:
-
-- Gets all interfaces in vdom "root" from the Fortigate
-- Gets filtered interface by name (unique identifier)
-- Filters interface by operator *equals* "=="
-- Filters interface by operator contains "=@"
-- Filters interface by operator *not equals* "!="
-- Filters interface by multiple conditions
-- Updates interface data in the Fortigate
-- Checks for presence of interface in the Fortigate
-- Gets all interfaces in vdom "VDOM"
-
-`./examples/interface.py`_
-
-
 ----------------------------------------------------------------------------------------------------
 
 InternetService
@@ -505,6 +559,8 @@ IpPool
 ------
 **IpPool** object has the same parameters and methods as `Address`_
 
+Python examples `./examples/ip_pool.py`_
+
 FortiOS v6.4 data example `./examples/yml/ip_pool.yml`_
 
 **FortigateAPI.ip_pool.create(data)**
@@ -518,18 +574,41 @@ FortiOS v6.4 data example `./examples/yml/ip_pool.yml`_
 **FortigateAPI.ip_pool.update(data, uid)**
 
 
-Examples
-........
-IpPool examples:
-
-`./examples/ip_pool.py`_
-
-
 ----------------------------------------------------------------------------------------------------
 
 Policy
 ------
+Python examples `./examples/policy.py`_
+
+Python examples `./examples/policy_extended_filter.py`_
+
 FortiOS v6.4 data example `./examples/yml/policy.yml`_
+
+.. code:: python
+
+    from fortigate_api import FortigateAPI
+
+    fgt = FortigateAPI(host="host", username="username", password="password")
+
+    # Create policy in the Fortigate
+    data = dict(
+        name="POLICY",
+        status="enable",
+        action="accept",
+        srcintf=[{"name": "any"}],
+        dstintf=[{"name": "any"}],
+        srcaddr=[{"name": "all"}],
+        dstaddr=[{"name": "all"}],
+        service=[{"name": "ALL"}],
+        schedule="always",
+    )
+    fgt.policy.create(data)
+
+    # Get all policies from the Fortigate
+    policies_all = fgt.policy.get()
+
+    # Filters policies by name, by operator equals
+    policies_name = fgt.policy.get(filter="name==POLICY")
 
 
 create()
@@ -627,38 +706,6 @@ Return
     Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
 
 
-Examples
-........
-Policy examples:
-
-- Creates policy in the Fortigate
-- Gets all policies from the Fortigate
-- Gets filtered policy by policyid (unique identifier)
-- Filters policies by name, by operator *equals* "=="
-- Filters policies by operator *contains* "=@"
-- Filters policies by operator *not equals* "!="
-- Updates policy data in the Fortigate
-- Checks for presence of policy in the Fortigate
-- Gets all policies with destination address == "192.168.1.2/32"
-- Deletes policy from the Fortigate by policyid (unique identifier)
-- Deletes policies from the Fortigate by filter (by name)
-- Checks for absence of policy in the Fortigate
-
-`./examples/policy.py`_
-
-
-Policy Extended Filter examples:
-
-- Gets the rules where source prefix is equals 127.0.1.0/30
-- Gets the rules where source prefix is not equals 127.0.1.0/30
-- Gets the rules where source addresses are in subnets of 127.0.1.0/24
-- Gets the rules where source prefixes are supernets of address 127.0.1.1/32
-- Gets the rules where source prefix are equals 127.0.1.0/30 and destination prefix are equals 127.0.2.0/30
-- Delete policy, address-group, addresses from the Fortigate (order is important)
-
-`./examples/policy_extended_filter.py`_
-
-
 ----------------------------------------------------------------------------------------------------
 
 Schedule
@@ -741,6 +788,8 @@ SnmpCommunity
 -------------
 **SnmpCommunity**
 
+Python examples `./examples/snmp_community.py`_
+
 FortiOS v6.4 data example `./examples/yml/snmp_community.yml`_
 
 **FortigateAPI.snmp_community.create(data)**
@@ -763,11 +812,6 @@ uid             *str*   Name of the snmp-community-object, taken from the `uid` 
 
 Return
     Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
-
-
-Examples
-........
-SnmpCommunity examples `./examples/snmp_community.py`_
 
 
 ----------------------------------------------------------------------------------------------------
@@ -817,12 +861,34 @@ REST API connector to the Fortigate. Contains generic methods (get, put, delete,
 to work with any objects available through the REST API. `Fortigate`_ is useful for working with
 objects that are not implemented in `FortigateAPI`_
 
+Python examples `./examples/fortigate.py`_
+
+Python examples `./examples/fortigate_token.py`_
+
+.. code:: python
+
+    from fortigate_api import Fortigate
+
+    fgt = Fortigate(host="host", username="username", password="password")
+
+    # Create address in the Fortigate
+    data = {"name": "ADDRESS",
+            "obj-type": "ip",
+            "subnet": "127.0.0.100 255.255.255.252",
+            "type": "ipmask"}
+    fgt.post(url="api/v2/cmdb/firewall/address/", data=data)
+
+    # Get address data from the Fortigate
+    addresses_all = fgt.get(url="api/v2/cmdb/firewall/address/")
+
+
 =============== ======= ============================================================================
 Parameter       Type    Description
 =============== ======= ============================================================================
 host            *str*   Firewall ip address or hostname
-username        *str*   Administrator name
-password        *str*   Administrator password
+username        *str*   Administrator name. Mutually exclusive with token
+password        *str*   Administrator password. Mutually exclusive with token
+token           *str*   Administrator token. Mutually exclusive with username and password
 scheme          *str*   (optional) "https" (default) or "http"
 port            *int*   (optional) TCP port, by default 443 for "https", 80 for "http"
 timeout         *int*   (optional) Session timeout minutes (default 15)
@@ -913,21 +979,6 @@ Return
     Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
 
 
-Examples
-........
-Fortigate examples:
-
-- Creates address in the Fortigate
-- Gets address data from the Fortigate
-- Updates address data in the Fortigate
-- Checks for presence of address in the Fortigate
-- Deletes address from the Fortigate
-- Checks for absence of address in the Fortigate
-- Fortigate *with* statement
-
-`./examples/fortigate.py`_
-
-
 ----------------------------------------------------------------------------------------------------
 
 SSH
@@ -936,6 +987,28 @@ SSH
 SSH connector to the Fortigate. Contains methods to get and put configuration commands using ssh.
 Note, FortigateAPI parameter "vdom" used in REST API only and not used in SSH.
 In order to send cli commands to a specific vdom, you need "config vdom" before.
+
+Python examples `./examples/ssh.py`_
+
+Python examples `./examples/ssh_vdom.py`_
+
+.. code:: python
+
+    from fortigate_api import FortigateAPI
+
+    fgt_api = FortigateAPI(host="host", username="username", password="password")
+    fgt_api.ssh.login()
+
+    # Show interface config
+    config = fgt_api.ssh.send_command("show system interface dmz")
+
+    # Change interface description from "dmz" to "DMZ"
+    cmds = ["config system interface",
+            "edit dmz",
+            "set description DMZ",
+            "end"]
+    output = fgt_api.ssh.send_config_set(cmds)
+
 
 =============== ======= ============================================================================
 Parameter       Type    Description
@@ -986,54 +1059,17 @@ kwargs          *dict*        (optional) Netmiko parameters
 Return
     Output of the commands
 
-
-Examples
-........
-SSH examples:
-
-- Show interface config
-- Change interface description from "dmz" to "DMZ"
-- Check interface description is changed
-- Change read-timeout timer for long awaited commands
-
-`./examples/ssh.py`_
-
-SSH examples for working with vdom:
-
-- get system arp from interfaces associated with vdom="VDOM"
-- get system arp from interfaces associated with vdom="root"
-
-`./examples/ssh_vdom.py`_
-
 ----------------------------------------------------------------------------------------------------
-
-CiscoConfParse
---------------
-Helper that parses the Fortigate configuration to find and modify command lines.
-CiscoConfParse doesn't natively support Fortigate configuration,
-but after some tweaking in this package it has become a good tool to play with Fortigate config lines.
-For more information, see the documentation for the JunosCfgLine object at https://github.com/mpenning/ciscoconfparse
-
-
-Examples
-........
-CiscoConfParse examples:
-
-- get config from the Fortigate by SSH
-- create CiscoConfParse object
-- filter all JunosCfgLine objects of wan interfaces
-- print some data in CiscoConfParse objects
-- filter all wan interfaces blocks
-
-`./examples/ccp.py`_
 
 
 .. _`./examples`: ./examples
+.. _`./examples/yml`: ./examples/yml
 .. _`./examples/yml/address.yml`: ./examples/yml/address.yml
 .. _`./examples/yml/address_group.yml`: ./examples/yml/address_group.yml
 .. _`./examples/yml/antivirus.yml`: ./examples/yml/antivirus.yml
 .. _`./examples/yml/application.yml`: ./examples/yml/application.yml
 .. _`./examples/yml/dhcp_server.yml`: ./examples/yml/dhcp_server.yml
+.. _`./examples/yml/external_resource.yml`: ./examples/yml/external_resource.yml
 .. _`./examples/yml/interface.yml`: ./examples/yml/interface.yml
 .. _`./examples/yml/internet_service.yml`: ./examples/yml/internet_service.yml
 .. _`./examples/yml/ip_pool.yml`: ./examples/yml/ip_pool.yml
@@ -1047,10 +1083,12 @@ CiscoConfParse examples:
 .. _`./examples/yml/zone.yml`: ./examples/yml/zone.yml
 
 .. _`./examples/address.py`: ./examples/address.py
+.. _`./examples/address_token.py`: ./examples/address_token.py
 .. _`./examples/address_group.py`: ./examples/address_group.py
-.. _`./examples/ccp.py`: ./examples/ccp.py
 .. _`./examples/dhcp_server.py`: ./examples/dhcp_server.py
+.. _`./examples/external_resource.py`: ./examples/external_resource.py
 .. _`./examples/fortigate.py`: ./examples/fortigate.py
+.. _`./examples/fortigate_token.py`: ./examples/fortigate_token.py
 .. _`./examples/interface.py`: ./examples/interface.py
 .. _`./examples/ip_pool.py`: ./examples/ip_pool.py
 .. _`./examples/policy.py`: ./examples/policy.py

@@ -11,7 +11,7 @@ PASSWORD = "password"
 fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
 fgt.login()
 
-print("\n\n========================= dhcp_server =========================")
+print("\nCreates dhcp server")
 data = {
     "default-gateway": "192.168.255.1",
     "netmask": "255.255.255.0",

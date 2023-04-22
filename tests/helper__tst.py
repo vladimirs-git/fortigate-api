@@ -26,7 +26,7 @@ D_ADDR5 = {"name": ADDR5, "type": "ipmask", "subnet": "5.5.5.0 255.255.255.252"}
 D_ADDGR1 = {"name": ADDGR1, "type": "default", "member": [{"name": ADDR5}]}
 D_INTF1 = {"name": NAME1, "vdom": "root"}
 D_INTF3 = {"name": NAME3, "vdom": "vdom3"}
-D_NAME = {"name": NAME1}
+D_NAME1 = {"name": NAME1}
 D_POL1 = {
     "name": POL1,
     "policyid": "1",
@@ -106,47 +106,58 @@ class MockSession:
 class MockResponse(Response):
     """Mocked Response"""
     exist_objects = {
+        f"api/v2/cmdb/antivirus/profile/{NAME1}": [D_NAME1],
+        f"api/v2/cmdb/application/list/{NAME1}": [D_NAME1],
+
         "api/v2/cmdb/firewall/address/": [D_ADDR1, D_ADDR2, D_ADDR3, D_ADDR4, D_ADDR5],
+        f"api/v2/cmdb/firewall/address/?filter=name{EQ}{ADDR1}": [D_ADDR1],
+        f"api/v2/cmdb/firewall/address/{ADDR1}": [D_ADDR1],
+        f"api/v2/cmdb/firewall/address/{ADDR1}?filter=name{EQ}{ADDR1}": [D_ADDR1],
+        f"api/v2/cmdb/firewall/address/{SLASH_}": [D_SLASH],
+
         "api/v2/cmdb/firewall/addrgrp/": [D_ADDGR1],
+        f"api/v2/cmdb/firewall/addrgrp/?filter=name{EQ}{ADDGR1}": [D_ADDGR1],
+        f"api/v2/cmdb/firewall/addrgrp/{ADDGR1}": [D_ADDGR1],
+        f"api/v2/cmdb/firewall/addrgrp/{ADDGR1}?filter=name{EQ}{ADDGR1}": [D_ADDGR1],
+
+        f"api/v2/cmdb/firewall/internet-service/{NAME1}": [D_NAME1],
+        f"api/v2/cmdb/firewall/ippool/{NAME1}": [D_NAME1],
+        f"api/v2/cmdb/firewall/vip/{NAME1}": [D_NAME1],
+
         "api/v2/cmdb/firewall/policy/": [D_POL1, D_POL3],
         "api/v2/cmdb/firewall/policy/1": [D_POL1],
         "api/v2/cmdb/firewall/policy/3": [D_POL3],
-        "api/v2/cmdb/system.snmp/community/": [D_SNMP1, D_SNMP3],
-        "api/v2/cmdb/system.snmp/community/1": [D_SNMP1],
-        "api/v2/cmdb/system.snmp/community/3": [D_SNMP3],
-        "api/v2/cmdb/system/interface/": [D_INTF1, D_INTF3],
-        f"api/v2/cmdb/antivirus/profile/{NAME1}": [D_NAME],
-        f"api/v2/cmdb/application/list/{NAME1}": [D_NAME],
-        f"api/v2/cmdb/firewall.schedule/onetime/{NAME1}": [D_NAME],
-        f"api/v2/cmdb/firewall.service/category/{NAME1}": [D_NAME],
-        f"api/v2/cmdb/firewall.service/custom/{NAME1}": [D_NAME],
-        f"api/v2/cmdb/firewall.service/group/{NAME1}": [D_NAME],
-        f"api/v2/cmdb/firewall/address/?filter=name{EQ}{ADDR1}": [D_ADDR1],
-        f"api/v2/cmdb/firewall/address/{ADDR1}?filter=name{EQ}{ADDR1}": [D_ADDR1],
-        f"api/v2/cmdb/firewall/address/{ADDR1}": [D_ADDR1],
-        f"api/v2/cmdb/firewall/address/{SLASH_}": [D_SLASH],
-        f"api/v2/cmdb/firewall/addrgrp/{ADDGR1}": [D_ADDGR1],
-        f"api/v2/cmdb/firewall/addrgrp/{ADDGR1}?filter=name{EQ}{ADDGR1}": [D_ADDGR1],
-        f"api/v2/cmdb/firewall/addrgrp/?filter=name{EQ}{ADDGR1}": [D_ADDGR1],
-        f"api/v2/cmdb/firewall/internet-service/{NAME1}": [D_NAME],
-        f"api/v2/cmdb/firewall/ippool/{NAME1}": [D_NAME],
-        f"api/v2/cmdb/firewall/policy/{POL1}": [D_POL1],  # dummy for unittest
         f"api/v2/cmdb/firewall/policy/1?filter=name{EQ}{POL1}": [D_POL1],
         f"api/v2/cmdb/firewall/policy/?filter=name{EQ}{POL1}": [D_POL1],
         f"api/v2/cmdb/firewall/policy/?filter=name{EQ}{POL3}": [D_POL3],
         f"api/v2/cmdb/firewall/policy/?filter=policyid{EQ}1": [D_POL1],
         f"api/v2/cmdb/firewall/policy/?filter=policyid{EQ}3": [D_POL3],
-        f"api/v2/cmdb/firewall/vip/{NAME1}": [D_NAME],
-        f"api/v2/cmdb/system.snmp/community/{NAME1}": [D_SNMP1],  # dummy for unittest
+        f"api/v2/cmdb/firewall/policy/{POL1}": [D_POL1],  # dummy for unittest
+
+        f"api/v2/cmdb/firewall.schedule/onetime/{NAME1}": [D_NAME1],
+        f"api/v2/cmdb/firewall.service/category/{NAME1}": [D_NAME1],
+        f"api/v2/cmdb/firewall.service/custom/{NAME1}": [D_NAME1],
+        f"api/v2/cmdb/firewall.service/group/{NAME1}": [D_NAME1],
+
+        "api/v2/cmdb/system.snmp/community/": [D_SNMP1, D_SNMP3],
+        "api/v2/cmdb/system.snmp/community/1": [D_SNMP1],
+        "api/v2/cmdb/system.snmp/community/3": [D_SNMP3],
+        f"api/v2/cmdb/system.snmp/community/1?filter=name{EQ}{NAME1}": [D_SNMP1],
         f"api/v2/cmdb/system.snmp/community/?filter=id{EQ}1": [D_SNMP1],
         f"api/v2/cmdb/system.snmp/community/?filter=id{EQ}3": [D_SNMP3],
         f"api/v2/cmdb/system.snmp/community/?filter=name{EQ}{NAME1}": [D_SNMP1],
-        f"api/v2/cmdb/system.snmp/community/1?filter=name{EQ}{NAME1}": [D_SNMP1],
+        f"api/v2/cmdb/system.snmp/community/{NAME1}": [D_SNMP1],  # dummy for unittest
         # f"api/v2/cmdb/system.snmp/community/?filter=name{EQ}{NAME3}": [D_SNMP3],
+
+        f"api/v2/cmdb/system/external-resource/{NAME1}": [D_NAME1],
+        f"api/v2/cmdb/system/external-resource/?filter=name{EQ}{NAME1}": [D_NAME1],
+
+        "api/v2/cmdb/system/interface/": [D_INTF1, D_INTF3],
         f"api/v2/cmdb/system/interface/?filter=name{EQ}{NAME1}": [D_INTF1],
         f"api/v2/cmdb/system/interface/?filter=name{EQ}{NAME3}": [D_INTF3],
         f"api/v2/cmdb/system/interface/{NAME1}": [D_INTF1],
         f"api/v2/cmdb/system/interface/{NAME3}": [D_INTF3],
+
         f"api/v2/cmdb/system/zone/{NAME1}": [D_ZONE],
     }
 
@@ -175,8 +186,7 @@ class MockResponse(Response):
         if url_ in cls.exist_objects:
             data = cls.exist_objects[url_]
             text = json.dumps({**GET, **{"results": data}})
-            bytes_ = text.encode("utf-8")
-            resp._content = bytes_
+            resp._content = text.encode("utf-8")
             resp.status_code = 200
         return resp
 

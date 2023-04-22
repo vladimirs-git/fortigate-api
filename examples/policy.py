@@ -45,11 +45,11 @@ policies = fgt.policy.get()
 print(f"policies count={len(policies)}")  # policies count=244
 
 print("\nGets filtered policy by policyid (unique identifier)")
-policies = fgt.policy.get(uid="POLICY")
+policies = fgt.policy.get(uid=1)
 pprint(policies)
 #  [{"name": "POLICY",
-#    "policyid": 323,
-#    "uuid": "521390dc-d771-51ec-9dc2-32467e1bc561",
+#    "policyid": 1,
+#    "action": "accept",
 #    ...
 #    }]
 

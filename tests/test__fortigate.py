@@ -22,26 +22,29 @@ class Test(unittest.TestCase):
         """Fortigate.__repr__()"""
         default = dict(scheme="https", port=443, timeout=15, vdom="root")
         for kwargs, req in [
+            # username password
             (dict(host="a", username="b", password="c"),
-             "Fortigate(host='a', username='b', password='*')"),
+             "Fortigate(host='a', username='b')"),
             (dict(host="a", username="b", password="c", **default),
-             "Fortigate(host='a', username='b', password='*')"),
+             "Fortigate(host='a', username='b')"),
             (dict(host="a", username="b", password="c", port=80),
-             "Fortigate(host='a', username='b', password='*', port=80)"),
+             "Fortigate(host='a', username='b', port=80)"),
             (dict(host="a", username="b", password="c", scheme="https", port=80),
-             "Fortigate(host='a', username='b', password='*', port=80)"),
+             "Fortigate(host='a', username='b', port=80)"),
             (dict(host="a", username="b", password="c", scheme="http", port=80),
-             "Fortigate(host='a', username='b', password='*', scheme='http', port=80)"),
+             "Fortigate(host='a', username='b', scheme='http', port=80)"),
             (dict(host="a", username="b", password="c", timeout=1),
-             "Fortigate(host='a', username='b', password='*', timeout=1)"),
+             "Fortigate(host='a', username='b', timeout=1)"),
             (dict(host="a", username="b", password="c", vdom="d"),
-             "Fortigate(host='a', username='b', password='*', vdom='d')"),
+             "Fortigate(host='a', username='b', vdom='d')"),
             (dict(host="a", username="b", password="c", vdom="d", timeout=1, port=80),
-             "Fortigate(host='a', username='b', password='*', port=80, timeout=1, vdom='d')"),
+             "Fortigate(host='a', username='b', port=80, timeout=1, vdom='d')"),
             (dict(host="a", username="b", password="c", verify=True),
-             "Fortigate(host='a', username='b', password='*', verify=True)"),
+             "Fortigate(host='a', username='b', verify=True)"),
             (dict(host="a", username="b", password="c", verify=False),
-             "Fortigate(host='a', username='b', password='*')"),
+             "Fortigate(host='a', username='b')"),
+            # token
+            (dict(host="a", token="b"), "Fortigate(host='a', username='')"),
         ]:
             fgt = Fortigate(**kwargs)
             result = f"{fgt!r}"
@@ -58,26 +61,6 @@ class Test(unittest.TestCase):
                     self.assertEqual(result, req, msg="MockSession")
 
     # ============================= init =============================
-
-    def test_valid__init_scheme(self):
-        """Fortigate._init_scheme()"""
-        https = "https"
-        for kwargs, req in [
-            ({}, https),
-            (dict(scheme=""), https),
-            (dict(scheme="https"), https),
-            (dict(scheme="http"), "http"),
-        ]:
-            result = self.fgt._init_scheme(**kwargs)
-            self.assertEqual(result, req, msg=f"{kwargs=}")
-
-    def test_invalid__init_scheme(self):
-        """Fortigate._init_scheme()"""
-        for kwargs, error in [
-            (dict(scheme="ssh"), ValueError),
-        ]:
-            with self.assertRaises(error, msg=f"{kwargs=}"):
-                self.fgt._init_scheme(**kwargs)
 
     def test_valid__init_port(self):
         """Fortigate._init_port()"""
@@ -105,6 +88,46 @@ class Test(unittest.TestCase):
         ]:
             with self.assertRaises(error, msg=f"{kwargs=}"):
                 self.fgt._init_port(**kwargs)
+
+    def test_valid__init_scheme(self):
+        """Fortigate._init_scheme()"""
+        https = "https"
+        for kwargs, req in [
+            ({}, https),
+            (dict(scheme=""), https),
+            (dict(scheme="https"), https),
+            (dict(scheme="http"), "http"),
+        ]:
+            result = self.fgt._init_scheme(**kwargs)
+            self.assertEqual(result, req, msg=f"{kwargs=}")
+
+    def test_invalid__init_scheme(self):
+        """Fortigate._init_scheme()"""
+        for kwargs, error in [
+            (dict(scheme="ssh"), ValueError),
+        ]:
+            with self.assertRaises(error, msg=f"{kwargs=}"):
+                self.fgt._init_scheme(**kwargs)
+
+    def test_valid__init_token(self):
+        """Fortigate._init_token()"""
+        fgt = Fortigate(host="", username="", password="")
+        for kwargs, req in [
+            ({}, ""),
+            (dict(token="a"), "a"),
+        ]:
+            result = fgt._init_token(**kwargs)
+            self.assertEqual(result, req, msg=f"{kwargs=}")
+
+    def test_invalid__init_token(self):
+        """Fortigate._init_token()"""
+        for kwargs, error in [
+            (dict(host="", username="username"), ValueError),
+            (dict(host="", password="password"), ValueError),
+        ]:
+            fgt = Fortigate(**kwargs)
+            with self.assertRaises(error, msg=f"{kwargs=}"):
+                fgt._init_token(token="token")
 
     # =========================== property ===========================
 
