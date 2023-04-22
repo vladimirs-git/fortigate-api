@@ -4,7 +4,7 @@ from operator import attrgetter
 
 from requests import Response
 
-from fortigate_api import dict_, str_
+from fortigate_api import helpers as h
 from fortigate_api.types_ import DAny, LDAny, LStr, LResponse, StrInt
 
 IMPLEMENTED_OBJECTS = (
@@ -20,7 +20,9 @@ IMPLEMENTED_OBJECTS = (
     "api/v2/cmdb/firewall/ippool/",
     "api/v2/cmdb/firewall/policy/",
     "api/v2/cmdb/firewall/vip/",
+    "api/v2/cmdb/system.dhcp/server/",
     "api/v2/cmdb/system.snmp/community/",
+    "api/v2/cmdb/system/external-resource/",
     "api/v2/cmdb/system/interface/",
     "api/v2/cmdb/system/zone/",
 )
@@ -31,9 +33,15 @@ class Base:
 
     def __init__(self, fgt, url_obj: str, uid_key: str = "name"):
         """Object Base
-        :param fgt: Fortigate connector
-        :param url_obj: Part of REST API URL that pointing to object
-        :param uid_key: Key of unique identifier
+        ::
+            :param fgt: Fortigate connector
+            :type fgt: Fortigate
+
+            :param url_obj: Part of REST API URL that pointing to object
+            :type url_obj: str
+
+            :param uid_key: Key of unique identifier: "name" (default), "id", "policyid"
+            :type uid_key: str
         """
         self.fgt = fgt
         self.url_ = f"{self.fgt.url}/{url_obj}"
@@ -41,13 +49,17 @@ class Base:
 
     def create(self, data: DAny) -> Response:
         """Creates fortigate-object in the Fortigate
-        :param data: Data of the fortigate-object
-        :return: Session response
-            *<Response [200]>* Object successfully created or already exists
-            *<Response [500]>* Object already exist in the Fortigate
+        ::
+            :param data: Data of the fortigate-object
+            :type data: dict
+
+            :return: Session response
+                *<Response [200]>* Object successfully created or already exists
+                *<Response [500]>* Object already exist in the Fortigate
+            :rtype: Response
         """
-        dict_.check_mandatory(keys=["name"], **data)
-        uid = dict_.get_quoted(key="name", **data)
+        h.check_mandatory(keys=["name"], **data)
+        uid = h.get_quoted(key="name", **data)
         url = f"{self.url_}{uid}"
         exist = self.fgt.exist(url=url)
         if exist.ok:
@@ -57,32 +69,41 @@ class Base:
     # noinspection PyIncorrectDocstring
     def delete(self, uid: StrInt = "", **kwargs) -> Response:
         """Deletes the fortigate-object from the Fortigate
-        :param str uid: Identifier of the fortigate-object. Used to delete a single object
-        :param list filter: Filters fortigate-objects by one or multiple conditions: equals "==",
-            not equals "!=", contains "=@". Used to delete multiple objects
-        :return: Session response
-            *<Response [200]>* Object successfully deleted
-            *<Response [404]>* Object absent in the Fortigate
+        ::
+            :param uid: Identifier of the fortigate-object. Used to delete a single object
+            :type uid: str or int
+
+            :param filter: Filters fortigate-objects by one or multiple conditions: equals "==",
+                not equals "!=", contains "=@". Used to delete multiple objects
+            :type filter: str or List[str]
+
+            :return: Session response
+                *<Response [200]>* Object successfully deleted
+                *<Response [404]>* Object absent in the Fortigate
+            :rtype: Response
         """
         if uid:
             kwargs["uid"] = uid
-        dict_.check_only_one(["uid", "filter"], **kwargs)
-        if uid := dict_.pop_str("uid", kwargs):
-            uid = str_.quote(uid)
+        h.check_only_one(["uid", "filter"], **kwargs)
+        if uid := h.pop_str("uid", kwargs):
+            uid = h.quote(uid)
             url = f"{self.url_}{uid}"
             return self.fgt.delete(url=url)
         if "filter" in kwargs:
             return self._delete_by_filter(kwargs)
         raise ValueError(f"invalid {uid=} {kwargs=}")
 
-    def _delete_by_filter(self, kwargs):
+    def _delete_by_filter(self, kwargs) -> Response:
         """Deletes the fortigate-objects from the Fortigate by `filter`
-        :param kwargs: Filters fortigate-objects by one or multiple conditions: equals "==",
-            not equals "!=", contains "=@". Used to delete multiple objects
-        :return: Session response with the highest status_code
+        ::
+            :param kwargs: Filters fortigate-objects by one or multiple conditions: equals "==",
+                not equals "!=", contains "=@". Used to delete multiple objects
+
+            :return: Response object with the highest status_code
+            :rtype: Response
         """
         responses: LResponse = []
-        filters: LStr = dict_.pop_lstr(key="filter", data=kwargs)
+        filters: LStr = h.pop_lstr(key="filter", data=kwargs)
         datas = self.get(filter=filters)
         for data in datas:
             uid = data[self.uid_key]
@@ -94,25 +115,35 @@ class Base:
     # noinspection PyIncorrectDocstring
     def get(self, **kwargs) -> LDAny:
         """Gets fortigate-objects, all or filtered by some of params
-        :param str uid: Filters fortigate-object by unique identifier. Used to get a single object
-        :param list filter: Filters fortigate-objects by one or multiple conditions: equals "==",
-            not equals "!=", contains "=@". Used to get multiple objects
-        :return: *List[dict_]* List of the fortigate-objects
+        ::
+            :param uid: Filters fortigate-object by unique identifier. Used to get a single object
+            :type uid: str or int
+
+            :param filter: Filters fortigate-objects by one or multiple conditions: equals "==",
+                not equals "!=", contains "=@". Used to get multiple objects
+            :type filter: str or List[str]
+
+            :return: List of the fortigate-objects
+            :rtype: List[dict]
         """
         if kwargs:
-            dict_.check_one_of(keys=["uid", "filter"], **kwargs)
-        uid: str = dict_.pop_quoted(key="uid", data=kwargs)
+            h.check_one_of(keys=["uid", "filter"], **kwargs)
+        uid: str = h.pop_quoted(key="uid", data=kwargs)
         url = f"{self.url_}{uid}"
-        url = str_.make_url(url, **kwargs)
+        url = h.make_url(url, **kwargs)
         datas: LDAny = self.fgt.get(url)
         return datas
 
     def is_exist(self, uid: StrInt) -> bool:
         """Checks does a fortigate-object exists in the Fortigate
-        :param uid: Identifier of the fortigate-object
-        :return: True - object exist, False - object does not exist
+        ::
+            :param uid: Identifier of the fortigate-object
+            :type uid: str or int
+
+            :return: True - object exist, False - object does not exist
+            :rtype: bool
         """
-        if uid := str_.quote(uid):
+        if uid := h.quote(uid):
             url = f"{self.url_}{uid}"
             response = self.fgt.exist(url=url)
             return response.ok
@@ -120,12 +151,18 @@ class Base:
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
         """Updates address, address-group, etc. object, where `uid` is data["name"]
-        :param data: Data of the fortigate-object
-        :param uid: Name of the fortigate-object,
-            taken from the `uid` parameter or from data["name"]
-        :return: Session response
-            *<Response [200]>* Object successfully updated
-            *<Response [404]>* Object has not been updated
+        ::
+            :param data: Data of the fortigate-object
+            :type data: dict
+
+            :param uid: Name of the fortigate-object,
+                taken from the `uid` parameter or from data["name"]
+            :type uid: str or int
+
+            :return: Session response
+                *<Response [200]>* Object successfully updated
+                *<Response [404]>* Object has not been updated
+            :rtype: Response
         """
         if not uid:
             uid = data.get("name") or ""
@@ -138,8 +175,12 @@ class Base:
     @staticmethod
     def _highest_response(responses: LResponse) -> Response:
         """Return *Response* with the highest status_code, else returns *<Response [200]>*
-        :param responses: List of Responses
-        :return: Response with the highest status_code
+        ::
+            :param responses: List of Response objects
+            :type responses: List[Response]
+
+            :return: Response with the highest status_code
+            :rtype: Response
         """
         if responses:
             responses = sorted(responses, key=attrgetter("status_code"))
@@ -150,22 +191,28 @@ class Base:
 
     @staticmethod
     def _quote_url(url: str) -> str:
-        """quote end of str_"""
+        """Quote end of url"""
         for known in IMPLEMENTED_OBJECTS:
             if url.startswith(known):
                 end = url.replace(known, "", 1)
-                return known + str_.quote(end)
+                return known + h.quote(end)
         return url
 
     def _update(self, data: DAny, uid: StrInt) -> Response:
         """Updates fortigate-object in the Fortigate
-        :param data: Data of the fortigate-object
-        :param uid: Identifier of the fortigate-object
-        :return: Session response
-            *<Response [200]>* Object successfully updated
-            *<Response [404]>* Object has not been updated
+        ::
+            :param data: Data of the fortigate-object
+            :type data: dict
+
+            :param uid: Identifier of the fortigate-object
+            :type uid: str or int
+
+            :return: Session response
+                *<Response [200]>* Object successfully updated
+                *<Response [404]>* Object has not been updated
+            :rtype: Response
         """
-        if uid := str_.quote(uid):
+        if uid := h.quote(uid):
             url = f"{self.url_}{uid}"
             exist = self.fgt.exist(url=url)
             if not exist.ok:

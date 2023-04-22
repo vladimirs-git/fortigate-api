@@ -1,13 +1,12 @@
 """Fortigate examples:
 
-- User-Based Authentication
+- Token-Based Authentication
 - Creates address in the Fortigate
 - Gets address data from the Fortigate
 - Updates address data in the Fortigate
 - Checks for presence of address in the Fortigate
 - Deletes address from the Fortigate
 - Checks for absence of address in the Fortigate
-- Fortigate *with* statement
 """
 
 from pprint import pprint
@@ -15,11 +14,8 @@ from pprint import pprint
 from fortigate_api import Fortigate
 
 HOST = "host"
-USERNAME = "username"
-PASSWORD = "password"
-
-fgt = Fortigate(host=HOST, username=USERNAME, password=PASSWORD)
-fgt.login()
+TOKEN = "token"
+fgt = Fortigate(host=HOST, token=TOKEN)
 
 # Creates address in the Fortigate
 print("\nCreates address in the Fortigate")
@@ -65,11 +61,3 @@ print("delete", response)  # <Response [200]>
 print("\nChecks for absence of address in the Fortigate")
 response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
 print("exist", response)  # <Response [404]>
-
-fgt.logout()
-
-# Fortigate *with* statement
-print("\nFortigate *with* statement")
-with Fortigate(host=HOST, username=USERNAME, password=PASSWORD) as fgt:
-    response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
-    print("exist", response)  # <Response [404]>

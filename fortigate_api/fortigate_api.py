@@ -7,6 +7,7 @@ from fortigate_api.address_group import AddressGroup
 from fortigate_api.antivirus import Antivirus
 from fortigate_api.application import Application
 from fortigate_api.dhcp_server import DhcpServer
+from fortigate_api.external_resource import ExternalResource
 from fortigate_api.fortigate import Fortigate, VDOM
 from fortigate_api.interface import Interface
 from fortigate_api.internet_service import InternetService
@@ -27,35 +28,39 @@ class FortigateAPI:
 
     def __init__(self, **kwargs):
         """**FortigateAPI** - a set of methods for working with the most commonly used objects
-        :param host: Firewall ip address or hostname
-        :type host: str
+        ::
+            :param host: Firewall ip address or hostname
+            :type host: str
 
-        :param username: Administrator name
-        :type username: str
+            :param username: Administrator name. Mutually exclusive with token
+            :type username: str
 
-        :param password: Administrator password
-        :type password: str
+            :param password: Administrator password. Mutually exclusive with token
+            :type password: str
 
-        :param scheme: (optional) "https" (default) or "http"
-        :type scheme: str
+            :param token: Administrator token. Mutually exclusive with username and password
+            :type token: str
 
-        :param port: (optional) TCP port, by default 443 for "https", 80 for "http"
-        :type port: str
+            :param scheme: (optional) "https" (default) or "http"
+            :type scheme: str
 
-        :param timeout: (optional) Session timeout minutes (default 15)
-        :type timeout: int
+            :param port: (optional) TCP port, by default 443 for "https", 80 for "http"
+            :type port: str
 
-        :param verify: (optional) Enable SSL certificate verification for HTTPS requests.
-            True -  enable
-            False - disable (default)
-        :type verify: bool
+            :param timeout: (optional) Session timeout minutes (default 15)
+            :type timeout: int
 
-        :param vdom: Name of virtual domain (default "root").
-            Used in REST API (Not used in SSH)
-        :type vdom: str
+            :param verify: (optional) Enable SSL certificate verification for HTTPS requests.
+                True -  enable
+                False - disable (default)
+            :type verify: bool
 
-        :param ssh: Netmiko ConnectHandler parameters
-        :type ssh: Dict[str, Any]
+            :param vdom: Name of virtual domain (default "root").
+                Used in REST API (Not used in SSH)
+            :type vdom: str
+
+            :param ssh: Netmiko ConnectHandler parameters
+            :type ssh: dict
         """
         self.fgt = Fortigate(**kwargs)
         self.ssh = SSH(**kwargs)
@@ -65,6 +70,7 @@ class FortigateAPI:
         self.antivirus = Antivirus(self.fgt)
         self.application = Application(self.fgt)
         self.dhcp_server = DhcpServer(self.fgt)
+        self.external_resource = ExternalResource(self.fgt)
         self.interface = Interface(self.fgt)
         self.internet_service = InternetService(self.fgt)
         self.ip_pool = IpPool(self.fgt)

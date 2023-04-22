@@ -1,22 +1,22 @@
-"""unittest application.py"""
+"""unittest external_resource.py"""
 
 import unittest
 
-from fortigate_api.application import Application
+from fortigate_api.external_resource import ExternalResource
 from tests.helper__tst import NAME1, NAME2, NAME3, MockFortigate
 
 
 # noinspection DuplicatedCode
 class Test(MockFortigate):
-    """Application"""
+    """ExternalResource"""
 
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = Application(fgt=self.fgt)
+        self.obj = ExternalResource(fgt=self.fgt)
 
     def test_valid__create(self):
-        """Application.create()"""
+        """Address.create()"""
         for name, req in [
             (NAME1, 200),  # present in the Fortigate, no need create
             (NAME2, 500),  # error
@@ -26,7 +26,7 @@ class Test(MockFortigate):
             self.assertEqual(result, req, msg=f"{name=}")
 
     def test_valid__delete(self):
-        """Application.delete()"""
+        """Address.delete()"""
         for kwargs, req in [
             (dict(uid=NAME1), 200),
             (dict(uid=NAME2), 500),
@@ -36,8 +36,17 @@ class Test(MockFortigate):
             result = self.obj.delete(**kwargs).status_code
             self.assertEqual(result, req, msg=f"{kwargs=}")
 
+    def test_invalid__delete(self):
+        """Address.delete()"""
+        for kwargs, error in [
+            (dict(uid=""), ValueError),
+            (dict(uid=NAME1, filter=f"name=={NAME1}"), KeyError),
+        ]:
+            with self.assertRaises(error, msg=f"{kwargs=}"):
+                self.obj.delete(**kwargs)
+
     def test_valid__get(self):
-        """Application.get()"""
+        """Address.get()"""
         for kwargs, req in [
             (dict(uid=NAME1), [NAME1]),
             (dict(uid=NAME2), []),
@@ -47,7 +56,7 @@ class Test(MockFortigate):
             self.assertEqual(result, req, msg=f"{kwargs=}")
 
     def test_valid__update(self):
-        """Application.update()"""
+        """Address.update()"""
         for kwargs, req in [
             (dict(uid=NAME1, data=dict(name=NAME1)), 200),
             (dict(uid=NAME2, data=dict(name=NAME2)), 500),

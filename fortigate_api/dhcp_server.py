@@ -16,20 +16,30 @@ class DhcpServer(Base):
         """Creates dhcp-server-object in the Fortigate.
         Note, in Fortigate is possible to create multiple DHCP servers with the same settings,
         you need control duplicates
-        :param data: Data of the fortigate-object
-        :return: Session response
-            *<Response [200]>* Object successfully created or already exists
+        ::
+            :param data: Data of the fortigate-object
+            :type data: dict
+
+            :return: Session response
+                *<Response [200]>* Object successfully created or already exists
+            :rtype: Response
         """
         return self.fgt.post(url=self.url_, data=data)
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
         """Updates dhcp-server-object, where `uid` is data["id"]
-        :param data: Data of the dhcp-server-object
-        :param uid: ID of the dhcp-server-object,
-            taken from the `uid` parameter or from data["id"]
-        :return: Session response
-            *<Response [200]>* Object successfully updated
-            *<Response [404]>* Object has not been updated
+        ::
+            :param data: Data of the dhcp-server-object
+            :type data: dict
+
+            :param uid: ID of the dhcp-server-object,
+                taken from the `uid` parameter or from data["id"]
+            :type uid: str or int
+
+            :return: Session response
+                *<Response [200]>* Object successfully updated
+                *<Response [404]>* Object has not been updated
+            :rtype: Response
         """
         if not uid:
             uid = data.get("id") or ""

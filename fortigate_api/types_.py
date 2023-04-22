@@ -1,15 +1,20 @@
 """Typing"""
 
+from datetime import date
 from ipaddress import IPv4Network
-from typing import Any, Dict, Iterable, List, Set, Tuple, Union
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Literal, Set, Tuple, Union
 
 from requests import Response
 
 DAny = Dict[str, Any]
 DStr = Dict[str, str]
 IStr = Iterable[str]
+LPath = List[Path]
 LResponse = List[Response]
 LStr = List[str]
+Method = Literal["delete", "get", "post", "put"]
+SDate = Set[date]
 SStr = Set[str]
 StrInt = Union[str, int]
 T2Str = Tuple[str, str]

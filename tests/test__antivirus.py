@@ -40,7 +40,7 @@ class Test(MockFortigate):
         """Antivirus.get()"""
         for kwargs, req in [
             (dict(uid=NAME1), [NAME1]),
-            (dict(uid="NAME9"), []),
+            (dict(uid=NAME2), []),
         ]:
             result_ = self.obj.get(**kwargs)
             result = [d["name"] for d in result_]
@@ -50,9 +50,9 @@ class Test(MockFortigate):
         """Antivirus.update()"""
         for kwargs, req in [
             (dict(uid=NAME1, data=dict(name=NAME1)), 200),
-            (dict(uid="NAME9", data=dict(name="NAME9")), 500),
+            (dict(uid=NAME2, data=dict(name=NAME2)), 500),
             (dict(data=dict(name=NAME1)), 200),
-            (dict(data=dict(name="NAME9")), 500),
+            (dict(data=dict(name=NAME2)), 500),
         ]:
             result = self.obj.update(**kwargs).status_code
             self.assertEqual(result, req, msg=f"{kwargs=}")
@@ -61,7 +61,7 @@ class Test(MockFortigate):
         """Address.is_exist()"""
         for uid, req in [
             (NAME1, True),
-            ("NAME9", False),
+            (NAME2, False),
         ]:
             result = self.obj.is_exist(uid=uid)
             self.assertEqual(result, req, msg=f"{uid=}")

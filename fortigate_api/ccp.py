@@ -7,7 +7,7 @@ from typing import List
 
 from ciscoconfparse import CiscoConfParse, JunosCfgLine  # type: ignore
 
-from fortigate_api import str_
+from fortigate_api import helpers as h
 from fortigate_api.types_ import LStr, T2Str, T3Str, UStr
 
 LJunosCfgLine = List[JunosCfgLine]
@@ -49,25 +49,26 @@ class FgtConfParse(CiscoConfParse):
 
 def convert_fgt_to_junos(config: str) -> str:
     """Convert Fortigate commands to Junos syntax, to parse by ciscoconfparse
-    :param config: Fortigate syntax config
-    :return config: CiscoConfParse junos syntax config
-    :example:
-        config = "
-            config system interface
-              edit "mgmt"
-                set ip 10.0.0.1 255.255.255.0
-              next
-            end
-           "
-        convert_fgt_to_junos(config) -> "
-            config system interface {
-              edit "mgmt" {
-                set ip 10.0.0.1 255.255.255.0
-              }
-              next
-            }
-            end
-           "
+    ::
+        :param config: Fortigate syntax config
+        :return config: CiscoConfParse junos syntax config
+        :example:
+            config = "
+                config system interface
+                  edit "mgmt"
+                    set ip 10.0.0.1 255.255.255.0
+                  next
+                end
+               "
+            convert_fgt_to_junos(config) -> "
+                config system interface {
+                  edit "mgmt" {
+                    set ip 10.0.0.1 255.255.255.0
+                  }
+                  next
+                }
+                end
+               "
     """
     spaces = r"^(\s+)?"
     re_config = f"({spaces}config .+)"
@@ -125,7 +126,7 @@ def findall1(regex: str, obj: JunosCfgLine, flags=0) -> str:
     """
     value = ""
     for item in obj.ioscfg:
-        if value := str_.findall1(pattern=regex, string=item, flags=flags):
+        if value := h.findall1(pattern=regex, string=item, flags=flags):
             break
     return value
 
@@ -140,7 +141,7 @@ def findall2(regex: str, obj: JunosCfgLine, flags=0) -> T2Str:
     """
     value1, value2 = "", ""
     for item in obj.ioscfg:
-        value1, value2 = str_.findall2(pattern=regex, string=item, flags=flags)
+        value1, value2 = h.findall2(pattern=regex, string=item, flags=flags)
         if value1:
             break
     return value1, value2
@@ -155,7 +156,7 @@ def findall3(regex: str, obj: JunosCfgLine) -> T3Str:
     """
     value1, value2, value3 = "", "", ""
     for item in obj.ioscfg:
-        value1, value2, value3 = str_.findall3(pattern=regex, string=item)
+        value1, value2, value3 = h.findall3(pattern=regex, string=item)
         if value1:
             break
     return value1, value2, value3

@@ -1,17 +1,14 @@
 """unittests package"""
 
-import os
 import re
 import unittest
-from datetime import datetime, date
 from pathlib import Path
-from typing import Dict, Set
 
+import dictdiffer  # type: ignore
 import tomli
 
-from fortigate_api.str_ import findall1
-
-DDate = Dict[str, date]
+from fortigate_api import helpers as h
+from fortigate_api.base import IMPLEMENTED_OBJECTS
 
 
 def _make_pyproject_d(root: Path) -> dict:
@@ -20,20 +17,6 @@ def _make_pyproject_d(root: Path) -> dict:
     fh = path.open(mode="rb")
     pyproject_d = tomli.load(fh)
     return pyproject_d
-
-
-def _last_modified_date(root: Path) -> str:
-    """Paths to .py files with last modified dates"""
-    dates: Set[date] = set()
-    for root_i, _, files_i in os.walk(str(root)):
-        for file_ in files_i:
-            if file_.endswith(".py"):
-                path = os.path.join(root_i, file_)
-                stat = os.stat(path)
-                date_ = datetime.fromtimestamp(stat.st_mtime).date()
-                dates.add(date_)
-    date_ = sorted(dates)[-1]
-    return str(date_)
 
 
 ROOT = Path(__file__).parent.parent.resolve()
@@ -61,13 +44,13 @@ class Test(unittest.TestCase):
     def test_valid__version__readme(self):
         """version in README, URL"""
         package = PYPROJECT["project"]["name"].replace("_", "-")
-        readme = PYPROJECT["project"]["readme"]
+        readme_file = PYPROJECT["project"]["readme"]
         dwl_url = PYPROJECT["project"]["urls"]["Download URL"]
-        readme_text = Path.joinpath(ROOT, readme).read_text()
+        readme_text = Path.joinpath(ROOT, readme_file).read_text()
         version_req = PYPROJECT["project"]["version"]
 
         for key, text in [
-            (readme, readme_text),
+            (readme_file, readme_text),
             ("pyproject.toml project.urls.DownloadURL", dwl_url)
         ]:
             is_regex_found = False
@@ -87,7 +70,7 @@ class Test(unittest.TestCase):
         path = Path.joinpath(ROOT, "CHANGELOG.rst")
         text = path.read_text()
         regex = r"(.+)\s\(\d\d\d\d-\d\d-\d\d\)$"
-        version_changelog = findall1(regex, text, re.M)
+        version_changelog = h.findall1(regex, text, re.M)
         self.assertEqual(version_changelog, version, msg=f"version in {path=}")
 
     def test_valid__date(self):
@@ -95,9 +78,30 @@ class Test(unittest.TestCase):
         path = Path.joinpath(ROOT, "CHANGELOG.rst")
         text = path.read_text()
         regex = r".+\((\d\d\d\d-\d\d-\d\d)\)$"
-        date_changelog = findall1(regex, text, re.M)
-        last_modified = _last_modified_date(ROOT)
+        date_changelog = h.findall1(regex, text, re.M)
+        last_modified = h.last_modified_date(root=str(ROOT))
         self.assertEqual(date_changelog, last_modified, msg="last modified file")
+
+    def test_valid__implemented_objects(self):
+        """IMPLEMENTED_OBJECTS"""
+        expected = set()
+        paths = h.files_py(root=str(ROOT))
+        for path in paths:
+            text = Path(path).read_text()
+            if url_ := h.findall1(r"super\(\).__init__\(.+url_obj=\"(.+?)\"", text):
+                expected.add(url_)
+
+        # in code
+        actual = set(IMPLEMENTED_OBJECTS)
+        diff = list(dictdiffer.diff(expected, actual))
+        self.assertEqual([], diff, msg="base.py IMPLEMENTED_OBJECTS")
+
+        # in readme
+        readme_text = Path.joinpath(ROOT, PYPROJECT["project"]["readme"]).read_text()
+        actual = {s for s in IMPLEMENTED_OBJECTS if h.findall1(s, readme_text)}
+        expected = set(IMPLEMENTED_OBJECTS)
+        diff = list(dictdiffer.diff(expected, actual))
+        self.assertEqual([], diff, msg="Readme IMPLEMENTED_OBJECTS")
 
 
 if __name__ == "__main__":

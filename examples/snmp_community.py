@@ -11,7 +11,7 @@ PASSWORD = "password"
 fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
 fgt.login()
 
-print("\n\n========================= snmp_community =========================")
+print("\nCreates snmp_community")
 data = {
     "name": "SNMP_COMMUNITY",
     "hosts": [{"id": 1, "ip": "10.0.0.0 255.0.0.0"}],

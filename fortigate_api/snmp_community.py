@@ -14,12 +14,18 @@ class SnmpCommunity(Base):
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
         """Updates snmp-community-object, where `uid` is data["id"]
-        :param data: Data of the snmp-community-object
-        :param uid: ID of the snmp-community-object,
-            taken from the `uid` parameter or from data["id"]
-        :return: Session response
-            *<Response [200]>* Object successfully updated
-            *<Response [404]>* Object has not been updated
+        ::
+            :param data: Data of the snmp-community-object
+            :type data: dict
+
+            :param uid: ID of the snmp-community-object,
+                taken from the `uid` parameter or from data["id"]
+            :type uid: str or int
+
+            :return: Session response
+                *<Response [200]>* Object successfully updated
+                *<Response [404]>* Object has not been updated
+            :rtype: Response
         """
         if not uid:
             uid = data.get("id") or ""

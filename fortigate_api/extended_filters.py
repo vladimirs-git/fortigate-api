@@ -5,7 +5,7 @@ from functools import wraps
 from ipaddress import ip_network, IPv4Network
 from typing import Tuple
 
-from fortigate_api import dict_, str_
+from fortigate_api import helpers as h
 from fortigate_api.address import Address
 from fortigate_api.address_group import AddressGroup
 from fortigate_api.types_ import LDAny, LStr, DLStr, DLInet
@@ -26,13 +26,20 @@ def wrapp_efilters(func):
     @wraps(func)
     def wrapper(fgt_api, **kwargs):
         """Wrapper. Extended Filters
-        :param FortigateAPI fgt_api: Wrapped object
-        :param str efilter: Extended filter: "srcaddr", "dstaddr" by condition: equals "==",
-            not equals "!=",  supernets ">=", subnets "<="
-        :param kwargs: Parameters for wrapped object
-        :return: *List[dict_]* List of the fortigate-objects
+        ::
+            :param fgt_api: Wrapped object
+            :type fgt_api: FortigateAPI
+
+            :param efilter: Extended filter: "srcaddr", "dstaddr" by condition: equals "==",
+                not equals "!=",  supernets ">=", subnets "<="
+            :type efilter: str or List[str]
+
+            :param kwargs: Parameters for wrapped object
+
+            :return: List of the fortigate-objects
+            :rtype: List[dict]
         """
-        if efilters := dict_.pop_lstr(key="efilter", data=kwargs):
+        if efilters := h.pop_lstr(key="efilter", data=kwargs):
             _valid_efilters(efilters)
 
         datas = func(fgt_api, **kwargs)
@@ -46,10 +53,17 @@ def wrapp_efilters(func):
 
 def efilter_by_sdst(policies: LDAny, efilter: str, fgt) -> None:
     """Filter policies by efilter "srcaddr", "dstaddr"
-    :param policies: Policies
-    :param efilter: Extended filter
-    :param Fortigate fgt: Fortigate connector
-    :return: Side effect `policies`. Pass policies matched by efilter
+    ::
+        :param policies: Policies (side effect)
+        :type policies: List[dict]
+
+        :param efilter: Extended filter
+        :type efilter: str
+
+        :param fgt: Fortigate connector
+        :type fgt: Fortigate
+
+        :return: None. Updates policies (side effect). Pass policies matched by efilter
     """
     if not _split_efilter(efilter)[0]:
         return
@@ -67,9 +81,13 @@ def efilter_by_sdst(policies: LDAny, efilter: str, fgt) -> None:
 
 def _split_efilter(efilter: str) -> Tuple[str, str, IPv4Network]:
     """Parse `key`, `operator`, `value` from `efilter` for "srcaddr", "dstaddr"
-    :param efilter: Extended filter
+    ::
+        :param efilter: Extended filter
+        :type efilter: str
+
+        :return: efilter key, efilter operator, efilter value IPv4Network
     """
-    key, operator, value = str_.findall3(pattern=r"(\w+)(..)(.+)", string=efilter)
+    key, operator, value = h.findall3(pattern=r"(\w+)(..)(.+)", string=efilter)
     if key not in ["srcaddr", "dstaddr"]:
         return "", "", IPv4Network("0.0.0.0")
     ipnet = ip_network(value)
@@ -81,9 +99,10 @@ def _split_efilter(efilter: str) -> Tuple[str, str, IPv4Network]:
 def _get_names_subnets(addresses: LDAny, addr_groups: LDAny) -> DLStr:
     """Get all IPv4Networks from the Fortigate address-objects and address-group-objects.
     Skip IPv6Networks
-    :param addresses: Fortigate address-objects
-    :param addr_groups: Fortigate address-group-objects
-    :return: Data indexed by address and address-group names (policy members)
+    ::
+        :param addresses: Fortigate address-objects
+        :param addr_groups: Fortigate address-group-objects
+        :return: Data indexed by address and address-group names (policy members)
     """
     members_d: DLStr = {d["name"]: [d["subnet"]] for d in addresses if d["type"] == "ipmask"}
     for addgr_d in addr_groups:
@@ -100,11 +119,12 @@ def _get_names_subnets(addresses: LDAny, addr_groups: LDAny) -> DLStr:
 
 def _convert_subnets_to_ipnets(members_d: DLStr) -> DLInet:
     """Converts subnets to IPv4Networks
-    :param members_d: Members names and subnets (in policies)
-    :return: Members names and IPv4Networks
-    :example:
-        members: {"ADDRESS": ["1.1.1.1 255.255.255.255"], "ADDR_GR": ["2.2.2.0 255.255.255.0"]}
-        return: {"ADDRESS": [IPv4Network("1.1.1.1/32")], "ADDR_GR": [IPv4Network("2.2.2.0/24")]}
+    ::
+        :param members_d: Members names and subnets (in policies)
+        :return: Members names and IPv4Networks
+        :example:
+            members: {"ADDRESS": ["1.1.1.1 255.255.255.255"], "ADDR_GR": ["2.2.2.0 255.255.255.0"]}
+            return: {"ADDRESS": [IPv4Network("1.1.1.1/32")], "ADDR_GR": [IPv4Network("2.2.2.0/24")]}
     """
     ipnets_d: DLInet = {}
     for name, subnets in members_d.items():
@@ -126,14 +146,16 @@ def _convert_subnets_to_ipnets(members_d: DLStr) -> DLInet:
 
 def _valid_efilters(efilters: LStr) -> None:
     """Validate efilters key, operator, value
-    :param efilters: Extended filters keys
-    :raises ValueError: If efilter has invalid format
+    ::
+        :param efilters: Extended filters keys
+        :return: None. efilters has valid format
+        :raises ValueError: If efilter has invalid format
     """
     re_operators = "|".join(EFILTER_OPERATORS)
     regex = r"(\w+?)({})(.+)".format(re_operators)
     keys: LStr = []
     for efilter in efilters:
-        key, operator, value = str_.findall3(pattern=regex, string=efilter)
+        key, operator, value = h.findall3(pattern=regex, string=efilter)
         keys.append(key)
         expected = EFILTER_KEYS
         if key not in expected:
@@ -149,10 +171,11 @@ def _valid_efilters(efilters: LStr) -> None:
 
 def _filter_policy_by_ipnets(efilter: str, policies: LDAny, names_ipnets_d: DLInet) -> LDAny:
     """Filter `policies` by `efilter` "srcaddr", "dstaddr"
-    :param efilter: Extended filter
-    :param policies: Policies
-    :param names_ipnets_d: Members names and IPv4Networks
-    :return: Filtered policies
+    ::
+        :param efilter: Extended filter
+        :param policies: Policies
+        :param names_ipnets_d: Members names and IPv4Networks
+        :return: Filtered policies
     """
     key, operator, ipnet_filter = _split_efilter(efilter)
 

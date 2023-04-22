@@ -12,19 +12,20 @@ class SSH:
     Contains methods to get and put configuration commands using ssh
     """
 
-    def __init__(self, host: str, username: str, password: str, **kwargs):
+    def __init__(self, host: str, username: str = "", password: str = "", **kwargs):
         """SSH
-        :param host: Firewall ip address or hostname
-        :type host: str
+        ::
+            :param host: Firewall ip address or hostname
+            :type host: str
 
-        :param username: Administrator name
-        :type username: str
+            :param username: Administrator name
+            :type username: str
 
-        :param password: Administrator password
-        :type password: str
+            :param password: Administrator password
+            :type password: str
 
-        :param ssh: Netmiko *ConnectHandler* parameters
-        :type ssh: Dict[str, Any]
+            :param ssh: Netmiko *ConnectHandler* parameters
+            :type ssh: Dict[str, Any]
         """
         ssh_kwargs: DAny = dict(kwargs.get("ssh") or {})
         ssh_kwargs.update(dict(
@@ -64,14 +65,15 @@ class SSH:
 
     def send_command(self, cmd: str, **kwargs) -> str:
         """Sends the command to the Fortigate
-        :param cmd: The command to be executed on the Fortigate
-        :type cmd: str
+        ::
+            :param cmd: The command to be executed on the Fortigate
+            :type cmd: str
 
-        :param kwargs: (optional) Netmiko parameters
-        :type kwargs: Dict[str, Any]
+            :param kwargs: (optional) Netmiko parameters
+            :type kwargs: Dict[str, Any]
 
-        :return: Output of the command
-        :rtype: str
+            :return: Output of the command
+            :rtype: str
         """
         self.login()
         output = self.session.send_command(cmd, **kwargs)
@@ -79,14 +81,15 @@ class SSH:
 
     def send_config_set(self, cmds: UStr, **kwargs) -> str:
         """Sends configuration commands to the Fortigate
-        :param cmds: Configuration commands to be executed on the Fortigate
-        :type cmds: List[str], str
+        ::
+            :param cmds: Configuration commands to be executed on the Fortigate
+            :type cmds: List[str], str
 
-        :param kwargs: (optional) Netmiko parameters
-        :type kwargs: Dict[str, Any]
+            :param kwargs: (optional) Netmiko parameters
+            :type kwargs: Dict[str, Any]
 
-        :return: Output of the commands
-        :rtype: str
+            :return: Output of the commands
+            :rtype: str
         """
         self.login()
         if isinstance(cmds, str):
