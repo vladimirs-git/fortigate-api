@@ -8,10 +8,13 @@
 
 for more details see https://github.com/mpenning/ciscoconfparse
 """
+import logging
 from pprint import pprint
 
 from fortigate_api import FortigateAPI
 from fortigate_api import ccp
+
+logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 USERNAME = "username"

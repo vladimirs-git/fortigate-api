@@ -6,9 +6,12 @@
 - Delete address from the Fortigate
 """
 
+import logging
 from pprint import pprint
 
 from fortigate_api import FortigateAPI
+
+logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 TOKEN = "token"

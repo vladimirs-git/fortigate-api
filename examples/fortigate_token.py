@@ -9,9 +9,12 @@
 - Check for absence of address in the Fortigate
 """
 
+import logging
 from pprint import pprint
 
 from fortigate_api import Fortigate
+
+logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 TOKEN = "token"

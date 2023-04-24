@@ -4,7 +4,11 @@
 - Get system arp from interfaces associated with vdom="root"
 """
 
+import logging
+
 from fortigate_api import FortigateAPI
+
+logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "hostname"
 USERNAME = "username"

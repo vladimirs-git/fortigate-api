@@ -6,7 +6,11 @@
 - Change read-timeout timer for long awaited commands
 """
 
+import logging
+
 from fortigate_api import FortigateAPI
+
+logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 USERNAME = "username"

@@ -1,8 +1,11 @@
 """DhcpServer examples."""
 
+import logging
 from pprint import pprint
 
 from fortigate_api import FortigateAPI
+
+logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 USERNAME = "username"
