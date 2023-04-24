@@ -7,6 +7,7 @@
 - Check for presence of address in the Fortigate
 - Delete address from the Fortigate
 - Check for absence of address in the Fortigate
+- Get Directory
 - Fortigate *with* statement
 """
 
@@ -80,7 +81,16 @@ pprint(output)
 #   'crscore': 30,
 # ...
 
+
+# Get Directory
+output = fgt.directory(url="/api/v2/log")
+pprint(output)
+output = fgt.directory(url="/api/v2/monitor")
+pprint(output)
+
+
 fgt.logout()
+
 
 # Fortigate *with* statement
 print("\nFortigate *with* statement")

@@ -251,6 +251,25 @@ class Fortigate:
             self._logging(response)
         return response
 
+    def directory(self, url: str) -> LDAny:
+        """GET directory (schema) of available REST API data source
+
+        ::
+            :param url: REST API URL to the directory
+            :type url: str
+
+            :return: List of the Fortigate objects
+            :rtype: List[dict]
+        """
+        response: Response = self._response("get", url)
+        if not response.ok:
+            logging.info("code=%s, reason=%s, url=%s", response.status_code, response.reason, url)
+            return []
+        response_json = response.json()
+        results: LDAny = response_json.get("directory") or []
+        return results
+
+
     def exist(self, url: str) -> Response:
         """Check does an object exists in the Fortigate.
 
@@ -280,7 +299,7 @@ class Fortigate:
             logging.info("code=%s, reason=%s, url=%s", response.status_code, response.reason, url)
             return []
         response_json = response.json()
-        results: LDAny = response_json["results"]
+        results: LDAny = response_json.get("results") or []
         return results
 
     def post(self, url: str, data: DAny) -> Response:
