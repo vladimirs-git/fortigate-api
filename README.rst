@@ -18,8 +18,9 @@ You can also get and change the Fortigate configuration through SSH.
 
 Main features:
 
-- REST API to create, delete, get, update objects. Move policy before, after other policy.
-- SSH Netmiko connector to work with CLI commands.
+- REST API to create, delete, get, update objects. Move policy before, after other policy
+- Session-based (user, password) and Token-based authentication
+- SSH Netmiko connector to work with CLI commands
 - Usage examples in `./examples`_
 
 ----------------------------------------------------------------------------------------------------

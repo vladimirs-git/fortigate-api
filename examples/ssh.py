@@ -21,7 +21,6 @@ PASSWORD = "password"
 fgt_api = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
 fgt_api.ssh.login()
 
-
 # Show interface config
 config = fgt_api.ssh.send_command("show system interface dmz")
 print(config)

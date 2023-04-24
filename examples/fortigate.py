@@ -88,9 +88,7 @@ pprint(output)
 output = fgt.directory(url="/api/v2/monitor")
 pprint(output)
 
-
 fgt.logout()
-
 
 # Fortigate *with* statement
 print("\nFortigate *with* statement")

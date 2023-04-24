@@ -252,7 +252,7 @@ class Fortigate:
         return response
 
     def directory(self, url: str) -> LDAny:
-        """GET directory (schema) of available REST API data source
+        """Get directory schema of available REST API data source.
 
         ::
             :param url: REST API URL to the directory
@@ -268,7 +268,6 @@ class Fortigate:
         response_json = response.json()
         results: LDAny = response_json.get("directory") or []
         return results
-
 
     def exist(self, url: str) -> Response:
         """Check does an object exists in the Fortigate.
@@ -404,9 +403,10 @@ class Fortigate:
             :return: Session response
             :rtype: Response
         """
+        params_ = [("vdom", self.vdom), ("start", 0), ("count", 1)]
         params: DAny = dict(
             url=self._valid_url(url),
-            params=urlencode([("vdom", self.vdom)]),
+            params=urlencode(params_),
             timeout=self.timeout,
             verify=self.verify,
         )
