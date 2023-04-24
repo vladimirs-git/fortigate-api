@@ -15,8 +15,8 @@ class Test(unittest.TestCase):
     def setUp(self):
         """setUp"""
         patch.object(Fortigate, "_get_session", return_value=MockSession()).start()
-        self.fgt = Fortigate(host="host", username="username", password="")
-        self.url_policy = f"{self.fgt.url}/api/v2/cmdb/firewall/policy/"
+        self.rest = Fortigate(host="host", username="username", password="")
+        self.url_policy = f"{self.rest.url}/api/v2/cmdb/firewall/policy/"
 
     def test_valid__repr__(self):
         """Fortigate.__repr__()"""
@@ -77,8 +77,8 @@ class Test(unittest.TestCase):
             (dict(port=1), https, 1),
             (dict(port="1"), "http", 1),
         ]:
-            self.fgt.scheme = scheme
-            result = self.fgt._init_port(**kwargs)
+            self.rest.scheme = scheme
+            result = self.rest._init_port(**kwargs)
             self.assertEqual(result, req, msg=f"{kwargs=}")
 
     def test_invalid__init_port(self):
@@ -87,7 +87,7 @@ class Test(unittest.TestCase):
             (dict(port="typo"), ValueError),
         ]:
             with self.assertRaises(error, msg=f"{kwargs=}"):
-                self.fgt._init_port(**kwargs)
+                self.rest._init_port(**kwargs)
 
     def test_valid__init_scheme(self):
         """Fortigate._init_scheme()"""
@@ -98,7 +98,7 @@ class Test(unittest.TestCase):
             (dict(scheme="https"), https),
             (dict(scheme="http"), "http"),
         ]:
-            result = self.fgt._init_scheme(**kwargs)
+            result = self.rest._init_scheme(**kwargs)
             self.assertEqual(result, req, msg=f"{kwargs=}")
 
     def test_invalid__init_scheme(self):
@@ -107,7 +107,7 @@ class Test(unittest.TestCase):
             (dict(scheme="ssh"), ValueError),
         ]:
             with self.assertRaises(error, msg=f"{kwargs=}"):
-                self.fgt._init_scheme(**kwargs)
+                self.rest._init_scheme(**kwargs)
 
     def test_valid__init_token(self):
         """Fortigate._init_token()"""
@@ -137,8 +137,8 @@ class Test(unittest.TestCase):
             (requests.session(), True),
             (None, False),
         ]:
-            self.fgt._session = session
-            result = self.fgt.is_connected
+            self.rest._session = session
+            result = self.rest.is_connected
             self.assertEqual(result, req, msg=f"{session=}")
 
     def test_valid__url(self):
@@ -150,8 +150,8 @@ class Test(unittest.TestCase):
             (https, domain, 443, f"https://{domain}"),
             (https, ip_, 443, f"https://{ip_}"),
         ]:
-            self.fgt.scheme, self.fgt.host, self.fgt.port = scheme, host, port
-            result = self.fgt.url
+            self.rest.scheme, self.rest.host, self.rest.port = scheme, host, port
+            result = self.rest.url
             self.assertEqual(result, req, msg=f"{host=} {port=}")
 
     # =========================== methods ============================
@@ -163,7 +163,7 @@ class Test(unittest.TestCase):
             (2, 500),
         ]:
             url = f"{self.url_policy}{policy_id}"
-            result = self.fgt.delete(url=url).status_code
+            result = self.rest.delete(url=url).status_code
             self.assertEqual(result, req, msg=f"{policy_id=}")
 
     def test_valid__get(self):
@@ -173,7 +173,7 @@ class Test(unittest.TestCase):
             (2, []),
         ]:
             url = f"{self.url_policy}{policy_id}"
-            result_ = self.fgt.get(url=url)
+            result_ = self.rest.get(url=url)
             result = [d["name"] for d in result_]
             self.assertEqual(result, req, msg=f"{policy_id=}")
 
@@ -185,7 +185,7 @@ class Test(unittest.TestCase):
             (NAME3, 200),
         ]:
             url = f"{self.url_policy}"
-            result = self.fgt.post(url=url, data={"name": name}).status_code
+            result = self.rest.post(url=url, data={"name": name}).status_code
             self.assertEqual(result, req, msg=f"{name=}")
 
     def test_valid__put(self):
@@ -195,7 +195,7 @@ class Test(unittest.TestCase):
             (2, 500),
         ]:
             url = f"{self.url_policy}{policy_id}"
-            result = self.fgt.put(url=url, data={"name": NAME1}).status_code
+            result = self.rest.put(url=url, data={"name": NAME1}).status_code
             self.assertEqual(result, req, msg=f"{policy_id=}")
 
     def test_valid__exist(self):
@@ -205,7 +205,7 @@ class Test(unittest.TestCase):
             (2, 500),
         ]:
             policy_id = f"{self.url_policy}{policy_id}"
-            result = self.fgt.exist(url=policy_id).status_code
+            result = self.rest.exist(url=policy_id).status_code
             self.assertEqual(result, req, msg=f"{policy_id=}")
 
     def test_valid__get_session(self):
@@ -214,7 +214,7 @@ class Test(unittest.TestCase):
             None,
             requests.session(),
         ]:
-            result = self.fgt._get_session()
+            result = self.rest._get_session()
             self.assertEqual(result.__class__.__name__, "MockSession", msg=f"{session=}")
 
     def test_valid__hide_secret(self):
@@ -224,8 +224,8 @@ class Test(unittest.TestCase):
             ("_a_", "a"),
             ("_%5B_", "["),
         ]:
-            self.fgt.password = password
-            result = self.fgt._hide_secret(string=string)
+            self.rest.password = password
+            result = self.rest._hide_secret(string=string)
             self.assertEqual(result, req, msg=f"{string=}, {password=}")
 
     def test_valid__valid_url(self):

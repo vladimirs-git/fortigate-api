@@ -31,12 +31,12 @@ IMPLEMENTED_OBJECTS = (
 class Base:
     """Parent of FortigateAPI objects: Address, AddressGroup, Policy, etc."""
 
-    def __init__(self, fgt, url_obj: str, uid_key: str = "name"):
+    def __init__(self, rest, url_obj: str, uid_key: str = "name"):
         """Parent of FortigateAPI objects: Address, AddressGroup, Policy, etc.
 
         ::
-            :param fgt: Fortigate connector
-            :type fgt: Fortigate
+            :param rest: Fortigate REST API connector
+            :type rest: Fortigate
 
             :param url_obj: Part of REST API URL that pointing to object
             :type url_obj: str
@@ -44,8 +44,8 @@ class Base:
             :param uid_key: Key of unique identifier: "name" (default), "id", "policyid"
             :type uid_key: str
         """
-        self.fgt = fgt
-        self.url_ = f"{self.fgt.url}/{url_obj}"
+        self.rest = rest
+        self.url_ = f"{self.rest.url}/{url_obj}"
         self.uid_key = uid_key
 
     def create(self, data: DAny) -> Response:
@@ -63,10 +63,10 @@ class Base:
         h.check_mandatory(keys=["name"], **data)
         uid = h.get_quoted(key="name", **data)
         url = f"{self.url_}{uid}"
-        exist = self.fgt.exist(url=url)
+        exist = self.rest.exist(url=url)
         if exist.ok:
             return exist
-        return self.fgt.post(url=self.url_, data=data)
+        return self.rest.post(url=self.url_, data=data)
 
     # noinspection PyIncorrectDocstring
     def delete(self, uid: StrInt = "", **kwargs) -> Response:
@@ -91,7 +91,7 @@ class Base:
         if uid := h.pop_str("uid", kwargs):
             uid = h.quote(uid)
             url = f"{self.url_}{uid}"
-            return self.fgt.delete(url=url)
+            return self.rest.delete(url=url)
         if "filter" in kwargs:
             return self._delete_by_filter(kwargs)
         raise ValueError(f"invalid {uid=} {kwargs=}")
@@ -112,7 +112,7 @@ class Base:
         for data in datas:
             uid = data[self.uid_key]
             url = f"{self.url_}{uid}"
-            response = self.fgt.delete(url=url)
+            response = self.rest.delete(url=url)
             responses.append(response)
         return self._highest_response(responses)
 
@@ -136,7 +136,7 @@ class Base:
         uid: str = h.pop_quoted(key="uid", data=kwargs)
         url = f"{self.url_}{uid}"
         url = h.make_url(url, **kwargs)
-        datas: LDAny = self.fgt.get(url)
+        datas: LDAny = self.rest.get(url)
         return datas
 
     def is_exist(self, uid: StrInt) -> bool:
@@ -151,7 +151,7 @@ class Base:
         """
         if uid := h.quote(uid):
             url = f"{self.url_}{uid}"
-            response = self.fgt.exist(url=url)
+            response = self.rest.exist(url=url)
             return response.ok
         raise ValueError(f"invalid {uid=}")
 
@@ -223,8 +223,8 @@ class Base:
         """
         if uid := h.quote(uid):
             url = f"{self.url_}{uid}"
-            exist = self.fgt.exist(url=url)
+            exist = self.rest.exist(url=url)
             if not exist.ok:
                 return exist
-            return self.fgt.put(url=url, data=data)
+            return self.rest.put(url=url, data=data)
         raise ValueError(f"invalid {uid=}")

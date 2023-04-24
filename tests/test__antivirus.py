@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = Antivirus(fgt=self.fgt)
+        self.obj = Antivirus(rest=self.rest)
 
     def test_valid__create(self):
         """Antivirus.create()"""

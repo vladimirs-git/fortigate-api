@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = Schedule(fgt=self.fgt)
+        self.obj = Schedule(rest=self.rest)
 
     def test_valid__create(self):
         """Schedule.create()"""

@@ -6,11 +6,11 @@ from fortigate_api.base import Base
 class VirtualIP(Base):
     """Virtual IP Object."""
 
-    def __init__(self, fgt):
+    def __init__(self, rest):
         """Virtual IP Object.
 
         ::
-            :param fgt: Fortigate connector
-            :type fgt: Fortigate
+            :param rest: Fortigate REST API connector
+            :type rest: Fortigate
         """
-        super().__init__(fgt=fgt, url_obj="api/v2/cmdb/firewall/vip/")
+        super().__init__(rest=rest, url_obj="api/v2/cmdb/firewall/vip/")

@@ -12,14 +12,14 @@ from fortigate_api.types_ import LDAny, StrInt
 class Policy(Base):
     """Policy Object."""
 
-    def __init__(self, fgt):
+    def __init__(self, rest):
         """Policy Object.
 
         ::
-            :param fgt: Fortigate connector
-            :type fgt: Fortigate
+            :param rest: Fortigate REST API connector
+            :type rest: Fortigate
         """
-        super().__init__(fgt=fgt, url_obj="api/v2/cmdb/firewall/policy/", uid_key="policyid")
+        super().__init__(rest=rest, url_obj="api/v2/cmdb/firewall/policy/", uid_key="policyid")
 
     # noinspection PyIncorrectDocstring
     @wrapp_efilters
@@ -62,11 +62,11 @@ class Policy(Base):
                 *<Response [500]>* Policy has not been moved
             :rtype: Response
         """
-        kwargs = dict(action="move", username=self.fgt.username, secretkey=self.fgt.password)
+        kwargs = dict(action="move", username=self.rest.username, secretkey=self.rest.password)
         kwargs[position] = neighbor
         url = f"{self.url_}{uid}"
         url = h.make_url(url, **kwargs)
-        return self.fgt.put(url=url, data={})
+        return self.rest.put(url=url, data={})
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
         """Update policy-object in the Fortigate.

@@ -45,13 +45,13 @@ def wrapp_efilters(func):
         datas = func(fgt_api, **kwargs)
 
         for efilter in efilters:
-            efilter_by_sdst(policies=datas, efilter=efilter, fgt=fgt_api.fgt)
+            efilter_by_sdst(policies=datas, efilter=efilter, rest=fgt_api.rest)
         return datas
 
     return wrapper
 
 
-def efilter_by_sdst(policies: LDAny, efilter: str, fgt) -> None:
+def efilter_by_sdst(policies: LDAny, efilter: str, rest) -> None:
     """Filter policies by efilter "srcaddr", "dstaddr".
 
     ::
@@ -61,16 +61,16 @@ def efilter_by_sdst(policies: LDAny, efilter: str, fgt) -> None:
         :param efilter: Extended filter
         :type efilter: str
 
-        :param fgt: Fortigate connector
-        :type fgt: Fortigate
+        :param rest: Fortigate REST API connector
+        :type rest: Fortigate
 
         :return: None. Updates policies (side effect). Pass policies matched by efilter
     """
     if not _split_efilter(efilter)[0]:
         return
     # get addresses and address-groups from the Fortigate
-    addresses: LDAny = Address(fgt).get()
-    addr_groups: LDAny = AddressGroup(fgt).get()
+    addresses: LDAny = Address(rest).get()
+    addr_groups: LDAny = AddressGroup(rest).get()
     names_subnets_d: DLStr = _get_names_subnets(addresses, addr_groups)
     names_ipnets_d: DLInet = _convert_subnets_to_ipnets(names_subnets_d)
 

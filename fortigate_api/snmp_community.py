@@ -9,14 +9,14 @@ from fortigate_api.types_ import DAny, StrInt
 class SnmpCommunity(Base):
     """SNMP Community Object."""
 
-    def __init__(self, fgt):
+    def __init__(self, rest):
         """SNMP Community Object.
 
         ::
-            :param fgt: Fortigate connector
-            :type fgt: Fortigate
+            :param rest: Fortigate REST API connector
+            :type rest: Fortigate
         """
-        super().__init__(fgt=fgt, url_obj="api/v2/cmdb/system.snmp/community/", uid_key="id")
+        super().__init__(rest=rest, url_obj="api/v2/cmdb/system.snmp/community/", uid_key="id")
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
         """Update snmp-community-object, where `uid` is data["id"].

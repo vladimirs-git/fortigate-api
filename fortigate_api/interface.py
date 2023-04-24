@@ -8,14 +8,14 @@ from fortigate_api.types_ import LDAny
 class Interface(Base):
     """Interface Object."""
 
-    def __init__(self, fgt):
+    def __init__(self, rest):
         """Interface Object.
 
         ::
-            :param fgt: Fortigate connector
-            :type fgt: Fortigate
+            :param rest: Fortigate REST API connector
+            :type rest: Fortigate
         """
-        super().__init__(fgt=fgt, url_obj="api/v2/cmdb/system/interface/")
+        super().__init__(rest=rest, url_obj="api/v2/cmdb/system/interface/")
 
     # noinspection PyIncorrectDocstring
     def get(self, **kwargs) -> LDAny:
@@ -39,5 +39,5 @@ class Interface(Base):
             h.pop_quoted(key="all", data=kwargs)
             return super().get(**kwargs)
         interfaces = super().get(**kwargs)
-        interfaces = [d for d in interfaces if d["vdom"] == self.fgt.vdom]
+        interfaces = [d for d in interfaces if d["vdom"] == self.rest.vdom]
         return interfaces

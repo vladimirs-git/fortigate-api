@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = IpPool(fgt=self.fgt)
+        self.obj = IpPool(rest=self.rest)
 
     def test_valid__create(self):
         """IpPool.create()"""

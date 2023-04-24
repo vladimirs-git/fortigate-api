@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = ServiceGroup(fgt=self.fgt)
+        self.obj = ServiceGroup(rest=self.rest)
 
     def test_valid__create(self):
         """ServiceGroup.create()"""

@@ -52,7 +52,7 @@ class MockFortigate(unittest.TestCase):
         """Set Up."""
         patch.object(Fortigate, "login", return_value=MockSession()).start()
         patch.object(Fortigate, "_get_session", return_value=MockSession()).start()
-        self.fgt = Fortigate(host="domain.com", username="", password="")
+        self.rest = Fortigate(host="domain.com", username="", password="")
 
 
 class MockSession:

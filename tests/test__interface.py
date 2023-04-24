@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = Interface(fgt=self.fgt)
+        self.obj = Interface(rest=self.rest)
 
     def test_valid__create(self):
         """Interface.create()"""

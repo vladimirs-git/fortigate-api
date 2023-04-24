@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = Zone(fgt=self.fgt)
+        self.obj = Zone(rest=self.rest)
 
     def test_valid__create(self):
         """Zone.create()"""

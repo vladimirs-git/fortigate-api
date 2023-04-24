@@ -18,11 +18,11 @@ HOST = "host"
 USERNAME = "username"
 PASSWORD = "password"
 
-fgt_api = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
-fgt_api.ssh.login()
+fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
+fgt.ssh.login()
 
 # Show interface config
-config = fgt_api.ssh.send_command("show system interface dmz")
+config = fgt.ssh.send_command("show system interface dmz")
 print(config)
 print()
 # config system interface
@@ -43,7 +43,7 @@ cmds = ["config system interface",
         "edit dmz",
         "set description DMZ",
         "end"]
-output = fgt_api.ssh.send_config_set(cmds)
+output = fgt.ssh.send_config_set(cmds)
 print(output)
 print()
 # config system interface
@@ -54,7 +54,7 @@ print()
 
 
 # Check interface description is changed
-config = fgt_api.ssh.send_command("show system interface dmz")
+config = fgt.ssh.send_command("show system interface dmz")
 print(config)
 print()
 # config system interface
@@ -72,7 +72,7 @@ print()
 
 
 # Get system session list
-output = fgt_api.ssh.send_command("get system session list")
+output = fgt.ssh.send_command("get system session list")
 print(output)
 print()
 # PROTO   EXPIRE SOURCE          SOURCE-NAT    DESTINATION  DESTINATION-NAT
@@ -88,8 +88,8 @@ log_settings = [
     "execute log filter device memory",
     "execute log filter view-lines 100",
 ]
-fgt_api.ssh.send_config_set(log_settings)
-output = fgt_api.ssh.send_command("execute log display")
+fgt.ssh.send_config_set(log_settings)
+output = fgt.ssh.send_command("execute log display")
 print(output)
 print()
 # 606 logs found.
@@ -109,15 +109,15 @@ cmds = ["execute ping-options repeat-count 2",
         "execute ping 8.8.8.8"]
 # noinspection PyBroadException
 try:
-    _ = fgt_api.ssh.send_config_set(cmds)
+    _ = fgt.ssh.send_config_set(cmds)
 except Exception:
     print("no answer for a long time, session timed out")
 print()
 # no answer for a long time, session timed out
 
 ssh_params = dict(read_timeout_override=180)
-fgt_api = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD, ssh=ssh_params)
-output = fgt_api.ssh.send_config_set(cmds)
+fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD, ssh=ssh_params)
+output = fgt.ssh.send_config_set(cmds)
 print(output)
 # execute ping-options repeat-count 2
 #

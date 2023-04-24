@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = Policy(fgt=self.fgt)
+        self.obj = Policy(rest=self.rest)
 
     def test_valid__create(self):
         """Policy.create()"""

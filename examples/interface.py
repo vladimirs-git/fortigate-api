@@ -63,7 +63,7 @@ response = fgt.interface.is_exist(uid="dmz")
 print("interface.is_exist", response)  # interface.is_exist True
 
 print("\nChanges virtual domain to \"VDOM\" and gets all interfaces inside this vdom")
-fgt.fgt.vdom = "VDOM"
+fgt.rest.vdom = "VDOM"
 print(f"{fgt!r}")  # Fortigate(host='host', username='username', password='********', vdom='VDOM')
 print(fgt.vdom)  # VDOM
 interfaces = fgt.interface.get()

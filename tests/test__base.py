@@ -14,7 +14,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = Base(fgt=self.fgt, url_obj="api/v2/cmdb/firewall/address/")
+        self.obj = Base(rest=self.rest, url_obj="api/v2/cmdb/firewall/address/")
 
     # =========================== helpers ============================
 

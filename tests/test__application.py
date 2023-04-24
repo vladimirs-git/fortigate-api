@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = Application(fgt=self.fgt)
+        self.obj = Application(rest=self.rest)
 
     def test_valid__create(self):
         """Application.create()"""

@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = VirtualIP(fgt=self.fgt)
+        self.obj = VirtualIP(rest=self.rest)
 
     def test_valid__create(self):
         """VirtualIp.create()"""

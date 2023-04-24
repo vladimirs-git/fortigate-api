@@ -9,14 +9,14 @@ from fortigate_api.types_ import DAny, StrInt
 class DhcpServer(Base):
     """DHCP Server Object."""
 
-    def __init__(self, fgt):
+    def __init__(self, rest):
         """DHCP Server Object.
 
         ::
-            :param fgt: Fortigate connector
-            :type fgt: Fortigate
+            :param rest: Fortigate REST API connector
+            :type rest: Fortigate
         """
-        super().__init__(fgt=fgt, url_obj="api/v2/cmdb/system.dhcp/server/", uid_key="id")
+        super().__init__(rest=rest, url_obj="api/v2/cmdb/system.dhcp/server/", uid_key="id")
 
     def create(self, data: DAny) -> Response:
         """Create dhcp-server-object in the Fortigate.
@@ -31,7 +31,7 @@ class DhcpServer(Base):
                 *<Response [200]>* Object successfully created or already exists
             :rtype: Response
         """
-        return self.fgt.post(url=self.url_, data=data)
+        return self.rest.post(url=self.url_, data=data)
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
         """Update dhcp-server-object, where `uid` is data["id"].

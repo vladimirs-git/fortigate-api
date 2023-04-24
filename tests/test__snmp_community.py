@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = SnmpCommunity(fgt=self.fgt)
+        self.obj = SnmpCommunity(rest=self.rest)
 
     def test_valid__create(self):
         """SnmpCommunity.create()"""

@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = ExternalResource(fgt=self.fgt)
+        self.obj = ExternalResource(rest=self.rest)
 
     def test_valid__create(self):
         """Address.create()"""
