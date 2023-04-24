@@ -178,7 +178,7 @@ class Fortigate:
         if self.token:
             try:
                 response: Response = session.get(
-                    url=f"{self.url}/api/v2/cmdb/system/vdom",
+                    url=f"{self.url}/api/v2/cmdb/system/status",
                     headers=self._bearer_token(),
                     verify=self.verify,
                 )
@@ -279,7 +279,8 @@ class Fortigate:
         if not response.ok:
             logging.info("code=%s, reason=%s, url=%s", response.status_code, response.reason, url)
             return []
-        results: LDAny = response.json()["results"]
+        response_json = response.json()
+        results: LDAny = response_json["results"]
         return results
 
     def post(self, url: str, data: DAny) -> Response:

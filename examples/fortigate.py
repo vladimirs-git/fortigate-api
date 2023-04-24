@@ -69,6 +69,17 @@ print("\nChecks for absence of address in the Fortigate")
 response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
 print("exist", response)  # <Response [404]>
 
+# Get logs traffic forward
+output = fgt.get(url="/api/v2/log/memory/traffic/forward")
+pprint(output)
+# [{'_metadata': {'#': 1, 'archive': False, 'logid': 13, 'roll': 63501, ...},
+#   'action': 'deny',
+#   'appcat': 'unscanned',
+#   'craction': 131072,
+#   'crlevel': 'high',
+#   'crscore': 30,
+# ...
+
 fgt.logout()
 
 # Fortigate *with* statement
