@@ -10,6 +10,7 @@ CHANGELOG
 * [feat] Fortigate.token
 * [fix] Fortigate.__repr__() removed password
 * [doc] README.rst
+* [refact] FortigateAPI.fgt > FortigateAPI.rest
 
 
 1.1.1 (2023-03-16)

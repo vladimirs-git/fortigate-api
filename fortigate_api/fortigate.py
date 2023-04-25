@@ -403,10 +403,9 @@ class Fortigate:
             :return: Session response
             :rtype: Response
         """
-        params_ = [("vdom", self.vdom), ("start", 0), ("count", 1)]
         params: DAny = dict(
             url=self._valid_url(url),
-            params=urlencode(params_),
+            params=urlencode([("vdom", self.vdom)]),
             timeout=self.timeout,
             verify=self.verify,
         )
