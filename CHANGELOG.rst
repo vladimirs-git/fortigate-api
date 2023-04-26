@@ -4,7 +4,7 @@
 CHANGELOG
 =========
 
-1.2.0 (2023-04-26)
+1.2.1 (2023-04-26)
 ------------------
 * [feat] FortigateAPI.ExternalResource
 * [feat] Fortigate.token
