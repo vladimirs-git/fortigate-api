@@ -35,7 +35,7 @@ jobs:
       - name: pylint
         run: pylint fortigate_api tests
       - name: mypy
-        run: mypy fortigate_api tests
+        run: mypy --namespace-packages --explicit-package-bases fortigate_api tests
       - name: pytest
         run: pytest -v -m "not developing" tests
       - name: coverage
