@@ -1,6 +1,6 @@
 [project]
 name = "fortigate_api"
-version = "1.2.1"
+version = "1.2.2"
 authors = [
   { name="Vladimir Prusakov", email="vladimir.prusakovs@gmail.com" },
 ]
@@ -9,9 +9,9 @@ readme = "README.rst"
 license = { text="MIT" }
 requires-python = ">=3.8"
 dependencies = [
-    "requests == 2.28.*",
-    "netmiko == 4.1.*",
-    "ciscoconfparse == 1.7.*",
+    "requests >= 2.28",
+    "netmiko >= 4.1",
+    "ciscoconfparse >= 1.7",
 ]
 keywords = ["fortigate", "api", "fortios", "firewall", "networking", "telecommunication"]
 classifiers = [
@@ -31,7 +31,7 @@ classifiers = [
 "Homepage" = "https://github.com/vladimirs-git/fortigate-api"
 "Repository" = "https://github.com/vladimirs-git/fortigate-api"
 "Bug Tracker" = "https://github.com/vladimirs-git/fortigate-api/issues"
-"Download URL" = "https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.2.1.tar.gz"
+"Download URL" = "https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.2.2.tar.gz"
 [tool.setuptools.packages.find]
 include = ["fortigate_api"]
 [tool.setuptools.package-data]

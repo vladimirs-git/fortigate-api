@@ -4,6 +4,12 @@
 CHANGELOG
 =========
 
+1.2.2 (2023-04-27)
+------------------
+* [fix] dependencies
+* [feat] actions
+
+
 1.2.1 (2023-04-26)
 ------------------
 * [feat] FortigateAPI.ExternalResource
