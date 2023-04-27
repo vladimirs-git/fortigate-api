@@ -7,7 +7,7 @@ class Address(Base):
     """Address Object."""
 
     def __init__(self, rest):
-        """Address Object.
+        """Address Object
         ::
             :param rest: Fortigate REST API connector
             :type rest: Fortigate

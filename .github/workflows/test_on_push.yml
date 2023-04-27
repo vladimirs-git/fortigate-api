@@ -40,7 +40,7 @@ jobs:
 #        run: pytest -v -m "not developing" tests
 #      - name: coverage
 #        run: pytest --cov=tests
-#      - name: pydocstyle
-#        run: pydocstyle .
+      - name: pydocstyle
+        run: pydocstyle .
       - name: rst-lint
         run: rst-lint README.rst CHANGELOG.rst
