@@ -3,7 +3,7 @@
 from datetime import date
 from ipaddress import IPv4Network
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Literal, Set, Tuple, Union
+from typing import Any, Dict, Iterable, List, Literal, Optional, Set, Tuple, Union
 
 from requests import Response
 
@@ -20,6 +20,7 @@ StrInt = Union[str, int]
 T2Str = Tuple[str, str]
 T3Str = Tuple[str, str, str]
 
+ODAny = Optional[DAny]
 DDAny = Dict[str, DAny]
 DLInet = Dict[str, List[IPv4Network]]
 DLStr = Dict[str, LStr]

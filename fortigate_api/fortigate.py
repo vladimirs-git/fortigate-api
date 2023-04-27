@@ -18,7 +18,7 @@ from requests.exceptions import SSLError
 from requests.packages import urllib3  # type: ignore
 
 from fortigate_api import helpers as h
-from fortigate_api.types_ import DAny, LDAny, DStr, Method
+from fortigate_api.types_ import DAny, LDAny, ODAny, DStr, Method
 
 # noinspection PyUnresolvedReferences
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -388,7 +388,7 @@ class Fortigate:
                 return type(ex)(tuple(msgs))
         return ex
 
-    def _response(self, method: Method, url: str, data: DAny = None) -> Response:
+    def _response(self, method: Method, url: str, data: ODAny = None) -> Response:
         """Call Session method and return Response.
 
         ::

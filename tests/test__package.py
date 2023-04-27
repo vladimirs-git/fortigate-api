@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 import dictdiffer  # type: ignore
+import pytest
 import tomli
 
 from fortigate_api import helpers as h
@@ -26,6 +27,7 @@ PYPROJECT = _make_pyproject_d(ROOT)
 class Test(unittest.TestCase):
     """package"""
 
+    @pytest.mark.developing
     def test_valid__init__(self):
         """__init__.py"""
         regex = r"(import|from)\s"
@@ -43,15 +45,15 @@ class Test(unittest.TestCase):
 
     def test_valid__version__readme(self):
         """version in README, URL"""
-        package = PYPROJECT["project"]["name"].replace("_", "-")
-        readme_file = PYPROJECT["project"]["readme"]
-        dwl_url = PYPROJECT["project"]["urls"]["Download URL"]
+        package = PYPROJECT["tool"]["poetry"]["name"].replace("_", "-")
+        readme_file = PYPROJECT["tool"]["poetry"]["readme"]
+        dwl_url = PYPROJECT["tool"]["poetry"]["urls"]["Download URL"]
         readme_text = Path.joinpath(ROOT, readme_file).read_text()
-        version_req = PYPROJECT["project"]["version"]
+        version_req = PYPROJECT["tool"]["poetry"]["version"]
 
         for key, text in [
             (readme_file, readme_text),
-            ("pyproject.toml project.urls.DownloadURL", dwl_url)
+            ("pyproject.toml project.urls.DownloadURL", dwl_url),
         ]:
             is_regex_found = False
             for regex in [
@@ -66,7 +68,7 @@ class Test(unittest.TestCase):
 
     def test_valid__version__changelog(self):
         """version in README"""
-        version = PYPROJECT["project"]["version"]
+        version = PYPROJECT["tool"]["poetry"]["version"]
         path = Path.joinpath(ROOT, "CHANGELOG.rst")
         text = path.read_text()
         regex = r"(.+)\s\(\d\d\d\d-\d\d-\d\d\)$"
@@ -97,7 +99,7 @@ class Test(unittest.TestCase):
         self.assertEqual([], diff, msg="base.py IMPLEMENTED_OBJECTS")
 
         # in readme
-        readme_text = Path.joinpath(ROOT, PYPROJECT["project"]["readme"]).read_text()
+        readme_text = Path.joinpath(ROOT, PYPROJECT["tool"]["poetry"]["readme"]).read_text()
         actual = {s for s in IMPLEMENTED_OBJECTS if h.findall1(s, readme_text)}
         expected = set(IMPLEMENTED_OBJECTS)
         diff = list(dictdiffer.diff(expected, actual))
