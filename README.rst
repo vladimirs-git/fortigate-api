@@ -8,7 +8,7 @@
 
 
 fortigate-api
-=============
+============
 
 Python package to configure Fortigate (Fortios) devices using REST API and SSH.
 With this package, you can change objects in the Fortigate. The most commonly used `Objects`_
