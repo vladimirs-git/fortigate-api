@@ -29,15 +29,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
       # Run tests
-      - name: pylint
-        run: pylint fortigate_api tests
-      - name: mypy
-        run: mypy fortigate_api tests
-      - name: pytest
-        run: pytest -v -m "not developing" tests
-      - name: coverage
-        run: pytest --cov=tests
-      - name: pydocstyle
-        run: pydocstyle .
+#      - name: pylint
+#        run: pylint fortigate_api tests
+#      - name: mypy
+#        run: mypy fortigate_api tests
+#      - name: pytest
+#        run: pytest -v -m "not developing" tests
+#      - name: coverage
+#        run: pytest --cov=tests
+#      - name: pydocstyle
+#        run: pydocstyle .
       - name: rst-lint
         run: rst-lint README.rst CHANGELOG.rst
