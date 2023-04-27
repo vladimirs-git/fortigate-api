@@ -43,6 +43,7 @@ dev = [
     "pydocstyle == 6.3.0",
     "pylint == 2.13.9",
     "pytest == 7.2.0",
+    "pytest-cov == 4.0.0",
     "restructuredtext-lint == 1.4.0",
     "twine == 4.0.1",
     "types-requests == 2.28.11.2",
