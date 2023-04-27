@@ -8,7 +8,6 @@ class Address(Base):
 
     def __init__(self, rest):
         """Address Object.
-
         ::
             :param rest: Fortigate REST API connector
             :type rest: Fortigate
