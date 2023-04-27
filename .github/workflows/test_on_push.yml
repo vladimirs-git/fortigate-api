@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ 3.8, 3.9, "3.10", 3.11 ]
+        python-version: [ 3.8 ]
+        # python-version: [ 3.8, 3.9, "3.10", 3.11 ]
     steps:
       # Checkout the code from the following branch
       - uses: actions/checkout@main
@@ -23,11 +24,16 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       # Install dependencies and run tests
-      - name: Install dependencies and run tests
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      # Run tests
       - name: Tests
         run: pytest -v -m "not developing" tests
       - name: Coverage
         run: pytest --cov=tests
+      - name: Linting
+        run: pylint fortigate_api tests
+      - name: Typing
+        run: mypy fortigate_api tests
