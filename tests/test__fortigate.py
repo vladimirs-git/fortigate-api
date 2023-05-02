@@ -231,17 +231,19 @@ class Test(unittest.TestCase):
     def test_valid__valid_url(self):
         """Fortigate._valid_url()"""
         default = dict(host="host", username="username", password="", port=443)
-        query = "api/v2/cmdb/firewall/address/"
-        url_ = f"https://host/{query}"
+        query = "api/v2/cmdb/firewall/address"
+        full_url = f"https://host/{query}"
+        https_80 = "https://host:80/"
+        http_80 = "http://host:80/"
         for kwargs, url, req in [
-            ({}, query, url_),
-            ({}, f"/{query}", url_),
-            ({}, "api/v2/cmdb/firewall/address", url_),
-            ({}, url_, url_),
-            (dict(port=80), query, f"https://host:80/{query}"),
-            (dict(port=80), f"https://host:80/{query}", f"https://host:80/{query}"),
-            (dict(scheme="http", port=80), query, f"http://host:80/{query}"),
-            (dict(scheme="http", port=80), f"http://host:80/{query}", f"http://host:80/{query}"),
+            ({}, query, full_url),
+            ({}, f"/{query}/", full_url),
+            ({}, full_url, full_url),
+            ({}, f"{full_url}/", full_url),
+            (dict(port=80), query, f"{https_80}{query}"),
+            (dict(port=80), f"{https_80}{query}", f"{https_80}{query}"),
+            (dict(scheme="http", port=80), query, f"{http_80}{query}"),
+            (dict(scheme="http", port=80), f"{http_80}{query}", f"{http_80}{query}"),
         ]:
             kwargs_ = {**default, **kwargs}
             fgt = Fortigate(**kwargs_)

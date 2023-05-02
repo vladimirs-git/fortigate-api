@@ -49,7 +49,7 @@ or install the package from github.com release
 
 .. code:: bash
 
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.2.3.tar.gz
+    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.2.4.tar.gz
 
 or install the package from github.com repository
 
@@ -866,6 +866,8 @@ Python examples `./examples/fortigate.py`_
 
 Python examples `./examples/fortigate_token.py`_
 
+Python examples `./examples/monitor.py`_
+
 .. code:: python
 
     from fortigate_api import Fortigate
@@ -1084,14 +1086,15 @@ Return
 .. _`./examples/yml/zone.yml`: ./examples/yml/zone.yml
 
 .. _`./examples/address.py`: ./examples/address.py
-.. _`./examples/address_token.py`: ./examples/address_token.py
 .. _`./examples/address_group.py`: ./examples/address_group.py
+.. _`./examples/address_token.py`: ./examples/address_token.py
 .. _`./examples/dhcp_server.py`: ./examples/dhcp_server.py
 .. _`./examples/external_resource.py`: ./examples/external_resource.py
 .. _`./examples/fortigate.py`: ./examples/fortigate.py
 .. _`./examples/fortigate_token.py`: ./examples/fortigate_token.py
 .. _`./examples/interface.py`: ./examples/interface.py
 .. _`./examples/ip_pool.py`: ./examples/ip_pool.py
+.. _`./examples/monitor.py`: ./examples/monitor.py
 .. _`./examples/policy.py`: ./examples/policy.py
 .. _`./examples/policy_extended_filter.py`: ./examples/policy_extended_filter.py
 .. _`./examples/snmp_community.py`: ./examples/snmp_community.py

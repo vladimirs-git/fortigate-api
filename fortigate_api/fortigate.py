@@ -10,7 +10,7 @@ import json
 import logging
 import re
 from typing import Callable, Iterable, Optional
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urljoin
 
 import requests
 from requests import Session, Response
@@ -423,8 +423,11 @@ class Fortigate:
         return response
 
     def _valid_url(self, url: str) -> str:
-        """Add "https://" to `url` if absent."""
+        """Return a valid URL string.
+
+        Add "https://" to `url` if it is absent and remove any trailing "/" character.
+        """
         if re.match("http(s)?://", url):
-            return url
-        url = url.strip("/")
-        return f"{self.url}/{url}/"
+            return url.rstrip("/")
+        path = url.strip("/")
+        return urljoin(self.url, path)

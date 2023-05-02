@@ -111,13 +111,13 @@ class MockResponse(Response):
         f"api/v2/cmdb/antivirus/profile/{NAME1}": [D_NAME1],
         f"api/v2/cmdb/application/list/{NAME1}": [D_NAME1],
 
-        "api/v2/cmdb/firewall/address/": [D_ADDR1, D_ADDR2, D_ADDR3, D_ADDR4, D_ADDR5],
+        "api/v2/cmdb/firewall/address": [D_ADDR1, D_ADDR2, D_ADDR3, D_ADDR4, D_ADDR5],
         f"api/v2/cmdb/firewall/address/?filter=name{EQ}{ADDR1}": [D_ADDR1],
         f"api/v2/cmdb/firewall/address/{ADDR1}": [D_ADDR1],
         f"api/v2/cmdb/firewall/address/{ADDR1}?filter=name{EQ}{ADDR1}": [D_ADDR1],
         f"api/v2/cmdb/firewall/address/{SLASH_}": [D_SLASH],
 
-        "api/v2/cmdb/firewall/addrgrp/": [D_ADDGR1],
+        "api/v2/cmdb/firewall/addrgrp": [D_ADDGR1],
         f"api/v2/cmdb/firewall/addrgrp/?filter=name{EQ}{ADDGR1}": [D_ADDGR1],
         f"api/v2/cmdb/firewall/addrgrp/{ADDGR1}": [D_ADDGR1],
         f"api/v2/cmdb/firewall/addrgrp/{ADDGR1}?filter=name{EQ}{ADDGR1}": [D_ADDGR1],
@@ -126,7 +126,7 @@ class MockResponse(Response):
         f"api/v2/cmdb/firewall/ippool/{NAME1}": [D_NAME1],
         f"api/v2/cmdb/firewall/vip/{NAME1}": [D_NAME1],
 
-        "api/v2/cmdb/firewall/policy/": [D_POL1, D_POL3],
+        "api/v2/cmdb/firewall/policy": [D_POL1, D_POL3],
         "api/v2/cmdb/firewall/policy/1": [D_POL1],
         "api/v2/cmdb/firewall/policy/3": [D_POL3],
         f"api/v2/cmdb/firewall/policy/1?filter=name{EQ}{POL1}": [D_POL1],
@@ -141,7 +141,7 @@ class MockResponse(Response):
         f"api/v2/cmdb/firewall.service/custom/{NAME1}": [D_NAME1],
         f"api/v2/cmdb/firewall.service/group/{NAME1}": [D_NAME1],
 
-        "api/v2/cmdb/system.snmp/community/": [D_SNMP1, D_SNMP3],
+        "api/v2/cmdb/system.snmp/community": [D_SNMP1, D_SNMP3],
         "api/v2/cmdb/system.snmp/community/1": [D_SNMP1],
         "api/v2/cmdb/system.snmp/community/3": [D_SNMP3],
         f"api/v2/cmdb/system.snmp/community/1?filter=name{EQ}{NAME1}": [D_SNMP1],
@@ -154,7 +154,7 @@ class MockResponse(Response):
         f"api/v2/cmdb/system/external-resource/{NAME1}": [D_NAME1],
         f"api/v2/cmdb/system/external-resource/?filter=name{EQ}{NAME1}": [D_NAME1],
 
-        "api/v2/cmdb/system/interface/": [D_INTF1, D_INTF3],
+        "api/v2/cmdb/system/interface": [D_INTF1, D_INTF3],
         f"api/v2/cmdb/system/interface/?filter=name{EQ}{NAME1}": [D_INTF1],
         f"api/v2/cmdb/system/interface/?filter=name{EQ}{NAME3}": [D_INTF3],
         f"api/v2/cmdb/system/interface/{NAME1}": [D_INTF1],

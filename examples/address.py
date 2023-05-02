@@ -29,10 +29,12 @@ fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
 fgt.login()
 
 # Create Address
-data = {"name": "ADDRESS",
-        "obj-type": "ip",
-        "subnet": "127.0.0.100 255.255.255.252",
-        "type": "ipmask"}
+data = {
+    "name": "ADDRESS",
+    "obj-type": "ip",
+    "subnet": "127.0.0.100 255.255.255.252",
+    "type": "ipmask",
+}
 response = fgt.address.create(data=data)
 print("address.create", response)  # address.create <Response [200]>
 
