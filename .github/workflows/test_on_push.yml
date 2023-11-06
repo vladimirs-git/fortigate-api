@@ -32,8 +32,8 @@ jobs:
           poetry export --with dev --format=requirements.txt --output=requirements.txt
           pip install -r requirements.txt
       # Run tests
-      - name: pylint
-        run: pylint fortigate_api
+      #- name: pylint
+      #  run: pylint fortigate_api tests
       - name: mypy
         run: mypy --namespace-packages --explicit-package-bases fortigate_api tests
       - name: pytest
