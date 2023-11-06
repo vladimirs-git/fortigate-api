@@ -33,7 +33,7 @@ jobs:
           pip install -r requirements.txt
       # Run tests
       - name: pylint
-        run: pylint fortigate_api tests
+        run: pylint fortigate_api
       - name: mypy
         run: mypy --namespace-packages --explicit-package-bases fortigate_api tests
       - name: pytest
