@@ -4,6 +4,11 @@
 CHANGELOG
 =========
 
+1.2.5 (2023-11-06)
+------------------
+* [fix] Look for a cookie that is named "ccsrftoken" or stars with "ccsrftoken_".
+
+
 1.2.4 (2023-05-02)
 ------------------
 * [fix] Fortigate._valid_url()

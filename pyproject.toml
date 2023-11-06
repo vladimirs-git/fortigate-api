@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "fortigate_api"
-version = "1.2.4"
+version = "1.2.5"
 description = "Python package to configure Fortigate (Fortios) devices using REST API and SSH"
 authors = ["Vladimir Prusakov <vladimir.prusakovs@gmail.com>"]
+readme = "README.rst"
 license = "MIT"
 homepage = "https://github.com/vladimirs-git/fortigate-api"
 repository = "https://github.com/vladimirs-git/fortigate-api"
-readme = "README.rst"
 keywords = ["fortigate", "api", "fortios", "firewall", "networking", "telecommunication"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -21,27 +21,34 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Natural Language :: English",
 ]
-include = ["fortigate_api"]
 [tool.poetry.dependencies]
 python = "^3.8"
+ciscoconfparse = "^1.9.28"
+netmiko = "^4.2.0"
 requests = "^2.28"
-netmiko = "^4.1"
-ciscoconfparse = "^1.7"
 
-[tool.poetry.dev-dependencies]
-dictdiffer = "0.9.0"
-mypy = "1.2.0"
-pydocstyle = "6.3.0"
-pylint = "2.13.9"
-pytest = "7.3.1"
-pytest-cov = "4.0.0"
-restructuredtext-lint = "1.4.0"
-twine = "4.0.2"
-types-requests = "2.28.11.17"
+[tool.poetry.group.dev.dependencies]
+dictdiffer = "^0.9.0"
+mypy = "^1.6.1"
+pydocstyle = "^6.3.0"
+pygments = "^2.16.1"
+pylint = "^3.0.2"
+pytest = "^7.4.3"
+pytest-cov = "^4.1.0"
+restructuredtext-lint = "^1.4.0"
+twine = "^4.0.2"
+types-requests = "^2.31.0.10"
+
+[tool.setuptools.package-data]
+vpnetbox = ["py.typed"]
 
 [tool.poetry.extras]
 test = ["pytest"]
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/vladimirs-git/fortigate-api/issues"
-"Download URL" = "https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.2.4.tar.gz"
+"Download URL" = "https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.2.5.tar.gz"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

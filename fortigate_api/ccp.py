@@ -91,7 +91,7 @@ def convert_fgt_to_junos(config: str) -> str:
         # end
         elif re.match(re_end, line):
             result = re.findall(re_end, line)
-            indent, end_ = result[0][:2]
+            indent, _ = result[0][:2]
             line = indent + "}\n" + indent + "end"
         # edit
         elif re.match(re_edit, line):
@@ -99,7 +99,7 @@ def convert_fgt_to_junos(config: str) -> str:
         # next
         elif re.match(re_next, line):
             result = re.findall(re_next, line)
-            indent, next_ = result[0][:2]
+            indent, _ = result[0][:2]
             line = indent + "}\n" + indent + "next"
         junos_lines.append(line)
 

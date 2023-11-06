@@ -19,12 +19,12 @@ EFILTER_OPERATORS = [
 ]
 
 
-def wrapp_efilters(func):
-    """Wrapp Extended Filters."""
+def wrap_efilters(func):
+    """Wrap Extended Filters."""
     # noinspection PyIncorrectDocstring
     @wraps(func)
     def wrapper(fgt_api, **kwargs):
-        """Wrapp Extended Filters.
+        """Wrap Extended Filters.
 
         ::
             :param fgt_api: Wrapped object
@@ -156,10 +156,10 @@ def _valid_efilters(efilters: LStr) -> None:
         :raises ValueError: If efilter has invalid format
     """
     re_operators = "|".join(EFILTER_OPERATORS)
-    regex = r"(\w+?)({})(.+)".format(re_operators)
+    regex = fr"(\w+?)({re_operators})(.+)"
     keys: LStr = []
     for efilter in efilters:
-        key, operator, value = h.findall3(pattern=regex, string=efilter)
+        key, operator, _ = h.findall3(pattern=regex, string=efilter)
         keys.append(key)
         expected = EFILTER_KEYS
         if key not in expected:

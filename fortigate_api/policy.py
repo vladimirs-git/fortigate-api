@@ -4,7 +4,7 @@ from requests import Response
 
 from fortigate_api import helpers as h
 from fortigate_api.base import Base
-from fortigate_api.extended_filters import wrapp_efilters
+from fortigate_api.extended_filters import wrap_efilters
 from fortigate_api.types_ import DAny
 from fortigate_api.types_ import LDAny, StrInt
 
@@ -22,7 +22,7 @@ class Policy(Base):
         super().__init__(rest=rest, url_obj="api/v2/cmdb/firewall/policy/", uid_key="policyid")
 
     # noinspection PyIncorrectDocstring
-    @wrapp_efilters
+    @wrap_efilters
     def get(self, **kwargs) -> LDAny:
         """Get fortigate-objects, all or filtered by some of params.
 
@@ -62,8 +62,12 @@ class Policy(Base):
                 *<Response [500]>* Policy has not been moved
             :rtype: Response
         """
-        kwargs = dict(action="move", username=self.rest.username, secretkey=self.rest.password)
-        kwargs[position] = neighbor
+        kwargs = {
+            "action": "move",
+            "username": self.rest.username,
+            "secretkey": self.rest.password,
+            position: neighbor,
+        }
         url = f"{self.url_}{uid}"
         url = h.make_url(url, **kwargs)
         return self.rest.put(url=url, data={})

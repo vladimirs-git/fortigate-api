@@ -31,10 +31,7 @@ class SSH:
             :type ssh: Dict[str, Any]
         """
         ssh_kwargs: DAny = dict(kwargs.get("ssh") or {})
-        ssh_kwargs.update(dict(
-            device_type="fortinet",
-            auto_connect=False,
-        ))
+        ssh_kwargs.update({"device_type": "fortinet", "auto_connect": False})
         self.session = ConnectHandler(host=host,
                                       username=username,
                                       password=password,
@@ -56,7 +53,7 @@ class SSH:
         if self.session.remote_conn:
             return
         # noinspection PyProtectedMember
-        self.session._open()
+        self.session._open()  # pylint: disable=protected-access
         if not self.session.remote_conn:
             raise ConnectionError("Cannot open remote connection")
 

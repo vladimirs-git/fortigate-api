@@ -1,12 +1,22 @@
 """unittest fortigate.py"""
 
 import unittest
+from unittest.mock import Mock
 from unittest.mock import patch
 
 import requests
 
 from fortigate_api import Fortigate
 from tests.helper__tst import NAME1, NAME2, NAME3, POL1, MockSession
+
+
+class MockCookie:
+    """Mock Cookie."""
+
+    def __init__(self, name: str, value: str):
+        """Init Cookie."""
+        self.name = name
+        self.value = value
 
 
 class Test(unittest.TestCase):
@@ -249,6 +259,32 @@ class Test(unittest.TestCase):
             fgt = Fortigate(**kwargs_)
             result = fgt._valid_url(url=url)
             self.assertEqual(result, req, msg=f"{url=}")
+
+    # =========================== helpers ============================
+
+    def test_valid__get_token_from_cookies(self):
+        """Fortigate._get_token_from_cookies()"""
+        for name, value, req_token in [
+            ("ccsrftoken", "\"token\"", "token"),
+            ("ccsrftoken_443", "\"token\"", "token"),
+            ("ccsrftoken_443_3334d10", "\"token\"", "token"),
+        ]:
+            session = Mock()
+            session.cookies = [MockCookie(name=name, value=value)]
+            token = self.rest._get_token_from_cookies(session)
+            self.assertEqual(token, req_token)
+
+    def test_invalid__get_token_from_cookies(self):
+        """Fortigate._get_token_from_cookies()"""
+        for name, error in [
+            ("ccsrftokenother-name", ValueError),
+            ("ccsrftoken-other-name", ValueError),
+            ("other-name", ValueError),
+        ]:
+            session = Mock()
+            session.cookies = [MockCookie(name=name, value="\"token\"")]
+            with self.assertRaises(error):
+                self.rest._get_token_from_cookies(session)
 
 
 if __name__ == "__main__":

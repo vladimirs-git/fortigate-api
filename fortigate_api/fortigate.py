@@ -79,7 +79,7 @@ class Fortigate:
         self.port: int = self._init_port(**kwargs)
         self.timeout: int = int(kwargs.get("timeout") or TIMEOUT)
         self.vdom: str = str(kwargs.get("vdom") or VDOM)
-        self.verify: bool = bool(kwargs.get("verify") or False)
+        self.verify: bool = bool(kwargs.get("verify"))
         self._session: Optional[Session] = None
 
     def __repr__(self):
@@ -199,16 +199,7 @@ class Fortigate:
         except Exception as ex:
             raise self._hide_secret_ex(ex)
 
-        cookie_name = "ccsrftoken"
-        cookies = [o for o in session.cookies if o and o.name == cookie_name]
-        if not cookies:
-            regex = cookie_name + r"_\d+$"
-            cookies = [o for o in session.cookies if re.match(regex, o.name)]
-        cookies = [o for o in cookies if isinstance(o.value, str)]
-        if not cookies:
-            raise ValueError("invalid login credentials, absent cookie ccsrftoken")
-        cookie = cookies[0]
-        token = str(cookie.value).strip("\"")
+        token = self._get_token_from_cookies(session)
         session.headers.update({"X-CSRFTOKEN": token})
 
         response = session.get(url=f"{self.url}/api/v2/cmdb/system/vdom")
@@ -343,6 +334,31 @@ class Fortigate:
 
     # =========================== helpers ============================
 
+    @staticmethod
+    def _get_token_from_cookies(session: Session) -> str:
+        """Retrieve the token from the cookies in the session.
+
+        Look for a cookie that is named "ccsrftoken" or stars with "ccsrftoken_".
+        :param session: The session object containing cookies.
+        :return: The token extracted from the cookies.
+        :raises ValueError: If the ccsrftoken cookie is absent.
+        """
+        while True:
+            # fortios < v7
+            cookie_name = "ccsrftoken"
+            if cookies := [o for o in session.cookies if o and o.name == cookie_name]:
+                break
+
+            # fortios >= v7
+            cookie_name += "_"
+            if cookies := [o for o in session.cookies if o and o.name.startswith(cookie_name)]:
+                break
+
+            raise ValueError("Invalid login credentials. Cookie 'ccsrftoken' is missing.")
+
+        token = str(cookies[0].value).strip("\"")
+        return token
+
     def _bearer_token(self) -> DStr:
         """Return bearer token."""
         return {"Authorization": f"Bearer {self.token}"}
@@ -403,12 +419,12 @@ class Fortigate:
             :return: Session response
             :rtype: Response
         """
-        params: DAny = dict(
-            url=self._valid_url(url),
-            params=urlencode([("vdom", self.vdom)]),
-            timeout=self.timeout,
-            verify=self.verify,
-        )
+        params: DAny = {
+            "url": self._valid_url(url),
+            "params": urlencode([("vdom", self.vdom)]),
+            "timeout": self.timeout,
+            "verify": self.verify,
+        }
         if isinstance(data, dict):
             params["data"] = json.dumps(data)
         if self.token:

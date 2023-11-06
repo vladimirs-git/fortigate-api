@@ -5,7 +5,6 @@ import unittest
 from pathlib import Path
 
 import dictdiffer  # type: ignore
-import pytest
 import tomli
 
 from fortigate_api import helpers as h
@@ -26,22 +25,6 @@ PYPROJECT = _make_pyproject_d(ROOT)
 
 class Test(unittest.TestCase):
     """package"""
-
-    @pytest.mark.developing
-    def test_valid__init__(self):
-        """__init__.py"""
-        regex = r"(import|from)\s"
-
-        path1 = Path.joinpath(ROOT, "__init__.py")
-        lines1 = {s.strip() for s in path1.read_text().splitlines()}
-        imports1 = {s for s in lines1 if re.match(regex, s)}
-
-        path2 = Path.joinpath(ROOT, "fortigate_api", "__init__.py")
-        lines2 = {s.strip() for s in path2.read_text().splitlines()}
-        imports2 = {s for s in lines2 if re.match(regex, s)}
-
-        diff = imports1.difference(imports2)
-        self.assertEqual(len(diff), 0, msg=f"imports {diff=} in {path1=} {path2=}")
 
     def test_valid__version__readme(self):
         """version in README, URL"""
@@ -67,16 +50,16 @@ class Test(unittest.TestCase):
             self.assertEqual(is_regex_found, True, msg=f"absent {version_req} in {key}")
 
     def test_valid__version__changelog(self):
-        """version in README"""
-        version = PYPROJECT["tool"]["poetry"]["version"]
+        """version in CHANGELOG"""
+        version_toml = PYPROJECT["tool"]["poetry"]["version"]
         path = Path.joinpath(ROOT, "CHANGELOG.rst")
         text = path.read_text()
         regex = r"(.+)\s\(\d\d\d\d-\d\d-\d\d\)$"
-        version_changelog = h.findall1(regex, text, re.M)
-        self.assertEqual(version_changelog, version, msg=f"version in {path=}")
+        version_log = h.findall1(regex, text, re.M)
+        self.assertEqual(version_log, version_toml, msg=f"version in {path=}")
 
     def test_valid__date(self):
-        """last modified date"""
+        """last modified date in CHANGELOG"""
         path = Path.joinpath(ROOT, "CHANGELOG.rst")
         text = path.read_text()
         regex = r".+\((\d\d\d\d-\d\d-\d\d)\)$"
