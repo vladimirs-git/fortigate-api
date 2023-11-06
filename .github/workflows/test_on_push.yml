@@ -29,8 +29,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
-          poetry export --with dev --format=requirements.txt --output=requirements.txt
-          pip install -r requirements.txt
       # Run tests
       #- name: pylint
       #  run: pylint fortigate_api tests
