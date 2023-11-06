@@ -202,7 +202,7 @@ class Fortigate:
         cookie_name = "ccsrftoken"
         cookies = [o for o in session.cookies if o and o.name == cookie_name]
         if not cookies:
-            regex = cookie_name + r"_\d+$"
+            regex = cookie_name + r".*$"
             cookies = [o for o in session.cookies if re.match(regex, o.name)]
         cookies = [o for o in cookies if isinstance(o.value, str)]
         if not cookies:
