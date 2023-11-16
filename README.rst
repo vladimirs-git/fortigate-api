@@ -957,7 +957,7 @@ Return
 
 
 get_l()
-.....
+.......
 **Fortigate.get_l(url)** GET list of objects.
 Fortigate returns list of items.
 
