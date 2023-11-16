@@ -47,7 +47,7 @@ or install the package from github.com release
 
 .. code:: bash
 
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.2.5.tar.gz
+    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.3.0.tar.gz
 
 or install the package from github.com repository
 
@@ -943,7 +943,8 @@ Return
 
 get()
 .....
-**Fortigate.get(url)** GET object configured in the Fortigate
+**Fortigate.get(url)** GET object configured in the Fortigate.
+Fortigate returns dictionary with key="results".
 
 =============== ======= ============================================================================
 Parameter       Type    Description
@@ -953,6 +954,21 @@ url             *str*   REST API URL to the object
 
 Return
     *List[dict]* of the objects data
+
+
+get_l()
+.....
+**Fortigate.get_l(url)** GET list of objects.
+Fortigate returns list of items.
+
+=============== ======= ============================================================================
+Parameter       Type    Description
+=============== ======= ============================================================================
+url             *str*   REST API URL
+=============== ======= ============================================================================
+
+Return
+    *List[dict]* of the objects
 
 
 post()

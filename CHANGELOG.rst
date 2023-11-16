@@ -4,6 +4,11 @@
 CHANGELOG
 =========
 
+1.3.0 (2023-11-16)
+------------------
+* [new] Fortigate.get_l()
+
+
 1.2.5 (2023-11-06)
 ------------------
 * [fix] Look for a cookie that is named "ccsrftoken" or stars with "ccsrftoken_".

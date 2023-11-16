@@ -81,6 +81,18 @@ pprint(output)
 #   'crscore': 30,
 # ...
 
+# Get list
+output = fgt.get_l(url="/api/v2/monitor/firewall/policy?global=1")
+pprint(output)
+# [{'build': 2093,
+#   'http_method': 'GET',
+#   'name': 'policy',
+#   'path': 'firewall',
+#   'results': [{'active_sessions': 0,
+#                'asic_bytes': 0,
+#                'asic_packets': 0,
+# ...
+
 
 # Get Directory
 output = fgt.directory(url="/api/v2/log")

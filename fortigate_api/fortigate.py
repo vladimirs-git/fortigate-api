@@ -277,19 +277,36 @@ class Fortigate:
     def get(self, url: str) -> LDAny:
         """GET object configured in the Fortigate.
 
-        ::
-            :param url: REST API URL to the object
-            :type url: str
+        Fortigate returns dictionary with key="results".
+        :param url: REST API URL to the object
+        :type url: str
 
-            :return: List of the Fortigate objects
-            :rtype: List[dict]
+        :return: List of the Fortigate objects
+        :rtype: List[dict]
         """
         response: Response = self._response("get", url)
         if not response.ok:
             logging.info("code=%s, reason=%s, url=%s", response.status_code, response.reason, url)
             return []
         response_json = response.json()
-        results: LDAny = response_json.get("results") or []
+        results: LDAny = list(response_json.get("results") or [])
+        return results
+
+    def get_l(self, url: str) -> list:
+        """GET list of objects.
+
+        Fortigate returns list of items.
+        :param url: REST API URL
+        :type url: str
+
+        :return: List of the objects
+        :rtype: List[dict]
+        """
+        response: Response = self._response("get", url)
+        if not response.ok:
+            logging.info("code=%s, reason=%s, url=%s", response.status_code, response.reason, url)
+            return []
+        results: LDAny = list(response.json() or [])
         return results
 
     def post(self, url: str, data: DAny) -> Response:
