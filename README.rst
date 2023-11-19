@@ -47,7 +47,7 @@ or install the package from github.com release
 
 .. code:: bash
 
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.3.0.tar.gz
+    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.3.1.tar.gz
 
 or install the package from github.com repository
 

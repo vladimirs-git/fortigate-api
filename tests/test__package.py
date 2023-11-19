@@ -20,38 +20,32 @@ def _make_pyproject_d(root: Path) -> dict:
 
 
 ROOT = Path(__file__).parent.parent.resolve()
-PYPROJECT = _make_pyproject_d(ROOT)
+PYPROJECT_D = _make_pyproject_d(ROOT)
 
 
 class Test(unittest.TestCase):
     """package"""
 
     def test_valid__version__readme(self):
-        """version in README, URL"""
-        package = PYPROJECT["tool"]["poetry"]["name"].replace("_", "-")
-        readme_file = PYPROJECT["tool"]["poetry"]["readme"]
-        dwl_url = PYPROJECT["tool"]["poetry"]["urls"]["Download URL"]
-        readme_text = Path.joinpath(ROOT, readme_file).read_text()
-        version_req = PYPROJECT["tool"]["poetry"]["version"]
+        """version in README, URL."""
+        expected = PYPROJECT_D["tool"]["poetry"]["version"]
+        package = PYPROJECT_D["tool"]["poetry"]["name"].replace("_", "-")
+        readme = PYPROJECT_D["tool"]["poetry"]["readme"]
+        readme_text = Path.joinpath(ROOT, readme).read_text(encoding="utf-8")
+        url_toml = "pyproject.toml project.urls.DownloadURL"
+        url_text = PYPROJECT_D["tool"]["poetry"]["urls"]["Download URL"]
 
-        for key, text in [
-            (readme_file, readme_text),
-            ("pyproject.toml project.urls.DownloadURL", dwl_url),
+        for source, text in [
+            (readme, readme_text),
+            (url_toml, url_text),
         ]:
-            is_regex_found = False
-            for regex in [
-                package + r".+/(.+?)\.tar\.gz",
-                package + r"@(.+?)$",
-            ]:
-                versions = re.findall(regex, text, re.M)
-                for version in versions:
-                    is_regex_found = True
-                    self.assertEqual(version, version_req, msg=f"version in {key}")
-            self.assertEqual(is_regex_found, True, msg=f"absent {version_req} in {key}")
+            regexes = [fr"{package}.+/(.+?)\.tar\.gz", fr"{package}@(.+?)$"]
+            versions = [v for s in regexes for v in re.findall(s, text, re.M)]
+            assert expected in versions, f"version {expected} not in {source}"
 
     def test_valid__version__changelog(self):
         """version in CHANGELOG"""
-        version_toml = PYPROJECT["tool"]["poetry"]["version"]
+        version_toml = PYPROJECT_D["tool"]["poetry"]["version"]
         path = Path.joinpath(ROOT, "CHANGELOG.rst")
         text = path.read_text()
         regex = r"(.+)\s\(\d\d\d\d-\d\d-\d\d\)$"
@@ -82,7 +76,7 @@ class Test(unittest.TestCase):
         self.assertEqual([], diff, msg="base.py IMPLEMENTED_OBJECTS")
 
         # in readme
-        readme_text = Path.joinpath(ROOT, PYPROJECT["tool"]["poetry"]["readme"]).read_text()
+        readme_text = Path.joinpath(ROOT, PYPROJECT_D["tool"]["poetry"]["readme"]).read_text()
         actual = {s for s in IMPLEMENTED_OBJECTS if h.findall1(s, readme_text)}
         expected = set(IMPLEMENTED_OBJECTS)
         diff = list(dictdiffer.diff(expected, actual))
