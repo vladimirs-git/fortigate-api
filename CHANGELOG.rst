@@ -4,9 +4,9 @@
 CHANGELOG
 =========
 
-1.3.1 (2023-11-19)
+1.3.1 (2023-12-06)
 ------------------
-* [fix] tests
+* [fix] quoted parameters, FortigateAPI.delete(filter="name=@10.0.0.1/32")
 
 
 1.3.0 (2023-11-16)

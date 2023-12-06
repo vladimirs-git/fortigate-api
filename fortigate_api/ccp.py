@@ -31,7 +31,16 @@ class FgtConfParse(CiscoConfParse):
         config_: str = self._init_config(config)
         config_ = convert_fgt_to_junos(config_)
         lines = config_.splitlines()
-        kwargs.update(config=lines, comment=comment, encoding=encoding, syntax="junos")
+        kwargs.update(
+            config=lines,
+            comment=comment,
+            encoding=encoding,
+            # todo logging INFO     | ciscoconfparse.ciscoconfparse:__init__:
+            #  As of version 1.9.17 and later,
+            #  `ignore_blank_lines=True` is only honored when `factory=True`
+            # ignore_blank_lines=False,
+            syntax="junos",
+        )
         super().__init__(**kwargs)
 
     @staticmethod

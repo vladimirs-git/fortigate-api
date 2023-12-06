@@ -110,7 +110,7 @@ class Base:
         filters: LStr = h.pop_lstr(key="filter", data=kwargs)
         datas = self.get(filter=filters)
         for data in datas:
-            uid = data[self.uid_key]
+            uid = h.quote(data[self.uid_key])
             url = f"{self.url_}{uid}"
             response = self.rest.delete(url=url)
             responses.append(response)

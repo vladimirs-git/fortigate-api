@@ -220,12 +220,12 @@ def make_url(url: str, **params) -> str:
             params: {"b": ["b", "B"]}
             return: "https://fomain.com?a=a&b=b&b=B"
     """
-    url_parsed: ParseResult = urlparse(url)
-    params_or: DAny = parse_qs(url_parsed.query)
+    url_o: ParseResult = urlparse(url)
+    params_or: DAny = parse_qs(url_o.query)
     params_: DAny = {**params_or, **params}
     query: str = urlencode(params_, doseq=True)
-    url_parsed = url_parsed._replace(query=query)
-    return url_parsed.geturl()
+    url_o = url_o._replace(query=query)
+    return url_o.geturl()
 
 
 def quote(string: Any) -> str:
