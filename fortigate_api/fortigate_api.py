@@ -21,6 +21,7 @@ from fortigate_api.snmp_community import SnmpCommunity
 from fortigate_api.ssh import SSH
 from fortigate_api.virtual_ip import VirtualIP
 from fortigate_api.zone import Zone
+from fortigate_api.vdoms import Vdoms
 
 
 class FortigateAPI:
@@ -83,6 +84,7 @@ class FortigateAPI:
         self.snmp_community = SnmpCommunity(self.rest)
         self.virtual_ip = VirtualIP(self.rest)
         self.zone = Zone(self.rest)
+        self.vdoms = Vdoms(self.rest)
 
     def __repr__(self):
         """Return a string representation related to this object."""

@@ -134,6 +134,10 @@ Object                GUI and REST API URL to the object (FortiOS v6.4)
 
                       https://hostname/api/v2/cmdb/system.snmp/community/
 
+`Vdoms`_              https://hostname/ng/system/vdom
+
+                      https://hostname/api/v2/cmdb/system/vdom/
+
 `VirtualIp`_          https://hostname/ng/firewall/virtual-ip
 
                       https://hostname/api/v2/cmdb/firewall/vip/
@@ -816,6 +820,17 @@ uid             *str*   Name of the snmp-community-object, taken from the `uid` 
 
 Return
     Session response. *<Response [200]>* Object successfully updated, *<Response [404]>* Object has not been updated
+
+
+----------------------------------------------------------------------------------------------------
+Vdoms
+---------
+
+Python examples `./examples/vdoms.py`_
+
+FortiOS v6.4 data example `./examples/yml/vdoms.yml`_
+
+**FortigateAPI.vdoms.get(filter)**
 
 
 ----------------------------------------------------------------------------------------------------

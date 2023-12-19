@@ -25,6 +25,7 @@ IMPLEMENTED_OBJECTS = (
     "api/v2/cmdb/system/external-resource/",
     "api/v2/cmdb/system/interface/",
     "api/v2/cmdb/system/zone/",
+    "api/v2/cmdb/system/vdom",
 )
 
 
