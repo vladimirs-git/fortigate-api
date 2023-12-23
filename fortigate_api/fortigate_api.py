@@ -1,4 +1,4 @@
-"""**FortigateAPI** - a set of methods for working with the most commonly used objects."""
+"""FortigateAPI, a set of methods designed to work with commonly used objects."""
 
 from __future__ import annotations
 
@@ -24,44 +24,47 @@ from fortigate_api.zone import Zone
 
 
 class FortigateAPI:
-    """**FortigateAPI** - a set of methods for working with the most commonly used objects."""
+    """FortigateAPI, a set of methods designed to work with commonly used objects.
 
-    def __init__(self, **kwargs):
-        """**FortigateAPI** - a set of methods for working with the most commonly used objects.
+    Objects:
+    :ivar obj address: :py:class:`.Address` :doc:`Address`.
+    """
 
-        ::
-            :param host: Firewall ip address or hostname
-            :type host: str
+    def __init__(self, **kwargs):  # TODO parameters as in netbox3
+        """Init FortigateAPI.
 
-            :param username: Administrator name. Mutually exclusive with token
-            :type username: str
+        :param host: Firewall ip address or hostname
+        :type host: str
 
-            :param password: Administrator password. Mutually exclusive with token
-            :type password: str
+        :param username: Administrator name. Mutually exclusive with token
+        :type username: str
 
-            :param token: Administrator token. Mutually exclusive with username and password
-            :type token: str
+        :param password: Administrator password. Mutually exclusive with token
+        :type password: str
 
-            :param scheme: (optional) "https" (default) or "http"
-            :type scheme: str
+        :param token: Administrator token. Mutually exclusive with username and password
+        :type token: str
 
-            :param port: (optional) TCP port, by default 443 for "https", 80 for "http"
-            :type port: str
+        :param scheme: (optional) "https" (default) or "http"
+        :type scheme: str
 
-            :param timeout: (optional) Session timeout minutes (default 15)
-            :type timeout: int
+        :param port: (optional) TCP port, by default 443 for "https", 80 for "http"
+        :type port: str
 
-            :param verify: (optional) Enable SSL certificate verification for HTTPS requests.
-                True -  enable
-                False - disable (default)
-            :type verify: bool
+        :param timeout: (optional) Session timeout minutes (default 15)
+        :type timeout: int
 
-            :param vdom: Name of virtual domain (default "root").
-                Used in REST API (Not used in SSH)
-            :type vdom: str
+        :param verify: (optional) Enable SSL certificate verification for HTTPS requests.
+            True -  enable
+            False - disable (default)
+        :type verify: bool
 
-            :param ssh: Netmiko ConnectHandler parameters
-            :type ssh: dict
+        :param vdom: Name of virtual domain (default "root").
+            Used in REST API (Not used in SSH)
+        :type vdom: str
+
+        :param ssh: Netmiko ConnectHandler parameters
+        :type ssh: dict
         """
         self.rest = Fortigate(**kwargs)
         self.ssh = SSH(**kwargs)

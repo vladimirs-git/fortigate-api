@@ -27,8 +27,8 @@ Python >=3.8 required.
 
     FortigateAPI <fortigate_api.rst>
     Fortigate <fortigate.rst>
-    Objects <objects/objects.rst>
-    Address <objects/address.rst>
+    Objects <objects.rst>
+    Address <Address.rst>
     SSH <ssh.rst>
     Examples <examples.rst>
 

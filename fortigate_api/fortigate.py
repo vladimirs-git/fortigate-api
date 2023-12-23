@@ -38,7 +38,7 @@ class Fortigate:
     objects that are not implemented in `FortigateAPI`_
     """
 
-    def __init__(self, host: str, **kwargs):
+    def __init__(self, host: str, **kwargs):   # TODO parameters as in netbox3
         """**Fortigate** - Firewall Connector.
 
         ::
