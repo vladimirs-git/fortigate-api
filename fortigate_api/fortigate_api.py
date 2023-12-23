@@ -19,16 +19,50 @@ from fortigate_api.service_category import ServiceCategory
 from fortigate_api.service_group import ServiceGroup
 from fortigate_api.snmp_community import SnmpCommunity
 from fortigate_api.ssh import SSH
+from fortigate_api.types_ import LStr
 from fortigate_api.virtual_ip import VirtualIP
 from fortigate_api.zone import Zone
 
 
 class FortigateAPI:
-    """FortigateAPI, a set of connectors to work with commonly used objects.
+    """FortigateAPI, a set of connectors to work with commonly used fortigate-objects.
 
     Connectors:
 
-    :ivar obj address: :py:class:`fortigate_api.address.Address` :doc:`Address`.
+    :ivar obj address: :py:class:`fortigate_api.address.Address`
+        :doc:`Address`.
+    :ivar obj address_group: :py:class:`fortigate_api.address_group.AddressGroup`
+        :doc:`AddressGroup`.
+    :ivar obj antivirus: :py:class:`fortigate_api.antivirus.Antivirus`
+        :doc:`Antivirus`.
+    :ivar obj application: :py:class:`fortigate_api.application.Application`
+        :doc:`Application`.
+    :ivar obj dhcp_server: :py:class:`fortigate_api.dhcp_server.DhcpServer`
+        :doc:`DhcpServer`.
+    :ivar obj external_resource: :py:class:`fortigate_api.external_resource.ExternalResource`
+        :doc:`ExternalResource`.
+    :ivar obj interface: :py:class:`fortigate_api.interface.Interface`
+        :doc:`Interface`.
+    :ivar obj internet_service: :py:class:`fortigate_api.internet_service.InternetService`
+        :doc:`InternetService`.
+    :ivar obj ip_pool: :py:class:`fortigate_api.ip_pool.IpPool`
+        :doc:`IpPool`.
+    :ivar obj policy: :py:class:`fortigate_api.policy.Policy`
+        :doc:`Policy`.
+    :ivar obj schedule: :py:class:`fortigate_api.schedule.Schedule`
+        :doc:`Schedule`.
+    :ivar obj service: :py:class:`fortigate_api.service.Service`
+        :doc:`Service`.
+    :ivar obj service_category: :py:class:`fortigate_api.service_category.ServiceCategory`
+        :doc:`ServiceCategory`.
+    :ivar obj service_group: :py:class:`fortigate_api.service_group.ServiceGroup`
+        :doc:`ServiceGroup`.
+    :ivar obj snmp_community: :py:class:`fortigate_api.snmp_community.SnmpCommunity`
+        :doc:`SnmpCommunity`.
+    :ivar obj virtual_ip: :py:class:`fortigate_api.virtual_ip.VirtualIP`
+        :doc:`VirtualIP`.
+    :ivar obj zone: :py:class:`fortigate_api.zone.Zone`
+        :doc:`Zone`.
     """
 
     def __init__(self, **kwargs):  # TODO parameters as in netbox3
@@ -69,7 +103,7 @@ class FortigateAPI:
         """
         self.rest = Fortigate(**kwargs)
         self.ssh = SSH(**kwargs)
-        # Objects
+        # Object connectors
         self.address = Address(self.rest)
         self.address_group = AddressGroup(self.rest)
         self.antivirus = Antivirus(self.rest)
@@ -123,3 +157,23 @@ class FortigateAPI:
         if not vdom:
             vdom = VDOM
         self.rest.vdom = vdom
+
+    # ============================= helpers ==============================
+
+    def _get_connectors(self) -> LStr:  # TODO test
+        """Return all Connectors"""
+        connectors: LStr = []
+        for attr in dir(self):
+            if attr in ["rest", "ssh"]:
+                continue
+            if attr.startswith("_"):
+                continue
+            obj = getattr(self, attr)
+            if callable(obj):
+                continue
+            if callable(getattr(self, attr)):
+                continue
+            if getattr(FortigateAPI, attr, None):  # property
+                continue
+            connectors.append(attr)
+        return connectors

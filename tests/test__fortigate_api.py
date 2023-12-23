@@ -1,10 +1,18 @@
 """unittest fortigate_api.py"""
-
+import re
 import unittest
 from unittest.mock import patch
 
+import pytest
+
 from fortigate_api import FortigateAPI, Fortigate
 from tests.helper__tst import MockSession
+
+
+@pytest.fixture
+def api():
+    """Init FortigateAPI."""
+    return FortigateAPI(host="host")
 
 
 class Test(unittest.TestCase):
@@ -25,6 +33,14 @@ class Test(unittest.TestCase):
                     result = session.__class__.__name__
                     req = "MockSession"
                     self.assertEqual(result, req, msg="MockSession")
+
+
+def test__connectors(api: FortigateAPI):
+    """FortigateAPI connectors"""
+    connectors = api._get_connectors()
+    docstring = api.__doc__
+    docs = re.findall(r':ivar obj (\w+):', docstring)
+    assert connectors == docs
 
 
 if __name__ == "__main__":

@@ -25,8 +25,8 @@ Python >=3.8 required.
    :maxdepth: 1
    :caption: Contents:
 
-    FortigateAPI <fortigate_api.rst>
-    Fortigate <fortigate.rst>
+    FortigateAPI <FortigateAPI.rst>
+    Fortigate <Fortigate.rst>
     Objects <objects.rst>
     Address <Address.rst>
     SSH <ssh.rst>
