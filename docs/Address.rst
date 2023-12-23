@@ -6,7 +6,7 @@
 Address
 =======
 
-.. autoclass:: address.Address
+.. autoclass:: fortigate_api.address.Address
   :members:
 
 

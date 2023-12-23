@@ -20,7 +20,7 @@ class Test(MockFortigate):
         for name, req in [
             (ADDGR1, 200),  # present in the Fortigate, no need create
             ("ADDGR9", 500),  # error
-            (NAME3, 200),  # absent in the Fortigate, need create
+            (NAME3, 200),  # not found in the Fortigate, need create
         ]:
             result = self.obj.create(data={"name": name}).status_code
             self.assertEqual(result, req, msg=f"{name=}")

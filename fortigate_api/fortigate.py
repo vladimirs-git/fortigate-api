@@ -234,7 +234,7 @@ class Fortigate:
 
             :return: Session response
                 *<Response [200]>* Object successfully deleted
-                *<Response [404]>* Object absent in the Fortigate
+                *<Response [404]>* Object not found in the Fortigate
             :rtype: Response
         """
         response: Response = self._response("delete", url)
@@ -261,7 +261,7 @@ class Fortigate:
         return results
 
     def exist(self, url: str) -> Response:
-        """Check does an object exists in the Fortigate.
+        """Check if an object exists in the Fortigate.
 
         ::
             :param url: REST API URL to the object

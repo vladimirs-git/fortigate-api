@@ -1,4 +1,4 @@
-"""FortigateAPI, a set of methods designed to work with commonly used objects."""
+"""FortigateAPI, a set of connectors to work with commonly used objects."""
 
 from __future__ import annotations
 
@@ -24,10 +24,11 @@ from fortigate_api.zone import Zone
 
 
 class FortigateAPI:
-    """FortigateAPI, a set of methods designed to work with commonly used objects.
+    """FortigateAPI, a set of connectors to work with commonly used objects.
 
-    Objects:
-    :ivar obj address: :py:class:`.Address` :doc:`Address`.
+    Connectors:
+
+    :ivar obj address: :py:class:`fortigate_api.address.Address` :doc:`Address`.
     """
 
     def __init__(self, **kwargs):  # TODO parameters as in netbox3
@@ -68,7 +69,7 @@ class FortigateAPI:
         """
         self.rest = Fortigate(**kwargs)
         self.ssh = SSH(**kwargs)
-
+        # Objects
         self.address = Address(self.rest)
         self.address_group = AddressGroup(self.rest)
         self.antivirus = Antivirus(self.rest)

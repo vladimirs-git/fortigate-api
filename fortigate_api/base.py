@@ -29,36 +29,36 @@ IMPLEMENTED_OBJECTS = (
 
 
 class Base:
-    """Parent of FortigateAPI objects: Address, AddressGroup, Policy, etc."""
+    """Connector, a set of methods to modify objects in the Fortigate."""
 
     def __init__(self, rest, url_obj: str, uid_key: str = "name"):
-        """Parent of FortigateAPI objects: Address, AddressGroup, Policy, etc.
+        """Init Connector.
 
-        ::
-            :param rest: Fortigate REST API connector
-            :type rest: Fortigate
+        :param rest: :ref:`Fortigate` REST API connector.
+        :type rest: Fortigate
 
-            :param url_obj: Part of REST API URL that pointing to object
-            :type url_obj: str
+        :param url_obj: Part of REST API URL that pointing to object.
+        :type url_obj: str
 
-            :param uid_key: Key of unique identifier: "name" (default), "id", "policyid"
-            :type uid_key: str
+        :param uid_key: Key of unique identifier: `name`, `id`, `policyid`.
+            Default in `name`.
+        :type uid_key: str
         """
         self.rest = rest
         self.url_ = f"{self.rest.url}/{url_obj}"
         self.uid_key = uid_key
 
     def create(self, data: DAny) -> Response:
-        """Create fortigate-object in the Fortigate.
+        """Create the fortigate-object in the Fortigate.
 
-        ::
-            :param data: Data of the fortigate-object
-            :type data: dict
+        :param data: Data of the fortigate-object.
+        :type data: dict
 
-            :return: Session response
-                *<Response [200]>* Object successfully created or already exists
-                *<Response [500]>* Object already exist in the Fortigate
-            :rtype: Response
+        :return: Session response.
+
+            - `<Response [200]>` Object successfully created or already exists,
+            - `<Response [400]>` Object already exist.
+        :rtype: requests.Response
         """
         h.check_mandatory(keys=["name"], **data)
         uid = h.get_quoted(key="name", **data)
@@ -72,18 +72,19 @@ class Base:
     def delete(self, uid: StrInt = "", **kwargs) -> Response:
         """Delete the fortigate-object from the Fortigate.
 
-        ::
-            :param uid: Identifier of the fortigate-object. Used to delete a single object
-            :type uid: str or int
+        :param uid: Identifier of the fortigate-object.
+            Used to delete a single object.
+        :type uid: str or int
 
-            :param filter: Filters fortigate-objects by one or multiple conditions: equals "==",
-                not equals "!=", contains "=@". Used to delete multiple objects
-            :type filter: str or List[str]
+        :param filter: Filter fortigate-objects by one or multiple :ref:`filtering conditions`.
+            Used to delete multiple objects.
+        :type filter: str or List[str]
 
-            :return: Session response
-                *<Response [200]>* Object successfully deleted
-                *<Response [404]>* Object absent in the Fortigate
-            :rtype: Response
+        :return: Session response.
+
+            - `<Response [200]>` Object successfully deleted,
+            - `<Response [404]>` Object not found in the Fortigate.
+        :rtype: requests.Response
         """
         if uid:
             kwargs["uid"] = uid
@@ -96,15 +97,79 @@ class Base:
             return self._delete_by_filter(kwargs)
         raise ValueError(f"invalid {uid=} {kwargs=}")
 
+    # noinspection PyIncorrectDocstring
+    def get(self, **kwargs) -> LDAny:
+        """Get fortigate-objects, all or filtered by some parameters.
+
+        :param uid: Filter fortigate-object by unique identifier.
+            Used to get a single object.
+        :type uid: str or int
+
+        :param filter: Filter fortigate-objects by one or multiple :ref:`filtering conditions`. 
+            Used to get multiple objects.
+        :type filter: str or List[str]
+
+        :return: List of the fortigate-objects.
+        :rtype: List[dict]
+        """
+        if kwargs:
+            h.check_one_of(keys=["uid", "filter"], **kwargs)
+        uid: str = h.pop_quoted(key="uid", data=kwargs)
+        url = f"{self.url_}{uid}"
+        url = h.make_url(url, **kwargs)
+        datas: LDAny = self.rest.get(url)
+        return datas
+
+    def is_exist(self, uid: StrInt) -> bool:
+        """Check if a fortigate-object exists in the Fortigate.
+
+        :param uid: Identifier of the fortigate-object.
+        :type uid: str or int
+
+        :return: True - object exist, False - object does not exist.
+        :rtype: bool
+        """
+        if uid := h.quote(uid):
+            url = f"{self.url_}{uid}"
+            response = self.rest.exist(url=url)
+            return response.ok
+        raise ValueError(f"invalid {uid=}")
+
+    def update(self, data: DAny, uid: StrInt = "") -> Response:
+        """Update fortigate-object where ``uid`` is ``data["name"]``.
+
+        :param data: Data of the fortigate-object.
+        :type data: dict
+
+        :param uid: Name of the fortigate-object,
+            taken from the ``uid`` parameter or from ``data["name"]``.
+        :type uid: str or int
+
+        :return: Session response.
+
+            - `Response [200]>` Object successfully updated,
+            - `Response [404]>` Object has not been updated.
+        :rtype: requests.Response
+        """
+        if not uid:
+            uid = data.get("name") or ""
+            if not uid:
+                raise ValueError(f"absent {uid=} and data[\"name\"]")
+        return self._update(data=data, uid=uid)
+
+    # =========================== helpers ===========================
+
     def _delete_by_filter(self, kwargs) -> Response:
         """Delete the fortigate-objects from the Fortigate by `filter`.
 
-        ::
-            :param kwargs: Filters fortigate-objects by one or multiple conditions: equals "==",
-                not equals "!=", contains "=@". Used to delete multiple objects
+        :param kwargs: Filter fortigate-objects by one or multiple :ref:`filtering conditions`.
+            Used to delete multiple objects.
 
-            :return: Response object with the highest status_code
-            :rtype: Response
+        :return: Session response with the highest (worst) status_code.
+
+            - `<Response [200]>` Object successfully deleted,
+            - `<Response [404]>` Object not found in the Fortigate.
+        :rtype: requests.Response
         """
         responses: LResponse = []
         filters: LStr = h.pop_lstr(key="filter", data=kwargs)
@@ -116,79 +181,15 @@ class Base:
             responses.append(response)
         return self._highest_response(responses)
 
-    # noinspection PyIncorrectDocstring
-    def get(self, **kwargs) -> LDAny:
-        """Get fortigate-objects, all or filtered by some of params.
-
-        ::
-            :param uid: Filters fortigate-object by unique identifier. Used to get a single object
-            :type uid: str or int
-
-            :param filter: Filters fortigate-objects by one or multiple conditions: equals "==",
-                not equals "!=", contains "=@". Used to get multiple objects
-            :type filter: str or List[str]
-
-            :return: List of the fortigate-objects
-            :rtype: List[dict]
-        """
-        if kwargs:
-            h.check_one_of(keys=["uid", "filter"], **kwargs)
-        uid: str = h.pop_quoted(key="uid", data=kwargs)
-        url = f"{self.url_}{uid}"
-        url = h.make_url(url, **kwargs)
-        datas: LDAny = self.rest.get(url)
-        return datas
-
-    def is_exist(self, uid: StrInt) -> bool:
-        """Check does a fortigate-object exists in the Fortigate.
-
-        ::
-            :param uid: Identifier of the fortigate-object
-            :type uid: str or int
-
-            :return: True - object exist, False - object does not exist
-            :rtype: bool
-        """
-        if uid := h.quote(uid):
-            url = f"{self.url_}{uid}"
-            response = self.rest.exist(url=url)
-            return response.ok
-        raise ValueError(f"invalid {uid=}")
-
-    def update(self, data: DAny, uid: StrInt = "") -> Response:
-        """Update address, address-group, etc. object, where `uid` is data["name"].
-
-        ::
-            :param data: Data of the fortigate-object
-            :type data: dict
-
-            :param uid: Name of the fortigate-object,
-                taken from the `uid` parameter or from data["name"]
-            :type uid: str or int
-
-            :return: Session response
-                *<Response [200]>* Object successfully updated
-                *<Response [404]>* Object has not been updated
-            :rtype: Response
-        """
-        if not uid:
-            uid = data.get("name") or ""
-            if not uid:
-                raise ValueError(f"absent {uid=} and data[\"name\"]")
-        return self._update(data=data, uid=uid)
-
-    # =========================== helpers ===========================
-
     @staticmethod
     def _highest_response(responses: LResponse) -> Response:
         """Return Response object with the highest status_code, else return <Response [200]>.
 
-        ::
-            :param responses: List of Response objects
-            :type responses: List[Response]
+        :param responses: List of Response objects.
+        :type responses: List[Response]
 
-            :return: Response with the highest status_code
-            :rtype: Response
+        :return: Response with the highest (worst) status_code.
+        :rtype: requests.Response
         """
         if responses:
             responses = sorted(responses, key=attrgetter("status_code"))
@@ -209,17 +210,17 @@ class Base:
     def _update(self, data: DAny, uid: StrInt) -> Response:
         """Update fortigate-object in the Fortigate.
 
-        ::
-            :param data: Data of the fortigate-object
-            :type data: dict
+        :param data: Data of the fortigate-object.
+        :type data: dict
 
-            :param uid: Identifier of the fortigate-object
-            :type uid: str or int
+        :param uid: Identifier of the fortigate-object.
+        :type uid: str or int
 
-            :return: Session response
-                *<Response [200]>* Object successfully updated
-                *<Response [404]>* Object has not been updated
-            :rtype: Response
+        :return: Session response.
+
+            - `Response [200]>` Object successfully updated,
+            - `Response [404]>` Object has not been updated.
+        :rtype: requests.Response
         """
         if uid := h.quote(uid):
             url = f"{self.url_}{uid}"
