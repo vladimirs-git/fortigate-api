@@ -20,7 +20,7 @@ def create_connectors() -> None:
         underline = "=" * len(obj_name)
         text = template.render(name=name, obj_name=obj_name, underline=underline)
 
-        path = Path(f"{obj_name}.rst")
+        path = Path("objects", f"{obj_name}.rst")
         path.write_text(text)
         logging.info("created %s", path)
 

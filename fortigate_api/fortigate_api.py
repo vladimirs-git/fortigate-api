@@ -27,79 +27,53 @@ from fortigate_api.zone import Zone
 class FortigateAPI:
     """FortigateAPI, a set of connectors to work with commonly used fortigate-objects.
 
-    Connectors:
+    Implemented Objects:
 
-    :ivar obj address: :py:class:`fortigate_api.address.Address`
-        :doc:`Address`.
-    :ivar obj address_group: :py:class:`fortigate_api.address_group.AddressGroup`
-        :doc:`AddressGroup`.
-    :ivar obj antivirus: :py:class:`fortigate_api.antivirus.Antivirus`
-        :doc:`Antivirus`.
-    :ivar obj application: :py:class:`fortigate_api.application.Application`
-        :doc:`Application`.
-    :ivar obj dhcp_server: :py:class:`fortigate_api.dhcp_server.DhcpServer`
-        :doc:`DhcpServer`.
-    :ivar obj external_resource: :py:class:`fortigate_api.external_resource.ExternalResource`
-        :doc:`ExternalResource`.
-    :ivar obj interface: :py:class:`fortigate_api.interface.Interface`
-        :doc:`Interface`.
-    :ivar obj internet_service: :py:class:`fortigate_api.internet_service.InternetService`
-        :doc:`InternetService`.
-    :ivar obj ip_pool: :py:class:`fortigate_api.ip_pool.IpPool`
-        :doc:`IpPool`.
-    :ivar obj policy: :py:class:`fortigate_api.policy.Policy`
-        :doc:`Policy`.
-    :ivar obj schedule: :py:class:`fortigate_api.schedule.Schedule`
-        :doc:`Schedule`.
-    :ivar obj service: :py:class:`fortigate_api.service.Service`
-        :doc:`Service`.
-    :ivar obj service_category: :py:class:`fortigate_api.service_category.ServiceCategory`
-        :doc:`ServiceCategory`.
-    :ivar obj service_group: :py:class:`fortigate_api.service_group.ServiceGroup`
-        :doc:`ServiceGroup`.
-    :ivar obj snmp_community: :py:class:`fortigate_api.snmp_community.SnmpCommunity`
-        :doc:`SnmpCommunity`.
-    :ivar obj virtual_ip: :py:class:`fortigate_api.virtual_ip.VirtualIP`
-        :doc:`VirtualIP`.
-    :ivar obj zone: :py:class:`fortigate_api.zone.Zone`
-        :doc:`Zone`.
+    :ivar obj address: :doc:`objects/Address`.
+    :ivar obj address_group: :doc:`objects/AddressGroup`.
+    :ivar obj antivirus: :doc:`objects/Antivirus`.
+    :ivar obj application: :doc:`objects/Application`.
+    :ivar obj dhcp_server: :doc:`objects/DhcpServer`.
+    :ivar obj external_resource: :doc:`objects/ExternalResource`.
+    :ivar obj interface: :doc:`objects/Interface`.
+    :ivar obj internet_service: :doc:`objects/InternetService`.
+    :ivar obj ip_pool: :doc:`objects/IpPool`.
+    :ivar obj policy: :doc:`objects/Policy`.
+    :ivar obj schedule: :doc:`objects/Schedule`.
+    :ivar obj service: :doc:`objects/Service`.
+    :ivar obj service_category: :doc:`objects/ServiceCategory`.
+    :ivar obj service_group: :doc:`objects/ServiceGroup`.
+    :ivar obj snmp_community: :doc:`objects/SnmpCommunity`.
+    :ivar obj virtual_ip: :doc:`objects/VirtualIP`.
+    :ivar obj zone: :doc:`objects/Zone`.
     """
 
     def __init__(self, **kwargs):  # TODO parameters as in netbox3
         """Init FortigateAPI.
 
-        :param host: Firewall ip address or hostname
-        :type host: str
+        :param str host: Fortigate hostname or ip address.
 
-        :param username: Administrator name. Mutually exclusive with token
-        :type username: str
+        :param str username: Administrator name. Mutually exclusive with `token`.
 
-        :param password: Administrator password. Mutually exclusive with token
-        :type password: str
+        :param str password: Administrator password. Mutually exclusive with `token`.
 
-        :param token: Administrator token. Mutually exclusive with username and password
-        :type token: str
+        :param str token: Token. Mutually exclusive with `username` and `password`.
 
-        :param scheme: (optional) "https" (default) or "http"
-        :type scheme: str
+        :param str scheme: Access method: `https` or `http`. Default is `https`.
 
-        :param port: (optional) TCP port, by default 443 for "https", 80 for "http"
-        :type port: str
+        :param int port: TCP port. Default is `443` for scheme=`https`, `80` for scheme=`http`.
 
-        :param timeout: (optional) Session timeout minutes (default 15)
-        :type timeout: int
+        :param int timeout: Session timeout (minutes). Default is 15.
 
-        :param verify: (optional) Enable SSL certificate verification for HTTPS requests.
-            True -  enable
-            False - disable (default)
-        :type verify: bool
+        :param bool verify: Transport Layer Security.
+            `True` - A TLS certificate required,
+            `False` - Requests will accept any TLS certificate.
+            Default is `False`.
 
-        :param vdom: Name of virtual domain (default "root").
-            Used in REST API (Not used in SSH)
-        :type vdom: str
+        :param str vdom: Name of the virtual domain. Default is `root`.
+            This is only used in the REST API and not in SSH.
 
-        :param ssh: Netmiko ConnectHandler parameters
-        :type ssh: dict
+        :param dict ssh: Netmiko ConnectHandler parameters.
         """
         self.rest = Fortigate(**kwargs)
         self.ssh = SSH(**kwargs)
@@ -138,16 +112,22 @@ class FortigateAPI:
     # =========================== methods ============================
 
     def login(self) -> FortigateAPI:
-        """Login to the Fortigate using REST API."""
+        """Login to the Fortigate using REST API.
+
+        Used with `username` and `password` parameters, not used with `token`.
+        """
         self.rest.login()
         return self
 
     def logout(self) -> None:
-        """Logout from the Fortigate using REST API."""
+        """Logout from the Fortigate using REST API.
+
+        Used with `username` and `password` parameters, not used with `token`.
+        """
         self.rest.logout()
 
     @property
-    def vdom(self) -> str:
+    def vdom(self) -> str:  # TODO rename to `active_vdom`
         """ACE TCP/UDP ports."""
         return self.rest.vdom
 
@@ -160,8 +140,8 @@ class FortigateAPI:
 
     # ============================= helpers ==============================
 
-    def _get_connectors(self) -> LStr:  # TODO test
-        """Return all Connectors"""
+    def _get_connectors(self) -> LStr:
+        """Return all Object connectors."""
         connectors: LStr = []
         for attr in dir(self):
             if attr in ["rest", "ssh"]:
