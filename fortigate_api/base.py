@@ -120,21 +120,6 @@ class Base:
         datas: LDAny = self.rest.get(url)
         return datas
 
-    def is_exist(self, uid: StrInt) -> bool:
-        """Check if a fortigate-object exists in the Fortigate.
-
-        :param uid: Identifier of the fortigate-object.
-        :type uid: str or int
-
-        :return: True - object exist, False - object does not exist.
-        :rtype: bool
-        """
-        if uid := h.quote(uid):
-            url = f"{self.url_}{uid}"
-            response = self.rest.exist(url=url)
-            return response.ok
-        raise ValueError(f"invalid {uid=}")
-
     def update(self, data: DAny, uid: StrInt = "") -> Response:
         """Update fortigate-object where ``uid`` is ``data["name"]``.
 
@@ -156,6 +141,21 @@ class Base:
             if not uid:
                 raise ValueError(f"absent {uid=} and data[\"name\"]")
         return self._update(data=data, uid=uid)
+
+    def is_exist(self, uid: StrInt) -> bool:
+        """Check if a fortigate-object exists in the Fortigate.
+
+        :param uid: Identifier of the fortigate-object.
+        :type uid: str or int
+
+        :return: True - object exist, False - object does not exist.
+        :rtype: bool
+        """
+        if uid := h.quote(uid):
+            url = f"{self.url_}{uid}"
+            response = self.rest.exist(url=url)
+            return response.ok
+        raise ValueError(f"invalid {uid=}")
 
     # =========================== helpers ===========================
 

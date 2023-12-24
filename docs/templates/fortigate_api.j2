@@ -1,0 +1,7 @@
+{{ obj }}
+{{ underline }}
+
+.. autoclass:: {{ package }}.{{ obj }}
+{% for connector in connectors %}
+  .. autoattribute:: {{ connector }}
+{% endfor %}

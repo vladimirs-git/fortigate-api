@@ -8,7 +8,7 @@ from fortigate_api.antivirus import Antivirus
 from fortigate_api.application import Application
 from fortigate_api.dhcp_server import DhcpServer
 from fortigate_api.external_resource import ExternalResource
-from fortigate_api.fortigate import Fortigate, VDOM
+from fortigate_api.fortigate import Fortigate, HTTPS, TIMEOUT, VDOM
 from fortigate_api.interface import Interface
 from fortigate_api.internet_service import InternetService
 from fortigate_api.ip_pool import IpPool
@@ -19,36 +19,28 @@ from fortigate_api.service_category import ServiceCategory
 from fortigate_api.service_group import ServiceGroup
 from fortigate_api.snmp_community import SnmpCommunity
 from fortigate_api.ssh import SSH
-from fortigate_api.types_ import LStr
+from fortigate_api.types_ import LStr, ODAny
 from fortigate_api.virtual_ip import VirtualIP
 from fortigate_api.zone import Zone
 
 
 class FortigateAPI:
-    """FortigateAPI, a set of connectors to work with commonly used fortigate-objects.
+    """FortigateAPI, a set of connectors to work with commonly used fortigate-objects."""
 
-    Implemented Objects:
-
-    :ivar obj address: :doc:`objects/Address`.
-    :ivar obj address_group: :doc:`objects/AddressGroup`.
-    :ivar obj antivirus: :doc:`objects/Antivirus`.
-    :ivar obj application: :doc:`objects/Application`.
-    :ivar obj dhcp_server: :doc:`objects/DhcpServer`.
-    :ivar obj external_resource: :doc:`objects/ExternalResource`.
-    :ivar obj interface: :doc:`objects/Interface`.
-    :ivar obj internet_service: :doc:`objects/InternetService`.
-    :ivar obj ip_pool: :doc:`objects/IpPool`.
-    :ivar obj policy: :doc:`objects/Policy`.
-    :ivar obj schedule: :doc:`objects/Schedule`.
-    :ivar obj service: :doc:`objects/Service`.
-    :ivar obj service_category: :doc:`objects/ServiceCategory`.
-    :ivar obj service_group: :doc:`objects/ServiceGroup`.
-    :ivar obj snmp_community: :doc:`objects/SnmpCommunity`.
-    :ivar obj virtual_ip: :doc:`objects/VirtualIP`.
-    :ivar obj zone: :doc:`objects/Zone`.
-    """
-
-    def __init__(self, **kwargs):  # TODO parameters as in netbox3
+    def __init__(
+            self,
+            host: str,
+            username: str = "",
+            password: str = "",
+            token: str = "",
+            scheme: str = HTTPS,
+            port: str = "",
+            timeout: int = TIMEOUT,
+            verify: bool = False,
+            vdom: str = VDOM,
+            ssh: ODAny = None,
+            **kwargs,
+    ):
         """Init FortigateAPI.
 
         :param str host: Fortigate hostname or ip address.
@@ -75,26 +67,75 @@ class FortigateAPI:
 
         :param dict ssh: Netmiko ConnectHandler parameters.
         """
+        kwargs = {
+            "host": host,
+            "username": username,
+            "password": password,
+            "token": token,
+            "scheme": scheme,
+            "port": port,
+            "timeout": timeout,
+            "verify": verify,
+            "vdom": vdom,
+            "ssh": ssh,
+            **kwargs,
+        }
+
         self.rest = Fortigate(**kwargs)
         self.ssh = SSH(**kwargs)
+
         # Object connectors
+
         self.address = Address(self.rest)
+        """:py:class:`.Address`"""
+
         self.address_group = AddressGroup(self.rest)
+        """:py:class:`.AddressGroup`"""
+
         self.antivirus = Antivirus(self.rest)
+        """:py:class:`.Antivirus`"""
+
         self.application = Application(self.rest)
+        """:py:class:`.Application`"""
+
         self.dhcp_server = DhcpServer(self.rest)
+        """:py:class:`.DhcpServer`"""
+
         self.external_resource = ExternalResource(self.rest)
+        """:py:class:`.ExternalResource`"""
+
         self.interface = Interface(self.rest)
+        """:py:class:`.Interface`"""
+
         self.internet_service = InternetService(self.rest)
+        """:py:class:`.InternetService`"""
+
         self.ip_pool = IpPool(self.rest)
+        """:py:class:`.IpPool`"""
+
         self.policy = Policy(self.rest)
+        """:py:class:`.Policy`"""
+
         self.schedule = Schedule(self.rest)
+        """:py:class:`.Schedule`"""
+
         self.service = Service(self.rest)
+        """:py:class:`.Service`"""
+
         self.service_category = ServiceCategory(self.rest)
+        """:py:class:`.ServiceCategory`"""
+
         self.service_group = ServiceGroup(self.rest)
+        """:py:class:`.ServiceGroup`"""
+
         self.snmp_community = SnmpCommunity(self.rest)
+        """:py:class:`.SnmpCommunity`"""
+
         self.virtual_ip = VirtualIP(self.rest)
+        """:py:class:`.VirtualIP`"""
+
         self.zone = Zone(self.rest)
+        """:py:class:`.Zone`"""
 
     def __repr__(self):
         """Return a string representation related to this object."""
@@ -112,17 +153,23 @@ class FortigateAPI:
     # =========================== methods ============================
 
     def login(self) -> FortigateAPI:
-        """Login to the Fortigate using REST API.
+        """Login to the Fortigate using REST API and creates a Session object.
 
-        Used with `username` and `password` parameters, not used with `token`.
+        - Validate 'token' if object has been initialized with `token` parameter.
+        - Validate  `password` if object has been initialized with `username` parameter.
+
+        :return: None. Creates Session object.
         """
         self.rest.login()
         return self
 
     def logout(self) -> None:
-        """Logout from the Fortigate using REST API.
+        """Logout from the Fortigate using REST API, deletes Session object.
 
-        Used with `username` and `password` parameters, not used with `token`.
+        - No need to logo ut if object has been initialized with `token` parameter.
+        - Log out if object has been initialized with `username` parameter.
+
+        :return: None. Deletes Session object
         """
         self.rest.logout()
 

@@ -57,10 +57,11 @@ class Policy(Base):
             :param neighbor: Policy will be moved near to this neighbor-policy
             :type neighbor: str or int
 
-            :return: Session response
+            :return: Session response.
+
                 *<Response [200]>* Policy successfully moved
                 *<Response [500]>* Policy has not been moved
-            :rtype: Response
+            :rtype: requests.Response
         """
         kwargs = {
             "action": "move",
@@ -83,10 +84,11 @@ class Policy(Base):
                 taken from the `uid` parameter or from data["policyid"]
             :type uid: str or int
 
-            :return: Session response
+            :return: Session response.
+
                 *<Response [200]>* Object successfully updated
                 *<Response [404]>* Object has not been updated
-            :rtype: Response
+            :rtype: requests.Response
         """
         if not uid:
             uid = data.get("policyid") or ""

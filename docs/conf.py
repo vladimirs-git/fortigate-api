@@ -1,8 +1,5 @@
-"""Configuration file for the Sphinx documentation builder.
-
-For the full list of built-in configuration values, see the documentation:
-https://www.sphinx-doc.org/en/master/usage/configuration.html
-"""
+"""Configuration file for the Sphinx documentation builder."""
+import logging
 
 project = "fortigate-api"
 copyright = "2021, Vladimirs Prusakovs"
@@ -23,3 +20,38 @@ html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 
 autoclass_content = "both"
+
+autodoc_default_options = {
+    # "members": True,
+    "member-order": "bysource",
+    # "special-members": "__init__",
+    # "undoc-members": True,
+    # "exclude-members": "__weakref__"
+}
+
+
+def process_signature(app, what, name, obj, options, signature, return_annotation):
+    _ = f"{app=} {what=} {name=} {obj=} {options=} {signature=} {return_annotation=}"
+    logging.warning(_)
+    if what == "class" and name == "fortigate_api.base.Base":
+        return "", ""
+
+
+def process_docstring(app, what, name, obj, options, lines: list):
+    """Skip docstrings of class Base, Base.__init__."""
+    _ = f"{app=} {what=} {name=} {obj=} {options=} {lines=}"
+    logging.warning(_)
+    if what == "class" and name == "fortigate_api.base.Base":
+        lines.clear()
+
+
+def skip(app, what, name, obj, would_skip, options):
+    _ = f"{app=} {what=} {name=} {obj=} {would_skip=} {options=}"
+    logging.warning(_)
+    return would_skip
+
+
+# def setup(app):
+#     app.connect("autodoc-skip-member", skip)
+#     app.connect("autodoc-process-signature", process_signature)
+#     app.connect("autodoc-process-docstring", process_docstring)

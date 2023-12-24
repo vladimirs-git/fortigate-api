@@ -4,7 +4,11 @@ from fortigate_api.base import Base
 
 
 class Address(Base):
-    """Address Object."""
+    """Address Object.
+
+    - Web UI: https://hostname/api/v2/cmdb/firewall/addrgrp/
+    - API: https://hostname/ng/firewall/address
+    """
 
     def __init__(self, rest):
         """Init Address Object.

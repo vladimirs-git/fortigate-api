@@ -5,7 +5,7 @@ Python package to configure Fortigate (Fortios) devices using REST API and SSH.
 With this package, you can modify objects in the Fortigate. The most commonly used :ref:`Objects`
 are implemented in the :ref:`FortigateAPI` methods, but you can manipulate any other objects
 that can be accessed through the REST API using the :ref:`Fortigate` methods.
-Additionally, you can retrieve and modify the Fortigate configuration through :ref:`SSH`.
+Additionally, you can retrieve and modify the Fortigate configuration through :ref:`Ssh`.
 
 Main features:
 
@@ -14,10 +14,10 @@ Main features:
 - SSH Netmiko connector to work with CLI commands
 - Usage :ref:`Examples`
 
+Python >=3.8 required.
 
 This project on `GitHub`_.
 
-Python >=3.8 required.
 
 ----------------------------------------------------------------------------------------
 
