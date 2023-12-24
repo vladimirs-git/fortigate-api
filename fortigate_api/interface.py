@@ -6,14 +6,18 @@ from fortigate_api.types_ import LDAny
 
 
 class Interface(Base):
-    """Interface Object."""
+    """Interface Object.
+
+    - Web UI: https://hostname/ng/interface
+    - API: https://hostname/api/v2/cmdb/system/interface
+    - Data: :ref:`Interface.yml`
+    """
 
     def __init__(self, rest):
-        """Interface Object.
+        """Init Interface Object.
 
-        ::
-            :param rest: Fortigate REST API connector
-            :type rest: Fortigate
+        :param rest: :ref:`Fortigate` REST API connector.
+        :type rest: Fortigate
         """
         super().__init__(rest=rest, url_obj="api/v2/cmdb/system/interface/")
 

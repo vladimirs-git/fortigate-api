@@ -88,59 +88,59 @@ Object                GUI and REST API URL to the object (FortiOS v6.4)
 
 `Application`_        https://hostname/ng/utm/appctrl/sensor
 
-                      https://hostname/api/v2/cmdb/application/list/
+                      https://hostname/api/v2/cmdb/application/list
 
 `DhcpServer`_         https://hostname/ng/interface/edit/{name}
 
-                      https://hostname/api/v2/cmdb/system.dhcp/server/
+                      https://hostname/api/v2/cmdb/system.dhcp/server
 
 `ExternalResource`_   https://hostname/ng/external-connector
 
-                      https://hostname/api/v2/cmdb/system/external-resource/
+                      https://hostname/api/v2/cmdb/system/external-resource
 
 `Interface`_          https://hostname/ng/interface
 
-                      https://hostname/api/v2/cmdb/system/interface/
+                      https://hostname/api/v2/cmdb/system/interface
 
 `InternetService`_    https://hostname/ng/firewall/internet_service
 
-                      https://hostname/api/v2/cmdb/firewall/internet-service/
+                      https://hostname/api/v2/cmdb/firewall/internet-service
 
 `IpPool`_             https://hostname/ng/firewall/ip-pool
 
-                      https://hostname/api/v2/cmdb/firewall/ippool/
+                      https://hostname/api/v2/cmdb/firewall/ippool
 
 `Policy`_             https://hostname/ng/firewall/policy/policy/standard
 
-                      https://hostname/api/v2/cmdb/firewall/policy/
+                      https://hostname/api/v2/cmdb/firewall/policy
 
 `Schedule`_           https://hostname/ng/firewall/schedule
 
-                      https://hostname/api/v2/cmdb/firewall.schedule/onetime/
+                      https://hostname/api/v2/cmdb/firewall.schedule/onetime
 
 `Service`_            https://hostname/ng/firewall/service
 
-                      https://hostname/api/v2/cmdb/firewall.service/custom/
+                      https://hostname/api/v2/cmdb/firewall.service/custom
 
 `ServiceCategory`_    https://hostname/ng/firewall/service
 
-                      https://hostname/api/v2/cmdb/firewall.service/category/
+                      https://hostname/api/v2/cmdb/firewall.service/category
 
 `ServiceGroup`_       https://hostname/ng/firewall/service
 
-                      https://hostname/api/v2/cmdb/firewall.service/group/
+                      https://hostname/api/v2/cmdb/firewall.service/group
 
 `SnmpCommunity`_      https://hostname/ng/system/snmp
 
-                      https://hostname/api/v2/cmdb/system.snmp/community/
+                      https://hostname/api/v2/cmdb/system.snmp/community
 
 `VirtualIp`_          https://hostname/ng/firewall/virtual-ip
 
-                      https://hostname/api/v2/cmdb/firewall/vip/
+                      https://hostname/api/v2/cmdb/firewall/vip
 
 `Zone`_               https://hostname/ng/interface
 
-                      https://hostname/api/v2/cmdb/system/zone/
+                      https://hostname/api/v2/cmdb/system/zone
 ===================== ==============================================================================
 
 

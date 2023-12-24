@@ -2,7 +2,7 @@
 
 import unittest
 
-from fortigate_api.virtual_ip import VirtualIP
+from fortigate_api.virtual_ip import VirtualIp
 from tests.helper__tst import NAME1, NAME2, NAME3, MockFortigate
 
 
@@ -13,7 +13,7 @@ class Test(MockFortigate):
     def setUp(self):
         """setUp"""
         super().setUp()
-        self.obj = VirtualIP(rest=self.rest)
+        self.obj = VirtualIp(rest=self.rest)
 
     def test_valid__create(self):
         """VirtualIp.create()"""

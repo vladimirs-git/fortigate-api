@@ -10,14 +10,18 @@ from fortigate_api.types_ import LDAny, StrInt
 
 
 class Policy(Base):
-    """Policy Object."""
+    """Policy Object.
+
+    - Web UI: https://hostname/ng/firewall/policy/policy/standard
+    - API: https://hostname/api/v2/cmdb/firewall/policy
+    - Data: :ref:`Policy.yml`
+    """
 
     def __init__(self, rest):
-        """Policy Object.
+        """Init Policy Object.
 
-        ::
-            :param rest: Fortigate REST API connector
-            :type rest: Fortigate
+        :param rest: :ref:`Fortigate` REST API connector.
+        :type rest: Fortigate
         """
         super().__init__(rest=rest, url_obj="api/v2/cmdb/firewall/policy/", uid_key="policyid")
 

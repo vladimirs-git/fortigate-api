@@ -12,7 +12,7 @@ class Antivirus(Base):
     """
 
     def __init__(self, rest):
-        """Antivirus Object.
+        """Init Antivirus Object.
 
         :param rest: :ref:`Fortigate` REST API connector.
         :type rest: Fortigate

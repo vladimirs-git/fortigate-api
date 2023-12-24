@@ -7,14 +7,18 @@ from fortigate_api.types_ import DAny, StrInt
 
 
 class SnmpCommunity(Base):
-    """SNMP Community Object."""
+    """SNMP Community Object.
+
+    - Web UI: https://hostname/ng/system/snmp
+    - API: https://hostname/api/v2/cmdb/system.snmp/community
+    - Data: :ref:`SnmpCommunity.yml`
+    """
 
     def __init__(self, rest):
-        """SNMP Community Object.
+        """Init SNMP Community Object.
 
-        ::
-            :param rest: Fortigate REST API connector
-            :type rest: Fortigate
+        :param rest: :ref:`Fortigate` REST API connector.
+        :type rest: Fortigate
         """
         super().__init__(rest=rest, url_obj="api/v2/cmdb/system.snmp/community/", uid_key="id")
 

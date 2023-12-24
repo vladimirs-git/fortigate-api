@@ -7,14 +7,18 @@ from fortigate_api.types_ import DAny, StrInt
 
 
 class DhcpServer(Base):
-    """DHCP Server Object."""
+    """DHCP Server Object.
+
+    - Web UI: https://hostname/ng/interface/edit/{name}
+    - API: https://hostname/api/v2/cmdb/system.dhcp/server
+    - Data: :ref:`DhcpServer.yml`
+    """
 
     def __init__(self, rest):
-        """DHCP Server Object.
+        """Init DHCP Server Object.
 
-        ::
-            :param rest: Fortigate REST API connector
-            :type rest: Fortigate
+        :param rest: :ref:`Fortigate` REST API connector.
+        :type rest: Fortigate
         """
         super().__init__(rest=rest, url_obj="api/v2/cmdb/system.dhcp/server/", uid_key="id")
 
