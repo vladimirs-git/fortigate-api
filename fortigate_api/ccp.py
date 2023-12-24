@@ -7,10 +7,10 @@ For more details see https://github.com/mpenning/ciscoconfparse
 """
 import re
 from typing import List
-from vhelpers import vre
-from ciscoconfparse import CiscoConfParse, JunosCfgLine  # type: ignore
 
-from fortigate_api import helpers as h
+from ciscoconfparse import CiscoConfParse, JunosCfgLine  # type: ignore
+from vhelpers import vre
+
 from fortigate_api.types_ import LStr, T2Str, T3Str, UStr
 
 LJunosCfgLine = List[JunosCfgLine]

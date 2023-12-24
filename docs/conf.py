@@ -1,5 +1,4 @@
 """Configuration file for the Sphinx documentation builder."""
-import logging
 
 project = "fortigate-api"
 copyright = "2021, Vladimirs Prusakovs"

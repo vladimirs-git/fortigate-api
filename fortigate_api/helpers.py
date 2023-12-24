@@ -1,13 +1,12 @@
 """Helper functions."""
 
 import os
-import re
 import time
 from datetime import datetime
 from urllib import parse
 from urllib.parse import urlencode, urlparse, parse_qs, ParseResult
 
-from fortigate_api.types_ import Any, DAny, T2Str, T3Str, IStr, IStrs, LStr, SDate
+from fortigate_api.types_ import Any, DAny, IStr, IStrs, LStr, SDate
 
 
 # =============================== dict ===============================

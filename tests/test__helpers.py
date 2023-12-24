@@ -1,5 +1,4 @@
 """unittest helpers.py"""
-from vhelpers import vre
 import unittest
 
 import pytest

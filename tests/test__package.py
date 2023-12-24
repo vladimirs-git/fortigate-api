@@ -1,11 +1,11 @@
 """unittests package"""
-from vhelpers import vre
 import re
 import unittest
 from pathlib import Path
 
 import dictdiffer  # type: ignore
 import tomli
+from vhelpers import vre
 
 from fortigate_api import helpers as h
 from fortigate_api.base import IMPLEMENTED_OBJECTS

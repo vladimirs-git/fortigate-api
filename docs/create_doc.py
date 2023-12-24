@@ -4,10 +4,11 @@ from pathlib import Path
 
 from jinja2 import Template
 from vhelpers import vre
+
 import fortigate_api
 from fortigate_api import FortigateAPI
-from fortigate_api.types_ import LStr
 from fortigate_api import helpers as h
+from fortigate_api.types_ import LStr
 
 API = FortigateAPI(host="host")
 

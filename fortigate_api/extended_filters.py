@@ -5,11 +5,12 @@ from functools import wraps
 from ipaddress import ip_network, IPv4Network
 from typing import Tuple
 
+from vhelpers import vre
+
 from fortigate_api import helpers as h
 from fortigate_api.address import Address
 from fortigate_api.address_group import AddressGroup
 from fortigate_api.types_ import LDAny, LStr, DLStr, DLInet
-from vhelpers import vre
 
 EFILTER_KEYS = ["dstaddr", "srcaddr"]
 EFILTER_OPERATORS = [
@@ -22,6 +23,7 @@ EFILTER_OPERATORS = [
 
 def wrap_efilters(func):
     """Wrap Extended Filters."""
+
     # noinspection PyIncorrectDocstring
     @wraps(func)
     def wrapper(fgt_api, **kwargs):
