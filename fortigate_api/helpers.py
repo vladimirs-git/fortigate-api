@@ -148,6 +148,39 @@ def pop_quoted(key: str, data: DAny) -> str:
 
 # =============================== str ================================
 
+def attr_to_class(attr: str) -> str:
+    """Replace lower-case attribute name camel-case class name.
+
+    :param attr: Attribute name.
+
+    :return: class name.
+
+    :example: attr_to_class("address_group") -> "AddressGroup"
+    """
+    return "".join([s.capitalize() for s in attr.split("_")])
+
+
+def class_to_attr(word: str) -> str:
+    """Replace upper character with underscore and lower.
+
+    :param word: The word to be modified.
+
+    :return: The modified word.
+
+    :example: replace_upper("IpAddresses") -> "ip_addresses"
+    """
+    if not word:
+        return ""
+    word = word[0].lower() + word[1:]
+    new_word = ""
+    for char in word:
+        if char.isupper():
+            new_word += "_" + char.lower()
+        else:
+            new_word += char
+    return new_word
+
+
 def findall1(pattern: str, string: str, flags=0) -> str:
     """Parse 1st item of re.findall(). If nothing is found, return an empty string.
 

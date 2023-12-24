@@ -1,17 +1,19 @@
-"""unittest helper.py"""
+"""unittest helpers.py"""
 
 import unittest
+
+import pytest
 
 from fortigate_api import helpers as h
 
 
 class Test(unittest.TestCase):
-    """unittest helper.py"""
+    """unittest helpers.py"""
 
     # ============================= dict =============================
 
     def test_valid__check_mandatory(self):
-        """check_mandatory()"""
+        """helpers.check_mandatory()"""
         for keys, kwargs in [
             ([], {}),
             ([], dict(a=1)),
@@ -21,7 +23,7 @@ class Test(unittest.TestCase):
             h.check_mandatory(keys=keys, **kwargs)
 
     def test_invalid__check_mandatory(self):
-        """check_mandatory()"""
+        """helpers.check_mandatory()"""
         for keys, kwargs, error in [
             (["a"], {}, KeyError),
             (["a"], dict(b=2), KeyError),
@@ -31,7 +33,7 @@ class Test(unittest.TestCase):
                 h.check_mandatory(keys=keys, **kwargs)
 
     def test_valid__check_only_one(self):
-        """check_only_one()"""
+        """helpers.check_only_one()"""
         for keys, kwargs in [
             ([], {}),
             ([], dict(a=1)),
@@ -44,7 +46,7 @@ class Test(unittest.TestCase):
             h.check_only_one(keys=keys, **kwargs)
 
     def test_invalid__check_only_one(self):
-        """check_only_one()"""
+        """helpers.check_only_one()"""
         for keys, kwargs, error in [
             (["a", "b"], dict(a=1, b=2), KeyError),
         ]:
@@ -52,7 +54,7 @@ class Test(unittest.TestCase):
                 h.check_only_one(keys=keys, **kwargs)
 
     def test_valid__check_one_of(self):
-        """check_one_of()"""
+        """helpers.check_one_of()"""
         for keys, kwargs in [
             ([], {}),
             ([], dict(a=1)),
@@ -64,7 +66,7 @@ class Test(unittest.TestCase):
             h.check_one_of(keys=keys, **kwargs)
 
     def test_invalid__check_one_of(self):
-        """check_one_of()"""
+        """helpers.check_one_of()"""
         for keys, kwargs, error in [
             (["a"], {}, KeyError),
             (["a", "b"], dict(c=3), KeyError),
@@ -73,7 +75,7 @@ class Test(unittest.TestCase):
                 h.check_one_of(keys=keys, **kwargs)
 
     def test_valid__get_quoted(self):
-        """get_quoted()"""
+        """helpers.get_quoted()"""
         key = "name"
         for kwargs, req in [
             (dict(name=1), "1"),
@@ -84,7 +86,7 @@ class Test(unittest.TestCase):
             self.assertEqual(result, req, msg=f"{kwargs=}")
 
     def test_invalid__get_quoted(self):
-        """get_quoted()"""
+        """helpers.get_quoted()"""
         key = "name"
         for kwargs, error in [
             (dict(a=1), KeyError),
@@ -94,7 +96,7 @@ class Test(unittest.TestCase):
                 h.get_quoted(key=key, **kwargs)
 
     def test_valid__pop_int(self):
-        """pop_int()"""
+        """helpers.pop_int()"""
         key = "id"
         for data, req in [
             ({}, 0),
@@ -108,7 +110,7 @@ class Test(unittest.TestCase):
             self.assertIsNone(result_, msg=f"{data=}")
 
     def test_invalid__pop_int(self):
-        """pop_int()"""
+        """helpers.pop_int()"""
         key = "id"
         for data, error in [
             (dict(id="a"), TypeError),
@@ -118,7 +120,7 @@ class Test(unittest.TestCase):
                 h.pop_int(key=key, data=data)
 
     def test_valid__pop_lstr(self):
-        """pop_lstr()"""
+        """helpers.pop_lstr()"""
         key = "filter"
         for data, req in [
             ({}, []),
@@ -134,7 +136,7 @@ class Test(unittest.TestCase):
             self.assertIsNone(result_, msg=f"{data=}")
 
     def test_invalid__pop_lstr(self):
-        """pop_lstr()"""
+        """helpers.pop_lstr()"""
         key = "filter"
         for data, error in [
             (dict(filter=1), TypeError),
@@ -144,7 +146,7 @@ class Test(unittest.TestCase):
                 h.pop_lstr(key=key, data=data)
 
     def test_valid__pop_str(self):
-        """pop_str()"""
+        """helpers.pop_str()"""
         key = "name"
         for data, req in [
             ({}, ""),
@@ -157,10 +159,8 @@ class Test(unittest.TestCase):
             result_ = data.get(key)
             self.assertIsNone(result_, msg=f"{data=}")
 
-    # ============================= str ==============================
-
     def test_valid__findall1(self):
-        """helpers.findall1()"""
+        """helpers.helpers.findall1()"""
         for pattern, string, expected in [
             ("", "abcde", ""),  # empty string
             ("typo", "abcde", ""),  # no match
@@ -172,7 +172,7 @@ class Test(unittest.TestCase):
             self.assertEqual(expected, actual, msg=f"{pattern=}")
 
     def test_invalid__findall1(self):
-        """helpers.findall1()"""
+        """helpers.helpers.findall1()"""
         for pattern, string, error in [
             (["(b)"], "abcde", TypeError),
         ]:
@@ -181,7 +181,7 @@ class Test(unittest.TestCase):
                 h.findall1(pattern=pattern, string=string)
 
     def test_valid__findall2(self):
-        """helpers.findall2()"""
+        """helpers.helpers.findall2()"""
         for pattern, string, expected in [
             ("", "abcde", ("", "")),
             ("typo", "abcde", ("", "")),
@@ -195,7 +195,7 @@ class Test(unittest.TestCase):
             self.assertEqual(expected, actual, msg=f"{pattern=}")
 
     def test_valid__findall3(self):
-        """helpers.findall3()"""
+        """helpers.helpers.findall3()"""
         for pattern, string, expected in [
             ("", "abcde", ("", "", "")),
             ("typo", "abcde", ("", "", "")),
@@ -211,7 +211,7 @@ class Test(unittest.TestCase):
             self.assertEqual(expected, actual, msg=f"{pattern=}")
 
     def test_valid__make_url(self):
-        """make_url()"""
+        """helpers.make_url()"""
         for url, params, req in [
             ("https://domain.com", {}, "https://domain.com"),
             ("https://domain.com", dict(b="b"), "https://domain.com?b=b"),
@@ -224,7 +224,7 @@ class Test(unittest.TestCase):
             self.assertEqual(result, req, msg=f"{url=} {params=}")
 
     def test_valid__quote_(self):
-        """quote_()"""
+        """helpers.quote_()"""
         for string, req in [
             ("", ""),
             (1, "1"),
@@ -233,6 +233,32 @@ class Test(unittest.TestCase):
         ]:
             result = h.quote(string=string)
             self.assertEqual(result, req, msg=f"{string=}")
+
+
+# ============================= str ==============================
+
+@pytest.mark.parametrize("word, expected", [
+    ("", ""),
+    ("text", "Text"),
+    ("text_text", "TextText"),
+    ("text_text_text", "TextTextText"),
+])
+def test__attr_to_class(word, expected):
+    """helpers.attr_to_class()"""
+    actual = h.attr_to_class(word)
+    assert actual == expected
+
+
+@pytest.mark.parametrize("word, expected", [
+    ("", ""),
+    ("Text", "text"),
+    ("TextText", "text_text"),
+    ("TextTextText", "text_text_text"),
+])
+def test__class_to_attr(word, expected):
+    """helpers.class_to_attr()"""
+    actual = h.class_to_attr(word)
+    assert actual == expected
 
 
 if __name__ == "__main__":

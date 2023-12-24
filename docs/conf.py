@@ -31,27 +31,30 @@ autodoc_default_options = {
 
 
 def process_signature(app, what, name, obj, options, signature, return_annotation):
+    """Modify class docstring."""
     _ = f"{app=} {what=} {name=} {obj=} {options=} {signature=} {return_annotation=}"
-    logging.warning(_)
-    if what == "class" and name == "fortigate_api.base.Base":
-        return "", ""
+    # logging.warning(_)
+    # if what == "class" and name == "fortigate_api.base.Base":
+    #     return "", ""
 
 
 def process_docstring(app, what, name, obj, options, lines: list):
     """Skip docstrings of class Base, Base.__init__."""
     _ = f"{app=} {what=} {name=} {obj=} {options=} {lines=}"
-    logging.warning(_)
-    if what == "class" and name == "fortigate_api.base.Base":
-        lines.clear()
+    # logging.warning(_)
+    # if what == "class" and name == "fortigate_api.base.Base":
+    #     lines.clear()
 
 
 def skip(app, what, name, obj, would_skip, options):
+    """Modify members docstring."""
     _ = f"{app=} {what=} {name=} {obj=} {would_skip=} {options=}"
-    logging.warning(_)
+    # logging.warning(_)
     return would_skip
 
 
-# def setup(app):
-#     app.connect("autodoc-skip-member", skip)
-#     app.connect("autodoc-process-signature", process_signature)
-#     app.connect("autodoc-process-docstring", process_docstring)
+def setup(app):
+    """Setup."""
+    app.connect("autodoc-skip-member", skip)
+    app.connect("autodoc-process-signature", process_signature)
+    app.connect("autodoc-process-docstring", process_docstring)
