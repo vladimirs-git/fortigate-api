@@ -49,8 +49,28 @@ types-requests = "^2.31.0.10"
 types-tabulate = "^0.9.0.3"
 typing-extensions = "^4.8.0"
 
-[tool.setuptools.package-data]
-fortigate_api = ["py.typed"]
+[tool.pylint]
+max-line-length = 100
+disable = "fixme"
+
+[tool.pylint.message_control]
+enable = ["too-many-arguments"]
+max-args = 12
+
+[tool.pylint."fortigate_api.fortigate.py"]
+disable = ["too-many-instance-attributes"]
+[tool.pylint."fortigate_api.fortigate_api.py"]
+disable = ["too-many-instance-attributes"]
+[tool.pylint."tests.*"]
+disable = [
+    "duplicate-code",
+    "protected-access",
+    "redefined-outer-name",
+    "too-few-public-methods",
+    "too-many-public-methods",
+    "unused-import",
+    "use-dict-literal",
+]
 
 [tool.poetry.extras]
 test = ["pytest"]
@@ -86,6 +106,9 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false  # arguments on separate lines
 line-ending = "auto"
+
+[tool.setuptools.package-data]
+fortigate_api = ["py.typed"]
 
 [build-system]
 requires = ["poetry-core"]

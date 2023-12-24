@@ -171,7 +171,11 @@ def _valid_efilters(efilters: LStr) -> None:
         raise ValueError(f"{invalid=} in {efilters=}, expected only one key")
 
 
-def _filter_policy_by_ipnets(efilter: str, policies: LDAny, names_ipnets_d: DLInet) -> LDAny:
+def _filter_policy_by_ipnets(  # pylint: disable=too-many-branches
+        efilter: str,
+        policies: LDAny,
+        names_ipnets_d: DLInet,
+) -> LDAny:
     """Filter `policies` by `efilter` `srcaddr`, `dstaddr`.
 
     :param str efilter: Extended filter.
@@ -182,7 +186,7 @@ def _filter_policy_by_ipnets(efilter: str, policies: LDAny, names_ipnets_d: DLIn
     key, operator, ipnet_filter = _split_efilter(efilter)
 
     policies_: LDAny = []  # result
-    for policy in policies:
+    for policy in policies:  # pylint: disable=too-many-nested-blocks
         members = [d["name"] for d in policy[key]]
         for member in members:
             ipnets = names_ipnets_d.get(member)

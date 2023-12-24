@@ -32,7 +32,7 @@ class Fortigate:
     Is useful for working with objects that are not implemented in :py:class:`.FortigateAPI`.
     """
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments
             self,
             host: str,
             username: str = "",
@@ -87,7 +87,7 @@ class Fortigate:
         self.token = self._init_token(**kwargs)
         self.scheme: str = self._init_scheme(**kwargs)
         self.port: int = self._init_port(**kwargs)
-        self.timeout: int = int(kwargs.get("timeout"))
+        self.timeout: int = int(kwargs.get("timeout") or 0)
         self.vdom: str = str(kwargs.get("vdom") or VDOM)
         self.verify: bool = bool(kwargs.get("verify"))
 

@@ -47,7 +47,7 @@ class Test(unittest.TestCase):
         """version in CHANGELOG"""
         version_toml = PYPROJECT_D["tool"]["poetry"]["version"]
         path = Path.joinpath(ROOT, "CHANGELOG.rst")
-        text = path.read_text()
+        text = path.read_text(encoding="utf-8")
         regex = r"(.+)\s\(\d\d\d\d-\d\d-\d\d\)$"
         version_log = vre.find1(regex, text, re.M)
         self.assertEqual(version_log, version_toml, msg=f"version in {path=}")
@@ -55,7 +55,7 @@ class Test(unittest.TestCase):
     def test_valid__date(self):
         """last modified date in CHANGELOG"""
         path = Path.joinpath(ROOT, "CHANGELOG.rst")
-        text = path.read_text()
+        text = path.read_text(encoding="utf-8")
         regex = r".+\((\d\d\d\d-\d\d-\d\d)\)$"
         date_changelog = vre.find1(regex, text, re.M)
         last_modified = h.last_modified_date(root=str(ROOT))
@@ -66,7 +66,7 @@ class Test(unittest.TestCase):
         expected = set()
         paths = h.files_py(root=str(ROOT))
         for path in paths:
-            text = Path(path).read_text()
+            text = Path(path).read_text(encoding="utf-8")
             if url_ := vre.find1(r"super\(\).__init__\(.+url_obj=\"(.+?)\"", text):
                 expected.add(url_)
 
@@ -76,7 +76,8 @@ class Test(unittest.TestCase):
         self.assertEqual([], diff, msg="base.py IMPLEMENTED_OBJECTS")
 
         # in readme
-        readme_text = Path.joinpath(ROOT, PYPROJECT_D["tool"]["poetry"]["readme"]).read_text()
+        path = Path.joinpath(ROOT, PYPROJECT_D["tool"]["poetry"]["readme"])
+        readme_text = path.read_text(encoding="utf-8")
         actual = {s for s in IMPLEMENTED_OBJECTS if vre.find1(s, readme_text)}
         expected = set(IMPLEMENTED_OBJECTS)
         diff = list(dictdiffer.diff(expected, actual))

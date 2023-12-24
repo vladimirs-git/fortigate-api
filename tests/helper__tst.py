@@ -83,12 +83,14 @@ class MockSession:
     @staticmethod
     def delete(url: str, **kwargs) -> Response:
         """Mock Session delete."""
+        _ = kwargs  # noqa
         return MockResponse.delete(url=url)
 
     # noinspection PyUnusedLocal
     @staticmethod
     def get(url: str, **kwargs) -> Response:
         """Mock Session get."""
+        _ = kwargs  # noqa
         return MockResponse.get(url=url)
 
     # noinspection PyUnusedLocal

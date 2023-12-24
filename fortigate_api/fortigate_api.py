@@ -27,7 +27,7 @@ from fortigate_api.zone import Zone
 class FortigateAPI:
     """FortigateAPI, a set of connectors to work with commonly used fortigate-objects."""
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments
             self,
             host: str,
             username: str = "",
