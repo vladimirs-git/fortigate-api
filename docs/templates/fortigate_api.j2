@@ -2,6 +2,7 @@
 {{ underline }}
 
 .. autoclass:: {{ package }}.{{ obj }}
-{% for connector in connectors %}
+  :members:
+  {% for connector in connectors %}
   .. autoattribute:: {{ connector }}
-{% endfor %}
+  {% endfor %}

@@ -150,12 +150,26 @@ class FortigateAPI:
         self.rest.__exit__()
         self.ssh.__exit__()
 
+    # ============================= property =============================
+
+    @property
+    def vdom(self) -> str:  # TODO rename to `active_vdom`
+        """Actual virtual domain."""
+        return self.rest.vdom
+
+    @vdom.setter
+    def vdom(self, vdom: str) -> None:
+        vdom = str(vdom)
+        if not vdom:
+            vdom = VDOM
+        self.rest.vdom = vdom
+
     # =========================== methods ============================
 
     def login(self) -> FortigateAPI:
         """Login to the Fortigate using REST API and creates a Session object.
 
-        - Validate 'token' if object has been initialized with `token` parameter.
+        - Validate `token` if object has been initialized with `token` parameter.
         - Validate  `password` if object has been initialized with `username` parameter.
 
         :return: None. Creates Session object.
@@ -166,24 +180,12 @@ class FortigateAPI:
     def logout(self) -> None:
         """Logout from the Fortigate using REST API, deletes Session object.
 
-        - No need to logo ut if object has been initialized with `token` parameter.
-        - Log out if object has been initialized with `username` parameter.
+        - No need to logout if object has been initialized with `token` parameter.
+        - Logout if object has been initialized with `username` parameter.
 
         :return: None. Deletes Session object
         """
         self.rest.logout()
-
-    @property
-    def vdom(self) -> str:  # TODO rename to `active_vdom`
-        """ACE TCP/UDP ports."""
-        return self.rest.vdom
-
-    @vdom.setter
-    def vdom(self, vdom: str) -> None:
-        vdom = str(vdom)
-        if not vdom:
-            vdom = VDOM
-        self.rest.vdom = vdom
 
     # ============================= helpers ==============================
 
