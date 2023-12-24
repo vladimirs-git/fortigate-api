@@ -7,7 +7,7 @@ For more details see https://github.com/mpenning/ciscoconfparse
 """
 import re
 from typing import List
-
+from vhelpers import vre
 from ciscoconfparse import CiscoConfParse, JunosCfgLine  # type: ignore
 
 from fortigate_api import helpers as h
@@ -150,7 +150,7 @@ def findall1(regex: str, obj: JunosCfgLine, flags=0) -> str:
     """
     value = ""
     for item in obj.ioscfg:
-        if value := h.findall1(pattern=regex, string=item, flags=flags):
+        if value := vre.find1(pattern=regex, string=item, flags=flags):
             break
     return value
 
@@ -168,7 +168,7 @@ def findall2(regex: str, obj: JunosCfgLine, flags=0) -> T2Str:
     """
     value1, value2 = "", ""
     for item in obj.ioscfg:
-        value1, value2 = h.findall2(pattern=regex, string=item, flags=flags)
+        value1, value2 = vre.find2(pattern=regex, string=item, flags=flags)
         if value1:
             break
     return value1, value2
@@ -185,7 +185,7 @@ def findall3(regex: str, obj: JunosCfgLine) -> T3Str:
     """
     value1, value2, value3 = "", "", ""
     for item in obj.ioscfg:
-        value1, value2, value3 = h.findall3(pattern=regex, string=item)
+        value1, value2, value3 = vre.find3(pattern=regex, string=item)
         if value1:
             break
     return value1, value2, value3

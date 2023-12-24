@@ -15,10 +15,9 @@ from fortigate_api.types_ import Any, DAny, T2Str, T3Str, IStr, IStrs, LStr, SDa
 def check_mandatory(keys: IStr, **kwargs) -> None:
     """Check all of `keys` are mandatory in `kwargs`.
 
-    ::
-        :param keys: Interested keys, all of them should be in `kwargs`
-        :param kwargs: Checked data
-        :raises KeyError: If one of the `keys` is not found in `kwargs`
+    :param keys: Interested keys, all of them should be in `kwargs`.
+    :param kwargs: Checked data.
+    :raises KeyError: If one of the `keys` is not found in `kwargs`.
     """
     keys2 = list(kwargs)
     keys_absent: LStr = []
@@ -32,10 +31,9 @@ def check_mandatory(keys: IStr, **kwargs) -> None:
 def check_only_one(keys: IStr, **kwargs) -> None:
     """Check only one of keys should be in `kwargs`.
 
-    ::
-        :param keys: Interested keys, only one of them should be in `kwargs`
-        :param kwargs: Checked data
-        :raises KeyError: If multiple of the `keys` are found in `kwargs`
+    :param keys: Interested keys, only one of them should be in `kwargs`.
+    :param kwargs: Checked data.
+    :raises KeyError: If multiple of the `keys` are found in `kwargs`.
     """
     keys1 = set(keys)
     keys2 = set(kwargs)
@@ -47,10 +45,9 @@ def check_only_one(keys: IStr, **kwargs) -> None:
 def check_one_of(keys: IStr, **kwargs) -> None:
     """Check one of key is mandatory in `kwargs`.
 
-    ::
-        :param keys: Interested keys, one of them should be in `kwargs`
-        :param kwargs: Checked data
-        :raises KeyError: If none of the `keys` are found in `kwargs`
+    :param keys: Interested keys, one of them should be in `kwargs`.
+    :param kwargs: Checked data.
+    :raises KeyError: If none of the `keys` are found in `kwargs`.
     """
     if not keys:
         return
@@ -62,12 +59,11 @@ def check_one_of(keys: IStr, **kwargs) -> None:
 
 
 def get_quoted(key: str, **kwargs) -> str:
-    """Get mandatory key/value from `kwargs` and return quoted value as *str*.
+    """Get mandatory key/value from `kwargs` and return quoted value as string.
 
-    ::
-        :param key: Interested `key` in `kwargs`
-        :param kwargs: Data
-        :return: Interested quoted value
+    :param key: Interested `key` in `kwargs`.
+    :param kwargs: Data.
+    :return: Interested quoted value.
     """
     check_mandatory(keys=[key], **kwargs)
     value = str(kwargs[key])
@@ -76,12 +72,11 @@ def get_quoted(key: str, **kwargs) -> str:
 
 
 def pop_int(key: str, data: DAny) -> int:
-    """Pop key/value from `data` and return value as *int*.
+    """Pop key/value from `data` and return value as integer.
 
-    ::
-        :param key: Interested `key` in `data`
-        :param data: Data
-        :return: Interested value. Side effect `data` - removes interested 'key'
+    :param key: Interested `key` in `data`.
+    :param data: Data.
+    :return: Interested value. Side effect `data` - removes interested 'key'.
     """
     if key not in data:
         return 0
@@ -95,12 +90,11 @@ def pop_int(key: str, data: DAny) -> int:
 
 
 def pop_lstr(key: str, data: DAny) -> LStr:
-    """Pop key/value from `data` and return value as *List[str]*.
+    """Pop key/value from `data` and return value as List[str].
 
-    ::
-        :param key: Interested `key` in `data`
-        :param data: Data
-        :return: Interested value. Side effect `data` - removes interested 'key'
+    :param key: Interested `key` in `data`.
+    :param data: Data.
+    :return: Interested value. Side effect `data` - removes interested 'key'.
     """
     if key not in data:
         return []
@@ -115,12 +109,11 @@ def pop_lstr(key: str, data: DAny) -> LStr:
 
 
 def pop_str(key: str, data: DAny) -> str:
-    """Pop key/value from `data` and return value as *str*.
+    """Pop key/value from `data` and return value as string.
 
-    ::
-        :param key: Interested `key` in `data`
-        :param data: Data
-        :return: Interested value. Side effect `data` - removes interested 'key'
+    :param key: Interested `key` in `data`.
+    :param data: Data.
+    :return: Interested value. Side effect `data` - removes interested 'key'.
     """
     if key not in data:
         return ""
@@ -131,12 +124,11 @@ def pop_str(key: str, data: DAny) -> str:
 
 
 def pop_quoted(key: str, data: DAny) -> str:
-    """Pop key/value from `data` and return quoted value as *str*.
+    """Pop key/value from `data` and return quoted value as string.
 
-    ::
-        :param key: Interested `key` in `data`
-        :param data: Data
-        :return: Interested value. Side effect `data` - removes interested 'key'
+    :param key: Interested `key` in `data`.
+    :param data: Data.
+    :return: Interested value. Side effect `data` - removes interested 'key'.
     """
     if key not in data:
         return ""
@@ -181,77 +173,17 @@ def class_to_attr(word: str) -> str:
     return new_word
 
 
-def findall1(pattern: str, string: str, flags=0) -> str:
-    """Parse 1st item of re.findall(). If nothing is found, return an empty string.
-
-    ::
-        :param pattern: Regex pattern, where 1 group with parentheses in pattern is required
-        :param string: String where need to find pattern
-        :param flags: re.findall flags
-        :return: Interested substring
-        :example:
-            pattern = "a(b)cde"
-            string = "abcde"
-            return: "b"
-    """
-    result = (re.findall(pattern=pattern, string=string, flags=flags) or [""])[0]
-    if isinstance(result, str):
-        return result
-    if isinstance(result, tuple):
-        return result[0]
-    return ""
-
-
-def findall2(pattern: str, string: str, flags=0) -> T2Str:
-    """Parse 2 items of re.findall(). If nothing is found, return empty strings.
-
-    ::
-        :param pattern: Regex pattern, where 2 groups with parentheses in pattern are required
-        :param string: String where need to find pattern
-        :param flags: re.findall flags
-        :return: Two interested substrings
-        :example:
-            pattern = "a(b)(c)de"
-            string = "abcde"
-            return: "b", "c"
-    """
-    result = (re.findall(pattern=pattern, string=string, flags=flags) or [("", "")])[0]
-    if isinstance(result, tuple) and len(result) >= 2:
-        return result[0], result[1]
-    return "", ""
-
-
-def findall3(pattern: str, string: str, flags=0) -> T3Str:
-    """Parse 3 items of re.findall(). If nothing is found, return empty strings.
-
-    ::
-        :param pattern: Regex pattern, where 3 groups with parentheses in pattern are required
-        :param string: String where need to find pattern
-        :param flags: re.findall flags
-        :return: Three interested substrings
-        :example:
-            pattern = "a(b)(c)(d)e"
-            string = "abcde"
-            return: "b", "c", "d"
-    """
-    result = (re.findall(pattern=pattern, string=string, flags=flags) or [("", "", "")])[0]
-    if isinstance(result, tuple) and len(result) >= 3:
-        return result[0], result[1], result[2]
-    return "", "", ""
-
-
 def make_url(url: str, **params) -> str:
     """Add params to URL.
 
-    ::
-        :param url: URL with old params
-        :param params: New params
-        :return: URL with old and new params
+    :param url: URL with old params
+    :param params: New params
+    :return: URL with old and new params
 
-        :example:
-            url: "https://fomain.com?a=a"
-            params: {"b": ["b", "B"]}
-            return: "https://fomain.com?a=a&b=b&b=B"
+    :example:
+        url: "https://fomain.com?a=a"
+        params: {"b": ["b", "B"]}
+        return: "https://fomain.com?a=a&b=b&b=B"
     """
     url_o: ParseResult = urlparse(url)
     params_or: DAny = parse_qs(url_o.query)
@@ -264,12 +196,10 @@ def make_url(url: str, **params) -> str:
 def quote(string: Any) -> str:
     """Quote name of the string.
 
-    ::
-        :param string: Line to by quoted
-        :example: "10.0.0.0/8" > "10.0.0.0%2F8"
+    :param string: Line to by quoted
+    :example: "10.0.0.0/8" > "10.0.0.0%2F8"
     """
-    string_ = str(string)
-    return parse.quote(string=string_, safe="")
+    return parse.quote(string=str(string), safe="")
 
 
 # ============================= wrapper ==============================

@@ -1,5 +1,5 @@
 """unittests package"""
-
+from vhelpers import vre
 import re
 import unittest
 from pathlib import Path
@@ -49,7 +49,7 @@ class Test(unittest.TestCase):
         path = Path.joinpath(ROOT, "CHANGELOG.rst")
         text = path.read_text()
         regex = r"(.+)\s\(\d\d\d\d-\d\d-\d\d\)$"
-        version_log = h.findall1(regex, text, re.M)
+        version_log = vre.find1(regex, text, re.M)
         self.assertEqual(version_log, version_toml, msg=f"version in {path=}")
 
     def test_valid__date(self):
@@ -57,7 +57,7 @@ class Test(unittest.TestCase):
         path = Path.joinpath(ROOT, "CHANGELOG.rst")
         text = path.read_text()
         regex = r".+\((\d\d\d\d-\d\d-\d\d)\)$"
-        date_changelog = h.findall1(regex, text, re.M)
+        date_changelog = vre.find1(regex, text, re.M)
         last_modified = h.last_modified_date(root=str(ROOT))
         self.assertEqual(date_changelog, last_modified, msg="last modified file")
 
@@ -67,7 +67,7 @@ class Test(unittest.TestCase):
         paths = h.files_py(root=str(ROOT))
         for path in paths:
             text = Path(path).read_text()
-            if url_ := h.findall1(r"super\(\).__init__\(.+url_obj=\"(.+?)\"", text):
+            if url_ := vre.find1(r"super\(\).__init__\(.+url_obj=\"(.+?)\"", text):
                 expected.add(url_)
 
         # in code
@@ -77,7 +77,7 @@ class Test(unittest.TestCase):
 
         # in readme
         readme_text = Path.joinpath(ROOT, PYPROJECT_D["tool"]["poetry"]["readme"]).read_text()
-        actual = {s for s in IMPLEMENTED_OBJECTS if h.findall1(s, readme_text)}
+        actual = {s for s in IMPLEMENTED_OBJECTS if vre.find1(s, readme_text)}
         expected = set(IMPLEMENTED_OBJECTS)
         diff = list(dictdiffer.diff(expected, actual))
         self.assertEqual([], diff, msg="Readme IMPLEMENTED_OBJECTS")

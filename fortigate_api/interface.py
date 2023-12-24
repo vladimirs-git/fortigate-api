@@ -25,19 +25,17 @@ class Interface(Base):
     def get(self, **kwargs) -> LDAny:
         """Get interface-objects in specified vdom, all or filtered by some of params.
 
-        ::
-            :param uid: Filters interface-object by unique identifier. Used to get a single object
-            :type uid: str
+        :param str uid: Filters interface-object by unique identifier.
+            Used to get a single object.
 
-            :param filter: Filters interface-objects by one or multiple conditions: equals "==",
-                not equals "!=", contains "=@". Used to get multiple objects
-            :type filter: str or List[str]
+        :param filter: Filter fortigate-objects by one or multiple :ref:`filtering conditions`.
+            Used to get multiple objects.
+        :type filter: str or List[str]
 
-            :param all: Gets all interface-objects from all vdom
-            :type all: bool
+        :param bool all: Gets all interface-objects from all vdom.
 
-            :return: List of interface-objects
-            :rtype: List[dict]
+        :return: List of interface-objects.
+        :rtype: List[dict]
         """
         if kwargs.get("all"):
             h.pop_quoted(key="all", data=kwargs)

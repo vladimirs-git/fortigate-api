@@ -26,33 +26,31 @@ class DhcpServer(Base):
         """Create dhcp-server-object in the Fortigate.
 
         Note, in Fortigate is possible to create multiple DHCP servers with the same settings,
-        you need control duplicates
-        ::
-            :param data: Data of the fortigate-object
-            :type data: dict
+        you need control duplicates.
 
-            :return: Session response
-                *<Response [200]>* Object successfully created or already exists
-            :rtype: requests.Response
+        :param dict data: Data of the fortigate-object
+
+        :return: Session response.
+
+            - <Response [200]> Object successfully created or already exists.
+        :rtype: requests.Response
         """
         return self.rest.post(url=self.url_, data=data)
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
-        """Update dhcp-server-object, where `uid` is data["id"].
+        """Update dhcp-server-object, where `uid` is `data["id"]`.
 
-        ::
-            :param data: Data of the dhcp-server-object
-            :type data: dict
+        :param dict data: Data of the dhcp-server-object.
 
-            :param uid: ID of the dhcp-server-object,
-                taken from the `uid` parameter or from data["id"]
-            :type uid: str or int
+        :param uid: ID of the dhcp-server-object,
+            taken from the `uid` parameter or from `data["id"]`
+        :type uid: str or int
 
-            :return: Session response.
+        :return: Session response.
 
-                *<Response [200]>* Object successfully updated
-                *<Response [404]>* Object has not been updated
-            :rtype: requests.Response
+            - <Response [200]> Object successfully updated,
+            - <Response [404]> Object has not been updated.
+        :rtype: requests.Response
         """
         if not uid:
             uid = data.get("id") or ""

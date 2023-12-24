@@ -1,5 +1,5 @@
 """unittest helpers.py"""
-
+from vhelpers import vre
 import unittest
 
 import pytest
@@ -158,57 +158,6 @@ class Test(unittest.TestCase):
             self.assertEqual(result, req, msg=f"{data=}")
             result_ = data.get(key)
             self.assertIsNone(result_, msg=f"{data=}")
-
-    def test_valid__findall1(self):
-        """helpers.helpers.findall1()"""
-        for pattern, string, expected in [
-            ("", "abcde", ""),  # empty string
-            ("typo", "abcde", ""),  # no match
-            ("(typo)", "abcde", ""),  # no match
-            ("(b)", "abcde", "b"),  # valid
-            ("(b)(c)", "abcde", "b"),  # multiple match
-        ]:
-            actual = h.findall1(pattern=pattern, string=string)
-            self.assertEqual(expected, actual, msg=f"{pattern=}")
-
-    def test_invalid__findall1(self):
-        """helpers.helpers.findall1()"""
-        for pattern, string, error in [
-            (["(b)"], "abcde", TypeError),
-        ]:
-            with self.assertRaises(error, msg=f"{pattern=}"):
-                # noinspection PyTypeChecker
-                h.findall1(pattern=pattern, string=string)
-
-    def test_valid__findall2(self):
-        """helpers.helpers.findall2()"""
-        for pattern, string, expected in [
-            ("", "abcde", ("", "")),
-            ("typo", "abcde", ("", "")),
-            ("(b)", "abcde", ("", "")),
-            ("(b)(typo)", "abcde", ("", "")),
-            ("(typo)(c)", "abcde", ("", "")),
-            ("(b)(c)", "abcde", ("b", "c")),
-            ("(b)(c)(d)", "abcde", ("b", "c")),
-        ]:
-            actual = h.findall2(pattern=pattern, string=string)
-            self.assertEqual(expected, actual, msg=f"{pattern=}")
-
-    def test_valid__findall3(self):
-        """helpers.helpers.findall3()"""
-        for pattern, string, expected in [
-            ("", "abcde", ("", "", "")),
-            ("typo", "abcde", ("", "", "")),
-            ("(b)", "abcde", ("", "", "")),
-            ("(b)(c)", "abcde", ("", "", "")),
-            ("(typo)(c)(d)", "abcde", ("", "", "")),
-            ("(b)(typo)(d)", "abcde", ("", "", "")),
-            ("(b)(c)(typo)", "abcde", ("", "", "")),
-            ("(b)(c)(d)", "abcde", ("b", "c", "d")),
-            ("(b)(c)(d)(e)", "abcde", ("b", "c", "d")),
-        ]:
-            actual = h.findall3(pattern=pattern, string=string)
-            self.assertEqual(expected, actual, msg=f"{pattern=}")
 
     def test_valid__make_url(self):
         """helpers.make_url()"""

@@ -23,21 +23,20 @@ class SnmpCommunity(Base):
         super().__init__(rest=rest, url_obj="api/v2/cmdb/system.snmp/community/", uid_key="id")
 
     def update(self, data: DAny, uid: StrInt = "") -> Response:
-        """Update snmp-community-object, where `uid` is data["id"].
+        """Update snmp-community-object, where `uid` is `data["id"]`.
 
-        ::
-            :param data: Data of the snmp-community-object
-            :type data: dict
+        :param data: Data of the snmp-community-object.
+        :type data: dict
 
-            :param uid: ID of the snmp-community-object,
-                taken from the `uid` parameter or from data["id"]
-            :type uid: str or int
+        :param uid: ID of the snmp-community-object,
+            taken from the `uid` parameter or from `data["id"]`.
+        :type uid: str or int
 
-            :return: Session response.
+        :return: Session response.
 
-                *<Response [200]>* Object successfully updated
-                *<Response [404]>* Object has not been updated
-            :rtype: requests.Response
+            - <Response [200]> Object successfully updated,
+            - <Response [404]> Object has not been updated.
+        :rtype: requests.Response
         """
         if not uid:
             uid = data.get("id") or ""

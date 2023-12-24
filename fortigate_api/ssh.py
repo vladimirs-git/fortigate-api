@@ -1,6 +1,6 @@
 """SSH connector to the Fortigate.
 
-A set of methods to work with configuration commands using SSH.
+Contains methods to get and put configuration commands using ssh.
 """
 
 from netmiko import ConnectHandler  # type: ignore
@@ -23,7 +23,8 @@ class SSH:
 
         :param str password: Administrator password.
 
-        :param dict ssh: Netmiko *ConnectHandler* parameters.
+        :param ssh: Netmiko ConnectHandler parameters.
+        :type ssh: Dict[str, Any]
         """
         ssh_kwargs: DAny = dict(kwargs.get("ssh") or {})
         ssh_kwargs.update({"device_type": "fortinet", "auto_connect": False})
@@ -80,7 +81,8 @@ class SSH:
         :param cmds: Configuration commands to be executed on the Fortigate.
         :type cmds: str or List[str]
 
-        :param dict kwargs: Netmiko parameters.
+        :param kwargs: Netmiko parameters.
+        :type kwargs: Dict[str, Any]
 
         :return: Output of the commands.
         :rtype: str
