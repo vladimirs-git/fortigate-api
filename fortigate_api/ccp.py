@@ -1,4 +1,6 @@
-"""CiscoConfParse.
+"""CiscoConfParse adapted for Fortigate.
+
+UNDER DEVELOPMENT!
 
 Helper that parses the Fortigate config to find and change config commands.
 For more details see https://github.com/mpenning/ciscoconfparse
@@ -15,18 +17,20 @@ LJunosCfgLine = List[JunosCfgLine]
 
 
 class FgtConfParse(CiscoConfParse):
-    """CiscoConfParse adapted for Fortigate."""
+    """CiscoConfParse adapted for Fortigate.
+
+    UNDER DEVELOPMENT!
+    """
 
     def __init__(self, config: UStr, comment="#", encoding="UTF-8", **kwargs):
         """FgtConfParse.
 
-        ::
-            :param config: Fortigate config
-            :type config: str, List[str]
-            :param comment: Comment delimiter (default "#")
-            :type comment: str
-            :param kwargs: Other CiscoConfParse parameters
-            :return: CiscoConfParse object with JunosCfgLine lines
+        :param config: Fortigate config.
+        :type config: str or List[str]
+
+        :param str comment: Comment delimiter. Default is `#`.
+
+        :param kwargs: Other CiscoConfParse parameters.
         """
         config_: str = self._init_config(config)
         config_ = convert_fgt_to_junos(config_)
@@ -61,26 +65,27 @@ class FgtConfParse(CiscoConfParse):
 def convert_fgt_to_junos(config: str) -> str:
     """Convert Fortigate commands to Junos syntax, to parse by ciscoconfparse.
 
-    ::
-        :param config: Fortigate syntax config
-        :return config: CiscoConfParse junos syntax config
-        :example:
-            config = "
-                config system interface
-                  edit "mgmt"
-                    set ip 10.0.0.1 255.255.255.0
-                  next
-                end
-               "
-            convert_fgt_to_junos(config) -> "
-                config system interface {
-                  edit "mgmt" {
-                    set ip 10.0.0.1 255.255.255.0
-                  }
-                  next
-                }
-                end
-               "
+    :param config: Fortigate syntax config.
+
+    :return config: CiscoConfParse junos syntax config.
+
+    :example:
+        config = "
+            config system interface
+              edit "mgmt"
+                set ip 10.0.0.1 255.255.255.0
+              next
+            end
+           "
+        convert_fgt_to_junos(config) -> "
+            config system interface {
+              edit "mgmt" {
+                set ip 10.0.0.1 255.255.255.0
+              }
+              next
+            }
+            end
+           "
     """
     spaces = r"^(\s+)?"
     re_config = f"({spaces}config .+)"
@@ -116,13 +121,16 @@ def convert_fgt_to_junos(config: str) -> str:
 
 
 def findall(regex: str, obj: JunosCfgLine, flags=0) -> LStr:
-    """Parse substrings from *JunosCfgLine* objects by regex.
+    """Parse substrings from JunosCfgLine objects by regex.
 
-    ::
-        :param regex: Regex pattern with 1 group
-        :param obj: JunosCfgLine object
-        :param flags: re.findall flags
-        :return: List of interested substrings
+    :param str regex: Regex pattern with 1 group.
+
+    :param JunosCfgLine obj: JunosCfgLine object.
+
+    :param int flags: re.findall flags.
+
+    :return: List of interested substrings.
+    :rtype: List[str]
     """
     string = "\n".join(obj.ioscfg)
     values = re.findall(pattern=regex, string=string, flags=flags)
@@ -130,13 +138,15 @@ def findall(regex: str, obj: JunosCfgLine, flags=0) -> LStr:
 
 
 def findall1(regex: str, obj: JunosCfgLine, flags=0) -> str:
-    """Parse substring from *JunosCfgLine* objects by regex.
+    """Parse substring from JunosCfgLine objects by regex.
 
-    ::
-        :param regex: Regex pattern with 1 group
-        :param obj: JunosCfgLine object
-        :param flags: re.findall flags
-        :return: Interested substring
+    :param str regex: Regex pattern with 1 group.
+
+    :param JunosCfgLine obj: JunosCfgLine object.
+    :param int flags: re.findall flags.
+
+    :return: Interested substring.
+    :rtype: str
     """
     value = ""
     for item in obj.ioscfg:
@@ -146,13 +156,15 @@ def findall1(regex: str, obj: JunosCfgLine, flags=0) -> str:
 
 
 def findall2(regex: str, obj: JunosCfgLine, flags=0) -> T2Str:
-    """Parse 2 substrings from *JunosCfgLine* objects by regex.
+    """Parse 2 substrings from JunosCfgLine objects by regex.
 
-    ::
-        :param regex: Regex pattern with 2 groups
-        :param obj: JunosCfgLine object
-        :param flags: re.findall flags
-        :return: Interested substrings
+    :param str regex: Regex pattern with 2 groups.
+
+    :param JunosCfgLine obj: JunosCfgLine object.
+
+    :param int flags: re.findall flags.
+
+    :return: Interested substrings.
     """
     value1, value2 = "", ""
     for item in obj.ioscfg:
@@ -163,12 +175,13 @@ def findall2(regex: str, obj: JunosCfgLine, flags=0) -> T2Str:
 
 
 def findall3(regex: str, obj: JunosCfgLine) -> T3Str:
-    """Parse 3 substrings from *JunosCfgLine* objects by regex.
+    """Parse 3 substrings from JunosCfgLine objects by regex.
 
-    ::
-        :param regex: Regex pattern with 3 groups
-        :param obj: JunosCfgLine object
-        :return: Interested substrings
+    :param str regex: Regex pattern with 3 groups.
+
+    :param JunosCfgLine obj: JunosCfgLine object.
+
+    :return: Interested substrings.
     """
     value1, value2, value3 = "", "", ""
     for item in obj.ioscfg:
@@ -181,14 +194,16 @@ def findall3(regex: str, obj: JunosCfgLine) -> T3Str:
 def find_by_keys(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
     r"""Find object by keys in geneology.
 
-    ::
-        :param ccp: CiscoConfParse object
-        :param keys: Geneology keys to find object
-        :return: List of JunosCfgLine objects
-        :rtype: List[JunosCfgLine]
-        :example:
-            keys = ["config system global", "edit \"wan1\""]
-            find_by_keys(ccp, keys) -> [<JunosCfgLine # 20 '    edit "wan1"' (parent is # 21)>]
+    :param CiscoConfParse ccp: CiscoConfParse object.
+
+    :param list keys: Geneology keys to find object.
+
+    :return: List of JunosCfgLine objects.
+    :rtype: List[JunosCfgLine]
+
+    :example:
+        keys = ["config system global", "edit \"wan1\""]
+        find_by_keys(ccp, keys) -> [<JunosCfgLine # 20 '    edit "wan1"' (parent is # 21)>]
     """
     if not keys:
         return []
@@ -212,15 +227,17 @@ def find_by_keys(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
 def find_by_re_keys(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
     """Find object by keys regex in geneology.
 
-    ::
-        :param ccp: CiscoConfParse object
-        :param keys: Geneology regex keys to find object
-        :return: List of JunosCfgLine objects
-        :rtype: List[JunosCfgLine]
-        :example:
-            keys = ["config system global", r"edit .wan[12]."]
-            find_by_keys(ccp, keys) -> [<JunosCfgLine # 20 '    edit "wan1"' (parent is # 21)>,
-                                        <JunosCfgLine # 30 '    edit "wan2"' (parent is # 31)>]
+    :param CiscoConfParse ccp: CiscoConfParse object.
+
+    :param list keys: Geneology regex keys to find object.
+
+    :return: List of JunosCfgLine objects.
+    :rtype: List[JunosCfgLine]
+
+    :example:
+        keys = ["config system global", r"edit .wan[12]."]
+        find_by_keys(ccp, keys) -> [<JunosCfgLine # 20 '    edit "wan1"' (parent is # 21)>,
+                                    <JunosCfgLine # 30 '    edit "wan2"' (parent is # 31)>]
     """
     if not keys:
         return []
@@ -256,16 +273,18 @@ def find_by_re_keys(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
 def find_children(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
     r"""Find children object by geneology keys.
 
-    ::
-        :param ccp: CiscoConfParse object
-        :param keys: Geneology keys to find object
-        :return: List of children JunosCfgLine objects
-        :rtype: List[JunosCfgLine]
-        :example:
-            keys = ["config system global", "edit \"wan1\""]
-            find_children(ccp, keys) -> ["set vdom \"root\"",
-                                         "set ip 10.0.1.1 255.255.255.0",
-                                         ...]
+    :param CiscoConfParse ccp: CiscoConfParse object.
+
+    :param list keys: Geneology keys to find object.
+
+    :return: List of children JunosCfgLine objects.
+    :rtype: List[JunosCfgLine]
+
+    :example:
+        keys = ["config system global", "edit \"wan1\""]
+        find_children(ccp, keys) -> ["set vdom \"root\"",
+                                     "set ip 10.0.1.1 255.255.255.0",
+                                     ...]
     """
     return [o for oo in find_by_keys(ccp, keys) for o in oo.children]
 
@@ -273,10 +292,9 @@ def find_children(ccp: CiscoConfParse, keys: LStr) -> LJunosCfgLine:
 def join_children(obj: JunosCfgLine) -> str:
     """Join all children of JunosCfgLine object.
 
-    ::
-        :param obj: JunosCfgLine object
-        :return: joined text lines of all children
-        :rtype: str
+    :param JunosCfgLine obj: JunosCfgLine object.
+    :return: joined text lines of all children.
+    :rtype: str
     """
     lines = [o.text for o in obj.all_children]
     return "\n".join(lines)
@@ -285,15 +303,17 @@ def join_children(obj: JunosCfgLine) -> str:
 def find_re_blocks(ccp: CiscoConfParse, regex: str) -> LStr:
     r"""Work similar to CiscoConfParse.find_block(), but return list of config sections".
 
-    ::
-        :param ccp: CiscoConfParse object
-        :param regex: Regex pattern to find
-        :return: Lines of all_children in found block
-        :example:
-            regex = "edit \"wan1\""
-            find_children(ccp, keys) -> ["set vdom \"root\"",
-                                         "set ip 10.0.1.1 255.255.255.0",
-                                         ...]
+    :param CiscoConfParse ccp: CiscoConfParse object.
+
+    :param str regex: Regex pattern to find.
+
+    :return: Lines of all_children in found block.
+
+    :example:
+        regex = "edit \"wan1\""
+        find_children(ccp, keys) -> ["set vdom \"root\"",
+                                     "set ip 10.0.1.1 255.255.255.0",
+                                     ...]
     """
     blocks: LStr = []
     parents: LJunosCfgLine = ccp.find_objects(regex)

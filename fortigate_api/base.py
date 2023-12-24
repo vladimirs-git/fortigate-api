@@ -34,15 +34,12 @@ class Base:
     def __init__(self, rest, url_obj: str, uid_key: str = "name"):
         """Init Connector.
 
-        :param rest: :ref:`Fortigate` REST API connector.
-        :type rest: Fortigate
+        :param Fortigate rest: :ref:`Fortigate` REST API connector.
 
-        :param url_obj: Part of REST API URL that pointing to object.
-        :type url_obj: str
+        :param str url_obj: Part of REST API URL that pointing to object.
 
-        :param uid_key: Key of unique identifier: `name`, `id`, `policyid`.
+        :param str uid_key: Key of unique identifier: `name`, `id`, `policyid`.
             Default in `name`.
-        :type uid_key: str
         """
         self.rest = rest
         self.url_ = f"{self.rest.url}/{url_obj}"
@@ -51,8 +48,7 @@ class Base:
     def create(self, data: DAny) -> Response:
         """Create the fortigate-object in the Fortigate.
 
-        :param data: Data of the fortigate-object.
-        :type data: dict
+        :param dict data: Data of the fortigate-object.
 
         :return: Session response.
 
@@ -123,8 +119,7 @@ class Base:
     def update(self, data: DAny, uid: StrInt = "") -> Response:
         """Update fortigate-object where ``uid`` is ``data["name"]``.
 
-        :param data: Data of the fortigate-object.
-        :type data: dict
+        :param dict data: Data of the fortigate-object.
 
         :param uid: Name of the fortigate-object,
             taken from the ``uid`` parameter or from ``data["name"]``.
@@ -210,8 +205,7 @@ class Base:
     def _update(self, data: DAny, uid: StrInt) -> Response:
         """Update fortigate-object in the Fortigate.
 
-        :param data: Data of the fortigate-object.
-        :type data: dict
+        :param dict data: Data of the fortigate-object.
 
         :param uid: Identifier of the fortigate-object.
         :type uid: str or int
