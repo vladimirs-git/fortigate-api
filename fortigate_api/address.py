@@ -6,8 +6,9 @@ from fortigate_api.base import Base
 class Address(Base):
     """Address Object.
 
-    - Web UI: https://hostname/api/v2/cmdb/firewall/addrgrp/
-    - API: https://hostname/ng/firewall/address
+    - Web UI: https://hostname/ng/firewall/address
+    - API: https://hostname/api/v2/cmdb/firewall/address
+    - Data: :ref:`Address.yml`
     """
 
     def __init__(self, rest):

@@ -6,8 +6,8 @@ from fortigate_api.base import Base
 class AddressGroup(Base):
     """Address Group Object.
 
-    - Web UI: https://hostname/api/v2/cmdb/firewall/addrgrp/
-    - API: https://hostname/ng/firewall/address
+    - Web UI: https://hostname/ng/firewall/addrgrp
+    - API: https://hostname/api/v2/cmdb/firewall/address
     """
 
     def __init__(self, rest):
