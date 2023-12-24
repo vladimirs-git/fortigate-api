@@ -28,8 +28,7 @@ This project on `GitHub`_.
     FortigateAPI <FortigateAPI.rst>
     Fortigate <Fortigate.rst>
     Objects <objects.rst>
-    Address <Address.rst>
-    SSH <ssh.rst>
+    SSH <SSH.rst>
     Examples <examples.rst>
 
 

@@ -82,7 +82,10 @@ class FortigateAPI:
         }
 
         self.rest = Fortigate(**kwargs)
+        """:py:class:`.Fortigate`"""
+
         self.ssh = SSH(**kwargs)
+        """:py:class:`.SSH`"""
 
         # Object connectors
 

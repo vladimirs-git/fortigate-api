@@ -3,7 +3,11 @@ FortigateAPI
 
 .. autoclass:: fortigate_api.FortigateAPI
   :members:
-  
+
+  .. autoattribute:: rest
+
+  .. autoattribute:: ssh
+
   .. autoattribute:: address
   
   .. autoattribute:: address_group

@@ -1,6 +1,6 @@
 """SSH connector to the Fortigate.
 
-Contains methods to get and put configuration commands using ssh.
+A set of methods to work with configuration commands using SSH.
 """
 
 from netmiko import ConnectHandler  # type: ignore
@@ -11,24 +11,19 @@ from fortigate_api.types_ import DAny, UStr
 class SSH:
     """SSH connector to the Fortigate.
 
-    Contains methods to get and put configuration commands using ssh.
+    A set of methods to work with configuration commands using SSH.
     """
 
     def __init__(self, host: str, username: str = "", password: str = "", **kwargs):
-        """SSH connector to the Fortigate.
+        """Init SSH.
 
-        ::
-            :param host: Firewall ip address or hostname
-            :type host: str
+        :param str host: Fortigate hostname or ip address.
 
-            :param username: Administrator name
-            :type username: str
+        :param str username: Administrator name.
 
-            :param password: Administrator password
-            :type password: str
+        :param str password: Administrator password.
 
-            :param ssh: Netmiko *ConnectHandler* parameters
-            :type ssh: Dict[str, Any]
+        :param dict ssh: Netmiko *ConnectHandler* parameters.
         """
         ssh_kwargs: DAny = dict(kwargs.get("ssh") or {})
         ssh_kwargs.update({"device_type": "fortinet", "auto_connect": False})
@@ -68,15 +63,12 @@ class SSH:
     def send_command(self, cmd: str, **kwargs) -> str:
         """Send the command to the Fortigate.
 
-        ::
-            :param cmd: The command to be executed on the Fortigate
-            :type cmd: str
+        :param str cmd: The command to be executed on the Fortigate.
 
-            :param kwargs: (optional) Netmiko parameters
-            :type kwargs: Dict[str, Any]
+        :param dict kwargs: Netmiko parameters.
 
-            :return: Output of the command
-            :rtype: str
+        :return: Output of the command.
+        :rtype: str
         """
         self.login()
         output = self.session.send_command(cmd, **kwargs)
@@ -85,15 +77,13 @@ class SSH:
     def send_config_set(self, cmds: UStr, **kwargs) -> str:
         """Send configuration commands to the Fortigate.
 
-        ::
-            :param cmds: Configuration commands to be executed on the Fortigate
-            :type cmds: List[str], str
+        :param cmds: Configuration commands to be executed on the Fortigate.
+        :type cmds: str or List[str]
 
-            :param kwargs: (optional) Netmiko parameters
-            :type kwargs: Dict[str, Any]
+        :param dict kwargs: Netmiko parameters.
 
-            :return: Output of the commands
-            :rtype: str
+        :return: Output of the commands.
+        :rtype: str
         """
         self.login()
         if isinstance(cmds, str):
