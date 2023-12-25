@@ -45,7 +45,7 @@ D_SNMP3 = {"name": NAME3, "id": "3"}
 D_ZONE = {"name": NAME1, "interface": [{"interface-name": NAME1}]}
 
 
-class MockFortigate(unittest.TestCase):
+class MockFortigate(unittest.TestCase):  # TODO delete
     """Mock Fortigate."""
 
     def setUp(self):
@@ -55,7 +55,7 @@ class MockFortigate(unittest.TestCase):
         self.rest = Fortigate(host="domain.com", username="", password="")
 
 
-class MockSession:
+class MockSession:  # TODO delete
     """Mock Session."""
 
     def __init__(self):
@@ -106,7 +106,7 @@ class MockSession:
         return MockResponse().put(url=url, **kwargs)
 
 
-class MockResponse(Response):
+class MockResponse(Response):  # TODO delete
     """Mock Response."""
 
     exist_objects = {

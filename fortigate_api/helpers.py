@@ -5,8 +5,8 @@ import time
 from datetime import datetime
 from urllib import parse
 from urllib.parse import urlencode, urlparse, parse_qs, ParseResult
-
-from fortigate_api.types_ import Any, DAny, IStr, IStrs, LStr, SDate
+from vhelpers import vdict
+from fortigate_api.types_ import Any, DAny, IStr, LStr, SDate, TLists
 
 
 # =============================== dict ===============================
@@ -50,91 +50,86 @@ def check_one_of(keys: IStr, **kwargs) -> None:
     """
     if not keys:
         return
-    keys2 = set(kwargs)
     for key in keys:
-        if key in keys2:
+        if key in kwargs:
             return
-    raise KeyError(f"mandatory one of {keys=} in {keys2}")
+    raise KeyError(f"Mandatory one of {keys=} in {set(kwargs)}")
 
 
 def get_quoted(key: str, **kwargs) -> str:
-    """Get mandatory key/value from `kwargs` and return quoted value as string.
+    """Get mandatory key/value from `kwargs` and return quoted value as a string.
 
-    :param key: Interested `key` in `kwargs`.
-    :param kwargs: Data.
-    :return: Interested quoted value.
+    :param key: The key to retrieve the value from `kwargs`.
+    :param kwargs: The keyword arguments containing the key/value pairs.
+    :return: The quoted value as a string.
     """
     check_mandatory(keys=[key], **kwargs)
     value = str(kwargs[key])
-    quoted = parse.quote(string=value, safe="")
-    return quoted
+    return parse.quote(string=value, safe="")
 
 
 def pop_int(key: str, data: DAny) -> int:
-    """Pop key/value from `data` and return value as integer.
+    """Pop key/value from `data` and return value as an integer.
 
-    :param key: Interested `key` in `data`.
-    :param data: Data.
-    :return: Interested value. Side effect `data` - removes interested 'key'.
+    If key is absent in data return zero.
+
+    :param key: The `key` to be popped from `data`.
+    :param data: The dictionary from which the key is to be popped.
+    :return: The value as integer. Update `data`, remove `key`.
     """
-    if key not in data:
+    value = vdict.pop(key, data)
+    if value is None:
         return 0
-    value = data.pop(key)
-    if not value:
-        value = "0"
-    value = str(value)
-    if not value.isdigit():
-        raise TypeError(f"{key}={value} {int} expected")
+    if not str(value).isdigit():
+        raise TypeError(f"{key=} {value=} {int} expected.")
     return int(value)
 
 
 def pop_lstr(key: str, data: DAny) -> LStr:
-    """Pop key/value from `data` and return value as List[str].
+    """Pop list of strings key/value from `data`.
 
-    :param key: Interested `key` in `data`.
-    :param data: Data.
-    :return: Interested value. Side effect `data` - removes interested 'key'.
+    If key is absent in data return empty list.
+
+    :param key: The `key` to be popped from `data`.
+    :param data: The dictionary from which the key is to be popped.
+    :return: The values as a string. Update `data`, remove `key`.
     """
-    if key not in data:
-        return []
-    values: IStrs = data.pop(key)
-    if not isinstance(values, (str, list, set, tuple)):
-        raise TypeError(f"{key}={values} {list} expected")
+    values = vdict.pop(key, data)
+    if values is None:
+        values = []
     if isinstance(values, str):
         values = [values]
-    if invalid := [s for s in values if not isinstance(s, str)]:
-        raise TypeError(f"{key}={invalid} {str} expected")
+    if not isinstance(values, TLists):
+        raise TypeError(f"{key=} {values=} {list} expected.")
+    for value in values:
+        if not isinstance(value, str):
+            raise TypeError(f"{key=} {value=} {list} expected.")
     return list(values)
 
 
 def pop_str(key: str, data: DAny) -> str:
-    """Pop key/value from `data` and return value as string.
+    """Pop key/value from `data` and return value as a string.
 
-    :param key: Interested `key` in `data`.
-    :param data: Data.
-    :return: Interested value. Side effect `data` - removes interested 'key'.
+    If key is absent in data return empty string.
+
+    :param key: The `key` to be popped from `data`.
+    :param data: The dictionary from which the key is to be popped.
+    :return: The value as a string. Update `data`, remove `key`.
     """
-    if key not in data:
-        return ""
-    value = data.pop(key)
-    if value is None:
-        value = ""
-    return str(value)
+    return str(vdict.pop(key, data) or "")
 
 
 def pop_quoted(key: str, data: DAny) -> str:
-    """Pop key/value from `data` and return quoted value as string.
+    """Pop key/value from `data` and return quoted value as a string.
 
-    :param key: Interested `key` in `data`.
-    :param data: Data.
-    :return: Interested value. Side effect `data` - removes interested 'key'.
+    If key is absent in data return empty string.
+
+    :param key: The `key` to be popped from `data`.
+    :param data: The dictionary from which the key is to be popped.
+    :return: The quoted value as a string. Update `data`, remove `key`.
     """
-    if key not in data:
-        return ""
-    value = data.pop(key)
-    if value is None:
-        return ""
-    return parse.quote(string=str(value), safe="")
+    value: str = pop_str(key, data)
+    return parse.quote(string=value, safe="")
 
 
 # =============================== str ================================

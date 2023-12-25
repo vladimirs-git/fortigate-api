@@ -35,7 +35,7 @@ jobs:
       - name: mypy
         run: mypy --namespace-packages --explicit-package-bases fortigate_api tests
       - name: pytest
-        run: pytest -v -m "not developing" tests
+        run: pytest -v -m "not skip" tests
       - name: coverage
         run: pytest --cov=tests
       - name: pydocstyle

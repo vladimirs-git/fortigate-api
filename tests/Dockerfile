@@ -15,6 +15,6 @@ RUN python -m pip install --upgrade pip && \
 RUN rm /fortigate_api/__init__.py
 RUN pylint fortigate_api tests
 RUN mypy --namespace-packages --explicit-package-bases fortigate_api tests
-RUN pytest -v -m "not developing" tests
+RUN pytest -v -m "not skip" tests
 RUN pydocstyle .
 RUN rst-lint README.rst CHANGELOG.rst
