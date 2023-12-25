@@ -44,10 +44,9 @@ def test__create(connectors: list, mocker: MockerFixture, data, expected):
 
 @pytest.mark.parametrize("kwargs, expected", [
     ({"uid": "ADDR1"}, 200),
-    ({"uid": "ADDR2"}, 404),
+    ({"uid": "ADDR9"}, 404),
     ({"filter": "name==ADDR1"}, 200),
-    ({"filter": "name==ADDR2"}, 200),
-    ({"filter": "name==ADDR3"}, 200),
+    ({"filter": "name==ADDR9"}, 200),
     ({"uid": ""}, ValueError),
     ({"uid": "ADDR1", "filter": "name==ADDR1"}, KeyError),
 ])

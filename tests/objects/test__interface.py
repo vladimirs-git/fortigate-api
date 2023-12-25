@@ -2,88 +2,115 @@
 
 import unittest
 
-from fortigate_api.interface import Interface
-from tests.helper__tst import NAME1, NAME2, NAME3, MockFortigate
+import pytest
+from pytest_mock import MockerFixture
+from requests import Session
+
+from fortigate_api import FortigateAPI
+from tests import helper__tst as tst
 
 
-# noinspection DuplicatedCode
-class Test(MockFortigate):
-    """Interface"""
+@pytest.fixture
+def connectors():
+    """Init Connector objects."""
+    api = FortigateAPI(host="host")
+    api.rest._session = Session()
+    items = [
+        api.interface,
+    ]
+    return items
 
-    def setUp(self):
-        """setUp"""
-        super().setUp()
-        self.obj = Interface(rest=self.rest)
 
-    def test_valid__create(self):
-        """Interface.create()"""
-        for name, req in [
-            (NAME1, 200),  # present in the Fortigate, no need create
-            (NAME2, 500),  # error
-            (NAME3, 200),  # not found in the Fortigate, need create
-        ]:
-            result = self.obj.create(data={"name": name}).status_code
-            self.assertEqual(result, req, msg=f"{name=}")
+@pytest.mark.parametrize("kwargs, expected", [
+    ({"uid": "INTF1"}, 200),
+    ({"uid": "INTF9"}, 404),
+    ({"filter": "name==INTF1"}, 200),
+    ({"filter": "name==INTF3"}, 200),
+    ({"filter": "name==INTF9"}, 200),
+    ({"uid": ""}, ValueError),
+    ({"uid": "INTF1", "filter": "name==INTF1"}, KeyError),
+])
+def test__delete(connectors: list, mocker: MockerFixture, kwargs, expected):
+    """Interface.delete()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+    mocker.patch("requests.Session.delete",
+                 side_effect=lambda *args, **kw: tst.session_delete(mocker, *args, **kw))
 
-    def test_valid__delete(self):
-        """Interface.delete()"""
-        for kwargs, req in [
-            (dict(uid=NAME1), 200),
-            (dict(uid=NAME2), 500),
-            (dict(filter=f"name=={NAME1}"), 200),
-            (dict(filter=f"name=={NAME2}"), 200),
-        ]:
-            result = self.obj.delete(**kwargs).status_code
-            self.assertEqual(result, req, msg=f"{kwargs=}")
+    for connector in connectors:
+        if isinstance(expected, int):
+            response = connector.delete(**kwargs)
+            actual = response.status_code
+            assert actual == expected
+        else:
+            with pytest.raises(expected):
+                connector.delete(**kwargs)
 
-    def test_valid__get(self):
-        """Interface.get()"""
-        for kwargs, req in [
-            (dict(uid=NAME1), [NAME1]),
-            (dict(uid=NAME2), []),
-            (dict(uid=NAME3), []),  # vdom3
-            (dict(filter=f"name=={NAME1}"), [NAME1]),
-            (dict(filter=f"name=={NAME2}"), []),
-            (dict(filter=f"name=={NAME3}"), []),  # vdom3
-            (dict(all=True), [NAME1, NAME3]),
-            (dict(all=True, uid=NAME1), [NAME1]),
-            (dict(all=True, uid=NAME2), []),
-            (dict(all=True, uid=NAME3), [NAME3]),
-            (dict(all=True, filter=f"name=={NAME1}"), [NAME1]),
-            (dict(all=True, filter=f"name=={NAME2}"), []),
-            (dict(all=True, filter=f"name=={NAME3}"), [NAME3]),
-        ]:
-            result_ = self.obj.get(**kwargs)
-            result = [d["name"] for d in result_]
-            self.assertEqual(result, req, msg=f"{kwargs=}")
 
-    def test_invalid__get(self):
-        """Interface.get()"""
-        for kwargs, error in [
-            (dict(name=NAME1), KeyError),
-        ]:
-            with self.assertRaises(error, msg=f"{kwargs=}"):
-                self.obj.get(**kwargs)
+@pytest.mark.parametrize("kwargs, expected", [
+    (dict(uid="INTF1"), ["INTF1"]),  # root
+    (dict(uid="INTF3"), []),  # vdom3
+    (dict(uid="INTF9"), []),  # absent
+    (dict(filter=f"name==INTF1"), ["INTF1"]),
+    (dict(filter=f"name==INTF3"), []),
+    (dict(filter=f"name==INTF9"), []),
+    (dict(all=True), ["INTF1", "INTF3"]),
+    (dict(all=True, uid="INTF1"), ["INTF1"]),
+    (dict(all=True, uid="INTF3"), ["INTF3"]),
+    (dict(all=True, uid="INTF9"), []),
+    (dict(all=True, filter=f"name==INTF1"), ["INTF1"]),
+    (dict(all=True, filter=f"name==INTF3"), ["INTF3"]),
+    (dict(all=True, filter=f"name==INTF9"), []),
+    (dict(name="INTF1"), KeyError),
+])
+def test__get(connectors: list, mocker: MockerFixture, kwargs, expected):
+    """Interface.get()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
 
-    def test_valid__update(self):
-        """Interface.update()"""
-        for kwargs, req in [
-            (dict(uid=NAME1, data=dict(name=NAME1)), 200),
-            (dict(uid="NAME9", data=dict(name="NAME9")), 500),
-            (dict(data=dict(name=NAME1)), 200),
-            (dict(data=dict(name="NAME9")), 500),
-        ]:
-            result = self.obj.update(**kwargs).status_code
-            self.assertEqual(result, req, msg=f"{kwargs=}")
+    for connector in connectors:
+        if isinstance(expected, list):
+            items = connector.get(**kwargs)
+            actual = [d["name"] for d in items]
+            assert actual == expected
+        else:
+            with pytest.raises(expected):
+                connector.get(**kwargs)
 
-    def test_valid__is_exist(self):
-        """Address.is_exist()"""
-        for uid, req in [
-            (NAME1, True),
-            ("NAME9", False),
-        ]:
-            result = self.obj.is_exist(uid=uid)
-            self.assertEqual(result, req, msg=f"{uid=}")
+
+@pytest.mark.parametrize("kwargs, expected", [
+    ({"uid": "INTF1", "data": {"name": "INTF1"}}, 200),
+    ({"uid": "INTF3", "data": {"name": "INTF3"}}, 200),
+    ({"uid": "INTF9", "data": {"name": "INTF9"}}, 404),
+    ({"data": {"name": "INTF1"}}, 200),
+    ({"data": {"name": "INTF3"}}, 200),
+    ({"data": {"name": "INTF9"}}, 404),
+])
+def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
+    """Interface.update()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+    mocker.patch("requests.Session.put",
+                 side_effect=lambda *args, **kw: tst.session_put(mocker, *args, **kw))
+
+    for connector in connectors:
+        response = connector.update(**kwargs)
+        actual = response.status_code
+        assert actual == expected
+
+
+@pytest.mark.parametrize("uid, expected", [
+    ("INTF1", True),
+    ("INTF9", False),
+])
+def test__is_exist(connectors: list, mocker: MockerFixture, uid, expected):
+    """Interface.is_exist()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+
+    for connector in connectors:
+        actual = connector.is_exist(uid=uid)
+        assert actual == expected, connector
 
 
 if __name__ == "__main__":

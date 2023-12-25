@@ -36,7 +36,7 @@ def connectors():
     ({"typo": "NAME1"}, KeyError),
 ])
 def test__create(connectors: list, mocker: MockerFixture, data, expected):
-    """Address.create()"""
+    """Antivirusn.create()"""
     mocker.patch("requests.Session.get",
                  side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     mocker.patch("requests.Session.post",
@@ -54,15 +54,14 @@ def test__create(connectors: list, mocker: MockerFixture, data, expected):
 
 @pytest.mark.parametrize("kwargs, expected", [
     ({"uid": "NAME1"}, 200),
-    ({"uid": "NAME2"}, 404),
+    ({"uid": "NAME9"}, 404),
     ({"filter": "name==NAME1"}, 200),
-    ({"filter": "name==NAME2"}, 200),
-    ({"filter": "name==NAME3"}, 200),
+    ({"filter": "name==NAME9"}, 200),
     ({"uid": ""}, ValueError),
     ({"uid": "NAME1", "filter": "name==NAME1"}, KeyError),
 ])
 def test__delete(connectors: list, mocker: MockerFixture, kwargs, expected):
-    """Address.delete()"""
+    """Antivirusn.delete()"""
     mocker.patch("requests.Session.get",
                  side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     mocker.patch("requests.Session.delete",
@@ -88,7 +87,7 @@ def test__delete(connectors: list, mocker: MockerFixture, kwargs, expected):
     (dict(id="NAME1"), KeyError),
 ])
 def test__get(connectors: list, mocker: MockerFixture, kwargs, expected):
-    """Address.get()"""
+    """Antivirusn.get()"""
     mocker.patch("requests.Session.get",
                  side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
 
@@ -109,7 +108,7 @@ def test__get(connectors: list, mocker: MockerFixture, kwargs, expected):
     ({"data": {"name": "NAME3"}}, 404),
 ])
 def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
-    """Address.update()"""
+    """Antivirusn.update()"""
     mocker.patch("requests.Session.get",
                  side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     mocker.patch("requests.Session.put",
@@ -126,7 +125,7 @@ def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
     ("NAME3", False),
 ])
 def test__is_exist(connectors: list, mocker: MockerFixture, uid, expected):
-    """Address.is_exist()"""
+    """Antivirusn.is_exist()"""
     mocker.patch("requests.Session.get",
                  side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
 
