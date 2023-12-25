@@ -20,7 +20,6 @@ INTF3 = {"name": "INTF3", "vdom": "vdom3"}
 NAME1 = {"name": "NAME1"}
 NAME3 = {"name": "NAME3"}
 
-
 URL_BASE = "/api/v2/cmdb/firewall/"
 UID_NAME = [
     "antivirus/profile",
@@ -39,7 +38,6 @@ UID_NAME = [
     "system/interface",
     "system.snmp/community",
 ]
-
 
 
 def create_cookie(name: str, value: str) -> Cookie:

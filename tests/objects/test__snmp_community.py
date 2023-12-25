@@ -1,13 +1,10 @@
 """unittest snmp_community.py"""
 
-import unittest
-
 import pytest
 from pytest_mock import MockerFixture
 from requests import Session
 
 from fortigate_api import FortigateAPI
-from fortigate_api.snmp_community import SnmpCommunity
 from tests import helper__tst as tst
 
 
