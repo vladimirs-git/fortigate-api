@@ -209,10 +209,29 @@ def test_valid__quote(string, expected):
 
 @pytest.mark.parametrize("url, expected", [
     ("", ""),
+    ("https://domain.com/api/v2/cmdb", ""),
+    ("https://domain.com/api/v2/cmdb/firewall", ""),
+    ("https://domain.com/api/v2/cmdb/firewall/policy", "firewall/policy"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/", "firewall/policy"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/1", "firewall/policy"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/1/2", "firewall/policy"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy?key=value", "firewall/policy"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/1?key=value", "firewall/policy"),
+])
+def test_valid__url_to_app_model(url, expected):
+    """helpers.url_to_app_model()"""
+    actual = h.url_to_app_model(url=url)
+    assert actual == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ("", ""),
+    ("https://domain.com/api/v2/cmdb", ""),
     ("https://domain.com/api/v2/cmdb/firewall", ""),
     ("https://domain.com/api/v2/cmdb/firewall/policy", "policy"),
     ("https://domain.com/api/v2/cmdb/firewall/policy/", "policy"),
     ("https://domain.com/api/v2/cmdb/firewall/policy/1", "policy"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/1/2", "policy"),
     ("https://domain.com/api/v2/cmdb/firewall/policy?key=value", "policy"),
     ("https://domain.com/api/v2/cmdb/firewall/policy/1?key=value", "policy"),
 ])
@@ -224,6 +243,7 @@ def test_valid__url_to_model(url, expected):
 
 @pytest.mark.parametrize("url, expected", [
     ("", ""),
+    ("https://domain.com/api/v2/cmdb", ""),
     ("https://domain.com/api/v2/cmdb/firewall", ""),
     ("https://domain.com/api/v2/cmdb/firewall/policy", ""),
     ("https://domain.com/api/v2/cmdb/firewall/policy/", ""),

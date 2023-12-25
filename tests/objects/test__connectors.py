@@ -1,4 +1,9 @@
-"""unittest address.py"""
+"""Test
+ address.py
+ address_group.py
+ antivirus.py
+ etc.
+ """
 
 import pytest
 from pytest_mock import MockerFixture
@@ -24,6 +29,17 @@ def connectors():
     items = [
         api.address,
         api.address_group,
+        api.antivirus,
+        api.application,
+        api.external_resource,
+        api.internet_service,
+        api.ip_pool,
+        api.schedule,
+        api.service,
+        api.service_category,
+        api.service_group,
+        api.virtual_ip,
+        api.zone,
     ]
     return items
 
@@ -131,4 +147,4 @@ def test__is_exist(connectors: list, mocker: MockerFixture, uid, expected):
 
     for connector in connectors:
         actual = connector.is_exist(uid=uid)
-        assert actual == expected
+        assert actual == expected, connector

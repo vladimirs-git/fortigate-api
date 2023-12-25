@@ -268,6 +268,21 @@ from fortigate_api.fortigate import Fortigate
 #         return url_
 
 URL_BASE = "/api/v2/cmdb/firewall/"
+LIKE_ADDRESS = [
+    "antivirus/profile",
+    "application/list",
+    "firewall.schedule/onetime",
+    "firewall.service/category",
+    "firewall.service/custom",
+    "firewall.service/group",
+    "firewall/address",
+    "firewall/addrgrp",
+    "firewall/internet-service",
+    "firewall/ippool",
+    "firewall/vip",
+    "system/external-resource",
+    "system/zone",
+]
 
 def create_cookie(name: str, value: str) -> Cookie:
     """Return Cookie object."""
@@ -337,10 +352,10 @@ def mock_response(mocker: MockerFixture, response: Response) -> Response:
 def session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.delete()"""
     _ = args, kwargs
-    model = h.url_to_model(url)
-    if model in ["address", "addrgrp"]:
+    app_model = h.url_to_app_model(url)
+    if app_model in LIKE_ADDRESS:
         resp = address_delete(url)
-    elif model == "policy":
+    elif app_model == "firewall/policy":
         resp = policy_delete(url)
     else:
         resp = create_response("delete", url, 400)
@@ -350,10 +365,10 @@ def session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
 def session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.get()"""
     _ = args, kwargs
-    model = h.url_to_model(url)
-    if model in ["address", "addrgrp"]:
+    app_model = h.url_to_app_model(url)
+    if app_model in LIKE_ADDRESS:
         resp = address_get(url)
-    elif model == "policy":
+    elif app_model == "firewall/policy":
         resp = policy_get(url)
     else:
         resp = create_response("get", url, 400)
@@ -363,10 +378,10 @@ def session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
 def session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.post()"""
     _ = args, kwargs
-    model = h.url_to_model(url)
-    if model in ["address", "addrgrp"]:
+    app_model = h.url_to_app_model(url)
+    if app_model in LIKE_ADDRESS:
         resp = address_post(url, data=kwargs)
-    elif model == "policy":
+    elif app_model == "firewall/policy":
         resp = policy_post(url, data=kwargs)
     else:
         resp = create_response("post", url, 400)
@@ -376,10 +391,10 @@ def session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
 def session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.put()"""
     _ = args, kwargs
-    model = h.url_to_model(url)
-    if model in ["address", "addrgrp"]:
+    app_model = h.url_to_app_model(url)
+    if app_model in LIKE_ADDRESS:
         resp = address_put(url)
-    elif model == "policy":
+    elif app_model == "firewall/policy":
         resp = policy_put(url)
     else:
         resp = create_response("put", url, 400)

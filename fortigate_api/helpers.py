@@ -197,6 +197,23 @@ def quote(string: Any) -> str:
     return parse.quote(string=str(string), safe="")
 
 
+def url_to_app_model(url: str) -> str:
+    """Parse app/model name from the URL.
+
+    :param url: The URL to parse.
+    :return: The app/model name parsed from the URL.
+    :example:
+        url_to_model("https://domain.com/api/v2/cmdb/firewall/policy/1") -> "firewall/policy"
+    """
+    url_o: ParseResult = urlparse(url)
+    path = url_o.path.strip("/")
+    items = path.split("/")
+    if len(items) <= 4:
+        return ""
+    app = items[3]
+    model = items[4]
+    return f"{app}/{model}"
+
 def url_to_model(url: str) -> str:
     """Parse model name from the URL.
 
