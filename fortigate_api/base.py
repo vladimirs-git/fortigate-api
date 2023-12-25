@@ -53,7 +53,7 @@ class Base:
         :return: Session response.
 
             - `<Response [200]>` Object successfully created or already exists,
-            - `<Response [400]>` Object already exist.
+            - `<Response [500]>` Object already exist.
         :rtype: requests.Response
         """
         h.check_mandatory(keys=["name"], **data)

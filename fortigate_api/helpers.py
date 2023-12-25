@@ -5,7 +5,9 @@ import time
 from datetime import datetime
 from urllib import parse
 from urllib.parse import urlencode, urlparse, parse_qs, ParseResult
+
 from vhelpers import vdict
+
 from fortigate_api.types_ import Any, DAny, IStr, LStr, SDate, TLists
 
 

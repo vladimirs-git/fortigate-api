@@ -1,7 +1,5 @@
 """unittest base.py"""
 
-import unittest
-
 import pytest
 from requests import Response
 

@@ -34,7 +34,7 @@ class FortigateAPI:
             password: str = "",
             token: str = "",
             scheme: str = HTTPS,
-            port: str = "",
+            port: int = 0,
             timeout: int = TIMEOUT,
             verify: bool = False,
             vdom: str = VDOM,

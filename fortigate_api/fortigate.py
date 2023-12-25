@@ -39,7 +39,7 @@ class Fortigate:
             password: str = "",
             token: str = "",
             scheme: str = HTTPS,
-            port: str = "",
+            port: int = 0,
             timeout: int = TIMEOUT,
             verify: bool = False,
             vdom: str = VDOM,
@@ -140,7 +140,9 @@ class Fortigate:
     @property
     def url(self) -> str:
         """Return URL to the Fortigate."""
-        if self.port == 443:
+        if self.scheme == HTTPS and self.port == 443:
+            return f"{self.scheme}://{self.host}"
+        if self.scheme == "http" and self.port == 80:
             return f"{self.scheme}://{self.host}"
         return f"{self.scheme}://{self.host}:{self.port}"
 
@@ -217,6 +219,7 @@ class Fortigate:
         :return: Session response.
 
             - `<Response [200]>` Object successfully deleted,
+            - `<Response [400]>` Invalid URL,
             - `<Response [404]>` Object not found in the Fortigate.
         :rtype: requests.Response
         """
@@ -270,7 +273,8 @@ class Fortigate:
         :return: Session response.
 
             - `<Response [200]>` Object successfully created or already exists,
-            - `<Response [400]>` Object already exist.
+            - `<Response [400]>` Invalid URL,
+            - `<Response [500]>` Object already exist.
         :rtype: requests.Response
         """
         response: Response = self._response("post", url, data)
@@ -288,6 +292,7 @@ class Fortigate:
         :return: Session response.
 
             - `Response [200]>` Object successfully updated,
+            - `Response [400]>` Invalid URL,
             - `Response [404]>` Object has not been updated.
         :rtype: requests.Response
         """
@@ -357,6 +362,19 @@ class Fortigate:
 
     # =========================== helpers ============================
 
+    def _bearer_token(self) -> DStr:
+        """Return bearer token."""
+        return {"Authorization": f"Bearer {self.token}"}
+
+    def _get_session(self) -> Session:
+        """Return an existing session or create a new one."""
+        if not self.is_connected:
+            self.login()
+        session = self._session
+        if not isinstance(session, Session):
+            raise TypeError(f"{session=} {Session} expected.")
+        return session
+
     @staticmethod
     def _get_token_from_cookies(session: Session) -> str:
         """Retrieve the token from the cookies in the session.
@@ -385,29 +403,6 @@ class Fortigate:
         token = str(cookies[0].value).strip("\"")
         return token
 
-    def _bearer_token(self) -> DStr:
-        """Return bearer token."""
-        return {"Authorization": f"Bearer {self.token}"}
-
-    def _get_session(self) -> Session:
-        """Return an existing session or create a new one."""
-        if not self.is_connected:
-            self.login()
-        session = self._session
-        if not isinstance(session, Session):
-            raise TypeError(f"{session=} {Session} expected.")
-        return session
-
-    def _logging(self, resp: Response) -> None:
-        """Log response."""
-        code = resp.status_code
-        reason = resp.reason
-        url = self._hide_secret(string=resp.url)
-        msg = f"{code=} {reason=} {url=}"
-        logging.info(msg)
-        if logging.getLogger().level <= logging.DEBUG:
-            logging.debug("text=%s", resp.text)
-
     def _hide_secret(self, string: str) -> str:
         """Hide password, secretkey in text (for safe logging)."""
         if not self.password:
@@ -429,6 +424,16 @@ class Fortigate:
                         msgs.append(arg)
                 return type(ex)(tuple(msgs))
         return ex
+
+    def _logging(self, resp: Response) -> None:
+        """Log response."""
+        code = resp.status_code
+        reason = resp.reason
+        url = self._hide_secret(string=resp.url)
+        msg = f"{code=} {reason=} {url=}"
+        logging.info(msg)
+        if logging.getLogger().level <= logging.DEBUG:
+            logging.debug("text=%s", resp.text)
 
     def _response(self, method: Method, url: str, data: ODAny = None) -> Response:
         """Call Session method and return Response.
