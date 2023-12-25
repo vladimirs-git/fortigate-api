@@ -84,8 +84,8 @@ class Fortigate:
         self.host = str(host)
         self.username = str(kwargs.get("username"))
         self.password = str(kwargs.get("password"))
-        self.token = self._init_token(**kwargs)
-        self.scheme: str = self._init_scheme(**kwargs)
+        self.token = _init_token(**kwargs)
+        self.scheme: str = _init_scheme(**kwargs)
         self.port: int = self._init_port(**kwargs)
         self.timeout: int = int(kwargs.get("timeout") or 0)
         self.vdom: str = str(kwargs.get("vdom") or VDOM)
@@ -325,40 +325,11 @@ class Fortigate:
         :return: Session response.
 
             - `<Response [200]>` Object exist,
+            - `Response [400]>` Invalid URL,
             - `<Response [404]>` Object does not exist.
         :rtype: requests.Response
         """
         return self._response("get", url)
-
-    # ============================= init =============================
-
-    def _init_port(self, **kwargs) -> int:
-        """Init port, 443 for scheme=`https`, 80 for scheme=`http`."""
-        if port := int(kwargs.get("port") or 0):
-            return port
-        if self.scheme == "http":
-            return PORT_80
-        return PORT_443
-
-    @staticmethod
-    def _init_scheme(**kwargs) -> str:
-        """Init scheme `https` or `http`."""
-        scheme = str(kwargs.get("scheme") or HTTPS)
-        expected = ["https", "http"]
-        if scheme not in expected:
-            raise ValueError(f"{scheme=}, {expected=}.")
-        return scheme
-
-    def _init_token(self, **kwargs) -> str:
-        """Init token."""
-        token = str(kwargs.get("token") or "")
-        if not token:
-            return ""
-        if self.username:
-            raise ValueError("Mutually excluded: username, token.")
-        if self.password:
-            raise ValueError("Mutually excluded: password, token.")
-        return token
 
     # =========================== helpers ============================
 
@@ -425,6 +396,14 @@ class Fortigate:
                 return type(ex)(tuple(msgs))
         return ex
 
+    def _init_port(self, **kwargs) -> int:
+        """Init port, 443 for scheme=`https`, 80 for scheme=`http`."""
+        if port := int(kwargs.get("port") or 0):
+            return port
+        if self.scheme == "http":
+            return PORT_80
+        return PORT_443
+
     def _logging(self, resp: Response) -> None:
         """Log response."""
         code = resp.status_code
@@ -475,3 +454,24 @@ class Fortigate:
             return url.rstrip("/")
         path = url.strip("/")
         return urljoin(self.url, path)
+
+
+def _init_scheme(**kwargs) -> str:
+    """Init scheme `https` or `http`."""
+    scheme = str(kwargs.get("scheme") or HTTPS)
+    expected = ["https", "http"]
+    if scheme not in expected:
+        raise ValueError(f"{scheme=}, {expected=}.")
+    return scheme
+
+
+def _init_token(**kwargs) -> str:
+    """Init token."""
+    token = str(kwargs.get("token") or "")
+    if not token:
+        return ""
+    if kwargs.get("username"):
+        raise ValueError("Mutually excluded: username, token.")
+    if kwargs.get("password"):
+        raise ValueError("Mutually excluded: password, token.")
+    return token

@@ -145,11 +145,14 @@ class FortigateAPI:
         return self.rest.__repr__()
 
     def __enter__(self):
-        """Enter the runtime context related to this object."""
+        """Enter the runtime context.
+
+        No need login REST and SSH. Session will be logged in after the first request.
+        """
         return self
 
     def __exit__(self, *args):
-        """Exit the runtime context related to this object."""
+        """Exit the runtime context, logout REST and SSH sessions."""
         self.rest.__exit__()
         self.ssh.__exit__()
 

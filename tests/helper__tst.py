@@ -4,9 +4,12 @@ from __future__ import annotations
 import json
 import re
 import unittest
+from http.cookiejar import Cookie
+from typing import Any
 from unittest.mock import patch
 
-from requests import Response
+from pytest_mock import MockerFixture
+from requests import Response, Session
 from requests.cookies import RequestsCookieJar
 
 from fortigate_api.fortigate import Fortigate
@@ -176,8 +179,7 @@ class MockResponse(Response):  # TODO delete
     def get(cls, url: str) -> MockResponse:
         """Mock Session get.
 
-        ::
-            :return: status_code=200 if object is configured in the Fortigate
+        :return: status_code=200 if object is configured in the Fortigate
         """
         resp = cls(url=url)
         url_ = cls._url(url=url)
@@ -204,9 +206,8 @@ class MockResponse(Response):  # TODO delete
     def post(cls, url: str, **kwargs) -> MockResponse:
         """Mock Session post.
 
-        ::
-            :return: status_code==200 (created successfully) only for supported objects
-                with names: NAME1, NAME3
+        :return: status_code==200 (created successfully) only for supported objects
+            with names: NAME1, NAME3
         """
         resp = cls(url=url)
         data_s = kwargs.get("data")
@@ -229,8 +230,7 @@ class MockResponse(Response):  # TODO delete
     def delete(cls, url: str) -> MockResponse:
         """Mock Session delete.
 
-        ::
-            :return: Object is configured in firewall, status_code==200
+        :return: Object is configured in firewall, status_code==200
         """
         resp = cls(url=url)
         url_ = cls._url(url=url)
@@ -242,8 +242,7 @@ class MockResponse(Response):  # TODO delete
     def put(cls, url: str, **kwargs) -> MockResponse:
         """Mock Session put.
 
-        ::
-            :return: Object is configured in firewall, status_code==200
+        :return: Object is configured in firewall, status_code==200
         """
         resp = cls(url=url)
         url_ = cls._url(url=url)
@@ -266,3 +265,116 @@ class MockResponse(Response):  # TODO delete
         else:
             url_ = url.split("/host/")[1]
         return url_
+
+
+def create_cookie(name: str, value: str) -> Cookie:
+    """Return Cookie object."""
+    return Cookie(
+        version=0,
+        name=name,
+        value=value,
+        port=None,
+        port_specified=False,
+        domain="host.local",
+        domain_specified=False,
+        domain_initial_dot=False,
+        path="/",
+        path_specified=True,
+        secure=True,
+        expires=None,
+        discard=True,
+        comment=None,
+        comment_url=None,
+        rest={},
+    )
+
+
+def crate_response(status_code: int) -> Response:
+    """Return Response object with status_code=200."""
+    response = Response()
+    response.status_code = status_code
+    return response
+
+
+def create_session_w_cookie(name: str, value: str) -> Session:
+    """Return Session object with cookies."""
+    cookie = create_cookie(name, value)
+    session = Session()
+    session.cookies = [cookie]  # type: ignore
+    return session
+
+
+def create_response(method: str, url: str, status_code: int, data: Any = None) -> Response:
+    """Create response."""
+    resp = Response()
+    resp.url = url
+    resp.status_code = status_code
+    data_ = {"http_method": method.upper(), "revision": "1", "status": "success"}
+    if status_code >= 400:
+        data_.update({"status": "error"})
+    if data is not None:
+        data_["results"] = data
+    text = json.dumps(data_)
+    resp._content = text.encode("utf-8")
+    return resp
+
+
+def mock_response(mocker: MockerFixture, response: Response) -> Response:
+    """Crate mock based on Response"""
+    resp: Response = mocker.Mock(spec=Response)
+    resp.url = response.url
+    resp.status_code = response.status_code
+    resp.ok = response.ok  # type: ignore
+    resp.reason = ""
+    resp.json.return_value = response.json()  # type: ignore
+    return resp
+
+
+def mock_session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
+    """Mock Session.delete()"""
+    _ = args, kwargs
+    if url == "https://host/api/v2/cmdb/firewall/policy/1":
+        resp = create_response("delete", url, 200)
+    elif url.startswith("https://host/api/v2/cmdb/firewall/policy/2"):
+        resp = create_response("delete", url, 404)
+    else:
+        resp = create_response("delete", url, 400)
+    return mock_response(mocker, resp)
+
+
+def mock_session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
+    """Mock Session.get()"""
+    _ = args, kwargs
+    if url == "https://host/api/v2/cmdb/firewall/policy/1":
+        resp = create_response("get", url, 200, [{"id": "1", "name": NAME1}])
+    elif url.startswith("https://host/api/v2/cmdb/firewall/policy/3"):
+        resp = create_response("get", url, 404)
+    elif url.startswith("https://host/api/v2/cmdb/firewall/policy"):
+        resp = create_response("get", url, 200, [])
+    else:
+        resp = create_response("get", url, 400)
+    return mock_response(mocker, resp)
+
+
+def mock_session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
+    """Mock Session.post()"""
+    _ = args, kwargs
+    if url == "https://host/api/v2/cmdb/firewall/policy/1":
+        resp = create_response("post", url, 200)
+    elif url.startswith("https://host/api/v2/cmdb/firewall/policy"):
+        resp = create_response("post", url, 500)
+    else:
+        resp = create_response("post", url, 400)
+    return mock_response(mocker, resp)
+
+
+def mock_session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
+    """Mock Session.put()"""
+    _ = args, kwargs
+    if url == "https://host/api/v2/cmdb/firewall/policy/1":
+        resp = create_response("put", url, 200)
+    elif url.startswith("https://host/api/v2/cmdb/firewall/policy"):
+        resp = create_response("put", url, 404)
+    else:
+        resp = create_response("put", url, 400)
+    return mock_response(mocker, resp)
