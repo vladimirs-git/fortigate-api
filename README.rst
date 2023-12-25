@@ -43,11 +43,6 @@ Install the package from pypi.org release
 
     pip install fortigate-api
 
-or install the package from github.com release
-
-.. code:: bash
-
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.3.2.tar.gz
 
 or install the package from github.com repository
 
