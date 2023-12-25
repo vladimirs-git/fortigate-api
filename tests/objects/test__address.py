@@ -2,91 +2,124 @@
 
 import unittest
 
+import pytest
+from pytest_mock import MockerFixture
+from requests import Session
+
+from fortigate_api import FortigateAPI
 from fortigate_api.address import Address
-from tests.helper__tst import ADDR1, NAME3, SLASH, MockFortigate
+from tests import helper__tst as tst
 
 
-# noinspection DuplicatedCode
-class Test(MockFortigate):
-    """Address"""
+@pytest.fixture
+def obj():
+    """Init Fortigate"""
+    api = FortigateAPI(host="host")
+    api.rest._session = Session()
+    return api.address
 
-    def setUp(self):
-        """setUp"""
-        super().setUp()
-        self.obj = Address(rest=self.rest)
 
-    def test_valid__create(self):
-        """Address.create()"""
-        for name, req in [
-            (ADDR1, 200),  # present in the Fortigate, no need create
-            ("ADDR9", 500),  # error
-            (NAME3, 200),  # not found in the Fortigate, need create
-            (SLASH, 200),  # name with slash, present in the Fortigate, no need create
-        ]:
-            result = self.obj.create(data={"name": name}).status_code
-            self.assertEqual(result, req, msg=f"{name=}")
+@pytest.mark.parametrize("data, expected", [
+    ({"name": "ADDR1"}, 200),  # already exist
+    ({"name": "ADDR2"}, 200),  # not exist
+    ({"name": "A/B"}, 200),  # already exist
+    ({"typo": "ADDR1"}, KeyError),
+])
+def test__create(obj: Address, mocker: MockerFixture, data, expected):
+    """Address.create()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+    mocker.patch("requests.Session.post",
+                 side_effect=lambda *args, **kw: tst.session_post(mocker, *args, **kw))
 
-    def test_valid__delete(self):
-        """Address.delete()"""
-        for kwargs, req in [
-            (dict(uid=ADDR1), 200),
-            (dict(uid="ADDR9"), 500),
-            (dict(filter=f"name=={ADDR1}"), 200),
-            (dict(filter="name==ADDR9"), 200),
-        ]:
-            result = self.obj.delete(**kwargs).status_code
-            self.assertEqual(result, req, msg=f"{kwargs=}")
+    if isinstance(expected, int):
+        response = obj.create(data)
+        actual = response.status_code
+        assert actual == expected
+    else:
+        with pytest.raises(expected):
+            obj.create(data)
 
-    def test_invalid__delete(self):
-        """Address.delete()"""
-        for kwargs, error in [
-            (dict(uid=""), ValueError),
-            (dict(uid=ADDR1, filter=f"name=={ADDR1}"), KeyError),
-        ]:
-            with self.assertRaises(error, msg=f"{kwargs=}"):
-                self.obj.delete(**kwargs)
 
-    def test_valid__get(self):
-        """Address.get()"""
-        for kwargs, req in [
-            (dict(uid=ADDR1), [ADDR1]),
-            (dict(uid=SLASH), [SLASH]),
-            (dict(uid="ADDR9"), []),
-            (dict(uid=ADDR1, filter=f"name=={ADDR1}"), [ADDR1]),
-            (dict(filter=f"name=={ADDR1}"), [ADDR1]),
-            (dict(filter="name==ADDR9"), []),
-        ]:
-            result_ = self.obj.get(**kwargs)
-            result = [d["name"] for d in result_]
-            self.assertEqual(result, req, msg=f"{kwargs=}")
+@pytest.mark.parametrize("kwargs, expected", [
+    ({"uid": "ADDR1"}, 200),
+    ({"uid": "ADDR2"}, 404),
+    ({"filter": "name==ADDR1"}, 200),
+    ({"filter": "name==ADDR2"}, 200),
+    ({"filter": "name==ADDR3"}, 200),
+    ({"uid": ""}, ValueError),
+    ({"uid": "ADDR1", "filter": "name==ADDR1"}, KeyError),
+])
+def test__delete(obj: Address, mocker: MockerFixture, kwargs, expected):
+    """Address.delete()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+    mocker.patch("requests.Session.delete",
+                 side_effect=lambda *args, **kw: tst.session_delete(mocker, *args, **kw))
 
-    def test_invalid__get(self):
-        """Address.get()"""
-        for kwargs, error in [
-            (dict(id=ADDR1), KeyError),
-        ]:
-            with self.assertRaises(error, msg=f"{kwargs=}"):
-                self.obj.get(**kwargs)
+    if isinstance(expected, int):
+        response = obj.delete(**kwargs)
+        actual = response.status_code
+        assert actual == expected
+    else:
+        with pytest.raises(expected):
+            obj.delete(**kwargs)
 
-    def test_valid__update(self):
-        """Address.update()"""
-        for kwargs, req in [
-            (dict(uid=ADDR1, data=dict(name=ADDR1)), 200),
-            (dict(uid="ADDR9", data=dict(name="ADDR9")), 500),
-            (dict(data=dict(name=ADDR1)), 200),
-            (dict(data=dict(name="ADDR9")), 500),
-        ]:
-            result = self.obj.update(**kwargs).status_code
-            self.assertEqual(result, req, msg=f"{kwargs=}")
 
-    def test_valid__is_exist(self):
-        """Address.is_exist()"""
-        for uid, req in [
-            (ADDR1, True),
-            ("ADDR9", False),
-        ]:
-            result = self.obj.is_exist(uid=uid)
-            self.assertEqual(result, req, msg=f"{uid=}")
+@pytest.mark.parametrize("kwargs, expected", [
+    (dict(uid="ADDR1"), ["ADDR1"]),
+    (dict(uid="ADDR1", filter=f"name==ADDR1"), ["ADDR1"]),
+    (dict(uid="ADDR2"), []),
+    (dict(uid="A/B"), ["A/B"]),
+    (dict(filter="name==ADDR2"), []),
+    (dict(filter=f"name==ADDR1"), ["ADDR1"]),
+    (dict(id="ADDR1"), KeyError),
+])
+def test__get(obj: Address, mocker: MockerFixture, kwargs, expected):
+    """Address.get()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+
+    if isinstance(expected, list):
+        items = obj.get(**kwargs)
+        actual = [d["name"] for d in items]
+        assert actual == expected
+    else:
+        with pytest.raises(expected):
+            obj.get(**kwargs)
+
+
+@pytest.mark.parametrize("kwargs, expected", [
+    ({"uid": "ADDR1", "data": {"name": "ADDR1"}}, 200),
+    ({"uid": "ADDR3", "data": {"name": "ADDR3"}}, 404),
+    ({"data": {"name": "ADDR1"}}, 200),
+    ({"data": {"name": "ADDR3"}}, 404),
+])
+def test__update(obj: Address, mocker: MockerFixture, kwargs, expected):
+    """Address.update()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+    mocker.patch("requests.Session.put",
+                 side_effect=lambda *args, **kw: tst.session_put(mocker, *args, **kw))
+
+    response = obj.update(**kwargs)
+
+    actual = response.status_code
+    assert actual == expected
+
+
+@pytest.mark.parametrize("uid, expected", [
+    ("ADDR1", True),
+    ("ADDR3", False),
+])
+def test__is_exist(obj: Address, mocker: MockerFixture, uid, expected):
+    """Address.is_exist()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+
+    actual = obj.is_exist(uid=uid)
+
+    assert actual == expected
 
 
 if __name__ == "__main__":

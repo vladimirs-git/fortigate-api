@@ -9,11 +9,6 @@ from fortigate_api import Fortigate, fortigate
 from tests import helper__tst as tst
 
 QUERY = "api/v2/cmdb/firewall/policy"
-URL = "https://host/api/v2/cmdb/firewall/policy"
-URL1 = "https://host/api/v2/cmdb/firewall/policy/1"
-URL2 = "https://host/api/v2/cmdb/firewall/policy/2"
-URL3 = "https://host/api/v2/cmdb/firewall/policy/3"
-INVALID = "https://host/api/v2/cmdb/firewall/typo/1"
 
 
 @pytest.fixture
@@ -105,69 +100,69 @@ def test__url(scheme, host, port, expected):
 # =========================== methods ============================
 
 @pytest.mark.parametrize("url, expected", [
-    (URL1, 200),
-    (URL2, 404),
-    (INVALID, 400),
+    ("https://host/api/v2/cmdb/firewall/policy/1", 200),
+    ("https://host/api/v2/cmdb/firewall/policy/2", 404),
+    ("https://host/api/v2/cmdb/firewall/typo/1", 400),
 ])
 def test__delete(fgt: Fortigate, mocker: MockerFixture, url, expected):
     """Fortigate.delete()"""
     mocker.patch("requests.Session.delete",
-                 side_effect=lambda *args, **kw: tst.mock_session_delete(mocker, *args, **kw))
+                 side_effect=lambda *args, **kw: tst.session_delete(mocker, *args, **kw))
     response = fgt.delete(url=url)
     actual = response.status_code
     assert actual == expected
 
 
 @pytest.mark.parametrize("url, expected", [
-    (URL1, [{"id": "1", "name": "NAME1"}]),
-    (URL2, []),
-    (INVALID, []),
+    ("https://host/api/v2/cmdb/firewall/policy/1", [{"policyid": "1"}]),
+    ("https://host/api/v2/cmdb/firewall/policy/2", []),
+    ("https://host/api/v2/cmdb/firewall/typo/1", []),
 ])
 def test__get(fgt: Fortigate, mocker: MockerFixture, url, expected):
     """Fortigate.get()"""
     mocker.patch("requests.Session.get",
-                 side_effect=lambda *args, **kw: tst.mock_session_get(mocker, *args, **kw))
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     actual = fgt.get(url=url)
     assert actual == expected
 
 
-@pytest.mark.parametrize("url, expected", [
-    (URL1, 200),
-    (URL2, 500),
-    (INVALID, 400),
+@pytest.mark.parametrize("url, data, expected", [
+    ("https://host/api/v2/cmdb/firewall/policy/1", {"name": "POL1"}, 500),
+    ("https://host/api/v2/cmdb/firewall/policy/2", {"name": "POL2"}, 200),
+    ("https://host/api/v2/cmdb/firewall/typo/2", {"name": "POL2"}, 400),
 ])
-def test__post(fgt: Fortigate, mocker: MockerFixture, url, expected):
+def test__post(fgt: Fortigate, mocker: MockerFixture, url, data, expected):
     """Fortigate.post()"""
     mocker.patch("requests.Session.post",
-                 side_effect=lambda *args, **kw: tst.mock_session_post(mocker, *args, **kw))
-    response = fgt.post(url=url, data={"name": "NAME1"})
+                 side_effect=lambda *args, **kw: tst.session_post(mocker, *args, **kw))
+    response = fgt.post(url=url, data=data)
     actual = response.status_code
     assert actual == expected
 
 
 @pytest.mark.parametrize("url, expected", [
-    (URL1, 200),
-    (URL2, 404),
-    (INVALID, 400),
+    ("https://host/api/v2/cmdb/firewall/policy/1", 200),
+    ("https://host/api/v2/cmdb/firewall/policy/2", 404),
+    ("https://host/api/v2/cmdb/firewall/typo/1", 400),
 ])
 def test__put(fgt: Fortigate, mocker: MockerFixture, url, expected):
     """Fortigate.put()"""
     mocker.patch("requests.Session.put",
-                 side_effect=lambda *args, **kw: tst.mock_session_put(mocker, *args, **kw))
-    response = fgt.put(url=url, data={"name": "NAME1"})
+                 side_effect=lambda *args, **kw: tst.session_put(mocker, *args, **kw))
+    response = fgt.put(url=url, data={"name": "POL1"})
     actual = response.status_code
     assert actual == expected
 
 
 @pytest.mark.parametrize("url, expected", [
-    (URL1, 200),
-    (URL3, 404),
-    (INVALID, 400),
+    ("https://host/api/v2/cmdb/firewall/policy/1", 200),
+    ("https://host/api/v2/cmdb/firewall/policy/3", 404),
+    ("https://host/api/v2/cmdb/firewall/typo/1", 400),
 ])
 def test__exist(fgt: Fortigate, mocker: MockerFixture, url, expected):
     """Fortigate.exist()"""
     mocker.patch("requests.Session.get",
-                 side_effect=lambda *args, **kw: tst.mock_session_get(mocker, *args, **kw))
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     response = fgt.exist(url=url)
     actual = response.status_code
     assert actual == expected

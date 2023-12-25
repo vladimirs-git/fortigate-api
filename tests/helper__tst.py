@@ -7,6 +7,7 @@ import unittest
 from http.cookiejar import Cookie
 from typing import Any
 from unittest.mock import patch
+from urllib.parse import urlparse, ParseResult
 
 from pytest_mock import MockerFixture
 from requests import Response, Session
@@ -330,51 +331,145 @@ def mock_response(mocker: MockerFixture, response: Response) -> Response:
     return resp
 
 
-def mock_session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
+# ============================= session ==============================
+
+def session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.delete()"""
     _ = args, kwargs
-    if url == "https://host/api/v2/cmdb/firewall/policy/1":
-        resp = create_response("delete", url, 200)
-    elif url.startswith("https://host/api/v2/cmdb/firewall/policy/2"):
-        resp = create_response("delete", url, 404)
+    url_o: ParseResult = urlparse(url)
+    if url_o.path.startswith("/api/v2/cmdb/firewall/address"):
+        resp = address_delete(url)
+    elif url_o.path.startswith("/api/v2/cmdb/firewall/policy"):
+        resp = policy_delete(url)
     else:
         resp = create_response("delete", url, 400)
     return mock_response(mocker, resp)
 
 
-def mock_session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
+def session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.get()"""
     _ = args, kwargs
-    if url == "https://host/api/v2/cmdb/firewall/policy/1":
-        resp = create_response("get", url, 200, [{"id": "1", "name": NAME1}])
-    elif url.startswith("https://host/api/v2/cmdb/firewall/policy/3"):
-        resp = create_response("get", url, 404)
-    elif url.startswith("https://host/api/v2/cmdb/firewall/policy"):
-        resp = create_response("get", url, 200, [])
+    url_o: ParseResult = urlparse(url)
+    if url_o.path.startswith("/api/v2/cmdb/firewall/address"):
+        resp = address_get(url)
+    elif url_o.path.startswith("/api/v2/cmdb/firewall/policy"):
+        resp = policy_get(url)
     else:
         resp = create_response("get", url, 400)
     return mock_response(mocker, resp)
 
 
-def mock_session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
+def session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.post()"""
     _ = args, kwargs
-    if url == "https://host/api/v2/cmdb/firewall/policy/1":
-        resp = create_response("post", url, 200)
-    elif url.startswith("https://host/api/v2/cmdb/firewall/policy"):
-        resp = create_response("post", url, 500)
+    url_o: ParseResult = urlparse(url)
+    if url_o.path.startswith("/api/v2/cmdb/firewall/address"):
+        resp = address_post(url, data=kwargs)
+    elif url_o.path.startswith("/api/v2/cmdb/firewall/policy"):
+        resp = policy_post(url, data=kwargs)
     else:
         resp = create_response("post", url, 400)
     return mock_response(mocker, resp)
 
 
-def mock_session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
+def session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.put()"""
     _ = args, kwargs
-    if url == "https://host/api/v2/cmdb/firewall/policy/1":
-        resp = create_response("put", url, 200)
-    elif url.startswith("https://host/api/v2/cmdb/firewall/policy"):
-        resp = create_response("put", url, 404)
+    url_o: ParseResult = urlparse(url)
+    if url_o.path.startswith("/api/v2/cmdb/firewall/address"):
+        resp = address_put(url)
+    elif url_o.path.startswith("/api/v2/cmdb/firewall/policy"):
+        resp = policy_put(url)
     else:
         resp = create_response("put", url, 400)
     return mock_response(mocker, resp)
+
+
+# ============================= address ==============================
+
+def address_delete(url: str) -> Response:
+    url_o: ParseResult = urlparse(url)
+    uid = url_o.path.split("/")[-1]
+    query = url_o.query
+    key = (uid, query)
+    status_code = {
+        ("A%2FB", ""): 200,
+        ("ADDR1", ""): 200,
+        ("ADDR1", "filter=name%3D%3DADDR1"): 200,
+        ("ADDR2", ""): 404,
+        ("", "filter=name%3D%3DADDR1"): 200,
+        ("", "filter=name%3D%3DADDR2"): 404,
+    }.get(key)
+    return create_response("delete", url, status_code)
+
+
+def address_get(url: str) -> Response:
+    url_o: ParseResult = urlparse(url)
+    uid = url_o.path.split("/")[-1]
+    query = url_o.query
+    key = (uid, query)
+    items = {
+        ("A%2FB", ""): [{"name": "A/B"}],
+        ("ADDR1", ""): [{"name": "ADDR1"}],
+        ("ADDR1", "filter=name%3D%3DADDR1"): [{"name": "ADDR1"}],
+        ("ADDR2", ""): [],
+        ("", "filter=name%3D%3DADDR1"): [{"name": "ADDR1"}],
+        ("", "filter=name%3D%3DADDR2"): [],
+    }.get(key)
+    if items is not None:
+        return create_response("get", url, 200, items)
+    return create_response("get", url, 404, [])
+
+
+def address_post(url: str, data: dict) -> Response:
+    data = json.loads(data["data"])
+    uid = data["name"]
+    status_code = {"ADDR1": 500, "ADDR2": 200, "ADDR3": 200}[uid]
+    return create_response("post", url, status_code)
+
+
+def address_put(url: str) -> Response:
+    url_o: ParseResult = urlparse(url)
+    uid = url_o.path.split("/")[-1]
+    status_code = {"ADDR1": 200, "ADDR3": 404}[uid]
+    return create_response("get", url, status_code)
+
+
+# ============================== policy ==============================
+
+def policy_delete(url: str) -> Response:
+    url_o: ParseResult = urlparse(url)
+    uid = url_o.path.split("/")[-1]
+    status_code = {"1": 200, "2": 404}[uid]
+    return create_response("delete", url, status_code)
+
+
+def policy_get(url: str) -> Response:
+    present_d = {
+        ("1", ""): [{"policyid": "1"}],
+        ("2", ""): [],
+    }
+    url_o: ParseResult = urlparse(url)
+    uid = url_o.path.split("/")[-1]
+    query = url_o.query
+    key = (uid, query)
+    items = present_d.get(key)
+    if items is not None:
+        resp = create_response("get", url, 200, items)
+    else:
+        resp = create_response("get", url, 404)
+    return resp
+
+
+def policy_put(url: str) -> Response:
+    url_o: ParseResult = urlparse(url)
+    uid = url_o.path.split("/")[-1]
+    status_code = {"1": 200, "2": 404}[uid]
+    return create_response("put", url, status_code)
+
+
+def policy_post(url: str, data: dict) -> Response:
+    data = json.loads(data["data"])
+    uid = data["name"]
+    status_code = {"POL1": 500, "POL2": 200}[uid]
+    return create_response("post", url, status_code)

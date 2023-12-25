@@ -242,8 +242,8 @@ class Fortigate:
         if not response.ok:
             logging.info("code=%s, reason=%s, url=%s", response.status_code, response.reason, url)
             return []
-        response_json = response.json()
-        results: LDAny = list(response_json.get("results") or [])
+        response_d = response.json()
+        results: LDAny = list(response_d.get("results") or [])
         return results
 
     def get_l(self, url: str) -> list:
