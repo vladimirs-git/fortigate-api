@@ -214,6 +214,7 @@ def url_to_app_model(url: str) -> str:
     model = items[4]
     return f"{app}/{model}"
 
+
 def url_to_model(url: str) -> str:
     """Parse model name from the URL.
 

@@ -53,6 +53,7 @@ class Base:
         :return: Session response.
 
             - `<Response [200]>` Object successfully created or already exists,
+            - `<Response [400]>` Invalid URL,
             - `<Response [500]>` Object already exist.
         :rtype: requests.Response
         """
@@ -79,6 +80,7 @@ class Base:
         :return: Session response.
 
             - `<Response [200]>` Object successfully deleted,
+            - `<Response [400]>` Invalid URL,
             - `<Response [404]>` Object not found in the Fortigate.
         :rtype: requests.Response
         """
@@ -128,6 +130,7 @@ class Base:
         :return: Session response.
 
             - `Response [200]>` Object successfully updated,
+            - `Response [400]>` Invalid URL,
             - `Response [404]>` Object has not been updated.
         :rtype: requests.Response
         """
@@ -213,6 +216,7 @@ class Base:
         :return: Session response.
 
             - `Response [200]>` Object successfully updated,
+            - `Response [400]>` Invalid URL,
             - `Response [404]>` Object has not been updated.
         :rtype: requests.Response
         """

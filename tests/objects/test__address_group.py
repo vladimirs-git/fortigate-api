@@ -1,4 +1,4 @@
-"""Test antivirus.py etc."""
+"""Test address_group.py"""
 
 import pytest
 from pytest_mock import MockerFixture
@@ -14,29 +14,19 @@ def connectors():
     api = FortigateAPI(host="host")
     api.rest._session = Session()
     items = [
-        api.antivirus,
-        api.application,
-        api.external_resource,
-        api.internet_service,
-        api.ip_pool,
-        api.schedule,
-        api.service,
-        api.service_category,
-        api.service_group,
-        api.virtual_ip,
-        api.zone,
+        api.address_group,
     ]
     return items
 
 
 @pytest.mark.parametrize("data, expected", [
-    ({"name": "NAME1"}, 200),  # already exist
-    ({"name": "NAME2"}, 200),  # not exist
+    ({"name": "ADGR1"}, 200),  # already exist
+    ({"name": "ADGR2"}, 200),  # not exist
     ({"name": "A/B"}, 200),  # already exist
-    ({"typo": "NAME1"}, KeyError),
+    ({"typo": "ADGR1"}, KeyError),
 ])
 def test__create(connectors: list, mocker: MockerFixture, data, expected):
-    """Address.create()"""
+    """AddressGroup.create()"""
     mocker.patch("requests.Session.get",
                  side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     mocker.patch("requests.Session.post",
@@ -53,16 +43,16 @@ def test__create(connectors: list, mocker: MockerFixture, data, expected):
 
 
 @pytest.mark.parametrize("kwargs, expected", [
-    ({"uid": "NAME1"}, 200),
-    ({"uid": "NAME2"}, 404),
-    ({"filter": "name==NAME1"}, 200),
-    ({"filter": "name==NAME2"}, 200),
-    ({"filter": "name==NAME3"}, 200),
+    ({"uid": "ADGR1"}, 200),
+    ({"uid": "ADGR2"}, 404),
+    ({"filter": "name==ADGR1"}, 200),
+    ({"filter": "name==ADGR2"}, 200),
+    ({"filter": "name==ADGR3"}, 200),
     ({"uid": ""}, ValueError),
-    ({"uid": "NAME1", "filter": "name==NAME1"}, KeyError),
+    ({"uid": "ADGR1", "filter": "name==ADGR1"}, KeyError),
 ])
 def test__delete(connectors: list, mocker: MockerFixture, kwargs, expected):
-    """Address.delete()"""
+    """AddressGroup.delete()"""
     mocker.patch("requests.Session.get",
                  side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     mocker.patch("requests.Session.delete",
@@ -79,16 +69,16 @@ def test__delete(connectors: list, mocker: MockerFixture, kwargs, expected):
 
 
 @pytest.mark.parametrize("kwargs, expected", [
-    (dict(uid="NAME1"), ["NAME1"]),
-    (dict(uid="NAME1", filter=f"name==NAME1"), ["NAME1"]),
-    (dict(uid="NAME2"), []),
+    (dict(uid="ADGR1"), ["ADGR1"]),
+    (dict(uid="ADGR1", filter=f"name==ADGR1"), ["ADGR1"]),
+    (dict(uid="ADGR2"), []),
     (dict(uid="A/B"), ["A/B"]),
-    (dict(filter="name==NAME2"), []),
-    (dict(filter=f"name==NAME1"), ["NAME1"]),
-    (dict(id="NAME1"), KeyError),
+    (dict(filter="name==ADGR2"), []),
+    (dict(filter=f"name==ADGR1"), ["ADGR1"]),
+    (dict(id="ADGR1"), KeyError),
 ])
 def test__get(connectors: list, mocker: MockerFixture, kwargs, expected):
-    """Address.get()"""
+    """AddressGroup.get()"""
     mocker.patch("requests.Session.get",
                  side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
 
@@ -103,13 +93,13 @@ def test__get(connectors: list, mocker: MockerFixture, kwargs, expected):
 
 
 @pytest.mark.parametrize("kwargs, expected", [
-    ({"uid": "NAME1", "data": {"name": "NAME1"}}, 200),
-    ({"uid": "NAME3", "data": {"name": "NAME3"}}, 404),
-    ({"data": {"name": "NAME1"}}, 200),
-    ({"data": {"name": "NAME3"}}, 404),
+    ({"uid": "ADGR1", "data": {"name": "ADGR1"}}, 200),
+    ({"uid": "ADGR3", "data": {"name": "ADGR3"}}, 404),
+    ({"data": {"name": "ADGR1"}}, 200),
+    ({"data": {"name": "ADGR3"}}, 404),
 ])
 def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
-    """Address.update()"""
+    """AddressGroup.update()"""
     mocker.patch("requests.Session.get",
                  side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     mocker.patch("requests.Session.put",
@@ -122,11 +112,11 @@ def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
 
 
 @pytest.mark.parametrize("uid, expected", [
-    ("NAME1", True),
-    ("NAME3", False),
+    ("ADGR1", True),
+    ("ADGR3", False),
 ])
 def test__is_exist(connectors: list, mocker: MockerFixture, uid, expected):
-    """Address.is_exist()"""
+    """AddressGroup.is_exist()"""
     mocker.patch("requests.Session.get",
                  side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
 
