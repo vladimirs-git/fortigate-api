@@ -205,3 +205,34 @@ def test_valid__quote(string, expected):
     """helpers.quote()"""
     actual = h.quote(string=string)
     assert actual == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ("", ""),
+    ("https://domain.com/api/v2/cmdb/firewall", ""),
+    ("https://domain.com/api/v2/cmdb/firewall/policy", "policy"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/", "policy"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/1", "policy"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy?key=value", "policy"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/1?key=value", "policy"),
+])
+def test_valid__url_to_model(url, expected):
+    """helpers.url_to_model()"""
+    actual = h.url_to_model(url=url)
+    assert actual == expected
+
+
+@pytest.mark.parametrize("url, expected", [
+    ("", ""),
+    ("https://domain.com/api/v2/cmdb/firewall", ""),
+    ("https://domain.com/api/v2/cmdb/firewall/policy", ""),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/", ""),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/1", "1"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/1/2", "1"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy?key=value", ""),
+    ("https://domain.com/api/v2/cmdb/firewall/policy/1?key=value", "1"),
+])
+def test_valid__url_to_uid(url, expected):
+    """helpers.url_to_uid()"""
+    actual = h.url_to_uid(url=url)
+    assert actual == expected

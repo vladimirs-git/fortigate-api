@@ -197,6 +197,40 @@ def quote(string: Any) -> str:
     return parse.quote(string=str(string), safe="")
 
 
+def url_to_model(url: str) -> str:
+    """Parse model name from the URL.
+
+    :param url: The URL to parse.
+    :return: The model name parsed from the URL.
+    :example:
+        url_to_model("https://domain.com/api/v2/cmdb/firewall/policy/1") -> "policy"
+    """
+    url_o: ParseResult = urlparse(url)
+    path = url_o.path.strip("/")
+    items = path.split("/")
+    if len(items) <= 4:
+        return ""
+    model = items[4]
+    return model
+
+
+def url_to_uid(url: str) -> str:
+    """Parse UID name from the URL.
+
+    :param url: The URL to parse.
+    :return: The UID parsed from the URL.
+    :example:
+        url_to_uuid("https://domain.com/api/v2/cmdb/firewall/policy/1") -> "1"
+    """
+    url_o: ParseResult = urlparse(url)
+    path = url_o.path.strip("/")
+    items = path.split("/")
+    if len(items) <= 5:
+        return ""
+    model = items[5]
+    return model
+
+
 # ============================= wrapper ==============================
 
 def time_spent(func):

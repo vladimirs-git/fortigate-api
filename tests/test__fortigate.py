@@ -127,9 +127,9 @@ def test__get(fgt: Fortigate, mocker: MockerFixture, url, expected):
 
 
 @pytest.mark.parametrize("url, data, expected", [
-    ("https://host/api/v2/cmdb/firewall/policy/1", {"name": "POL1"}, 500),
-    ("https://host/api/v2/cmdb/firewall/policy/2", {"name": "POL2"}, 200),
-    ("https://host/api/v2/cmdb/firewall/typo/2", {"name": "POL2"}, 400),
+    ("https://host/api/v2/cmdb/firewall/policy/1", {"name": "NAME1"}, 500),
+    ("https://host/api/v2/cmdb/firewall/policy/2", {"name": "NAME2"}, 200),
+    ("https://host/api/v2/cmdb/firewall/typo/2", {"name": "NAME2"}, 400),
 ])
 def test__post(fgt: Fortigate, mocker: MockerFixture, url, data, expected):
     """Fortigate.post()"""
@@ -149,7 +149,7 @@ def test__put(fgt: Fortigate, mocker: MockerFixture, url, expected):
     """Fortigate.put()"""
     mocker.patch("requests.Session.put",
                  side_effect=lambda *args, **kw: tst.session_put(mocker, *args, **kw))
-    response = fgt.put(url=url, data={"name": "POL1"})
+    response = fgt.put(url=url, data={"name": "NAME1"})
     actual = response.status_code
     assert actual == expected
 
