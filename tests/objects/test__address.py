@@ -112,7 +112,7 @@ def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
 
 @pytest.mark.parametrize("uid, expected", [
     ("ADDR1", True),
-    ("ADDR3", False),
+    ("ADDR9", False),
 ])
 def test__is_exist(connectors: list, mocker: MockerFixture, uid, expected):
     """Address.is_exist()"""

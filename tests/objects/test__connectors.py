@@ -122,7 +122,7 @@ def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
 
 @pytest.mark.parametrize("uid, expected", [
     ("NAME1", True),
-    ("NAME3", False),
+    ("NAME9", False),
 ])
 def test__is_exist(connectors: list, mocker: MockerFixture, uid, expected):
     """Antivirusn.is_exist()"""

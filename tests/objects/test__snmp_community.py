@@ -2,87 +2,127 @@
 
 import unittest
 
+import pytest
+from pytest_mock import MockerFixture
+from requests import Session
+
+from fortigate_api import FortigateAPI
 from fortigate_api.snmp_community import SnmpCommunity
-from tests.helper__tst import NAME1, NAME3, MockFortigate
+from tests import helper__tst as tst
 
 
-# noinspection DuplicatedCode
-class Test(MockFortigate):
-    """SnmpCommunity"""
-
-    def setUp(self):
-        """setUp"""
-        super().setUp()
-        self.obj = SnmpCommunity(rest=self.rest)
-
-    def test_valid__create(self):
-        """SnmpCommunity.create()"""
-        for name, req in [
-            (NAME1, 200),  # present in the Fortigate, no need create
-            ("NAME9", 500),  # error
-            (NAME3, 200),  # not found in the Fortigate, need create
-        ]:
-            result = self.obj.create(data={"name": name}).status_code
-            self.assertEqual(result, req, msg=f"{name=}")
-
-    def test_valid__delete(self):
-        """SnmpCommunity.delete()"""
-        for kwargs, req in [
-            (dict(uid="1"), 200),
-            (dict(uid=1), 200),
-            (dict(uid=9), 500),  # absent
-            (dict(filter="id==1"), 200),
-            (dict(filter="id==9"), 200),  # absent
-            (dict(filter=f"name=={NAME1}"), 200),
-            (dict(filter="name==NAME9"), 200),  # absent
-        ]:
-            result = self.obj.delete(**kwargs).status_code
-            self.assertEqual(result, req, msg=f"{kwargs=}")
-
-    def test_valid__get(self):
-        """SnmpCommunity.get()"""
-        for kwargs, req in [
-            ({}, [NAME1, NAME3]),
-            (dict(uid=1), [NAME1]),
-            (dict(uid=9), []),  # absent
-            (dict(uid=1, filter=f"name=={NAME1}"), [NAME1]),
-            (dict(filter=f"name=={NAME1}"), [NAME1]),
-            (dict(filter="name==POL9"), []),
-        ]:
-            result_ = self.obj.get(**kwargs)
-            result = [d["name"] for d in result_]
-            self.assertEqual(result, req, msg=f"{kwargs=}")
-
-    def test_invalid__get(self):
-        """Policy.get()"""
-        for kwargs, error in [
-            (dict(name=NAME1), KeyError),
-        ]:
-            with self.assertRaises(error, msg=f"{kwargs=}"):
-                self.obj.get(**kwargs)
-
-    def test_valid__update(self):
-        """SnmpCommunity.update()"""
-        for kwargs, req in [
-            (dict(uid=1, data=dict(name=NAME1, id=1)), 200),
-            (dict(uid=9, data=dict(name="NAME9", id=9)), 500),
-            (dict(uid="1", data=dict(name=NAME1, id=1)), 200),
-            (dict(uid="9", data=dict(name="NAME9", id=9)), 500),
-            (dict(data=dict(name=NAME1, id=1)), 200),
-            (dict(data=dict(name="NAME9", id=9)), 500),
-        ]:
-            result = self.obj.update(**kwargs).status_code
-            self.assertEqual(result, req, msg=f"{kwargs=}")
-
-    def test_valid__is_exist(self):
-        """Address.is_exist()"""
-        for uid, req in [
-            (NAME1, True),
-            ("NAME9", False),
-        ]:
-            result = self.obj.is_exist(uid=uid)
-            self.assertEqual(result, req, msg=f"{uid=}")
+@pytest.fixture
+def connectors():
+    """Init Connector objects."""
+    api = FortigateAPI(host="host")
+    api.rest._session = Session()
+    items = [
+        api.snmp_community,
+    ]
+    return items
 
 
-if __name__ == "__main__":
-    unittest.main()
+@pytest.mark.parametrize("data, expected", [
+    ({"name": "NAME1"}, 200),  # already exist
+    ({"name": "NAME2"}, 200),  # not exist
+    ({"name": "A/B"}, 200),  # already exist
+    ({"typo": "NAME1"}, KeyError),
+])
+def test__create(connectors: list, mocker: MockerFixture, data, expected):
+    """Antivirusn.create()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+    mocker.patch("requests.Session.post",
+                 side_effect=lambda *args, **kw: tst.session_post(mocker, *args, **kw))
+
+    for connector in connectors:
+        if isinstance(expected, int):
+            response = connector.create(data)
+            actual = response.status_code
+            assert actual == expected
+        else:
+            with pytest.raises(expected):
+                connector.create(data)
+
+
+@pytest.mark.parametrize("kwargs, expected", [
+    ({"uid": "NAME1"}, 200),
+    ({"uid": "NAME9"}, 404),
+    ({"uid": ""}, ValueError),
+])
+def test__delete(connectors: list, mocker: MockerFixture, kwargs, expected):
+    """SnmpCommunity.delete()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+    mocker.patch("requests.Session.delete",
+                 side_effect=lambda *args, **kw: tst.session_delete(mocker, *args, **kw))
+
+    for connector in connectors:
+        if isinstance(expected, int):
+            response = connector.delete(**kwargs)
+            actual = response.status_code
+            assert actual == expected
+        else:
+            with pytest.raises(expected):
+                connector.delete(**kwargs)
+
+
+@pytest.mark.parametrize("kwargs, expected", [
+    (dict(uid="NAME1"), ["NAME1"]),
+    (dict(uid="NAME1", filter=f"name==NAME1"), ["NAME1"]),
+    (dict(uid="NAME2"), []),
+    (dict(uid="A/B"), ["A/B"]),
+    (dict(filter="name==NAME2"), []),
+    (dict(filter=f"name==NAME1"), ["NAME1"]),
+    (dict(id="NAME1"), KeyError),
+])
+def test__get(connectors: list, mocker: MockerFixture, kwargs, expected):
+    """SnmpCommunity.get()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+
+    for connector in connectors:
+        if isinstance(expected, list):
+            items = connector.get(**kwargs)
+            actual = [d["name"] for d in items]
+            assert actual == expected
+        else:
+            with pytest.raises(expected):
+                connector.get(**kwargs)
+
+
+@pytest.mark.parametrize("kwargs, expected", [
+    ({"uid": "NAME1", "data": {"name": "NAME1"}}, 200),
+    ({"uid": "NAME3", "data": {"name": "NAME3"}}, 404),
+    ({"data": {"id": "NAME1"}}, 200),
+    ({"data": {"id": "NAME3"}}, 404),
+])
+def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
+    """SnmpCommunity.update()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+    mocker.patch("requests.Session.put",
+                 side_effect=lambda *args, **kw: tst.session_put(mocker, *args, **kw))
+
+    for connector in connectors:
+        response = connector.update(**kwargs)
+        actual = response.status_code
+        assert actual == expected
+
+
+@pytest.mark.parametrize("uid, expected", [
+    ("NAME1", True),
+    ("NAME9", False),
+])
+def test__is_exist(connectors: list, mocker: MockerFixture, uid, expected):
+    """SnmpCommunity.is_exist()"""
+    mocker.patch("requests.Session.get",
+                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
+
+    for connector in connectors:
+        actual = connector.is_exist(uid=uid)
+        assert actual == expected, connector
+
+    for connector in connectors:
+        actual = connector.is_exist(uid=uid)
+        assert actual == expected, connector

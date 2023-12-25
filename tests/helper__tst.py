@@ -22,7 +22,7 @@ NAME3 = {"name": "NAME3"}
 
 
 URL_BASE = "/api/v2/cmdb/firewall/"
-LIKE_ADDRESS = [
+UID_NAME = [
     "antivirus/profile",
     "application/list",
     "firewall.schedule/onetime",
@@ -37,7 +37,9 @@ LIKE_ADDRESS = [
     "system/external-resource",
     "system/zone",
     "system/interface",
+    "system.snmp/community",
 ]
+
 
 
 def create_cookie(name: str, value: str) -> Cookie:
@@ -109,7 +111,7 @@ def session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.delete(), delete"""
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
-    if app_model in LIKE_ADDRESS:
+    if app_model in UID_NAME:
         resp = address_delete(url)
     elif app_model == "firewall/policy":
         resp = policy_delete(url)
@@ -122,7 +124,7 @@ def session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.get(), get"""
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
-    if app_model in LIKE_ADDRESS:
+    if app_model in UID_NAME:
         resp = address_get(url)
     elif app_model == "firewall/policy":
         resp = policy_get(url)
@@ -135,7 +137,7 @@ def session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.post(), create"""
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
-    if app_model in LIKE_ADDRESS:
+    if app_model in UID_NAME:
         resp = address_post(url, data=kwargs)
     elif app_model == "firewall/policy":
         resp = policy_post(url, data=kwargs)
@@ -148,7 +150,7 @@ def session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     """Mock Session.put(), update"""
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
-    if app_model in LIKE_ADDRESS:
+    if app_model in UID_NAME:
         resp = address_put(url)
     elif app_model == "firewall/policy":
         resp = policy_put(url)

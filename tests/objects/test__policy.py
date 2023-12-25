@@ -159,7 +159,7 @@ def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
 
 @pytest.mark.parametrize("uid, expected", [
     (1, True),
-    (3, False),
+    (9, False),
 ])
 def test__is_exist(connectors: list, mocker: MockerFixture, uid, expected):
     """Policy.is_exist()"""
