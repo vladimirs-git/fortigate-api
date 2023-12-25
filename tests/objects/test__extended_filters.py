@@ -1,39 +1,27 @@
 """unittest extended_filters.py"""
-
-import unittest
+import pytest
 
 from fortigate_api import extended_filters
-from tests.helper__tst import MockFortigate
 
 
-class Test(MockFortigate):
-    """extended_filters"""
-
-    def test_valid__valid_efilters(self):
-        """Policy._valid_efilters()"""
-        for efilters in [
-            ["srcaddr==1.1.1.1/32"],
-            ["srcaddr!=1.1.1.1/32"],
-            ["srcaddr<=1.1.1.1/32"],
-            ["srcaddr>=1.1.1.1/32"],
-            ["dstaddr==1.1.1.1/32"],
-            ["dstaddr!=1.1.1.1/32"],
-            ["dstaddr<=1.1.1.1/32"],
-            ["dstaddr>=1.1.1.1/32"],
-            ["srcaddr==1.1.1.1/32", "dstaddr==2.2.2.2/32"],
-        ]:
+@pytest.mark.parametrize("efilters, error", [
+    (["srcaddr==1.1.1.1/32"], None),
+    (["srcaddr!=1.1.1.1/32"], None),
+    (["srcaddr<=1.1.1.1/32"], None),
+    (["srcaddr>=1.1.1.1/32"], None),
+    (["dstaddr==1.1.1.1/32"], None),
+    (["dstaddr!=1.1.1.1/32"], None),
+    (["dstaddr<=1.1.1.1/32"], None),
+    (["dstaddr>=1.1.1.1/32"], None),
+    (["srcaddr==1.1.1.1/32", "dstaddr==2.2.2.2/32"], None),
+    (["srcaddr!!1.1.1.1/32"], ValueError),
+    (["typo==1.1.1.1/32"], ValueError),
+    (["srcaddr==1.1.1.1/32", "srcaddr==2.2.2.2/32"], ValueError),
+])
+def test__delete(efilters, error):
+    """extended_filters._valid_efilters()"""
+    if error is None:
+        extended_filters._valid_efilters(efilters=efilters)
+    else:
+        with pytest.raises(error):
             extended_filters._valid_efilters(efilters=efilters)
-
-    def test_invalid__valid_efilters(self):
-        """Policy._valid_efilters()"""
-        for efilters, error in [
-            (["srcaddr!!1.1.1.1/32"], ValueError),
-            (["typo==1.1.1.1/32"], ValueError),
-            (["srcaddr==1.1.1.1/32", "srcaddr==2.2.2.2/32"], ValueError),
-        ]:
-            with self.assertRaises(error, msg=f"{efilters=}"):
-                extended_filters._valid_efilters(efilters=efilters)
-
-
-if __name__ == "__main__":
-    unittest.main()
