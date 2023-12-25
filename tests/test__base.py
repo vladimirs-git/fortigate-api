@@ -4,7 +4,6 @@ import pytest
 from requests import Response
 
 from fortigate_api import FortigateAPI
-from tests.helper__tst import NAME1, SLASH, SLASH_
 
 URL_BASE = "api/v2/cmdb/firewall/address/"
 
@@ -36,9 +35,9 @@ def test__highest_response(api: FortigateAPI, status_codes, expected):
 @pytest.mark.parametrize("url, expected", [
     ("", ""),
     (URL_BASE, URL_BASE),
-    (f"{URL_BASE}{NAME1}", f"{URL_BASE}{NAME1}"),
-    (f"{URL_BASE}{SLASH}", f"{URL_BASE}{SLASH_}"),
-    (SLASH, SLASH),
+    (f"{URL_BASE}NAME1", f"{URL_BASE}NAME1"),
+    (f"{URL_BASE}A/B", f"{URL_BASE}A%2FB"),
+    ("A/B", "A/B"),
 ])
 def test__class_to_attr(api: FortigateAPI, url, expected):
     """Base._quote_url()"""
