@@ -41,5 +41,5 @@ class SnmpCommunity(Base):
         if not uid:
             uid = data.get("id") or ""
             if not uid:
-                raise ValueError(f"absent {uid=} and data[\"id\"]")
+                raise ValueError(f"Absent {uid=} and data[\"id\"].")
         return self._update(uid=uid, data=data)

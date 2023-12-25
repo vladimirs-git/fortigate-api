@@ -53,10 +53,10 @@ class FgtConfParse(CiscoConfParse):
         if isinstance(config, str):
             return config
         if not isinstance(config, (list, tuple)):
-            raise TypeError(f"{config=} {str} expected")
+            raise TypeError(f"{config=} {str} expected.")
         for line in config:
             if not isinstance(line, str):
-                raise TypeError(f"{line=} {str} expected")
+                raise TypeError(f"{line=} {str} expected.")
         return "\n".join(config)
 
 

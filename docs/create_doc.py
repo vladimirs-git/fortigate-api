@@ -27,7 +27,7 @@ def create_fortigate_api() -> None:
     )
     path = Path(f"{class_}.rst")
     path.write_text(text)
-    logging.info("created %s", path)
+    logging.info("Created %s.", path)
 
 
 # noinspection PyProtectedMember
@@ -46,7 +46,7 @@ def create_connectors() -> None:
 
         path = Path("objects", f"{class_}.rst")
         path.write_text(text)
-        logging.info("created %s", path)
+        logging.info("Created %s.", path)
 
 
 # noinspection PyProtectedMember
@@ -69,7 +69,7 @@ def create_objects() -> None:
     text = Template(content_j2).render(items=items)
     path = Path(f"objects.rst")
     path.write_text(text)
-    logging.info("created %s", path)
+    logging.info("Created %s.", path)
 
 
 if __name__ == "__main__":

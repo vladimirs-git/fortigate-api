@@ -96,5 +96,5 @@ class Policy(Base):
         if not uid:
             uid = data.get("policyid") or ""
             if not uid:
-                raise ValueError(f"absent {uid=} and data[\"policyid\"]")
+                raise ValueError(f"Absent {uid=} and data[\"policyid\"].")
         return self._update(uid=uid, data=data)

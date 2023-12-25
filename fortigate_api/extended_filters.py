@@ -90,7 +90,7 @@ def _split_efilter(efilter: str) -> Tuple[str, str, IPv4Network]:
         return "", "", IPv4Network("0.0.0.0")
     ipnet = ip_network(value)
     if not isinstance(ipnet, IPv4Network):
-        raise ValueError(f"{efilter=} {IPv4Network} expected")
+        raise ValueError(f"{efilter=} {IPv4Network} expected.")
     return key, operator, ipnet
 
 
@@ -161,14 +161,14 @@ def _valid_efilters(efilters: LStr) -> None:
         keys.append(key)
         expected = EFILTER_KEYS
         if key not in expected:
-            raise ValueError(f"invalid {efilter=}, {expected=}")
+            raise ValueError(f"Invalid {efilter=}, {expected=}.")
         expected = EFILTER_OPERATORS
         if operator not in expected:
-            raise ValueError(f"invalid {operator=}, {expected=}")
+            raise ValueError(f"Invalid {operator=}, {expected=}.")
 
     counts = Counter(keys)
     if invalid := [k for k, v in counts.items() if v > 1]:
-        raise ValueError(f"{invalid=} in {efilters=}, expected only one key")
+        raise ValueError(f"{invalid=} in {efilters=}, expected only one key.")
 
 
 def _filter_policy_by_ipnets(  # pylint: disable=too-many-branches

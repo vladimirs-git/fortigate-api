@@ -51,7 +51,7 @@ class SSH:
         # noinspection PyProtectedMember
         self.session._open()  # pylint: disable=protected-access
         if not self.session.remote_conn:
-            raise ConnectionError("Cannot open remote connection")
+            raise ConnectionError("Cannot open remote connection.")
 
     def logout(self) -> None:
         """Logout from the Fortigate using SSH."""

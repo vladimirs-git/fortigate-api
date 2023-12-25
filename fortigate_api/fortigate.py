@@ -341,7 +341,7 @@ class Fortigate:
         scheme = str(kwargs.get("scheme") or HTTPS)
         expected = ["https", "http"]
         if scheme not in expected:
-            raise ValueError(f"{scheme=}, {expected=}")
+            raise ValueError(f"{scheme=}, {expected=}.")
         return scheme
 
     def _init_token(self, **kwargs) -> str:
@@ -350,9 +350,9 @@ class Fortigate:
         if not token:
             return ""
         if self.username:
-            raise ValueError("mutually excluded: username, token")
+            raise ValueError("Mutually excluded: username, token.")
         if self.password:
-            raise ValueError("mutually excluded: password, token")
+            raise ValueError("Mutually excluded: password, token.")
         return token
 
     # =========================== helpers ============================
@@ -395,7 +395,7 @@ class Fortigate:
             self.login()
         session = self._session
         if not isinstance(session, Session):
-            raise TypeError(f"{session=} {Session} expected")
+            raise TypeError(f"{session=} {Session} expected.")
         return session
 
     def _logging(self, resp: Response) -> None:

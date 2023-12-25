@@ -91,7 +91,7 @@ class Base:
             return self.rest.delete(url=url)
         if "filter" in kwargs:
             return self._delete_by_filter(kwargs)
-        raise ValueError(f"invalid {uid=} {kwargs=}")
+        raise ValueError(f"Invalid {uid=} {kwargs=}.")
 
     # noinspection PyIncorrectDocstring
     def get(self, **kwargs) -> LDAny:
@@ -134,7 +134,7 @@ class Base:
         if not uid:
             uid = data.get("name") or ""
             if not uid:
-                raise ValueError(f"absent {uid=} and data[\"name\"]")
+                raise ValueError(f"Absent {uid=} and data[\"name\"].")
         return self._update(data=data, uid=uid)
 
     def is_exist(self, uid: StrInt) -> bool:
@@ -150,7 +150,7 @@ class Base:
             url = f"{self.url_}{uid}"
             response = self.rest.exist(url=url)
             return response.ok
-        raise ValueError(f"invalid {uid=}")
+        raise ValueError(f"Invalid {uid=}.")
 
     # =========================== helpers ===========================
 
@@ -222,4 +222,4 @@ class Base:
             if not exist.ok:
                 return exist
             return self.rest.put(url=url, data=data)
-        raise ValueError(f"invalid {uid=}")
+        raise ValueError(f"Invalid {uid=}.")

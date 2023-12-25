@@ -18,13 +18,13 @@ def check_mandatory(keys: IStr, **kwargs) -> None:
     :param kwargs: Checked data.
     :raises KeyError: If one of the `keys` is not found in `kwargs`.
     """
-    keys2 = list(kwargs)
+    keys2 = list(kwargs)  # TODO delete > use kwargs
     keys_absent: LStr = []
     for key in keys:
         if key not in keys2:
             keys_absent.append(key)
     if keys_absent:
-        raise KeyError(f"mandatory {keys_absent=} in {keys2}")
+        raise KeyError(f"Mandatory {keys_absent=} in {keys2}.")
 
 
 def check_only_one(keys: IStr, **kwargs) -> None:
@@ -38,7 +38,7 @@ def check_only_one(keys: IStr, **kwargs) -> None:
     keys2 = set(kwargs)
     intersection = keys1.intersection(keys2)
     if len(intersection) > 1:
-        raise KeyError(f"multiple keys={intersection} not allowed in {keys2}, expected only one")
+        raise KeyError(f"Multiple keys={intersection} not allowed in {keys2}, expected only one.")
 
 
 def check_one_of(keys: IStr, **kwargs) -> None:
@@ -53,7 +53,7 @@ def check_one_of(keys: IStr, **kwargs) -> None:
     for key in keys:
         if key in kwargs:
             return
-    raise KeyError(f"Mandatory one of {keys=} in {set(kwargs)}")
+    raise KeyError(f"Mandatory one of {keys=} in {set(kwargs)}.")
 
 
 def get_quoted(key: str, **kwargs) -> str:
