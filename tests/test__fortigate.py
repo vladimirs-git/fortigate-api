@@ -6,7 +6,7 @@ from pytest_mock import MockerFixture
 from requests import Session
 
 from fortigate_api import Fortigate, fortigate
-from tests import helper__tst as tst
+from tests import helpers__tst as tst
 
 QUERY = "api/v2/cmdb/firewall/policy"
 

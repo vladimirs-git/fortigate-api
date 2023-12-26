@@ -1,4 +1,4 @@
-"""Helper for unittests."""
+"""Helper for tests."""
 from __future__ import annotations
 
 import json
@@ -11,14 +11,26 @@ from requests import Response, Session
 
 from fortigate_api import helpers as h
 
-ADDR1 = {"name": "ADDR1", "type": "ipmask", "subnet": "10.0.0.0 255.255.255.252"}
-ADDR3 = {"name": "ADDR3", "type": "ipmask", "subnet": "10.0.0.4 255.255.255.252"}
-ADGR1 = {"name": "ADGR1", "member": [{"name": "ADDR1"}]}
-ADGR3 = {"name": "ADGR3", "member": [{"name": "ADDR3"}]}
-INTF1 = {"name": "INTF1", "vdom": "root"}
-INTF3 = {"name": "INTF3", "vdom": "vdom3"}
-NAME1 = {"name": "NAME1"}
-NAME3 = {"name": "NAME3"}
+NAME1 = {
+    "name": "NAME1",
+    "vdom": "root",  # interface
+}
+NAME3 = {
+    "name": "NAME3",
+    "vdom": "vdom3",  # interface
+}
+POL1 = {
+    "policyid": 1,
+    "name": "POL1",
+}
+POL3 = {
+    "policyid": 3,
+    "name": "POL3",
+}
+SLASH = {
+    "name": "A/B",
+    "vdom": "root",  # interface
+}
 
 URL_BASE = "/api/v2/cmdb/firewall/"
 UID_NAME = [
@@ -106,11 +118,11 @@ def mock_response(mocker: MockerFixture, response: Response) -> Response:
 # ============================= session ==============================
 
 def session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
-    """Mock Session.delete(), delete"""
+    """Mock Session.delete()"""
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
     if app_model in UID_NAME:
-        resp = address_delete(url)
+        resp = connector_delete(url)
     elif app_model == "firewall/policy":
         resp = policy_delete(url)
     else:
@@ -119,11 +131,11 @@ def session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
 
 
 def session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
-    """Mock Session.get(), get"""
+    """Mock Session.get()"""
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
     if app_model in UID_NAME:
-        resp = address_get(url)
+        resp = connector_get(url)
     elif app_model == "firewall/policy":
         resp = policy_get(url)
     else:
@@ -136,7 +148,7 @@ def session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
     if app_model in UID_NAME:
-        resp = address_post(url, data=kwargs)
+        resp = connector_post(url, data=kwargs)
     elif app_model == "firewall/policy":
         resp = policy_post(url, data=kwargs)
     else:
@@ -149,7 +161,7 @@ def session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
     if app_model in UID_NAME:
-        resp = address_put(url)
+        resp = connector_put(url)
     elif app_model == "firewall/policy":
         resp = policy_put(url)
     else:
@@ -157,137 +169,75 @@ def session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     return mock_response(mocker, resp)
 
 
-# ============================= address ==============================
+# ============================ connector =============================
 
-
-def address_delete(url: str) -> Response:
-    """Delete."""
+def connector_delete(url: str) -> Response:
+    """Delete"""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
     key = (uid, query)
     status_code = {
-        # address
-        ("ADDR1", ""): 200,
-        ("ADDR1", "filter=name%3D%3DADDR1"): 200,
-        ("ADDR9", ""): 404,
-        ("", "filter=name%3D%3DADDR1"): 200,
-        ("", "filter=name%3D%3DADDR9"): 404,
-        # address_group
-        ("ADGR1", ""): 200,
-        ("ADGR1", "filter=name%3D%3DADGR1"): 200,
-        ("ADGR9", ""): 404,
-        ("", "filter=name%3D%3DADGR1"): 200,
-        ("", "filter=name%3D%3DADGR9"): 404,
-        # interface
-        ("INTF1", ""): 200,
-        ("INTF1", "filter=name%3D%3DINTF1"): 200,
-        ("INTF9", ""): 404,
-        ("", "filter=name%3D%3DINTF1"): 200,
-        ("", "filter=name%3D%3DINTF9"): 404,
-        # name
         ("A%2FB", ""): 200,
         ("NAME1", ""): 200,
         ("NAME1", "filter=name%3D%3DNAME1"): 200,
-        ("NAME9", ""): 404,
+        ("NAME9", ""): 404,  # not exist
         ("", "filter=name%3D%3DNAME1"): 200,
-        ("", "filter=name%3D%3DNAME9"): 404,
     }.get(key)
     return create_response("delete", url, status_code)
 
 
-def address_get(url: str) -> Response:
-    """Get."""
+def connector_get(url: str) -> Response:
+    """Get"""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
     key = (uid, query)
-
-    app_model = h.url_to_app_model(url)
-    if app_model == "firewall/address":
-        items = {
-            ("", ""): [ADDR1, ADDR3],
-            ("A%2FB", ""): [{"name": "A/B"}],
-            ("ADDR1", ""): [ADDR1],
-            ("ADDR1", "filter=name%3D%3DADDR1"): [ADDR1],
-            ("", "filter=name%3D%3DADDR1"): [ADDR1],
-            ("", "filter=name%3D%3DADDR9"): [],
-        }.get(key)
-    elif app_model == "firewall/addrgrp":
-        items = {
-            ("", ""): [ADGR1, ADGR3],
-            ("A%2FB", ""): [{"name": "A/B"}],
-            ("ADGR1", ""): [ADGR1],
-            ("ADGR1", "filter=name%3D%3DADGR1"): [ADGR1],
-            ("", "filter=name%3D%3DADGR1"): [ADGR1],
-            ("", "filter=name%3D%3DADDR9"): [],
-        }.get(key)
-    elif app_model == "system/interface":
-        items = {
-            ("", ""): [INTF1, INTF3],  # all
-            ("INTF1", ""): [INTF1],  # root
-            ("INTF1", "filter=name%3D%3DINTF1"): [INTF1],
-            ("INTF3", ""): [INTF3],  # vdom3
-            ("", "filter=name%3D%3DINTF1"): [INTF1],
-            ("", "filter=name%3D%3DINTF9"): [],
-            ("", "filter=name%3D%3DINTF3"): [INTF3],
-        }.get(key)
-    else:
-        items = {
-            ("", ""): [NAME1, NAME3],
-            ("A%2FB", ""): [{"name": "A/B"}],
-            ("NAME1", ""): [NAME1],
-            ("NAME1", "filter=name%3D%3DNAME1"): [NAME1],
-            ("", "filter=name%3D%3DNAME1"): [NAME1],
-            ("", "filter=name%3D%3DNAME9"): [],
-        }.get(key)
+    items = {
+        ("", ""): [NAME1, NAME3],
+        ("A%2FB", ""): [SLASH],
+        ("NAME1", ""): [NAME1],
+        ("NAME1", "filter=name%3D%3DNAME1"): [NAME1],
+        ("", "filter=name%3D%3DNAME1"): [NAME1],
+    }.get(key)
     if items is not None:
         return create_response("get", url, 200, items)
     return create_response("get", url, 404, [])
 
 
-def address_post(url: str, data: dict) -> Response:
-    """Create."""
+def connector_post(url: str, data: dict) -> Response:
+    """Create"""
     data = json.loads(data["data"])
     uid = data["name"]
     status_code = {
-        "ADDR1": 500,
-        "ADDR2": 200,
-        "ADGR1": 500,
-        "ADGR2": 200,
-        "NAME1": 500,
-        "NAME2": 200,
+        "NAME1": 500,  # exist
+        "NAME2": 200,  # not exist
     }[uid]
     return create_response("post", url, status_code)
 
 
-def address_put(url: str) -> Response:
-    """Update."""
+def connector_put(url: str) -> Response:
+    """Update"""
     uid = h.url_to_uid(url)
     status_code = {
-        "ADDR1": 200,
-        "ADDR3": 404,
-        "ADGR1": 200,
-        "ADGR3": 404,
-        "INTF1": 200,  # root
-        "INTF3": 200,  # vdom3
-        "INTF9": 404,
-        "NAME1": 200,
-        "NAME3": 404,
+        "NAME1": 200,  # exist
+        "NAME3": 404,  # not exist
     }[uid]
     return create_response("get", url, status_code)
 
 
 # ============================== policy ==============================
-POL1 = {"policyid": 1, "name": "POL1", "srcaddr": [{"name": "ADDR1"}], "dstaddr": []}
-POL3 = {"policyid": 3, "name": "POL3", "srcaddr": [{"name": "ADDR3"}], "dstaddr": []}
-
 
 def policy_delete(url: str) -> Response:
+    """Delete"""
     uid = h.url_to_uid(url)
-    status_code = {"1": 200, "2": 404}[uid]
+    status_code = {
+        "1": 200,  # exist
+        "2": 404,  # not exist
+    }[uid]
     return create_response("delete", url, status_code)
 
 
 def policy_get(url: str) -> Response:
+    """Get"""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
     key = (uid, query)
@@ -299,13 +249,23 @@ def policy_get(url: str) -> Response:
         ("2", ""): [],
     }.get(key)
     if items is not None:
-        resp = create_response("get", url, 200, items)
-    else:
-        resp = create_response("get", url, 404)
-    return resp
+        return create_response("get", url, 200, items)
+    return create_response("get", url, 404)
+
+
+def policy_post(url: str, data: dict) -> Response:
+    """Create"""
+    data = json.loads(data["data"])
+    name = data["name"]
+    status_code = {
+        "POL1": 500,  # exist
+        "POL2": 200,  # not exist
+    }[name]
+    return create_response("post", url, status_code)
 
 
 def policy_put(url: str) -> Response:
+    """Update"""
     uid = h.url_to_uid(url)
     status_code = {
         "1": 200,  # exist
@@ -313,13 +273,3 @@ def policy_put(url: str) -> Response:
         "4": 500,  # not moved, only for policy.move()
     }[uid]
     return create_response("put", url, status_code)
-
-
-def policy_post(url: str, data: dict) -> Response:
-    data = json.loads(data["data"])
-    name = data["name"]
-    status_code = {
-        "POL1": 500,
-        "POL2": 200,
-    }[name]
-    return create_response("post", url, status_code)

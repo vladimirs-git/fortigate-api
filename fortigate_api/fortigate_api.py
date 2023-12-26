@@ -159,7 +159,7 @@ class FortigateAPI:
     # ============================= property =============================
 
     @property
-    def vdom(self) -> str:  # TODO rename to `active_vdom`
+    def vdom(self) -> str:
         """Actual virtual domain."""
         return self.rest.vdom
 

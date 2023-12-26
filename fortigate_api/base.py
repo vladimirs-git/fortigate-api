@@ -74,7 +74,7 @@ class Base:
         :type uid: str or int
 
         :param filter: Filter fortigate-objects by one or multiple :ref:`filtering conditions`.
-            Used to delete multiple objects.
+            Used to delete multiple objects. todo 404
         :type filter: str or List[str]
 
         :return: Session response.
@@ -193,7 +193,7 @@ class Base:
             responses = sorted(responses, key=attrgetter("status_code"))
             return responses[-1]
         response = Response()
-        response.status_code = 200
+        response.status_code = 200  # todo 404
         return response
 
     @staticmethod

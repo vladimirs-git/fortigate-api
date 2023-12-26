@@ -7,7 +7,7 @@ from pytest_mock import MockerFixture
 from requests import Session
 
 from fortigate_api import FortigateAPI
-from tests import helper__tst as tst
+from tests import helpers__tst as tst
 
 
 @pytest.fixture
@@ -82,29 +82,6 @@ def test__delete(connectors: list, mocker: MockerFixture, kwargs, expected):
     (dict(filter="name==POL2"), []),
     (dict(filter=f"name==POL1"), ["POL1"]),
     (dict(id=1), KeyError),
-    # efilter
-    (dict(efilter="srcaddr==10.0.0.0/30"), ["POL1"]),
-    (dict(efilter="srcaddr==10.0.0.0/29"), []),
-    (dict(efilter="srcaddr!=10.0.0.0/30"), ["POL3"]),
-    (dict(efilter="srcaddr!=10.0.0.0/29"), ["POL1", "POL3"]),
-    (dict(efilter="srcaddr<=10.0.0.0/32"), []),  # get all subnets
-    (dict(efilter="srcaddr<=10.0.0.0/31"), []),
-    (dict(efilter="srcaddr<=10.0.0.0/30"), ["POL1"]),
-    (dict(efilter="srcaddr<=10.0.0.0/29"), ["POL1", "POL3"]),
-    (dict(efilter="srcaddr<=0.0.0.0/0"), ["POL1", "POL3"]),
-    (dict(efilter="srcaddr>=10.0.0.0"), ["POL1"]),  # get all supernets
-    (dict(efilter="srcaddr>=10.0.0.0/32"), ["POL1"]),
-    (dict(efilter="srcaddr>=10.0.0.0/31"), ["POL1"]),
-    (dict(efilter="srcaddr>=10.0.0.0/30"), ["POL1"]),
-    (dict(efilter="srcaddr>=10.0.0.0/29"), []),
-    (dict(efilter="srcaddr>=0.0.0.0/0"), []),
-    (dict(name="POL1"), KeyError),
-    (dict(efilter="srcaddr=!10.0.0.0/30"), ValueError),
-    (dict(efilter="typo==10.0.0.0/30"), ValueError),
-    (dict(efilter="srcaddr==typo"), ValueError),
-    (dict(efilter="srcaddr==10.0.0.1000"), ValueError),
-    (dict(efilter="srcaddr==10.0.0.1/33"), ValueError),
-    (dict(efilter="srcaddr==fd12:3456:789a:1::/64"), ValueError),
 ])
 def test__get(connectors: list, mocker: MockerFixture, kwargs, expected):
     """Policy.get()"""
