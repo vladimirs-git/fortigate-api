@@ -49,7 +49,7 @@ def test__create(connectors: list, mocker: MockerFixture, data, expected):
     (dict(uid=2), 404),
     (dict(filter="policyid==1"), 200),
     (dict(filter="policyid==2"), 200),
-    (dict(filter=f"name==POL1"), 200),
+    (dict(filter="name==POL1"), 200),
     (dict(filter="name==POL2"), 200),
     (dict(uid="", filter="policyid==1"), 200),
     (dict(uid=0, filter="policyid==1"), 200),
@@ -77,10 +77,10 @@ def test__delete(connectors: list, mocker: MockerFixture, kwargs, expected):
 
 @pytest.mark.parametrize("kwargs, expected", [
     (dict(uid=1), ["POL1"]),
-    (dict(uid=1, filter=f"name==POL1"), ["POL1"]),
+    (dict(uid=1, filter="name==POL1"), ["POL1"]),
     (dict(uid="POL2"), []),
     (dict(filter="name==POL2"), []),
-    (dict(filter=f"name==POL1"), ["POL1"]),
+    (dict(filter="name==POL1"), ["POL1"]),
     (dict(id=1), KeyError),
 ])
 def test__get(connectors: list, mocker: MockerFixture, kwargs, expected):

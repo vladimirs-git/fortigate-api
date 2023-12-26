@@ -44,7 +44,7 @@ or from github.com repository
     pip install git+https://github.com/vladimirs-git/fortigate-api
 
 
-:py:class:`.FortigateAPI` demonstration.
+FortigateAPI demonstration:
 
 - Create address in the Fortigate,
 - Get all addresses from the Fortigate,
@@ -114,7 +114,7 @@ or from github.com repository
 
 
 
-:py:class:`.Fortigate` demonstration.
+Fortigate demonstration:
 
 - Create address in the Fortigate,
 - Get address by name (unique identifier) from the Fortigate,

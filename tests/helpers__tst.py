@@ -182,7 +182,7 @@ def connector_delete(url: str) -> Response:
         ("NAME1", "filter=name%3D%3DNAME1"): 200,
         ("NAME9", ""): 404,  # not exist
         ("", "filter=name%3D%3DNAME1"): 200,
-    }.get(key)
+    }.get(key, 0)
     return create_response("delete", url, status_code)
 
 

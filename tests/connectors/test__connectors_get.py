@@ -35,11 +35,11 @@ def connectors():
 
 @pytest.mark.parametrize("kwargs, expected", [
     (dict(uid="NAME1"), ["NAME1"]),
-    (dict(uid="NAME1", filter=f"name==NAME1"), ["NAME1"]),
+    (dict(uid="NAME1", filter="name==NAME1"), ["NAME1"]),
     (dict(uid="NAME2"), []),
     (dict(uid="A/B"), ["A/B"]),
     (dict(filter="name==NAME2"), []),
-    (dict(filter=f"name==NAME1"), ["NAME1"]),
+    (dict(filter="name==NAME1"), ["NAME1"]),
     (dict(id="NAME1"), KeyError),
 ])
 def test__get(connectors: list, mocker: MockerFixture, kwargs, expected):
