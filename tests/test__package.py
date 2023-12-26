@@ -1,7 +1,6 @@
-"""unittests package"""
+"""Test package"""
 import ast
 import re
-import unittest
 from pathlib import Path
 
 from vhelpers import vdate, vdict, vpath, vre
@@ -61,7 +60,3 @@ def test__last_modified_date():
     files = vpath.get_files(ROOT, ext=".py")
     expected = vdate.last_modified(files)
     assert actual == expected, "last modified file"
-
-
-if __name__ == "__main__":
-    unittest.main()

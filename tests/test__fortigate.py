@@ -1,4 +1,4 @@
-"""unittest fortigate.py"""
+"""Test fortigate.py"""
 from unittest.mock import patch
 
 import pytest

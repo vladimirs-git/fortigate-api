@@ -1,5 +1,4 @@
-"""unittest fortigate_api.py"""
-import unittest
+"""Test fortigate_api.py"""
 
 from fortigate_api import FortigateAPI
 
@@ -13,7 +12,3 @@ def test__enter__():
     with FortigateAPI(host="host") as api:
         session = api.rest._session
         assert session is None
-
-
-if __name__ == "__main__":
-    unittest.main()

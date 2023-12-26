@@ -1,4 +1,4 @@
-"""unittest snmp_community.py"""
+"""Test snmp_community.py"""
 
 import pytest
 from pytest_mock import MockerFixture

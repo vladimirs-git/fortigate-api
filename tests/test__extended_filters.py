@@ -1,4 +1,4 @@
-"""unittest extended_filters.py"""
+"""Test extended_filters.py"""
 import pytest
 from pytest_mock import MockerFixture
 from requests import Session

@@ -1,6 +1,4 @@
-"""unittest policy.py"""
-
-import unittest
+"""Test policy.py"""
 
 import pytest
 from pytest_mock import MockerFixture
@@ -146,7 +144,3 @@ def test__is_exist(connectors: list, mocker: MockerFixture, uid, expected):
     for connector in connectors:
         actual = connector.is_exist(uid=uid)
         assert actual == expected, connector
-
-
-if __name__ == "__main__":
-    unittest.main()

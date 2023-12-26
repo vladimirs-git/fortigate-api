@@ -1,4 +1,4 @@
-"""unittest ccp.py"""
+"""Test ccp.py"""
 
 import unittest
 
