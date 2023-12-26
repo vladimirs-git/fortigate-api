@@ -27,6 +27,7 @@ def connectors():
         api.service_category,
         api.service_group,
         api.snmp_community,
+        api.vdoms,
         api.virtual_ip,
         api.zone,
     ]
@@ -34,15 +35,13 @@ def connectors():
 
 
 @pytest.mark.parametrize("data, expected", [
-    ({"name": "NAME1"}, 200),  # already exist
-    ({"name": "NAME2"}, 200),  # not exist
-    ({"name": "A/B"}, 200),  # already exist
+    ({"name": "NAME1"}, 500),  # already exist
+    ({"name": "NAME9"}, 200),  # not exist
+    ({"name": "A/B"}, 500),  # already exist
     ({"typo": "NAME1"}, KeyError),
 ])
 def test__create(connectors: list, mocker: MockerFixture, data, expected):
     """Address.create()"""
-    mocker.patch("requests.Session.get",
-                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     mocker.patch("requests.Session.post",
                  side_effect=lambda *args, **kw: tst.session_post(mocker, *args, **kw))
 

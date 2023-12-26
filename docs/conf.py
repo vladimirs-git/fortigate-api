@@ -3,7 +3,7 @@
 project = "fortigate-api"
 copyright = "2021, Vladimirs Prusakovs"
 author = "Vladimirs Prusakovs"
-release = "1.3.2"
+release = "1.4.0"
 
 extensions = [
     "sphinx.ext.autodoc",

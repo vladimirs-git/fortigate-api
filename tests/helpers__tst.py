@@ -45,10 +45,11 @@ UID_NAME = [
     "firewall/internet-service",
     "firewall/ippool",
     "firewall/vip",
-    "system/external-resource",
-    "system/zone",
-    "system/interface",
     "system.snmp/community",
+    "system/external-resource",
+    "system/interface",
+    "system/vdom",
+    "system/zone",
 ]
 
 
@@ -125,6 +126,7 @@ def session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
         resp = connector_delete(url)
     elif app_model == "firewall/policy":
         resp = policy_delete(url)
+    # invalid url
     else:
         resp = create_response("delete", url, 400)
     return mock_response(mocker, resp)
@@ -138,6 +140,7 @@ def session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
         resp = connector_get(url)
     elif app_model == "firewall/policy":
         resp = policy_get(url)
+    # invalid url
     else:
         resp = create_response("get", url, 400)
     return mock_response(mocker, resp)
@@ -151,6 +154,7 @@ def session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
         resp = connector_post(url, data=kwargs)
     elif app_model == "firewall/policy":
         resp = policy_post(url, data=kwargs)
+    # invalid url
     else:
         resp = create_response("post", url, 400)
     return mock_response(mocker, resp)
@@ -164,6 +168,7 @@ def session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
         resp = connector_put(url)
     elif app_model == "firewall/policy":
         resp = policy_put(url)
+    # invalid url
     else:
         resp = create_response("put", url, 400)
     return mock_response(mocker, resp)
@@ -179,10 +184,7 @@ def connector_delete(url: str) -> Response:
     status_code = {
         ("A%2FB", ""): 200,
         ("NAME1", ""): 200,
-        ("NAME1", "filter=name%3D%3DNAME1"): 200,
-        ("NAME9", ""): 404,  # not exist
-        ("", "filter=name%3D%3DNAME1"): 200,
-    }.get(key, 0)
+    }.get(key, 404)
     return create_response("delete", url, status_code)
 
 
@@ -195,12 +197,12 @@ def connector_get(url: str) -> Response:
         ("", ""): [NAME1, NAME3],
         ("A%2FB", ""): [SLASH],
         ("NAME1", ""): [NAME1],
+        ("NAME3", ""): [NAME3],  # interface
         ("NAME1", "filter=name%3D%3DNAME1"): [NAME1],
         ("", "filter=name%3D%3DNAME1"): [NAME1],
     }.get(key)
-    if items is not None:
-        return create_response("get", url, 200, items)
-    return create_response("get", url, 404, [])
+    status_code = 404 if items is None else 200
+    return create_response("get", url, status_code, items)
 
 
 def connector_post(url: str, data: dict) -> Response:
@@ -209,8 +211,8 @@ def connector_post(url: str, data: dict) -> Response:
     uid = data["name"]
     status_code = {
         "NAME1": 500,  # exist
-        "NAME2": 200,  # not exist
-    }[uid]
+        "A/B": 500,
+    }.get(uid, 200)
     return create_response("post", url, status_code)
 
 
@@ -219,8 +221,7 @@ def connector_put(url: str) -> Response:
     uid = h.url_to_uid(url)
     status_code = {
         "NAME1": 200,  # exist
-        "NAME3": 404,  # not exist
-    }[uid]
+    }.get(uid, 404)
     return create_response("get", url, status_code)
 
 
@@ -231,8 +232,7 @@ def policy_delete(url: str) -> Response:
     uid = h.url_to_uid(url)
     status_code = {
         "1": 200,  # exist
-        "2": 404,  # not exist
-    }[uid]
+    }.get(uid, 404)
     return create_response("delete", url, status_code)
 
 
@@ -244,13 +244,13 @@ def policy_get(url: str) -> Response:
     items = {
         ("", ""): [POL1, POL3],
         ("", "filter=name%3D%3DPOL1"): [POL1],
+        ("", "filter=policyid%3D%3D1"): [POL1],
         ("1", ""): [POL1],
         ("1", "filter=name%3D%3DPOL1"): [POL1],
         ("2", ""): [],
     }.get(key)
-    if items is not None:
-        return create_response("get", url, 200, items)
-    return create_response("get", url, 404)
+    status_code = 404 if items is None else 200
+    return create_response("get", url, status_code, items)
 
 
 def policy_post(url: str, data: dict) -> Response:
@@ -259,8 +259,7 @@ def policy_post(url: str, data: dict) -> Response:
     name = data["name"]
     status_code = {
         "POL1": 500,  # exist
-        "POL2": 200,  # not exist
-    }[name]
+    }.get(name, 200)
     return create_response("post", url, status_code)
 
 
@@ -269,7 +268,6 @@ def policy_put(url: str) -> Response:
     uid = h.url_to_uid(url)
     status_code = {
         "1": 200,  # exist
-        "2": 404,  # not exist
         "4": 500,  # not moved, only for policy.move()
-    }[uid]
+    }.get(uid, 404)
     return create_response("put", url, status_code)

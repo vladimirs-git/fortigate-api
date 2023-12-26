@@ -26,6 +26,7 @@ def connectors():
         api.service,
         api.service_category,
         api.service_group,
+        api.vdoms,
         api.virtual_ip,
         api.zone,
     ]
@@ -40,8 +41,6 @@ def connectors():
 ])
 def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
     """Address.update()"""
-    mocker.patch("requests.Session.get",
-                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     mocker.patch("requests.Session.put",
                  side_effect=lambda *args, **kw: tst.session_put(mocker, *args, **kw))
 

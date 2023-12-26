@@ -7,7 +7,7 @@ FortigateAPI
   .. autoattribute:: rest
 
   .. autoattribute:: ssh
-
+  
   .. autoattribute:: address
   
   .. autoattribute:: address_group
@@ -37,6 +37,8 @@ FortigateAPI
   .. autoattribute:: service_group
   
   .. autoattribute:: snmp_community
+  
+  .. autoattribute:: vdoms
   
   .. autoattribute:: virtual_ip
   

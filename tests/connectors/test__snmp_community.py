@@ -49,8 +49,6 @@ def test__delete(connectors: list, mocker: MockerFixture, kwargs, expected):
 ])
 def test__update(connectors: list, mocker: MockerFixture, kwargs, expected):
     """SnmpCommunity.update()"""
-    mocker.patch("requests.Session.get",
-                 side_effect=lambda *args, **kw: tst.session_get(mocker, *args, **kw))
     mocker.patch("requests.Session.put",
                  side_effect=lambda *args, **kw: tst.session_put(mocker, *args, **kw))
 

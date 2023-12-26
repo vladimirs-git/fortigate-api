@@ -24,6 +24,7 @@ IMPLEMENTED_OBJECTS = (
     "api/v2/cmdb/system.snmp/community/",
     "api/v2/cmdb/system/external-resource/",
     "api/v2/cmdb/system/interface/",
+    "api/v2/cmdb/system/vdom/",
     "api/v2/cmdb/system/zone/",
 )
 
@@ -58,11 +59,6 @@ class Base:
         :rtype: requests.Response
         """
         h.check_mandatory(keys=["name"], **data)
-        uid = h.get_quoted(key="name", **data)
-        url = f"{self.url_}{uid}"
-        exist = self.rest.exist(url=url)
-        if exist.ok:
-            return exist
         return self.rest.post(url=self.url_, data=data)
 
     # noinspection PyIncorrectDocstring
@@ -74,7 +70,8 @@ class Base:
         :type uid: str or int
 
         :param filter: Filter fortigate-objects by one or multiple :ref:`filtering conditions`.
-            Used to delete multiple objects. todo 404
+            Used to delete multiple objects.
+            If no objects have been found, return <Response [404]>.
         :type filter: str or List[str]
 
         :return: Session response.
@@ -129,9 +126,9 @@ class Base:
 
         :return: Session response.
 
-            - `Response [200]>` Object successfully updated,
-            - `Response [400]>` Invalid URL,
-            - `Response [404]>` Object has not been updated.
+            - `<Response [200]>` Object successfully updated,
+            - `<Response [400]>` Invalid URL,
+            - `<Response [404]>` Object has not been updated.
         :rtype: requests.Response
         """
         if not uid:
@@ -166,6 +163,7 @@ class Base:
         :return: Session response with the highest (worst) status_code.
 
             - `<Response [200]>` Object successfully deleted,
+            - `<Response [400]>` Invalid URL,
             - `<Response [404]>` Object not found in the Fortigate.
         :rtype: requests.Response
         """
@@ -181,19 +179,21 @@ class Base:
 
     @staticmethod
     def _highest_response(responses: LResponse) -> Response:
-        """Return Response object with the highest status_code, else return <Response [200]>.
+        """Return Response object with the highest status_code
+
+        If no objects have been found, return <Response [404]>.
 
         :param responses: List of Response objects.
         :type responses: List[Response]
 
-        :return: Response with the highest (worst) status_code.
+        :return: Response with the highest (worst) status_code or <Response [404]>.
         :rtype: requests.Response
         """
         if responses:
             responses = sorted(responses, key=attrgetter("status_code"))
             return responses[-1]
         response = Response()
-        response.status_code = 200  # todo 404
+        response.status_code = 404
         return response
 
     @staticmethod
@@ -215,15 +215,13 @@ class Base:
 
         :return: Session response.
 
-            - `Response [200]>` Object successfully updated,
-            - `Response [400]>` Invalid URL,
-            - `Response [404]>` Object has not been updated.
+            - `<Response [200]>` Object successfully updated,
+            - `<Response [400]>` Invalid URL,
+            - `<Response [404]>` Object has not been updated.
         :rtype: requests.Response
         """
-        if uid := h.quote(uid):
-            url = f"{self.url_}{uid}"
-            exist = self.rest.exist(url=url)
-            if not exist.ok:
-                return exist
-            return self.rest.put(url=url, data=data)
-        raise ValueError(f"Invalid {uid=}.")
+        uid = h.quote(uid)
+        if not uid:
+            raise ValueError("uid is required.")
+        url = f"{self.url_}{uid}"
+        return self.rest.put(url=url, data=data)

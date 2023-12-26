@@ -11,6 +11,8 @@ from fortigate_api import helpers as h
 from fortigate_api.types_ import LStr
 
 API = FortigateAPI(host="host")
+URL_REPO = "https://github.com/vladimirs-git/fortigate-api"
+URL_EXAMPLES = f"{URL_REPO}/tree/main/examples"
 
 
 # noinspection PyProtectedMember
@@ -37,11 +39,14 @@ def create_connectors() -> None:
     connectors: LStr = API._get_connectors()
 
     for connector in connectors:
+        example = _python_example(connector)
         class_ = h.attr_to_class(connector)
+
         text = Template(content_j2).render(
             package=fortigate_api.__name__,
             connector=connector,
             class_=class_,
+            example=example,
         )
 
         path = Path("objects", f"{class_}.rst")
@@ -62,14 +67,53 @@ def create_objects() -> None:
         docstring = connector_o.__doc__
         url_ui = vre.find1(r"Web UI:\s+(\S+)", docstring)
         url_api = vre.find1(r"API:\s+(\S+)", docstring)
+        example = _url_to_example(connector)
 
-        item = dict(class_=class_, url_ui=url_ui, url_api=url_api)
+        item = dict(class_=class_, url_ui=url_ui, url_api=url_api, example=example)
         items.append(item)
 
     text = Template(content_j2).render(items=items)
     path = Path(f"objects.rst")
     path.write_text(text)
     logging.info("Created %s.", path)
+
+
+def _url_to_example(connector: str) -> str:
+    """Return URL to usage example."""
+    root = Path(__file__).parent.parent
+    path = Path(root, "examples", f"{connector}.py")
+
+    url = ""
+    if path.exists():
+        url = f"{URL_EXAMPLES}/{connector}.py"
+    return url
+
+
+def _python_example(connector: str) -> str:
+    """Return python code wrapped to rst block.
+
+     If file with example does not exist, return empty string.
+
+    :param connector: Connector name.
+    :return: Wrapped python code if file exists.
+    """
+    root = Path(__file__).parent.parent
+    path = Path(root, "examples", f"{connector}.py")
+    if not path.exists():
+        return ""
+
+    text = path.read_text()
+    lines = [
+        "Usage",
+        "-----",
+        f"{URL_EXAMPLES}/{connector}.py",
+        "",
+        ".. code:: python",
+        "",
+        *[f"    {s}" for s in text.splitlines()],
+        "",
+    ]
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":

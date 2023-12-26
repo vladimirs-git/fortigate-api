@@ -26,6 +26,7 @@ def connectors():
         api.service,
         api.service_category,
         api.service_group,
+        api.vdoms,
         api.virtual_ip,
         api.zone,
     ]
@@ -36,7 +37,7 @@ def connectors():
     ({"uid": "NAME1"}, 200),
     ({"uid": "NAME9"}, 404),
     ({"filter": "name==NAME1"}, 200),
-    ({"filter": "name==NAME9"}, 200),  # not exist
+    ({"filter": "name==NAME9"}, 404),  # no objects have been found
     ({"uid": ""}, ValueError),
     ({"uid": "NAME1", "filter": "name==NAME1"}, KeyError),
 ])

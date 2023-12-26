@@ -2,7 +2,7 @@
 
 - Create address in the Fortigate,
 - Get all addresses from the Fortigate,
-- Get filtered address by name (unique identifier),
+- Get address by name (unique identifier),
 - Filter address by operator *equals* `==`,
 - Filter address by operator *contains* `=@`,
 - Filter address by operator *not equals* `!=`,
@@ -42,7 +42,7 @@ print(f"address.create {response}")  # address.create <Response [200]>
 addresses = fgt.address.get()
 print(f"All addresses count={len(addresses)}")  # All addresses count=14
 
-# Get filtered address by name (unique identifier)
+# Get address by name (unique identifier)
 addresses = fgt.address.get(uid="ADDRESS")
 pprint(addresses)
 #  [{"comment": "",

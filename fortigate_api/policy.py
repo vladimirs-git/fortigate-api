@@ -63,8 +63,9 @@ class Policy(Base):
 
         :return: Session response.
 
-            - <Response [200]> Policy successfully moved,
-            - <Response [500]> Policy has not been moved.
+            - `<Response [200]>` Policy successfully moved,
+            - `<Response [400]>` Invalid URL,
+            - `<Response [500]>` Policy has not been moved.
         :rtype: requests.Response
         """
         kwargs = {
@@ -89,8 +90,9 @@ class Policy(Base):
 
         :return: Session response.
 
-            - <Response [200]> Object successfully updated,
-            - <Response [404]> Object has not been updated.
+            - `<Response [200]>` Object successfully updated,
+            - `<Response [400]>` Invalid URL,
+            - `<Response [404]>` Object has not been updated.
         :rtype: requests.Response
         """
         if not uid:

@@ -20,6 +20,7 @@ from fortigate_api.service_group import ServiceGroup
 from fortigate_api.snmp_community import SnmpCommunity
 from fortigate_api.ssh import SSH
 from fortigate_api.types_ import LStr, ODAny
+from fortigate_api.vdoms import Vdoms
 from fortigate_api.virtual_ip import VirtualIp
 from fortigate_api.zone import Zone
 
@@ -133,6 +134,9 @@ class FortigateAPI:
 
         self.snmp_community = SnmpCommunity(self.rest)
         """:py:class:`.SnmpCommunity`"""
+
+        self.vdoms = Vdoms(self.rest)
+        """:py:class:`.Vdoms`"""
 
         self.virtual_ip = VirtualIp(self.rest)
         """:py:class:`.VirtualIp`"""

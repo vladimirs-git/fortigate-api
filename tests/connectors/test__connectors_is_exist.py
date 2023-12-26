@@ -26,9 +26,10 @@ def connectors():
         api.service,
         api.service_category,
         api.service_group,
+        api.snmp_community,
+        api.vdoms,
         api.virtual_ip,
         api.zone,
-        api.snmp_community,
     ]
     return items
 

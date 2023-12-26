@@ -27,6 +27,7 @@ def connectors():
         api.service_category,
         api.service_group,
         api.snmp_community,
+        api.vdoms,
         api.virtual_ip,
         api.zone,
     ]
@@ -36,9 +37,9 @@ def connectors():
 @pytest.mark.parametrize("kwargs, expected", [
     (dict(uid="NAME1"), ["NAME1"]),
     (dict(uid="NAME1", filter="name==NAME1"), ["NAME1"]),
-    (dict(uid="NAME2"), []),
+    (dict(uid="NAME9"), []),
     (dict(uid="A/B"), ["A/B"]),
-    (dict(filter="name==NAME2"), []),
+    (dict(filter="name==NAME9"), []),
     (dict(filter="name==NAME1"), ["NAME1"]),
     (dict(id="NAME1"), KeyError),
 ])

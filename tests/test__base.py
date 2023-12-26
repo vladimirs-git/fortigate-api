@@ -15,7 +15,7 @@ def api():
 
 
 @pytest.mark.parametrize("status_codes, expected", [
-    ([], 200),
+    ([], 404),
     ([200, 200], 200),
     ([200, 500, 400], 500),
     ([200, 400, 500], 500),

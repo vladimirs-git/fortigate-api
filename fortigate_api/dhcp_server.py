@@ -32,7 +32,9 @@ class DhcpServer(Base):
 
         :return: Session response.
 
-            - <Response [200]> Object successfully created or already exists.
+            - `<Response [200]>` Object successfully created or already exists,
+            - `<Response [400]>` Invalid URL,
+            - `<Response [500]>` Object already exist.
         :rtype: requests.Response
         """
         return self.rest.post(url=self.url_, data=data)
@@ -48,8 +50,9 @@ class DhcpServer(Base):
 
         :return: Session response.
 
-            - <Response [200]> Object successfully updated,
-            - <Response [404]> Object has not been updated.
+            - `<Response [200]>` Object successfully updated,
+            - `<Response [400]>` Invalid URL,
+            - `<Response [404]>` Object has not been updated.
         :rtype: requests.Response
         """
         if not uid:

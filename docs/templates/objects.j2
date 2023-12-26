@@ -5,8 +5,14 @@ Objects
 {{ item.class_ }}
 {{ "-" * item.class_|length }}
 
-- Web UI: {{ item.url_ui }}
-- API: {{ item.url_api }}
-- Data: :ref:`{{ item.class_ }}.yml`
+=============  =========================================================================
+Documentation  Link
+=============  =========================================================================
+Class          :ref:`{{ item.class_ }}`
+Data           :ref:`{{ item.class_ }}.yml`
+Web UI         {{ item.url_ui }}
+API            {{ item.url_api }}
+Usage          {{ item.example }}
+=============  =========================================================================
 
 {% endfor %}

@@ -291,9 +291,9 @@ class Fortigate:
 
         :return: Session response.
 
-            - `Response [200]>` Object successfully updated,
-            - `Response [400]>` Invalid URL,
-            - `Response [404]>` Object has not been updated.
+            - `<Response [200]>` Object successfully updated,
+            - `<Response [400]>` Invalid URL,
+            - `<Response [404]>` Object has not been updated.
         :rtype: requests.Response
         """
         response: Response = self._response("put", url, data)
@@ -325,7 +325,7 @@ class Fortigate:
         :return: Session response.
 
             - `<Response [200]>` Object exist,
-            - `Response [400]>` Invalid URL,
+            - `<Response [400]>` Invalid URL,
             - `<Response [404]>` Object does not exist.
         :rtype: requests.Response
         """

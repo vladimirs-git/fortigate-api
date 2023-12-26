@@ -34,8 +34,9 @@ class SnmpCommunity(Base):
 
         :return: Session response.
 
-            - <Response [200]> Object successfully updated,
-            - <Response [404]> Object has not been updated.
+            - `<Response [200]>` Object successfully updated,
+            - `<Response [400]>` Invalid URL,
+            - `<Response [404]>` Object has not been updated.
         :rtype: requests.Response
         """
         if not uid:
