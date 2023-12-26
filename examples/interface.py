@@ -1,10 +1,10 @@
 """Interface examples.
 
-- Get all interfaces in vdom "root" from the Fortigate
+- Get all interfaces in vdom `root` from the Fortigate
 - Get filtered interface by name (unique identifier)
-- Filter interface by operator *equals* "=="
-- Filter interface by operator contains "=@"
-- Filter interface by operator *not equals* "!="
+- Filter interface by operator *equals* `==`
+- Filter interface by operator contains `=@`
+- Filter interface by operator *not equals* `!=`
 - Filter interface by multiple conditions
 - Update interface data in the Fortigate
 - Check for presence of interface in the Fortigate

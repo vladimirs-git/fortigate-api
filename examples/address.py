@@ -1,17 +1,18 @@
 """Address examples.
 
-- Create address in the Fortigate
-- Get all addresses from the Fortigate
-- Get filtered address by name (unique identifier)
-- Filter address by operator *equals* "=="
-- Filter address by operator *contains* "=@"
-- Filter address by operator *not equals* "!="
-- Update address data in the Fortigate
-- Check for presence of address in the Fortigate
-- Delete address from the Fortigate by name
-- Delete addresses from the Fortigate by filter
-- Check for absence of address in the Fortigate
-- FortigateAPI *with* statement
+- Create address in the Fortigate,
+- Get all addresses from the Fortigate,
+- Get address by name (unique identifier),
+- Filter address by operator *equals* `==`,
+- Filter address by operator *contains* `=@`,
+- Filter address by operator *not equals* `!=`,
+- Filter address by multiple conditions,
+- Update address data in the Fortigate,
+- Check for presence of address in the Fortigate,
+- Delete address from the Fortigate by name (unique identifier),
+- Delete addresses from the Fortigate by filter,
+- Check for absence of address in the Fortigate,
+- FortigateAPI `with` statement,
 """
 
 import logging
@@ -26,23 +27,22 @@ USERNAME = "username"
 PASSWORD = "password"
 
 fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
-fgt.login()
 
-# Create Address
+# Create address in the Fortigate
 data = {
     "name": "ADDRESS",
     "obj-type": "ip",
     "subnet": "127.0.0.100 255.255.255.252",
     "type": "ipmask",
 }
-response = fgt.address.create(data=data)
-print("address.create", response)  # address.create <Response [200]>
+response = fgt.address.create(data)
+print(f"address.create {response}")  # address.create <Response [200]>
 
-print("\nGets all addresses from the Fortigate")
+# Get all addresses from the Fortigate
 addresses = fgt.address.get()
-print(f"addresses count={len(addresses)}")  # addresses count=1727
+print(f"All addresses count={len(addresses)}")  # All addresses count=14
 
-print("\nGets filtered address by name (unique identifier)")
+# Get address by name (unique identifier)
 addresses = fgt.address.get(uid="ADDRESS")
 pprint(addresses)
 #  [{"comment": "",
@@ -52,48 +52,48 @@ pprint(addresses)
 #    ...
 #    }]
 
-print("\nFilters address by operator equals \"==\"")
+# Filter address by operator *equals* `==`
 addresses = fgt.address.get(filter="name==ADDRESS")
-print(f"addresses count={len(addresses)}")  # addresses count=1
+print(f"Filtered by `==`, count={len(addresses)}")  # Filtered by `==`, count=1
 
-print("\nFilters address by operator contains \"=@\"")
+# Filter address by operator *contains* `=@`
 addresses = fgt.address.get(filter="subnet=@127.0")
-print(f"addresses count={len(addresses)}")  # addresses count=4
+print(f"Filtered by `=@`, count={len(addresses)}")  # Filtered by `=@`, count=2
 
-print("\nFilters address by operator not equals \"!=\"")
+# Filter address by operator *not equals* `!=`
 addresses = fgt.address.get(filter="name!=ADDRESS")
-print(f"addresses count={len(addresses)}")  # addresses count=1726
+print(f"Filtered by `!=`, count={len(addresses)}")  # Filtered by `!=`, count=13
 
-print("\nFilters address by multiple conditions")
+# Filter address by multiple conditions
 addresses = fgt.address.get(filter=["subnet=@127.0", "type==ipmask"])
-print(f"addresses count={len(addresses)}")  # addresses count=1
+print(f"Filtered by multiple conditions, count={len(addresses)}")
+# Filtered by multiple conditions, count=2
 
-print("\nUpdates address data in the Fortigate")
+# Update address data in the Fortigate
 data = dict(name="ADDRESS", subnet="127.0.0.255 255.255.255.255", color=6)
 response = fgt.address.update(uid="ADDRESS", data=data)
-print("address.update", response, response.ok)  # address.update <Response [200]> True
+print(f"address.update {response}")  # address.update <Response [200]>
 
-print("\nChecks for presence of address in the Fortigate")
+# Check for presence of address in the Fortigate
 response = fgt.address.is_exist(uid="ADDRESS")
-print("address.is_exist", response)  # address.is_exist True
+print(f"address.is_exist {response}")  # address.is_exist True
 
-print("\nDeletes address from the Fortigate by name")
+# Delete address from the Fortigate by name (unique identifier)
 response = fgt.address.delete(uid="ADDRESS")
-print("address.delete", response, response.ok)  # address.delete <Response [200]> True
+print(f"address.delete {response}")  # address.delete <Response [200]>
 
-print("\nDeletes addresses: ADDRESS, FIREWALL_AUTH_PORTAL_ADDRESS from the Fortigate by filter. "
-      "Returns <Response [500]> because FIREWALL_AUTH_PORTAL_ADDRESS cannot be deleted")
+# Delete addresses from the Fortigate by filter
+# Returns <Response [500]> because FIREWALL_AUTH_PORTAL_ADDRESS cannot be deleted
 response = fgt.address.delete(filter="name=@ADDRESS")
-print("address.delete", response, response.ok)  # address.delete <Response [500]> False
+print(f"address.delete {response}")  # address.delete <Response [500]>
 
-print("\nChecks for absence of address in the Fortigate")
+# Check for absence of address in the Fortigate
 response = fgt.address.is_exist(uid="ADDRESS")
-print("address.is_exist", response)  # address.is_exist False
+print(f"address.is_exist {response}")  # address.is_exist False
 
 fgt.logout()
 
-# FortigateAPI *with* statement
-print("\nFortigateAPI *with* statement")
+# FortigateAPI `with` statement
 with FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD) as fgt:
     response = fgt.address.is_exist(uid="ADDRESS")
-    print("address.is_exist", response)  # address.is_exist False
+    print(f"address.is_exist {response}", )  # address.is_exist False

@@ -1,16 +1,20 @@
-"""List Vdoms Object."""
+"""Vdoms Object."""
 
 from fortigate_api.base import Base
 
 
 class Vdoms(Base):
-    """Vdoms List Object."""
+    """Vdoms Object.
+
+    - Web UI: https://hostname/ng/system/vdom
+    - API: https://hostname/api/v2/cmdb/system/vdom
+    - Data: :ref:`Vdom.yml`
+    """
 
     def __init__(self, rest):
-        """Vdoms List Object.
+        """Init Vdoms Object.
 
-        ::
-            :param rest: Fortigate REST API connector
-            :type rest: Fortigate
+        :param rest: :ref:`Fortigate` REST API connector.
+        :type rest: Fortigate
         """
-        super().__init__(rest=rest, url_obj="api/v2/cmdb/system/vdom")
+        super().__init__(rest=rest, url_obj="api/v2/cmdb/system/vdom/")

@@ -1,0 +1,12 @@
+{{ class_ }}
+{{ "=" * class_|length }}
+
+.. autoclass:: {{ package }}.{{ class_ }}
+  :members:
+
+  .. autoattribute:: rest
+
+  .. autoattribute:: ssh
+  {% for connector in connectors %}
+  .. autoattribute:: {{ connector }}
+  {% endfor %}

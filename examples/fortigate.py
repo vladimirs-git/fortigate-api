@@ -1,14 +1,16 @@
 """Fortigate examples.
 
-- User-Based Authentication
-- Create address in the Fortigate
-- Get address data from the Fortigate
-- Update address data in the Fortigate
-- Check for presence of address in the Fortigate
-- Delete address from the Fortigate
-- Check for absence of address in the Fortigate
+- User-Based Authentication,
+- Create address in the Fortigate,
+- Get address by name (unique identifier) from the Fortigate,
+- Update address data in the Fortigate,
+- Check for presence of address in the Fortigate,
+- Delete address from the Fortigate by name (unique identifier),
+- Check for absence of address in the Fortigate,
+- Get logs traffic forward, value in JSON section with key="results",
+- Get monitor policy, value in JSON root section,
 - Get Directory
-- Fortigate *with* statement
+- Fortigate `with` statement,
 """
 
 import logging
@@ -23,19 +25,18 @@ USERNAME = "username"
 PASSWORD = "password"
 
 fgt = Fortigate(host=HOST, username=USERNAME, password=PASSWORD)
-fgt.login()
 
 # Creates address in the Fortigate
-print("\nCreates address in the Fortigate")
-data = {"name": "ADDRESS",
-        "obj-type": "ip",
-        "subnet": "127.0.0.100 255.255.255.252",
-        "type": "ipmask"}
+data = {
+    "name": "ADDRESS",
+    "obj-type": "ip",
+    "subnet": "127.0.0.100 255.255.255.252",
+    "type": "ipmask",
+}
 response = fgt.post(url="api/v2/cmdb/firewall/address/", data=data)
-print("post", response)  # post <Response [200]>
+print(f"POST {response}", )  # POST <Response [200]>
 
-# Gets address data from the Fortigate
-print("\nGets address data from the Fortigate")
+# Get address by name (unique identifier) from the Fortigate
 addresses = fgt.get(url="api/v2/cmdb/firewall/address/")
 addresses = [d for d in addresses if d["name"] == "ADDRESS"]
 pprint(addresses)
@@ -47,30 +48,19 @@ pprint(addresses)
 #    }]
 
 # Updates address data in the Fortigate
-print("\nUpdates address data in the Fortigate")
-data = dict(subnet="127.0.0.255 255.255.255.255")
+data = dict(color=6)
 response = fgt.put(url="api/v2/cmdb/firewall/address/ADDRESS", data=data)
-print("put", response)  # put <Response [200]>
-addresses = fgt.get(url="api/v2/cmdb/firewall/address/")
-addresses = [d for d in addresses if d["name"] == "ADDRESS"]
-print(addresses[0]["subnet"])  # 127.0.0.255 255.255.255.255
+print(f"PUT {response}")  # PUT <Response [200]>
 
-# Checks for presence of address in the Fortigate
-print("\nChecks for presence of address in the Fortigate")
-response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
-print("exist", response)  # <Response [200]>
-
-# Deletes address from the Fortigate
-print("\nDeletes address from the Fortigate")
+# Delete address from the Fortigate by name (unique identifier)
 response = fgt.delete(url="api/v2/cmdb/firewall/address/ADDRESS")
-print("delete", response)  # <Response [200]>
+print(f"DELETE {response}", )  # DELETE <Response [200]>
 
 # Checks for absence of address in the Fortigate
-print("\nChecks for absence of address in the Fortigate")
 response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
-print("exist", response)  # <Response [404]>
+print(f"Exist {response}", )  # Exist <Response [404]>
 
-# Get logs traffic forward
+# Get logs traffic forward, value in JSON section with key="results"
 output = fgt.get(url="/api/v2/log/memory/traffic/forward")
 pprint(output)
 # [{'_metadata': {'#': 1, 'archive': False, 'logid': 13, 'roll': 63501, ...},
@@ -81,7 +71,7 @@ pprint(output)
 #   'crscore': 30,
 # ...
 
-# Get list
+# Get monitor policy, value in JSON root section
 output = fgt.get_l(url="/api/v2/monitor/firewall/policy?global=1")
 pprint(output)
 # [{'build': 2093,
@@ -102,8 +92,7 @@ pprint(output)
 
 fgt.logout()
 
-# Fortigate *with* statement
-print("\nFortigate *with* statement")
+# Fortigate `with` statement
 with Fortigate(host=HOST, username=USERNAME, password=PASSWORD) as fgt:
     response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
-    print("exist", response)  # <Response [404]>
+    print("Exist", response)  # Exist <Response [404]>

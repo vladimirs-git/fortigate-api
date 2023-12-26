@@ -3,9 +3,9 @@
 - Create address-group in the Fortigate
 - Get all address-groups from the Fortigate
 - Get filtered address-group by name (unique identifier)
-- Filter address-group by operator *equals* "=="
-- Filter address-group by operator *contains* "=@"
-- Filter address-group by operator *not equals* "!="
+- Filter address-group by operator *equals* `==`
+- Filter address-group by operator *contains* `=@`
+- Filter address-group by operator *not equals* `!=`
 - Update address-group data in the Fortigate
 - Check for presence of address-group in the Fortigate
 - Delete address-group from the Fortigate by name

@@ -3,12 +3,12 @@
 - Create policy in the Fortigate
 - Get all policies from the Fortigate
 - Get filtered policy by policyid (unique identifier)
-- Filter policies by name, by operator *equals* "=="
-- Filter policies by operator *contains* "=@"
-- Filter policies by operator *not equals* "!="
+- Filter policies by name, by operator *equals* `==`
+- Filter policies by operator *contains* `=@`
+- Filter policies by operator *not equals* `!=`
 - Update policy data in the Fortigate
 - Check for presence of policy in the Fortigate
-- Get all policies with destination address == "192.168.1.2/32"
+- Get all policies with destination address == `192.168.1.2/32`
 - Delete policy from the Fortigate by policyid (unique identifier)
 - Delete policies from the Fortigate by filter (by name)
 - Check for absence of policy in the Fortigate

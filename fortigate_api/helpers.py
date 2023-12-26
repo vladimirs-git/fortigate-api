@@ -1,13 +1,14 @@
 """Helper functions."""
 
 import os
-import re
 import time
 from datetime import datetime
 from urllib import parse
 from urllib.parse import urlencode, urlparse, parse_qs, ParseResult
 
-from fortigate_api.types_ import Any, DAny, T2Str, T3Str, IStr, IStrs, LStr, SDate
+from vhelpers import vdict
+
+from fortigate_api.types_ import Any, DAny, IStr, LStr, SDate, TLists
 
 
 # =============================== dict ===============================
@@ -15,210 +16,169 @@ from fortigate_api.types_ import Any, DAny, T2Str, T3Str, IStr, IStrs, LStr, SDa
 def check_mandatory(keys: IStr, **kwargs) -> None:
     """Check all of `keys` are mandatory in `kwargs`.
 
-    ::
-        :param keys: Interested keys, all of them should be in `kwargs`
-        :param kwargs: Checked data
-        :raises KeyError: If one of the `keys` is not found in `kwargs`
+    :param keys: Interested keys, all of them should be in `kwargs`.
+    :param kwargs: Checked data.
+    :raises KeyError: If one of the `keys` is not found in `kwargs`.
     """
-    keys2 = list(kwargs)
     keys_absent: LStr = []
     for key in keys:
-        if key not in keys2:
+        if key not in kwargs:
             keys_absent.append(key)
     if keys_absent:
-        raise KeyError(f"mandatory {keys_absent=} in {keys2}")
+        raise KeyError(f"Mandatory {keys_absent=} in {list(kwargs)}.")
 
 
 def check_only_one(keys: IStr, **kwargs) -> None:
     """Check only one of keys should be in `kwargs`.
 
-    ::
-        :param keys: Interested keys, only one of them should be in `kwargs`
-        :param kwargs: Checked data
-        :raises KeyError: If multiple of the `keys` are found in `kwargs`
+    :param keys: Interested keys, only one of them should be in `kwargs`.
+    :param kwargs: Checked data.
+    :raises KeyError: If multiple of the `keys` are found in `kwargs`.
     """
     keys1 = set(keys)
-    keys2 = set(kwargs)
-    intersection = keys1.intersection(keys2)
+    allowed = set(kwargs)
+    intersection = keys1.intersection(allowed)
     if len(intersection) > 1:
-        raise KeyError(f"multiple keys={intersection} not allowed in {keys2}, expected only one")
+        raise KeyError(f"Expected only one key, keys={intersection} are not allowed in {allowed}.")
 
 
 def check_one_of(keys: IStr, **kwargs) -> None:
     """Check one of key is mandatory in `kwargs`.
 
-    ::
-        :param keys: Interested keys, one of them should be in `kwargs`
-        :param kwargs: Checked data
-        :raises KeyError: If none of the `keys` are found in `kwargs`
+    :param keys: Interested keys, one of them should be in `kwargs`.
+    :param kwargs: Checked data.
+    :raises KeyError: If none of the `keys` are found in `kwargs`.
     """
     if not keys:
         return
-    keys2 = set(kwargs)
     for key in keys:
-        if key in keys2:
+        if key in kwargs:
             return
-    raise KeyError(f"mandatory one of {keys=} in {keys2}")
+    raise KeyError(f"Mandatory one of {keys=} in {list(kwargs)}.")
 
 
 def get_quoted(key: str, **kwargs) -> str:
-    """Get mandatory key/value from `kwargs` and return quoted value as *str*.
+    """Get mandatory key/value from `kwargs` and return quoted value as a string.
 
-    ::
-        :param key: Interested `key` in `kwargs`
-        :param kwargs: Data
-        :return: Interested quoted value
+    :param key: The key to retrieve the value from `kwargs`.
+    :param kwargs: The keyword arguments containing the key/value pairs.
+    :return: The quoted value as a string.
     """
     check_mandatory(keys=[key], **kwargs)
     value = str(kwargs[key])
-    quoted = parse.quote(string=value, safe="")
-    return quoted
+    return parse.quote(string=value, safe="")
 
 
 def pop_int(key: str, data: DAny) -> int:
-    """Pop key/value from `data` and return value as *int*.
+    """Pop key/value from `data` and return value as an integer.
 
-    ::
-        :param key: Interested `key` in `data`
-        :param data: Data
-        :return: Interested value. Side effect `data` - removes interested 'key'
+    If key is absent in data return zero.
+
+    :param key: The `key` to be popped from `data`.
+    :param data: The dictionary from which the key is to be popped.
+    :return: The value as integer. Update `data`, remove `key`.
     """
-    if key not in data:
+    value = vdict.pop(key, data)
+    if value is None:
         return 0
-    value = data.pop(key)
-    if not value:
-        value = "0"
-    value = str(value)
-    if not value.isdigit():
-        raise TypeError(f"{key}={value} {int} expected")
+    if not str(value).isdigit():
+        raise TypeError(f"{key=} {value=} {int} expected.")
     return int(value)
 
 
 def pop_lstr(key: str, data: DAny) -> LStr:
-    """Pop key/value from `data` and return value as *List[str]*.
+    """Pop list of strings key/value from `data`.
 
-    ::
-        :param key: Interested `key` in `data`
-        :param data: Data
-        :return: Interested value. Side effect `data` - removes interested 'key'
+    If key is absent in data return empty list.
+
+    :param key: The `key` to be popped from `data`.
+    :param data: The dictionary from which the key is to be popped.
+    :return: The values as a string. Update `data`, remove `key`.
     """
-    if key not in data:
-        return []
-    values: IStrs = data.pop(key)
-    if not isinstance(values, (str, list, set, tuple)):
-        raise TypeError(f"{key}={values} {list} expected")
+    values = vdict.pop(key, data)
+    if values is None:
+        values = []
     if isinstance(values, str):
         values = [values]
-    if invalid := [s for s in values if not isinstance(s, str)]:
-        raise TypeError(f"{key}={invalid} {str} expected")
+    if not isinstance(values, TLists):
+        raise TypeError(f"{key=} {values=} {list} expected.")
+    for value in values:
+        if not isinstance(value, str):
+            raise TypeError(f"{key=} {value=} {list} expected.")
     return list(values)
 
 
 def pop_str(key: str, data: DAny) -> str:
-    """Pop key/value from `data` and return value as *str*.
+    """Pop key/value from `data` and return value as a string.
 
-    ::
-        :param key: Interested `key` in `data`
-        :param data: Data
-        :return: Interested value. Side effect `data` - removes interested 'key'
+    If key is absent in data return empty string.
+
+    :param key: The `key` to be popped from `data`.
+    :param data: The dictionary from which the key is to be popped.
+    :return: The value as a string. Update `data`, remove `key`.
     """
-    if key not in data:
-        return ""
-    value = data.pop(key)
-    if value is None:
-        value = ""
-    return str(value)
+    return str(vdict.pop(key, data) or "")
 
 
 def pop_quoted(key: str, data: DAny) -> str:
-    """Pop key/value from `data` and return quoted value as *str*.
+    """Pop key/value from `data` and return quoted value as a string.
 
-    ::
-        :param key: Interested `key` in `data`
-        :param data: Data
-        :return: Interested value. Side effect `data` - removes interested 'key'
+    If key is absent in data return empty string.
+
+    :param key: The `key` to be popped from `data`.
+    :param data: The dictionary from which the key is to be popped.
+    :return: The quoted value as a string. Update `data`, remove `key`.
     """
-    if key not in data:
-        return ""
-    value = data.pop(key)
-    if value is None:
-        return ""
-    return parse.quote(string=str(value), safe="")
+    value: str = pop_str(key, data)
+    return parse.quote(string=value, safe="")
 
 
 # =============================== str ================================
 
-def findall1(pattern: str, string: str, flags=0) -> str:
-    """Parse 1st item of re.findall(). If nothing is found, return an empty string.
+def attr_to_class(attr: str) -> str:
+    """Replace lower-case attribute name camel-case class name.
 
-    ::
-        :param pattern: Regex pattern, where 1 group with parentheses in pattern is required
-        :param string: String where need to find pattern
-        :param flags: re.findall flags
-        :return: Interested substring
-        :example:
-            pattern = "a(b)cde"
-            string = "abcde"
-            return: "b"
+    :param attr: Attribute name.
+
+    :return: class name.
+
+    :example: attr_to_class("address_group") -> "AddressGroup"
     """
-    result = (re.findall(pattern=pattern, string=string, flags=flags) or [""])[0]
-    if isinstance(result, str):
-        return result
-    if isinstance(result, tuple):
-        return result[0]
-    return ""
+    return "".join([s.capitalize() for s in attr.split("_")])
 
 
-def findall2(pattern: str, string: str, flags=0) -> T2Str:
-    """Parse 2 items of re.findall(). If nothing is found, return empty strings.
+def class_to_attr(word: str) -> str:
+    """Replace upper character with underscore and lower.
 
-    ::
-        :param pattern: Regex pattern, where 2 groups with parentheses in pattern are required
-        :param string: String where need to find pattern
-        :param flags: re.findall flags
-        :return: Two interested substrings
-        :example:
-            pattern = "a(b)(c)de"
-            string = "abcde"
-            return: "b", "c"
+    :param word: The word to be modified.
+
+    :return: The modified word.
+
+    :example: replace_upper("IpAddresses") -> "ip_addresses"
     """
-    result = (re.findall(pattern=pattern, string=string, flags=flags) or [("", "")])[0]
-    if isinstance(result, tuple) and len(result) >= 2:
-        return result[0], result[1]
-    return "", ""
-
-
-def findall3(pattern: str, string: str, flags=0) -> T3Str:
-    """Parse 3 items of re.findall(). If nothing is found, return empty strings.
-
-    ::
-        :param pattern: Regex pattern, where 3 groups with parentheses in pattern are required
-        :param string: String where need to find pattern
-        :param flags: re.findall flags
-        :return: Three interested substrings
-        :example:
-            pattern = "a(b)(c)(d)e"
-            string = "abcde"
-            return: "b", "c", "d"
-    """
-    result = (re.findall(pattern=pattern, string=string, flags=flags) or [("", "", "")])[0]
-    if isinstance(result, tuple) and len(result) >= 3:
-        return result[0], result[1], result[2]
-    return "", "", ""
+    if not word:
+        return ""
+    word = word[0].lower() + word[1:]
+    new_word = ""
+    for char in word:
+        if char.isupper():
+            new_word += "_" + char.lower()
+        else:
+            new_word += char
+    return new_word
 
 
 def make_url(url: str, **params) -> str:
     """Add params to URL.
 
-    ::
-        :param url: URL with old params
-        :param params: New params
-        :return: URL with old and new params
+    :param url: URL with old params
+    :param params: New params
+    :return: URL with old and new params
 
-        :example:
-            url: "https://fomain.com?a=a"
-            params: {"b": ["b", "B"]}
-            return: "https://fomain.com?a=a&b=b&b=B"
+    :example:
+        url: "https://fomain.com?a=a"
+        params: {"b": ["b", "B"]}
+        return: "https://fomain.com?a=a&b=b&b=B"
     """
     url_o: ParseResult = urlparse(url)
     params_or: DAny = parse_qs(url_o.query)
@@ -231,12 +191,62 @@ def make_url(url: str, **params) -> str:
 def quote(string: Any) -> str:
     """Quote name of the string.
 
-    ::
-        :param string: Line to by quoted
-        :example: "10.0.0.0/8" > "10.0.0.0%2F8"
+    :param string: Line to by quoted
+    :example: "10.0.0.0/8" > "10.0.0.0%2F8"
     """
-    string_ = str(string)
-    return parse.quote(string=string_, safe="")
+    return parse.quote(string=str(string), safe="")
+
+
+def url_to_app_model(url: str) -> str:
+    """Parse app/model name from the URL.
+
+    :param url: The URL to parse.
+    :return: The app/model name parsed from the URL.
+    :example:
+        url_to_model("https://domain.com/api/v2/cmdb/firewall/policy/1") -> "firewall/policy"
+    """
+    url_o: ParseResult = urlparse(url)
+    path = url_o.path.strip("/")
+    items = path.split("/")
+    if len(items) <= 4:
+        return ""
+    app = items[3]
+    model = items[4]
+    return f"{app}/{model}"
+
+
+def url_to_model(url: str) -> str:
+    """Parse model name from the URL.
+
+    :param url: The URL to parse.
+    :return: The model name parsed from the URL.
+    :example:
+        url_to_model("https://domain.com/api/v2/cmdb/firewall/policy/1") -> "policy"
+    """
+    url_o: ParseResult = urlparse(url)
+    path = url_o.path.strip("/")
+    items = path.split("/")
+    if len(items) <= 4:
+        return ""
+    model = items[4]
+    return model
+
+
+def url_to_uid(url: str) -> str:
+    """Parse UID name from the URL.
+
+    :param url: The URL to parse.
+    :return: The UID parsed from the URL.
+    :example:
+        url_to_uuid("https://domain.com/api/v2/cmdb/firewall/policy/1") -> "1"
+    """
+    url_o: ParseResult = urlparse(url)
+    path = url_o.path.strip("/")
+    items = path.split("/")
+    if len(items) <= 5:
+        return ""
+    model = items[5]
+    return model
 
 
 # ============================= wrapper ==============================

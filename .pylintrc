@@ -1,5 +1,0 @@
-[MESSAGES CONTROL]
-disable=R0801,  ; duplicate-code
-        R0902,  ; too-many-instance-attributes
-        R0912,  ; too-many-branches
-        R1702,  ; too-many-nested-blocks
