@@ -1,3 +1,12 @@
+
+.. image:: https://img.shields.io/pypi/v/fortigate-api.svg
+   :target: https://pypi.python.org/pypi/fortigate-api
+.. image:: https://img.shields.io/pypi/pyversions/fortigate-api.svg
+   :target: https://pypi.python.org/pypi/fortigate-api
+.. image:: https://img.shields.io/github/last-commit/vladimirs-git/fortigate-api
+   :target: https://pypi.python.org/pypi/fortigate-api
+
+
 fortigate-api
 =============
 
@@ -13,8 +22,6 @@ Main features:
 - Session-based (user, password) and Token-based authentication
 - SSH Netmiko connector to work with CLI commands
 - Usage :ref:`Examples`
-
-Python >=3.8 required.
 
 This project on `GitHub`_.
 
@@ -42,12 +49,6 @@ Install the package from pypi.org
 .. code:: bash
 
     pip install fortigate-api
-
-or from github.com release
-
-.. code:: bash
-
-    pip install https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/1.3.2.tar.gz
 
 or from github.com repository
 

@@ -66,6 +66,3 @@ response = fgt.address.is_exist(uid="ADDRESS")
 print(f"address.is_exist {response}")  # address.is_exist False
 
 fgt.logout()
-
-
-
