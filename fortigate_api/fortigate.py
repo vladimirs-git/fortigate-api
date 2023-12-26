@@ -231,7 +231,7 @@ class Fortigate:
     def get(self, url: str) -> LDAny:
         """GET fortigate-object from the Fortigate.
 
-        Fortigate returns dictionary with key="results".
+        Value in JSON section with key="results".
 
         :param url url: REST API URL to the fortigate-objects.
 
@@ -249,7 +249,7 @@ class Fortigate:
     def get_l(self, url: str) -> list:
         """GET list of the fortigate-objects from the Fortigate.
 
-        Fortigate returns list of the items.
+        Value in JSON root section.
 
         :param str url: REST API URL to the fortigate-objects.
 
