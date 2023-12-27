@@ -36,7 +36,6 @@ This project on `GitHub`_.
     Fortigate <Fortigate.rst>
     Objects <objects.rst>
     SSH <SSH.rst>
-    Examples <examples.rst>
 
 
 ----------------------------------------------------------------------------------------
