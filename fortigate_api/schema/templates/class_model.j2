@@ -1,0 +1,14 @@
+"""{{ docstring }}"""
+
+from fortigate_api.connector import Connector
+
+
+class {{ model_class }}(Connector):
+    """{{ docstring }}"""
+
+    uid = "{{ uid }}"
+    _path = "api/v2/cmdb{{ path }}"
+    {%- if path_ui %}
+    _path_ui = "{{ path_ui }}"
+    {% endif %}
+

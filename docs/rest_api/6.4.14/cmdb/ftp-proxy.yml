@@ -1,0 +1,409 @@
+basePath: /api/v2/cmdb
+consumes:
+- application/json
+host: 172.16.177.65
+info:
+  contact:
+    email: fosguiqateam@fortinet.com
+    name: FortiOS Web Application Team
+    url: http://modskristensen.net
+  description: REST API for configuring FortiOS objects and settings
+  termsOfService: http://fortinet.com/terms/
+  title: FortiOS CMDB
+  version: v2
+paths:
+  /ftp-proxy/explicit:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              incoming-ip:
+                description: Accept incoming FTP requests from this IP address. An
+                  interface must have this IP address.
+                format: ipv4
+                type: string
+              incoming-port:
+                description: Accept incoming FTP requests on one or more ports.
+                type: string
+              outgoing-ip:
+                description: Outgoing FTP requests will leave from this IP address.
+                  An interface must have this IP address.
+                format: ipv4
+                type: string
+              sec-default-action:
+                description: "Accept or deny explicit FTP proxy sessions when no FTP\
+                  \ proxy firewall policy exists.   \naccept:Accept requests. All\
+                  \ explicit FTP proxy traffic is accepted whether there is an explicit\
+                  \ FTP proxy policy or not   \ndeny:Deny requests unless there is\
+                  \ a matching explicit FTP proxy policy."
+                enum:
+                - accept
+                - deny
+                type: string
+              ssl:
+                description: "Enable/disable the explicit FTPS proxy.   \nenable:Enable\
+                  \ the explicit FTPS proxy.   \ndisable:Disable the explicit FTPS\
+                  \ proxy."
+                enum:
+                - enable
+                - disable
+                type: string
+              ssl-algorithm:
+                description: "Relative strength of encryption algorithms accepted\
+                  \ in negotiation.   \nhigh:High encryption. Allow only AES and ChaCha\
+                  \   \nmedium:Medium encryption. Allow AES, ChaCha, 3DES, and RC4.\
+                  \   \nlow:Low encryption. Allow AES, ChaCha, 3DES, RC4, and DES."
+                enum:
+                - high
+                - medium
+                - low
+                type: string
+              ssl-cert:
+                description: Name of certificate for SSL connections to this server
+                  (default = "Fortinet_CA_SSL").
+                maxLength: 35
+                type: string
+              ssl-dh-bits:
+                description: "Bit-size of Diffie-Hellman (DH) prime used in DHE-RSA\
+                  \ negotiation (default = 2048).   \n768:768-bit Diffie-Hellman prime.\
+                  \   \n1024:1024-bit Diffie-Hellman prime.   \n1536:1536-bit Diffie-Hellman\
+                  \ prime.   \n2048:2048-bit Diffie-Hellman prime."
+                enum:
+                - '768'
+                - '1024'
+                - '1536'
+                - '2048'
+                type: string
+              status:
+                description: "Enable/disable the explicit FTP proxy.   \nenable:Enable\
+                  \ the explicit FTP proxy.   \ndisable:Disable the explicit FTP proxy."
+                enum:
+                - enable
+                - disable
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: netgrp"
+      tags:
+      - ftp-proxy/explicit
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            incoming-ip:
+              description: Accept incoming FTP requests from this IP address. An interface
+                must have this IP address.
+              format: ipv4
+              type: string
+            incoming-port:
+              description: Accept incoming FTP requests on one or more ports.
+              type: string
+            outgoing-ip:
+              description: Outgoing FTP requests will leave from this IP address.
+                An interface must have this IP address.
+              format: ipv4
+              type: string
+            sec-default-action:
+              description: "Accept or deny explicit FTP proxy sessions when no FTP\
+                \ proxy firewall policy exists.   \naccept:Accept requests. All explicit\
+                \ FTP proxy traffic is accepted whether there is an explicit FTP proxy\
+                \ policy or not   \ndeny:Deny requests unless there is a matching\
+                \ explicit FTP proxy policy."
+              enum:
+              - accept
+              - deny
+              type: string
+            ssl:
+              description: "Enable/disable the explicit FTPS proxy.   \nenable:Enable\
+                \ the explicit FTPS proxy.   \ndisable:Disable the explicit FTPS proxy."
+              enum:
+              - enable
+              - disable
+              type: string
+            ssl-algorithm:
+              description: "Relative strength of encryption algorithms accepted in\
+                \ negotiation.   \nhigh:High encryption. Allow only AES and ChaCha\
+                \   \nmedium:Medium encryption. Allow AES, ChaCha, 3DES, and RC4.\
+                \   \nlow:Low encryption. Allow AES, ChaCha, 3DES, RC4, and DES."
+              enum:
+              - high
+              - medium
+              - low
+              type: string
+            ssl-cert:
+              description: Name of certificate for SSL connections to this server
+                (default = "Fortinet_CA_SSL").
+              maxLength: 35
+              type: string
+            ssl-dh-bits:
+              description: "Bit-size of Diffie-Hellman (DH) prime used in DHE-RSA\
+                \ negotiation (default = 2048).   \n768:768-bit Diffie-Hellman prime.\
+                \   \n1024:1024-bit Diffie-Hellman prime.   \n1536:1536-bit Diffie-Hellman\
+                \ prime.   \n2048:2048-bit Diffie-Hellman prime."
+              enum:
+              - '768'
+              - '1024'
+              - '1536'
+              - '2048'
+              type: string
+            status:
+              description: "Enable/disable the explicit FTP proxy.   \nenable:Enable\
+                \ the explicit FTP proxy.   \ndisable:Disable the explicit FTP proxy."
+              enum:
+              - enable
+              - disable
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: netgrp"
+      tags:
+      - ftp-proxy/explicit
+produces:
+- application/json
+schemes:
+- https
+security:
+- APIKeyQueryParam: []
+securityDefinitions:
+  APIKeyQueryParam:
+    in: query
+    name: access_token
+    type: apiKey
+swagger: '2.0'
+tags:
+- description: Configure explicit FTP proxy settings.
+  name: ftp-proxy/explicit

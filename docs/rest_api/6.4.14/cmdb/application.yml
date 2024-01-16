@@ -1,0 +1,4697 @@
+basePath: /api/v2/cmdb
+consumes:
+- application/json
+host: 172.16.177.65
+info:
+  contact:
+    email: fosguiqateam@fortinet.com
+    name: FortiOS Web Application Team
+    url: http://modskristensen.net
+  description: REST API for configuring FortiOS objects and settings
+  termsOfService: http://fortinet.com/terms/
+  title: FortiOS CMDB
+  version: v2
+paths:
+  /application/custom:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              behavior:
+                description: Custom application signature behavior.
+                type: string
+              category:
+                description: Custom application category ID (use ? to view available
+                  options).
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              comment:
+                description: Comment.
+                maxLength: 63
+                type: string
+              id:
+                description: Custom application category ID (use ? to view available
+                  options).
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              protocol:
+                description: Custom application signature protocol.
+                type: string
+              signature:
+                description: The text that makes up the actual custom application
+                  signature.
+                maxLength: 4095
+                type: string
+              tag:
+                description: Signature tag.
+                maxLength: 63
+                type: string
+              technology:
+                description: Custom application signature technology.
+                type: string
+              vendor:
+                description: Custom application signature vendor.
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - application/custom
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            behavior:
+              description: Custom application signature behavior.
+              type: string
+            category:
+              description: Custom application category ID (use ? to view available
+                options).
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            comment:
+              description: Comment.
+              maxLength: 63
+              type: string
+            id:
+              description: Custom application category ID (use ? to view available
+                options).
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            protocol:
+              description: Custom application signature protocol.
+              type: string
+            signature:
+              description: The text that makes up the actual custom application signature.
+              maxLength: 4095
+              type: string
+            tag:
+              description: Signature tag.
+              maxLength: 63
+              type: string
+            technology:
+              description: Custom application signature technology.
+              type: string
+            vendor:
+              description: Custom application signature vendor.
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - application/custom
+  /application/custom/{tag}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: tag
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - application/custom
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: tag
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              behavior:
+                description: Custom application signature behavior.
+                type: string
+              category:
+                description: Custom application category ID (use ? to view available
+                  options).
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              comment:
+                description: Comment.
+                maxLength: 63
+                type: string
+              id:
+                description: Custom application category ID (use ? to view available
+                  options).
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              protocol:
+                description: Custom application signature protocol.
+                type: string
+              signature:
+                description: The text that makes up the actual custom application
+                  signature.
+                maxLength: 4095
+                type: string
+              tag:
+                description: Signature tag.
+                maxLength: 63
+                type: string
+              technology:
+                description: Custom application signature technology.
+                type: string
+              vendor:
+                description: Custom application signature vendor.
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - application/custom
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            behavior:
+              description: Custom application signature behavior.
+              type: string
+            category:
+              description: Custom application category ID (use ? to view available
+                options).
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            comment:
+              description: Comment.
+              maxLength: 63
+              type: string
+            id:
+              description: Custom application category ID (use ? to view available
+                options).
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            protocol:
+              description: Custom application signature protocol.
+              type: string
+            signature:
+              description: The text that makes up the actual custom application signature.
+              maxLength: 4095
+              type: string
+            tag:
+              description: Signature tag.
+              maxLength: 63
+              type: string
+            technology:
+              description: Custom application signature technology.
+              type: string
+            vendor:
+              description: Custom application signature vendor.
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: tag
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - application/custom
+  /application/group:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              application:
+                description: Application ID list.
+                items:
+                  properties:
+                    id:
+                      description: Application IDs.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                  type: object
+                maxItems: null
+                type: array
+              category:
+                description: Application category ID list.
+                items:
+                  properties:
+                    id:
+                      description: Category IDs.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                  type: object
+                maxItems: null
+                type: array
+              comment:
+                description: Comment
+                maxLength: 255
+                type: string
+              name:
+                description: Application group name.
+                maxLength: 63
+                type: string
+              type:
+                description: "Application group type.   \napplication:Application\
+                  \ ID.   \ncategory:Application category ID."
+                enum:
+                - application
+                - category
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - application/group
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            application:
+              description: Application ID list.
+              items:
+                properties:
+                  id:
+                    description: Application IDs.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+              maxItems: null
+              type: array
+            category:
+              description: Application category ID list.
+              items:
+                properties:
+                  id:
+                    description: Category IDs.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+              maxItems: null
+              type: array
+            comment:
+              description: Comment
+              maxLength: 255
+              type: string
+            name:
+              description: Application group name.
+              maxLength: 63
+              type: string
+            type:
+              description: "Application group type.   \napplication:Application ID.\
+                \   \ncategory:Application category ID."
+              enum:
+              - application
+              - category
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - application/group
+  /application/group/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - application/group
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              application:
+                description: Application ID list.
+                items:
+                  properties:
+                    id:
+                      description: Application IDs.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                  type: object
+                maxItems: null
+                type: array
+              category:
+                description: Application category ID list.
+                items:
+                  properties:
+                    id:
+                      description: Category IDs.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                  type: object
+                maxItems: null
+                type: array
+              comment:
+                description: Comment
+                maxLength: 255
+                type: string
+              name:
+                description: Application group name.
+                maxLength: 63
+                type: string
+              type:
+                description: "Application group type.   \napplication:Application\
+                  \ ID.   \ncategory:Application category ID."
+                enum:
+                - application
+                - category
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - application/group
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            application:
+              description: Application ID list.
+              items:
+                properties:
+                  id:
+                    description: Application IDs.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+              maxItems: null
+              type: array
+            category:
+              description: Application category ID list.
+              items:
+                properties:
+                  id:
+                    description: Category IDs.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+              maxItems: null
+              type: array
+            comment:
+              description: Comment
+              maxLength: 255
+              type: string
+            name:
+              description: Application group name.
+              maxLength: 63
+              type: string
+            type:
+              description: "Application group type.   \napplication:Application ID.\
+                \   \ncategory:Application category ID."
+              enum:
+              - application
+              - category
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - application/group
+  /application/list:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              app-replacemsg:
+                description: "Enable/disable replacement messages for blocked applications.\
+                  \   \ndisable:Disable replacement messages for blocked applications.\
+                  \   \nenable:Enable replacement messages for blocked applications."
+                enum:
+                - disable
+                - enable
+                type: string
+              comment:
+                description: comments
+                maxLength: 255
+                type: string
+              control-default-network-services:
+                description: "Enable/disable enforcement of protocols over selected\
+                  \ ports.   \ndisable:Disable protocol enforcement over selected\
+                  \ ports.   \nenable:Enable protocol enforcement over selected ports."
+                enum:
+                - disable
+                - enable
+                type: string
+              deep-app-inspection:
+                description: "Enable/disable deep application inspection.   \ndisable:Disable\
+                  \ deep application inspection.   \nenable:Enable deep application\
+                  \ inspection."
+                enum:
+                - disable
+                - enable
+                type: string
+              default-network-services:
+                description: Default network service entries.
+                items:
+                  properties:
+                    id:
+                      description: Entry ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    port:
+                      description: Port number.
+                      maximum: 65535
+                      minimum: 0
+                      type: integer
+                    services:
+                      description: "Network protocols.   \nhttp:HTTP.   \nssh:SSH.\
+                        \   \ntelnet:TELNET.   \nftp:FTP.   \ndns:DNS.   \nsmtp:SMTP.\
+                        \   \npop3:POP3.   \nimap:IMAP.   \nsnmp:SNMP.   \nnntp:NNTP.\
+                        \   \nhttps:HTTPS."
+                      enum:
+                      - http
+                      - ssh
+                      - telnet
+                      - ftp
+                      - dns
+                      - smtp
+                      - pop3
+                      - imap
+                      - snmp
+                      - nntp
+                      - https
+                      type: string
+                    violation-action:
+                      description: "Action for protocols not white listed under selected\
+                        \ port.   \npass:Allow protocols not white listed under selected\
+                        \ port.   \nmonitor:Monitor protocols not white listed under\
+                        \ selected port.   \nblock:Block protocols not white listed\
+                        \ under selected port."
+                      enum:
+                      - pass
+                      - monitor
+                      - block
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              enforce-default-app-port:
+                description: "Enable/disable default application port enforcement\
+                  \ for allowed applications.   \ndisable:Disable default application\
+                  \ port enforcement.   \nenable:Enable default application port enforcement."
+                enum:
+                - disable
+                - enable
+                type: string
+              entries:
+                description: Application list entries.
+                items:
+                  properties:
+                    action:
+                      description: "Pass or block traffic, or reset connection for\
+                        \ traffic from this application.   \npass:Pass or allow matching\
+                        \ traffic.   \nblock:Block or drop matching traffic.   \n\
+                        reset:Reset sessions for matching traffic."
+                      enum:
+                      - pass
+                      - block
+                      - reset
+                      type: string
+                    application:
+                      description: ID of allowed applications.
+                      items:
+                        properties:
+                          id:
+                            description: Application IDs.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    behavior:
+                      description: Application behavior filter.
+                      type: string
+                    category:
+                      description: Category ID list.
+                      items:
+                        properties:
+                          id:
+                            description: Application category ID.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    exclusion:
+                      description: ID of excluded applications.
+                      items:
+                        properties:
+                          id:
+                            description: Excluded application IDs.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    id:
+                      description: Entry ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    log:
+                      description: "Enable/disable logging for this application list.\
+                        \   \ndisable:Disable logging.   \nenable:Enable logging."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    log-packet:
+                      description: "Enable/disable packet logging.   \ndisable:Disable\
+                        \ packet logging.   \nenable:Enable packet logging."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    parameters:
+                      description: Application parameters.
+                      items:
+                        properties:
+                          id:
+                            description: Parameter tuple ID.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                          members:
+                            description: Parameter tuple members.
+                            items:
+                              properties:
+                                id:
+                                  description: Parameter.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  type: integer
+                                name:
+                                  description: Parameter name.
+                                  maxLength: 31
+                                  type: string
+                                value:
+                                  description: Parameter value.
+                                  maxLength: 199
+                                  type: string
+                              type: object
+                            maxItems: null
+                            type: array
+                        type: object
+                      maxItems: null
+                      type: array
+                    per-ip-shaper:
+                      description: Per-IP traffic shaper.
+                      maxLength: 35
+                      type: string
+                    popularity:
+                      description: "Application popularity filter (1 - 5, from least\
+                        \ to most popular).   \n1:Popularity level 1.   \n2:Popularity\
+                        \ level 2.   \n3:Popularity level 3.   \n4:Popularity level\
+                        \ 4.   \n5:Popularity level 5."
+                      enum:
+                      - '1'
+                      - '2'
+                      - '3'
+                      - '4'
+                      - '5'
+                      type: string
+                    protocols:
+                      description: Application protocol filter.
+                      type: string
+                    quarantine:
+                      description: "Quarantine method.   \nnone:Quarantine is disabled.\
+                        \   \nattacker:Block all traffic sent from attacker's IP address.\
+                        \ The attacker's IP address is also added to the banned user\
+                        \ list. The target's address is not affected."
+                      enum:
+                      - none
+                      - attacker
+                      type: string
+                    quarantine-expiry:
+                      description: 'Duration of quarantine. (Format ###d##h##m, minimum
+                        1m, maximum 364d23h59m, default = 5m). Requires quarantine
+                        set to attacker.'
+                      type: string
+                    quarantine-log:
+                      description: "Enable/disable quarantine logging.   \ndisable:Disable\
+                        \ quarantine logging.   \nenable:Enable quarantine logging."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    rate-count:
+                      description: Count of the rate.
+                      maximum: 65535
+                      minimum: 0
+                      type: integer
+                    rate-duration:
+                      description: Duration (sec) of the rate.
+                      maximum: 65535
+                      minimum: 1
+                      type: integer
+                    rate-mode:
+                      description: "Rate limit mode.   \nperiodical:Allow configured\
+                        \ number of packets every rate-duration.   \ncontinuous:Block\
+                        \ packets once the rate is reached."
+                      enum:
+                      - periodical
+                      - continuous
+                      type: string
+                    rate-track:
+                      description: "Track the packet protocol field.   \nnone:none\
+                        \   \nsrc-ip:Source IP.   \ndest-ip:Destination IP.   \ndhcp-client-mac:DHCP\
+                        \ client.   \ndns-domain:DNS domain."
+                      enum:
+                      - none
+                      - src-ip
+                      - dest-ip
+                      - dhcp-client-mac
+                      - dns-domain
+                      type: string
+                    risk:
+                      description: Risk, or impact, of allowing traffic from this
+                        application to occur (1 - 5; Low, Elevated, Medium, High,
+                        and Critical).
+                      items:
+                        properties:
+                          level:
+                            description: Risk, or impact, of allowing traffic from
+                              this application to occur (1 - 5; Low, Elevated, Medium,
+                              High, and Critical).
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    session-ttl:
+                      description: Session TTL (0 = default).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    shaper:
+                      description: Traffic shaper.
+                      maxLength: 35
+                      type: string
+                    shaper-reverse:
+                      description: Reverse traffic shaper.
+                      maxLength: 35
+                      type: string
+                    technology:
+                      description: Application technology filter.
+                      type: string
+                    vendor:
+                      description: Application vendor filter.
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              extended-log:
+                description: "Enable/disable extended logging.   \nenable:Enable setting.\
+                  \   \ndisable:Disable setting."
+                enum:
+                - enable
+                - disable
+                type: string
+              force-inclusion-ssl-di-sigs:
+                description: "Enable/disable forced inclusion of SSL deep inspection\
+                  \ signatures.   \ndisable:Disable forced inclusion of signatures\
+                  \ which normally require SSL deep inspection.   \nenable:Enable\
+                  \ forced inclusion of signatures which normally require SSL deep\
+                  \ inspection."
+                enum:
+                - disable
+                - enable
+                type: string
+              name:
+                description: List name.
+                maxLength: 35
+                type: string
+              options:
+                description: "Basic application protocol signatures allowed by default.\
+                  \   \nallow-dns:Allow DNS.   \nallow-icmp:Allow ICMP.   \nallow-http:Allow\
+                  \ generic HTTP web browsing.   \nallow-ssl:Allow generic SSL communication.\
+                  \   \nallow-quic:Allow QUIC."
+                enum:
+                - allow-dns
+                - allow-icmp
+                - allow-http
+                - allow-ssl
+                - allow-quic
+                type: string
+              other-application-action:
+                description: "Action for other applications.   \npass:Allow sessions\
+                  \ matching an application in this application list.   \nblock:Block\
+                  \ sessions matching an application in this application list."
+                enum:
+                - pass
+                - block
+                type: string
+              other-application-log:
+                description: "Enable/disable logging for other applications.   \n\
+                  disable:Disable logging for other applications.   \nenable:Enable\
+                  \ logging for other applications."
+                enum:
+                - disable
+                - enable
+                type: string
+              p2p-black-list:
+                description: "P2P applications to be black listed.   \nskype:Skype.\
+                  \   \nedonkey:Edonkey.   \nbittorrent:Bit torrent."
+                enum:
+                - skype
+                - edonkey
+                - bittorrent
+                type: string
+              replacemsg-group:
+                description: Replacement message group.
+                maxLength: 35
+                type: string
+              unknown-application-action:
+                description: "Pass or block traffic from unknown applications.   \n\
+                  pass:Pass or allow unknown applications.   \nblock:Drop or block\
+                  \ unknown applications."
+                enum:
+                - pass
+                - block
+                type: string
+              unknown-application-log:
+                description: "Enable/disable logging for unknown applications.   \n\
+                  disable:Disable logging for unknown applications.   \nenable:Enable\
+                  \ logging for unknown applications."
+                enum:
+                - disable
+                - enable
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - application/list
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            app-replacemsg:
+              description: "Enable/disable replacement messages for blocked applications.\
+                \   \ndisable:Disable replacement messages for blocked applications.\
+                \   \nenable:Enable replacement messages for blocked applications."
+              enum:
+              - disable
+              - enable
+              type: string
+            comment:
+              description: comments
+              maxLength: 255
+              type: string
+            control-default-network-services:
+              description: "Enable/disable enforcement of protocols over selected\
+                \ ports.   \ndisable:Disable protocol enforcement over selected ports.\
+                \   \nenable:Enable protocol enforcement over selected ports."
+              enum:
+              - disable
+              - enable
+              type: string
+            deep-app-inspection:
+              description: "Enable/disable deep application inspection.   \ndisable:Disable\
+                \ deep application inspection.   \nenable:Enable deep application\
+                \ inspection."
+              enum:
+              - disable
+              - enable
+              type: string
+            default-network-services:
+              description: Default network service entries.
+              items:
+                properties:
+                  id:
+                    description: Entry ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  port:
+                    description: Port number.
+                    maximum: 65535
+                    minimum: 0
+                    type: integer
+                  services:
+                    description: "Network protocols.   \nhttp:HTTP.   \nssh:SSH. \
+                      \  \ntelnet:TELNET.   \nftp:FTP.   \ndns:DNS.   \nsmtp:SMTP.\
+                      \   \npop3:POP3.   \nimap:IMAP.   \nsnmp:SNMP.   \nnntp:NNTP.\
+                      \   \nhttps:HTTPS."
+                    enum:
+                    - http
+                    - ssh
+                    - telnet
+                    - ftp
+                    - dns
+                    - smtp
+                    - pop3
+                    - imap
+                    - snmp
+                    - nntp
+                    - https
+                    type: string
+                  violation-action:
+                    description: "Action for protocols not white listed under selected\
+                      \ port.   \npass:Allow protocols not white listed under selected\
+                      \ port.   \nmonitor:Monitor protocols not white listed under\
+                      \ selected port.   \nblock:Block protocols not white listed\
+                      \ under selected port."
+                    enum:
+                    - pass
+                    - monitor
+                    - block
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            enforce-default-app-port:
+              description: "Enable/disable default application port enforcement for\
+                \ allowed applications.   \ndisable:Disable default application port\
+                \ enforcement.   \nenable:Enable default application port enforcement."
+              enum:
+              - disable
+              - enable
+              type: string
+            entries:
+              description: Application list entries.
+              items:
+                properties:
+                  action:
+                    description: "Pass or block traffic, or reset connection for traffic\
+                      \ from this application.   \npass:Pass or allow matching traffic.\
+                      \   \nblock:Block or drop matching traffic.   \nreset:Reset\
+                      \ sessions for matching traffic."
+                    enum:
+                    - pass
+                    - block
+                    - reset
+                    type: string
+                  application:
+                    description: ID of allowed applications.
+                    items:
+                      properties:
+                        id:
+                          description: Application IDs.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  behavior:
+                    description: Application behavior filter.
+                    type: string
+                  category:
+                    description: Category ID list.
+                    items:
+                      properties:
+                        id:
+                          description: Application category ID.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  exclusion:
+                    description: ID of excluded applications.
+                    items:
+                      properties:
+                        id:
+                          description: Excluded application IDs.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  id:
+                    description: Entry ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  log:
+                    description: "Enable/disable logging for this application list.\
+                      \   \ndisable:Disable logging.   \nenable:Enable logging."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  log-packet:
+                    description: "Enable/disable packet logging.   \ndisable:Disable\
+                      \ packet logging.   \nenable:Enable packet logging."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  parameters:
+                    description: Application parameters.
+                    items:
+                      properties:
+                        id:
+                          description: Parameter tuple ID.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                        members:
+                          description: Parameter tuple members.
+                          items:
+                            properties:
+                              id:
+                                description: Parameter.
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                              name:
+                                description: Parameter name.
+                                maxLength: 31
+                                type: string
+                              value:
+                                description: Parameter value.
+                                maxLength: 199
+                                type: string
+                            type: object
+                          maxItems: null
+                          type: array
+                      type: object
+                    maxItems: null
+                    type: array
+                  per-ip-shaper:
+                    description: Per-IP traffic shaper.
+                    maxLength: 35
+                    type: string
+                  popularity:
+                    description: "Application popularity filter (1 - 5, from least\
+                      \ to most popular).   \n1:Popularity level 1.   \n2:Popularity\
+                      \ level 2.   \n3:Popularity level 3.   \n4:Popularity level\
+                      \ 4.   \n5:Popularity level 5."
+                    enum:
+                    - '1'
+                    - '2'
+                    - '3'
+                    - '4'
+                    - '5'
+                    type: string
+                  protocols:
+                    description: Application protocol filter.
+                    type: string
+                  quarantine:
+                    description: "Quarantine method.   \nnone:Quarantine is disabled.\
+                      \   \nattacker:Block all traffic sent from attacker's IP address.\
+                      \ The attacker's IP address is also added to the banned user\
+                      \ list. The target's address is not affected."
+                    enum:
+                    - none
+                    - attacker
+                    type: string
+                  quarantine-expiry:
+                    description: 'Duration of quarantine. (Format ###d##h##m, minimum
+                      1m, maximum 364d23h59m, default = 5m). Requires quarantine set
+                      to attacker.'
+                    type: string
+                  quarantine-log:
+                    description: "Enable/disable quarantine logging.   \ndisable:Disable\
+                      \ quarantine logging.   \nenable:Enable quarantine logging."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  rate-count:
+                    description: Count of the rate.
+                    maximum: 65535
+                    minimum: 0
+                    type: integer
+                  rate-duration:
+                    description: Duration (sec) of the rate.
+                    maximum: 65535
+                    minimum: 1
+                    type: integer
+                  rate-mode:
+                    description: "Rate limit mode.   \nperiodical:Allow configured\
+                      \ number of packets every rate-duration.   \ncontinuous:Block\
+                      \ packets once the rate is reached."
+                    enum:
+                    - periodical
+                    - continuous
+                    type: string
+                  rate-track:
+                    description: "Track the packet protocol field.   \nnone:none \
+                      \  \nsrc-ip:Source IP.   \ndest-ip:Destination IP.   \ndhcp-client-mac:DHCP\
+                      \ client.   \ndns-domain:DNS domain."
+                    enum:
+                    - none
+                    - src-ip
+                    - dest-ip
+                    - dhcp-client-mac
+                    - dns-domain
+                    type: string
+                  risk:
+                    description: Risk, or impact, of allowing traffic from this application
+                      to occur (1 - 5; Low, Elevated, Medium, High, and Critical).
+                    items:
+                      properties:
+                        level:
+                          description: Risk, or impact, of allowing traffic from this
+                            application to occur (1 - 5; Low, Elevated, Medium, High,
+                            and Critical).
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  session-ttl:
+                    description: Session TTL (0 = default).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  shaper:
+                    description: Traffic shaper.
+                    maxLength: 35
+                    type: string
+                  shaper-reverse:
+                    description: Reverse traffic shaper.
+                    maxLength: 35
+                    type: string
+                  technology:
+                    description: Application technology filter.
+                    type: string
+                  vendor:
+                    description: Application vendor filter.
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            extended-log:
+              description: "Enable/disable extended logging.   \nenable:Enable setting.\
+                \   \ndisable:Disable setting."
+              enum:
+              - enable
+              - disable
+              type: string
+            force-inclusion-ssl-di-sigs:
+              description: "Enable/disable forced inclusion of SSL deep inspection\
+                \ signatures.   \ndisable:Disable forced inclusion of signatures which\
+                \ normally require SSL deep inspection.   \nenable:Enable forced inclusion\
+                \ of signatures which normally require SSL deep inspection."
+              enum:
+              - disable
+              - enable
+              type: string
+            name:
+              description: List name.
+              maxLength: 35
+              type: string
+            options:
+              description: "Basic application protocol signatures allowed by default.\
+                \   \nallow-dns:Allow DNS.   \nallow-icmp:Allow ICMP.   \nallow-http:Allow\
+                \ generic HTTP web browsing.   \nallow-ssl:Allow generic SSL communication.\
+                \   \nallow-quic:Allow QUIC."
+              enum:
+              - allow-dns
+              - allow-icmp
+              - allow-http
+              - allow-ssl
+              - allow-quic
+              type: string
+            other-application-action:
+              description: "Action for other applications.   \npass:Allow sessions\
+                \ matching an application in this application list.   \nblock:Block\
+                \ sessions matching an application in this application list."
+              enum:
+              - pass
+              - block
+              type: string
+            other-application-log:
+              description: "Enable/disable logging for other applications.   \ndisable:Disable\
+                \ logging for other applications.   \nenable:Enable logging for other\
+                \ applications."
+              enum:
+              - disable
+              - enable
+              type: string
+            p2p-black-list:
+              description: "P2P applications to be black listed.   \nskype:Skype.\
+                \   \nedonkey:Edonkey.   \nbittorrent:Bit torrent."
+              enum:
+              - skype
+              - edonkey
+              - bittorrent
+              type: string
+            replacemsg-group:
+              description: Replacement message group.
+              maxLength: 35
+              type: string
+            unknown-application-action:
+              description: "Pass or block traffic from unknown applications.   \n\
+                pass:Pass or allow unknown applications.   \nblock:Drop or block unknown\
+                \ applications."
+              enum:
+              - pass
+              - block
+              type: string
+            unknown-application-log:
+              description: "Enable/disable logging for unknown applications.   \n\
+                disable:Disable logging for unknown applications.   \nenable:Enable\
+                \ logging for unknown applications."
+              enum:
+              - disable
+              - enable
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - application/list
+  /application/list/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - application/list
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              app-replacemsg:
+                description: "Enable/disable replacement messages for blocked applications.\
+                  \   \ndisable:Disable replacement messages for blocked applications.\
+                  \   \nenable:Enable replacement messages for blocked applications."
+                enum:
+                - disable
+                - enable
+                type: string
+              comment:
+                description: comments
+                maxLength: 255
+                type: string
+              control-default-network-services:
+                description: "Enable/disable enforcement of protocols over selected\
+                  \ ports.   \ndisable:Disable protocol enforcement over selected\
+                  \ ports.   \nenable:Enable protocol enforcement over selected ports."
+                enum:
+                - disable
+                - enable
+                type: string
+              deep-app-inspection:
+                description: "Enable/disable deep application inspection.   \ndisable:Disable\
+                  \ deep application inspection.   \nenable:Enable deep application\
+                  \ inspection."
+                enum:
+                - disable
+                - enable
+                type: string
+              default-network-services:
+                description: Default network service entries.
+                items:
+                  properties:
+                    id:
+                      description: Entry ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    port:
+                      description: Port number.
+                      maximum: 65535
+                      minimum: 0
+                      type: integer
+                    services:
+                      description: "Network protocols.   \nhttp:HTTP.   \nssh:SSH.\
+                        \   \ntelnet:TELNET.   \nftp:FTP.   \ndns:DNS.   \nsmtp:SMTP.\
+                        \   \npop3:POP3.   \nimap:IMAP.   \nsnmp:SNMP.   \nnntp:NNTP.\
+                        \   \nhttps:HTTPS."
+                      enum:
+                      - http
+                      - ssh
+                      - telnet
+                      - ftp
+                      - dns
+                      - smtp
+                      - pop3
+                      - imap
+                      - snmp
+                      - nntp
+                      - https
+                      type: string
+                    violation-action:
+                      description: "Action for protocols not white listed under selected\
+                        \ port.   \npass:Allow protocols not white listed under selected\
+                        \ port.   \nmonitor:Monitor protocols not white listed under\
+                        \ selected port.   \nblock:Block protocols not white listed\
+                        \ under selected port."
+                      enum:
+                      - pass
+                      - monitor
+                      - block
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              enforce-default-app-port:
+                description: "Enable/disable default application port enforcement\
+                  \ for allowed applications.   \ndisable:Disable default application\
+                  \ port enforcement.   \nenable:Enable default application port enforcement."
+                enum:
+                - disable
+                - enable
+                type: string
+              entries:
+                description: Application list entries.
+                items:
+                  properties:
+                    action:
+                      description: "Pass or block traffic, or reset connection for\
+                        \ traffic from this application.   \npass:Pass or allow matching\
+                        \ traffic.   \nblock:Block or drop matching traffic.   \n\
+                        reset:Reset sessions for matching traffic."
+                      enum:
+                      - pass
+                      - block
+                      - reset
+                      type: string
+                    application:
+                      description: ID of allowed applications.
+                      items:
+                        properties:
+                          id:
+                            description: Application IDs.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    behavior:
+                      description: Application behavior filter.
+                      type: string
+                    category:
+                      description: Category ID list.
+                      items:
+                        properties:
+                          id:
+                            description: Application category ID.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    exclusion:
+                      description: ID of excluded applications.
+                      items:
+                        properties:
+                          id:
+                            description: Excluded application IDs.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    id:
+                      description: Entry ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    log:
+                      description: "Enable/disable logging for this application list.\
+                        \   \ndisable:Disable logging.   \nenable:Enable logging."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    log-packet:
+                      description: "Enable/disable packet logging.   \ndisable:Disable\
+                        \ packet logging.   \nenable:Enable packet logging."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    parameters:
+                      description: Application parameters.
+                      items:
+                        properties:
+                          id:
+                            description: Parameter tuple ID.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                          members:
+                            description: Parameter tuple members.
+                            items:
+                              properties:
+                                id:
+                                  description: Parameter.
+                                  maximum: 4294967295
+                                  minimum: 0
+                                  type: integer
+                                name:
+                                  description: Parameter name.
+                                  maxLength: 31
+                                  type: string
+                                value:
+                                  description: Parameter value.
+                                  maxLength: 199
+                                  type: string
+                              type: object
+                            maxItems: null
+                            type: array
+                        type: object
+                      maxItems: null
+                      type: array
+                    per-ip-shaper:
+                      description: Per-IP traffic shaper.
+                      maxLength: 35
+                      type: string
+                    popularity:
+                      description: "Application popularity filter (1 - 5, from least\
+                        \ to most popular).   \n1:Popularity level 1.   \n2:Popularity\
+                        \ level 2.   \n3:Popularity level 3.   \n4:Popularity level\
+                        \ 4.   \n5:Popularity level 5."
+                      enum:
+                      - '1'
+                      - '2'
+                      - '3'
+                      - '4'
+                      - '5'
+                      type: string
+                    protocols:
+                      description: Application protocol filter.
+                      type: string
+                    quarantine:
+                      description: "Quarantine method.   \nnone:Quarantine is disabled.\
+                        \   \nattacker:Block all traffic sent from attacker's IP address.\
+                        \ The attacker's IP address is also added to the banned user\
+                        \ list. The target's address is not affected."
+                      enum:
+                      - none
+                      - attacker
+                      type: string
+                    quarantine-expiry:
+                      description: 'Duration of quarantine. (Format ###d##h##m, minimum
+                        1m, maximum 364d23h59m, default = 5m). Requires quarantine
+                        set to attacker.'
+                      type: string
+                    quarantine-log:
+                      description: "Enable/disable quarantine logging.   \ndisable:Disable\
+                        \ quarantine logging.   \nenable:Enable quarantine logging."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    rate-count:
+                      description: Count of the rate.
+                      maximum: 65535
+                      minimum: 0
+                      type: integer
+                    rate-duration:
+                      description: Duration (sec) of the rate.
+                      maximum: 65535
+                      minimum: 1
+                      type: integer
+                    rate-mode:
+                      description: "Rate limit mode.   \nperiodical:Allow configured\
+                        \ number of packets every rate-duration.   \ncontinuous:Block\
+                        \ packets once the rate is reached."
+                      enum:
+                      - periodical
+                      - continuous
+                      type: string
+                    rate-track:
+                      description: "Track the packet protocol field.   \nnone:none\
+                        \   \nsrc-ip:Source IP.   \ndest-ip:Destination IP.   \ndhcp-client-mac:DHCP\
+                        \ client.   \ndns-domain:DNS domain."
+                      enum:
+                      - none
+                      - src-ip
+                      - dest-ip
+                      - dhcp-client-mac
+                      - dns-domain
+                      type: string
+                    risk:
+                      description: Risk, or impact, of allowing traffic from this
+                        application to occur (1 - 5; Low, Elevated, Medium, High,
+                        and Critical).
+                      items:
+                        properties:
+                          level:
+                            description: Risk, or impact, of allowing traffic from
+                              this application to occur (1 - 5; Low, Elevated, Medium,
+                              High, and Critical).
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    session-ttl:
+                      description: Session TTL (0 = default).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    shaper:
+                      description: Traffic shaper.
+                      maxLength: 35
+                      type: string
+                    shaper-reverse:
+                      description: Reverse traffic shaper.
+                      maxLength: 35
+                      type: string
+                    technology:
+                      description: Application technology filter.
+                      type: string
+                    vendor:
+                      description: Application vendor filter.
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              extended-log:
+                description: "Enable/disable extended logging.   \nenable:Enable setting.\
+                  \   \ndisable:Disable setting."
+                enum:
+                - enable
+                - disable
+                type: string
+              force-inclusion-ssl-di-sigs:
+                description: "Enable/disable forced inclusion of SSL deep inspection\
+                  \ signatures.   \ndisable:Disable forced inclusion of signatures\
+                  \ which normally require SSL deep inspection.   \nenable:Enable\
+                  \ forced inclusion of signatures which normally require SSL deep\
+                  \ inspection."
+                enum:
+                - disable
+                - enable
+                type: string
+              name:
+                description: List name.
+                maxLength: 35
+                type: string
+              options:
+                description: "Basic application protocol signatures allowed by default.\
+                  \   \nallow-dns:Allow DNS.   \nallow-icmp:Allow ICMP.   \nallow-http:Allow\
+                  \ generic HTTP web browsing.   \nallow-ssl:Allow generic SSL communication.\
+                  \   \nallow-quic:Allow QUIC."
+                enum:
+                - allow-dns
+                - allow-icmp
+                - allow-http
+                - allow-ssl
+                - allow-quic
+                type: string
+              other-application-action:
+                description: "Action for other applications.   \npass:Allow sessions\
+                  \ matching an application in this application list.   \nblock:Block\
+                  \ sessions matching an application in this application list."
+                enum:
+                - pass
+                - block
+                type: string
+              other-application-log:
+                description: "Enable/disable logging for other applications.   \n\
+                  disable:Disable logging for other applications.   \nenable:Enable\
+                  \ logging for other applications."
+                enum:
+                - disable
+                - enable
+                type: string
+              p2p-black-list:
+                description: "P2P applications to be black listed.   \nskype:Skype.\
+                  \   \nedonkey:Edonkey.   \nbittorrent:Bit torrent."
+                enum:
+                - skype
+                - edonkey
+                - bittorrent
+                type: string
+              replacemsg-group:
+                description: Replacement message group.
+                maxLength: 35
+                type: string
+              unknown-application-action:
+                description: "Pass or block traffic from unknown applications.   \n\
+                  pass:Pass or allow unknown applications.   \nblock:Drop or block\
+                  \ unknown applications."
+                enum:
+                - pass
+                - block
+                type: string
+              unknown-application-log:
+                description: "Enable/disable logging for unknown applications.   \n\
+                  disable:Disable logging for unknown applications.   \nenable:Enable\
+                  \ logging for unknown applications."
+                enum:
+                - disable
+                - enable
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - application/list
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            app-replacemsg:
+              description: "Enable/disable replacement messages for blocked applications.\
+                \   \ndisable:Disable replacement messages for blocked applications.\
+                \   \nenable:Enable replacement messages for blocked applications."
+              enum:
+              - disable
+              - enable
+              type: string
+            comment:
+              description: comments
+              maxLength: 255
+              type: string
+            control-default-network-services:
+              description: "Enable/disable enforcement of protocols over selected\
+                \ ports.   \ndisable:Disable protocol enforcement over selected ports.\
+                \   \nenable:Enable protocol enforcement over selected ports."
+              enum:
+              - disable
+              - enable
+              type: string
+            deep-app-inspection:
+              description: "Enable/disable deep application inspection.   \ndisable:Disable\
+                \ deep application inspection.   \nenable:Enable deep application\
+                \ inspection."
+              enum:
+              - disable
+              - enable
+              type: string
+            default-network-services:
+              description: Default network service entries.
+              items:
+                properties:
+                  id:
+                    description: Entry ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  port:
+                    description: Port number.
+                    maximum: 65535
+                    minimum: 0
+                    type: integer
+                  services:
+                    description: "Network protocols.   \nhttp:HTTP.   \nssh:SSH. \
+                      \  \ntelnet:TELNET.   \nftp:FTP.   \ndns:DNS.   \nsmtp:SMTP.\
+                      \   \npop3:POP3.   \nimap:IMAP.   \nsnmp:SNMP.   \nnntp:NNTP.\
+                      \   \nhttps:HTTPS."
+                    enum:
+                    - http
+                    - ssh
+                    - telnet
+                    - ftp
+                    - dns
+                    - smtp
+                    - pop3
+                    - imap
+                    - snmp
+                    - nntp
+                    - https
+                    type: string
+                  violation-action:
+                    description: "Action for protocols not white listed under selected\
+                      \ port.   \npass:Allow protocols not white listed under selected\
+                      \ port.   \nmonitor:Monitor protocols not white listed under\
+                      \ selected port.   \nblock:Block protocols not white listed\
+                      \ under selected port."
+                    enum:
+                    - pass
+                    - monitor
+                    - block
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            enforce-default-app-port:
+              description: "Enable/disable default application port enforcement for\
+                \ allowed applications.   \ndisable:Disable default application port\
+                \ enforcement.   \nenable:Enable default application port enforcement."
+              enum:
+              - disable
+              - enable
+              type: string
+            entries:
+              description: Application list entries.
+              items:
+                properties:
+                  action:
+                    description: "Pass or block traffic, or reset connection for traffic\
+                      \ from this application.   \npass:Pass or allow matching traffic.\
+                      \   \nblock:Block or drop matching traffic.   \nreset:Reset\
+                      \ sessions for matching traffic."
+                    enum:
+                    - pass
+                    - block
+                    - reset
+                    type: string
+                  application:
+                    description: ID of allowed applications.
+                    items:
+                      properties:
+                        id:
+                          description: Application IDs.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  behavior:
+                    description: Application behavior filter.
+                    type: string
+                  category:
+                    description: Category ID list.
+                    items:
+                      properties:
+                        id:
+                          description: Application category ID.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  exclusion:
+                    description: ID of excluded applications.
+                    items:
+                      properties:
+                        id:
+                          description: Excluded application IDs.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  id:
+                    description: Entry ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  log:
+                    description: "Enable/disable logging for this application list.\
+                      \   \ndisable:Disable logging.   \nenable:Enable logging."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  log-packet:
+                    description: "Enable/disable packet logging.   \ndisable:Disable\
+                      \ packet logging.   \nenable:Enable packet logging."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  parameters:
+                    description: Application parameters.
+                    items:
+                      properties:
+                        id:
+                          description: Parameter tuple ID.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                        members:
+                          description: Parameter tuple members.
+                          items:
+                            properties:
+                              id:
+                                description: Parameter.
+                                maximum: 4294967295
+                                minimum: 0
+                                type: integer
+                              name:
+                                description: Parameter name.
+                                maxLength: 31
+                                type: string
+                              value:
+                                description: Parameter value.
+                                maxLength: 199
+                                type: string
+                            type: object
+                          maxItems: null
+                          type: array
+                      type: object
+                    maxItems: null
+                    type: array
+                  per-ip-shaper:
+                    description: Per-IP traffic shaper.
+                    maxLength: 35
+                    type: string
+                  popularity:
+                    description: "Application popularity filter (1 - 5, from least\
+                      \ to most popular).   \n1:Popularity level 1.   \n2:Popularity\
+                      \ level 2.   \n3:Popularity level 3.   \n4:Popularity level\
+                      \ 4.   \n5:Popularity level 5."
+                    enum:
+                    - '1'
+                    - '2'
+                    - '3'
+                    - '4'
+                    - '5'
+                    type: string
+                  protocols:
+                    description: Application protocol filter.
+                    type: string
+                  quarantine:
+                    description: "Quarantine method.   \nnone:Quarantine is disabled.\
+                      \   \nattacker:Block all traffic sent from attacker's IP address.\
+                      \ The attacker's IP address is also added to the banned user\
+                      \ list. The target's address is not affected."
+                    enum:
+                    - none
+                    - attacker
+                    type: string
+                  quarantine-expiry:
+                    description: 'Duration of quarantine. (Format ###d##h##m, minimum
+                      1m, maximum 364d23h59m, default = 5m). Requires quarantine set
+                      to attacker.'
+                    type: string
+                  quarantine-log:
+                    description: "Enable/disable quarantine logging.   \ndisable:Disable\
+                      \ quarantine logging.   \nenable:Enable quarantine logging."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  rate-count:
+                    description: Count of the rate.
+                    maximum: 65535
+                    minimum: 0
+                    type: integer
+                  rate-duration:
+                    description: Duration (sec) of the rate.
+                    maximum: 65535
+                    minimum: 1
+                    type: integer
+                  rate-mode:
+                    description: "Rate limit mode.   \nperiodical:Allow configured\
+                      \ number of packets every rate-duration.   \ncontinuous:Block\
+                      \ packets once the rate is reached."
+                    enum:
+                    - periodical
+                    - continuous
+                    type: string
+                  rate-track:
+                    description: "Track the packet protocol field.   \nnone:none \
+                      \  \nsrc-ip:Source IP.   \ndest-ip:Destination IP.   \ndhcp-client-mac:DHCP\
+                      \ client.   \ndns-domain:DNS domain."
+                    enum:
+                    - none
+                    - src-ip
+                    - dest-ip
+                    - dhcp-client-mac
+                    - dns-domain
+                    type: string
+                  risk:
+                    description: Risk, or impact, of allowing traffic from this application
+                      to occur (1 - 5; Low, Elevated, Medium, High, and Critical).
+                    items:
+                      properties:
+                        level:
+                          description: Risk, or impact, of allowing traffic from this
+                            application to occur (1 - 5; Low, Elevated, Medium, High,
+                            and Critical).
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  session-ttl:
+                    description: Session TTL (0 = default).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  shaper:
+                    description: Traffic shaper.
+                    maxLength: 35
+                    type: string
+                  shaper-reverse:
+                    description: Reverse traffic shaper.
+                    maxLength: 35
+                    type: string
+                  technology:
+                    description: Application technology filter.
+                    type: string
+                  vendor:
+                    description: Application vendor filter.
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            extended-log:
+              description: "Enable/disable extended logging.   \nenable:Enable setting.\
+                \   \ndisable:Disable setting."
+              enum:
+              - enable
+              - disable
+              type: string
+            force-inclusion-ssl-di-sigs:
+              description: "Enable/disable forced inclusion of SSL deep inspection\
+                \ signatures.   \ndisable:Disable forced inclusion of signatures which\
+                \ normally require SSL deep inspection.   \nenable:Enable forced inclusion\
+                \ of signatures which normally require SSL deep inspection."
+              enum:
+              - disable
+              - enable
+              type: string
+            name:
+              description: List name.
+              maxLength: 35
+              type: string
+            options:
+              description: "Basic application protocol signatures allowed by default.\
+                \   \nallow-dns:Allow DNS.   \nallow-icmp:Allow ICMP.   \nallow-http:Allow\
+                \ generic HTTP web browsing.   \nallow-ssl:Allow generic SSL communication.\
+                \   \nallow-quic:Allow QUIC."
+              enum:
+              - allow-dns
+              - allow-icmp
+              - allow-http
+              - allow-ssl
+              - allow-quic
+              type: string
+            other-application-action:
+              description: "Action for other applications.   \npass:Allow sessions\
+                \ matching an application in this application list.   \nblock:Block\
+                \ sessions matching an application in this application list."
+              enum:
+              - pass
+              - block
+              type: string
+            other-application-log:
+              description: "Enable/disable logging for other applications.   \ndisable:Disable\
+                \ logging for other applications.   \nenable:Enable logging for other\
+                \ applications."
+              enum:
+              - disable
+              - enable
+              type: string
+            p2p-black-list:
+              description: "P2P applications to be black listed.   \nskype:Skype.\
+                \   \nedonkey:Edonkey.   \nbittorrent:Bit torrent."
+              enum:
+              - skype
+              - edonkey
+              - bittorrent
+              type: string
+            replacemsg-group:
+              description: Replacement message group.
+              maxLength: 35
+              type: string
+            unknown-application-action:
+              description: "Pass or block traffic from unknown applications.   \n\
+                pass:Pass or allow unknown applications.   \nblock:Drop or block unknown\
+                \ applications."
+              enum:
+              - pass
+              - block
+              type: string
+            unknown-application-log:
+              description: "Enable/disable logging for unknown applications.   \n\
+                disable:Disable logging for unknown applications.   \nenable:Enable\
+                \ logging for unknown applications."
+              enum:
+              - disable
+              - enable
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - application/list
+  /application/name:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              behavior:
+                description: Application behavior.
+                type: string
+              category:
+                description: Application category ID.
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              id:
+                description: Application ID.
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              metadata:
+                description: Meta data.
+                items:
+                  properties:
+                    id:
+                      description: ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    metaid:
+                      description: Meta ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    valueid:
+                      description: Value ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                  type: object
+                maxItems: null
+                type: array
+              name:
+                description: Application name.
+                maxLength: 63
+                type: string
+              parameters:
+                description: Application parameters.
+                items:
+                  properties:
+                    default value:
+                      description: Parameter default value.
+                      maxLength: 199
+                      type: string
+                    name:
+                      description: Parameter name.
+                      maxLength: 31
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              popularity:
+                description: Application popularity.
+                maximum: 255
+                minimum: 0
+                type: integer
+              protocol:
+                description: Application protocol.
+                type: string
+              risk:
+                description: Application risk.
+                maximum: 255
+                minimum: 0
+                type: integer
+              technology:
+                description: Application technology.
+                type: string
+              vendor:
+                description: Application vendor.
+                type: string
+              weight:
+                description: Application weight.
+                maximum: 255
+                minimum: 0
+                type: integer
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - application/name
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            behavior:
+              description: Application behavior.
+              type: string
+            category:
+              description: Application category ID.
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            id:
+              description: Application ID.
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            metadata:
+              description: Meta data.
+              items:
+                properties:
+                  id:
+                    description: ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  metaid:
+                    description: Meta ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  valueid:
+                    description: Value ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+              maxItems: null
+              type: array
+            name:
+              description: Application name.
+              maxLength: 63
+              type: string
+            parameters:
+              description: Application parameters.
+              items:
+                properties:
+                  default value:
+                    description: Parameter default value.
+                    maxLength: 199
+                    type: string
+                  name:
+                    description: Parameter name.
+                    maxLength: 31
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            popularity:
+              description: Application popularity.
+              maximum: 255
+              minimum: 0
+              type: integer
+            protocol:
+              description: Application protocol.
+              type: string
+            risk:
+              description: Application risk.
+              maximum: 255
+              minimum: 0
+              type: integer
+            technology:
+              description: Application technology.
+              type: string
+            vendor:
+              description: Application vendor.
+              type: string
+            weight:
+              description: Application weight.
+              maximum: 255
+              minimum: 0
+              type: integer
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - application/name
+  /application/name/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - application/name
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              behavior:
+                description: Application behavior.
+                type: string
+              category:
+                description: Application category ID.
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              id:
+                description: Application ID.
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              metadata:
+                description: Meta data.
+                items:
+                  properties:
+                    id:
+                      description: ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    metaid:
+                      description: Meta ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    valueid:
+                      description: Value ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                  type: object
+                maxItems: null
+                type: array
+              name:
+                description: Application name.
+                maxLength: 63
+                type: string
+              parameters:
+                description: Application parameters.
+                items:
+                  properties:
+                    default value:
+                      description: Parameter default value.
+                      maxLength: 199
+                      type: string
+                    name:
+                      description: Parameter name.
+                      maxLength: 31
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              popularity:
+                description: Application popularity.
+                maximum: 255
+                minimum: 0
+                type: integer
+              protocol:
+                description: Application protocol.
+                type: string
+              risk:
+                description: Application risk.
+                maximum: 255
+                minimum: 0
+                type: integer
+              technology:
+                description: Application technology.
+                type: string
+              vendor:
+                description: Application vendor.
+                type: string
+              weight:
+                description: Application weight.
+                maximum: 255
+                minimum: 0
+                type: integer
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - application/name
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            behavior:
+              description: Application behavior.
+              type: string
+            category:
+              description: Application category ID.
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            id:
+              description: Application ID.
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            metadata:
+              description: Meta data.
+              items:
+                properties:
+                  id:
+                    description: ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  metaid:
+                    description: Meta ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  valueid:
+                    description: Value ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+              maxItems: null
+              type: array
+            name:
+              description: Application name.
+              maxLength: 63
+              type: string
+            parameters:
+              description: Application parameters.
+              items:
+                properties:
+                  default value:
+                    description: Parameter default value.
+                    maxLength: 199
+                    type: string
+                  name:
+                    description: Parameter name.
+                    maxLength: 31
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            popularity:
+              description: Application popularity.
+              maximum: 255
+              minimum: 0
+              type: integer
+            protocol:
+              description: Application protocol.
+              type: string
+            risk:
+              description: Application risk.
+              maximum: 255
+              minimum: 0
+              type: integer
+            technology:
+              description: Application technology.
+              type: string
+            vendor:
+              description: Application vendor.
+              type: string
+            weight:
+              description: Application weight.
+              maximum: 255
+              minimum: 0
+              type: integer
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - application/name
+  /application/rule-settings:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              id:
+                description: Rule ID.
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - application/rule-settings
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            id:
+              description: Rule ID.
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - application/rule-settings
+  /application/rule-settings/{id}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: id
+        required: true
+        type: integer
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - application/rule-settings
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              id:
+                description: Rule ID.
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - application/rule-settings
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            id:
+              description: Rule ID.
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - application/rule-settings
+produces:
+- application/json
+schemes:
+- https
+security:
+- APIKeyQueryParam: []
+securityDefinitions:
+  APIKeyQueryParam:
+    in: query
+    name: access_token
+    type: apiKey
+swagger: '2.0'
+tags:
+- description: Configure custom application signatures.
+  name: application/custom
+- description: Configure firewall application groups.
+  name: application/group
+- description: Configure application control lists.
+  name: application/list
+- description: Configure application signatures.
+  name: application/name
+- description: Configure application rule settings.
+  name: application/rule-settings

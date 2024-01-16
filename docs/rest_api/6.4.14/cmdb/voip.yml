@@ -1,0 +1,3647 @@
+basePath: /api/v2/cmdb
+consumes:
+- application/json
+host: 172.16.177.65
+info:
+  contact:
+    email: fosguiqateam@fortinet.com
+    name: FortiOS Web Application Team
+    url: http://modskristensen.net
+  description: REST API for configuring FortiOS objects and settings
+  termsOfService: http://fortinet.com/terms/
+  title: FortiOS CMDB
+  version: v2
+paths:
+  /voip/profile:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              comment:
+                description: Comment.
+                maxLength: 255
+                type: string
+              name:
+                description: Profile name.
+                maxLength: 35
+                type: string
+              sccp:
+                description: SCCP.
+                items:
+                  properties:
+                    block-mcast:
+                      description: "Enable/disable block multicast RTP connections.\
+                        \   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    log-call-summary:
+                      description: "Enable/disable log summary of SCCP calls.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    log-violations:
+                      description: "Enable/disable logging of SCCP violations.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    max-calls:
+                      description: Maximum calls per minute per SCCP client (max 65535).
+                      maximum: 65535
+                      minimum: 0
+                      type: integer
+                    status:
+                      description: "Enable/disable SCCP.   \ndisable:Disable status.\
+                        \   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    verify-header:
+                      description: "Enable/disable verify SCCP header content.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              sip:
+                description: SIP.
+                items:
+                  properties:
+                    ack-rate:
+                      description: ACK request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    block-ack:
+                      description: "Enable/disable block ACK requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-bye:
+                      description: "Enable/disable block BYE requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-cancel:
+                      description: "Enable/disable block CANCEL requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-geo-red-options:
+                      description: "Enable/disable block OPTIONS requests, but OPTIONS\
+                        \ requests still notify for redundancy.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-info:
+                      description: "Enable/disable block INFO requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-invite:
+                      description: "Enable/disable block INVITE requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-long-lines:
+                      description: "Enable/disable block requests with headers exceeding\
+                        \ max-line-length.   \ndisable:Disable status.   \nenable:Enable\
+                        \ status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-message:
+                      description: "Enable/disable block MESSAGE requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-notify:
+                      description: "Enable/disable block NOTIFY requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-options:
+                      description: "Enable/disable block OPTIONS requests and no OPTIONS\
+                        \ as notifying message for redundancy either.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-prack:
+                      description: "Enable/disable block prack requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-publish:
+                      description: "Enable/disable block PUBLISH requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-refer:
+                      description: "Enable/disable block REFER requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-register:
+                      description: "Enable/disable block REGISTER requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-subscribe:
+                      description: "Enable/disable block SUBSCRIBE requests.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-unknown:
+                      description: "Block unrecognized SIP requests (enabled by default).\
+                        \   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-update:
+                      description: "Enable/disable block UPDATE requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    bye-rate:
+                      description: BYE request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    call-keepalive:
+                      description: Continue tracking calls with no RTP for this many
+                        minutes.
+                      maximum: 10080
+                      minimum: 0
+                      type: integer
+                    cancel-rate:
+                      description: CANCEL request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    contact-fixup:
+                      description: "Fixup contact anyway even if contact's IP:port\
+                        \ doesn't match session's IP:port.   \ndisable:Disable status.\
+                        \   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    hnt-restrict-source-ip:
+                      description: "Enable/disable restrict RTP source IP to be the\
+                        \ same as SIP source IP when HNT is enabled.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    hosted-nat-traversal:
+                      description: "Hosted NAT Traversal (HNT).   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    info-rate:
+                      description: INFO request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    invite-rate:
+                      description: INVITE request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    ips-rtp:
+                      description: "Enable/disable allow IPS on RTP.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    log-call-summary:
+                      description: "Enable/disable logging of SIP call summary.  \
+                        \ \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    log-violations:
+                      description: "Enable/disable logging of SIP violations.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    malformed-header-allow:
+                      description: "Action for malformed Allow header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-call-id:
+                      description: "Action for malformed Call-ID header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-contact:
+                      description: "Action for malformed Contact header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-content-length:
+                      description: "Action for malformed Content-Length header.  \
+                        \ \ndiscard:Discard malformed messages.   \npass:Bypass malformed\
+                        \ messages.   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-content-type:
+                      description: "Action for malformed Content-Type header.   \n\
+                        discard:Discard malformed messages.   \npass:Bypass malformed\
+                        \ messages.   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-cseq:
+                      description: "Action for malformed CSeq header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-expires:
+                      description: "Action for malformed Expires header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-from:
+                      description: "Action for malformed From header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-max-forwards:
+                      description: "Action for malformed Max-Forwards header.   \n\
+                        discard:Discard malformed messages.   \npass:Bypass malformed\
+                        \ messages.   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-p-asserted-identity:
+                      description: "Action for malformed P-Asserted-Identity header.\
+                        \   \ndiscard:Discard malformed messages.   \npass:Bypass\
+                        \ malformed messages.   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-rack:
+                      description: "Action for malformed RAck header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-record-route:
+                      description: "Action for malformed Record-Route header.   \n\
+                        discard:Discard malformed messages.   \npass:Bypass malformed\
+                        \ messages.   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-route:
+                      description: "Action for malformed Route header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-rseq:
+                      description: "Action for malformed RSeq header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-a:
+                      description: "Action for malformed SDP a line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-b:
+                      description: "Action for malformed SDP b line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-c:
+                      description: "Action for malformed SDP c line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-i:
+                      description: "Action for malformed SDP i line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-k:
+                      description: "Action for malformed SDP k line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-m:
+                      description: "Action for malformed SDP m line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-o:
+                      description: "Action for malformed SDP o line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-r:
+                      description: "Action for malformed SDP r line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-s:
+                      description: "Action for malformed SDP s line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-t:
+                      description: "Action for malformed SDP t line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-v:
+                      description: "Action for malformed SDP v line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-z:
+                      description: "Action for malformed SDP z line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-to:
+                      description: "Action for malformed To header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-via:
+                      description: "Action for malformed VIA header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-request-line:
+                      description: "Action for malformed request line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    max-body-length:
+                      description: Maximum SIP message body length (0 meaning no limit).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    max-dialogs:
+                      description: Maximum number of concurrent calls/dialogs (per
+                        policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    max-idle-dialogs:
+                      description: Maximum number established but idle dialogs to
+                        retain (per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    max-line-length:
+                      description: Maximum SIP header line length (78-4096).
+                      maximum: 4096
+                      minimum: 78
+                      type: integer
+                    message-rate:
+                      description: MESSAGE request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    nat-port-range:
+                      description: RTP NAT port range.
+                      type: string
+                    nat-trace:
+                      description: "Enable/disable preservation of original IP in\
+                        \ SDP i line.   \ndisable:Disable status.   \nenable:Enable\
+                        \ status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    no-sdp-fixup:
+                      description: "Enable/disable no SDP fix-up.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    notify-rate:
+                      description: NOTIFY request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    open-contact-pinhole:
+                      description: "Enable/disable open pinhole for non-REGISTER Contact\
+                        \ port.   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    open-record-route-pinhole:
+                      description: "Enable/disable open pinhole for Record-Route port.\
+                        \   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    open-register-pinhole:
+                      description: "Enable/disable open pinhole for REGISTER Contact\
+                        \ port.   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    open-via-pinhole:
+                      description: "Enable/disable open pinhole for Via port.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    options-rate:
+                      description: OPTIONS request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    prack-rate:
+                      description: PRACK request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    preserve-override:
+                      description: "Override i line to preserve original IPS (default:\
+                        \ append).   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    provisional-invite-expiry-time:
+                      description: Expiry time for provisional INVITE (10 - 3600 sec).
+                      maximum: 3600
+                      minimum: 10
+                      type: integer
+                    publish-rate:
+                      description: PUBLISH request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    refer-rate:
+                      description: REFER request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    register-contact-trace:
+                      description: "Enable/disable trace original IP/port within the\
+                        \ contact header of REGISTER requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    register-rate:
+                      description: REGISTER request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    rfc2543-branch:
+                      description: "Enable/disable support via branch compliant with\
+                        \ RFC 2543.   \ndisable:Disable status.   \nenable:Enable\
+                        \ status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    rtp:
+                      description: "Enable/disable create pinholes for RTP traffic\
+                        \ to traverse firewall.   \ndisable:Disable status.   \nenable:Enable\
+                        \ status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    ssl-algorithm:
+                      description: "Relative strength of encryption algorithms accepted\
+                        \ in negotiation.   \nhigh:High encryption. Allow only AES\
+                        \ and ChaCha.   \nmedium:Medium encryption. Allow AES, ChaCha,\
+                        \ 3DES, and RC4.   \nlow:Low encryption. Allow AES, ChaCha,\
+                        \ 3DES, RC4, and DES."
+                      enum:
+                      - high
+                      - medium
+                      - low
+                      type: string
+                    ssl-auth-client:
+                      description: Require a client certificate and authenticate it
+                        with the peer/peergrp.
+                      maxLength: 35
+                      type: string
+                    ssl-auth-server:
+                      description: Authenticate the server's certificate with the
+                        peer/peergrp.
+                      maxLength: 35
+                      type: string
+                    ssl-client-certificate:
+                      description: Name of Certificate to offer to server if requested.
+                      maxLength: 35
+                      type: string
+                    ssl-client-renegotiation:
+                      description: "Allow/block client renegotiation by server.  \
+                        \ \nallow:Allow a SSL client to renegotiate.   \ndeny:Abort\
+                        \ any SSL connection that attempts to renegotiate.   \nsecure:Reject\
+                        \ any SSL connection that does not offer a RFC 5746 Secure\
+                        \ Renegotiation Indication."
+                      enum:
+                      - allow
+                      - deny
+                      - secure
+                      type: string
+                    ssl-max-version:
+                      description: "Highest SSL/TLS version to negotiate.   \nssl-3.0:SSL\
+                        \ 3.0.   \ntls-1.0:TLS 1.0.   \ntls-1.1:TLS 1.1.   \ntls-1.2:TLS\
+                        \ 1.2.   \ntls-1.3:TLS 1.3."
+                      enum:
+                      - ssl-3.0
+                      - tls-1.0
+                      - tls-1.1
+                      - tls-1.2
+                      - tls-1.3
+                      type: string
+                    ssl-min-version:
+                      description: "Lowest SSL/TLS version to negotiate.   \nssl-3.0:SSL\
+                        \ 3.0.   \ntls-1.0:TLS 1.0.   \ntls-1.1:TLS 1.1.   \ntls-1.2:TLS\
+                        \ 1.2.   \ntls-1.3:TLS 1.3."
+                      enum:
+                      - ssl-3.0
+                      - tls-1.0
+                      - tls-1.1
+                      - tls-1.2
+                      - tls-1.3
+                      type: string
+                    ssl-mode:
+                      description: "SSL/TLS mode for encryption & decryption of traffic.\
+                        \   \noff:No SSL.   \nfull:Client to FortiGate and FortiGate\
+                        \ to Server SSL."
+                      enum:
+                      - 'off'
+                      - full
+                      type: string
+                    ssl-pfs:
+                      description: "SSL Perfect Forward Secrecy.   \nrequire:PFS mandatory.\
+                        \   \ndeny:PFS rejected.   \nallow:PFS allowed."
+                      enum:
+                      - require
+                      - deny
+                      - allow
+                      type: string
+                    ssl-send-empty-frags:
+                      description: "Send empty fragments to avoid attack on CBC IV\
+                        \ (SSL 3.0 & TLS 1.0 only).   \nenable:Send empty fragments.\
+                        \   \ndisable:Do not send empty fragments."
+                      enum:
+                      - enable
+                      - disable
+                      type: string
+                    ssl-server-certificate:
+                      description: Name of Certificate return to the client in every
+                        SSL connection.
+                      maxLength: 35
+                      type: string
+                    status:
+                      description: "Enable/disable SIP.   \ndisable:Disable status.\
+                        \   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    strict-register:
+                      description: "Enable/disable only allow the registrar to connect.\
+                        \   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    subscribe-rate:
+                      description: SUBSCRIBE request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    unknown-header:
+                      description: "Action for unknown SIP header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    update-rate:
+                      description: UPDATE request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                  type: object
+                maxItems: null
+                type: array
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - voip/profile
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            comment:
+              description: Comment.
+              maxLength: 255
+              type: string
+            name:
+              description: Profile name.
+              maxLength: 35
+              type: string
+            sccp:
+              description: SCCP.
+              items:
+                properties:
+                  block-mcast:
+                    description: "Enable/disable block multicast RTP connections.\
+                      \   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  log-call-summary:
+                    description: "Enable/disable log summary of SCCP calls.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  log-violations:
+                    description: "Enable/disable logging of SCCP violations.   \n\
+                      disable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  max-calls:
+                    description: Maximum calls per minute per SCCP client (max 65535).
+                    maximum: 65535
+                    minimum: 0
+                    type: integer
+                  status:
+                    description: "Enable/disable SCCP.   \ndisable:Disable status.\
+                      \   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  verify-header:
+                    description: "Enable/disable verify SCCP header content.   \n\
+                      disable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            sip:
+              description: SIP.
+              items:
+                properties:
+                  ack-rate:
+                    description: ACK request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  block-ack:
+                    description: "Enable/disable block ACK requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-bye:
+                    description: "Enable/disable block BYE requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-cancel:
+                    description: "Enable/disable block CANCEL requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-geo-red-options:
+                    description: "Enable/disable block OPTIONS requests, but OPTIONS\
+                      \ requests still notify for redundancy.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-info:
+                    description: "Enable/disable block INFO requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-invite:
+                    description: "Enable/disable block INVITE requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-long-lines:
+                    description: "Enable/disable block requests with headers exceeding\
+                      \ max-line-length.   \ndisable:Disable status.   \nenable:Enable\
+                      \ status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-message:
+                    description: "Enable/disable block MESSAGE requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-notify:
+                    description: "Enable/disable block NOTIFY requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-options:
+                    description: "Enable/disable block OPTIONS requests and no OPTIONS\
+                      \ as notifying message for redundancy either.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-prack:
+                    description: "Enable/disable block prack requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-publish:
+                    description: "Enable/disable block PUBLISH requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-refer:
+                    description: "Enable/disable block REFER requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-register:
+                    description: "Enable/disable block REGISTER requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-subscribe:
+                    description: "Enable/disable block SUBSCRIBE requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-unknown:
+                    description: "Block unrecognized SIP requests (enabled by default).\
+                      \   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-update:
+                    description: "Enable/disable block UPDATE requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  bye-rate:
+                    description: BYE request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  call-keepalive:
+                    description: Continue tracking calls with no RTP for this many
+                      minutes.
+                    maximum: 10080
+                    minimum: 0
+                    type: integer
+                  cancel-rate:
+                    description: CANCEL request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  contact-fixup:
+                    description: "Fixup contact anyway even if contact's IP:port doesn't\
+                      \ match session's IP:port.   \ndisable:Disable status.   \n\
+                      enable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  hnt-restrict-source-ip:
+                    description: "Enable/disable restrict RTP source IP to be the\
+                      \ same as SIP source IP when HNT is enabled.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  hosted-nat-traversal:
+                    description: "Hosted NAT Traversal (HNT).   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  info-rate:
+                    description: INFO request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  invite-rate:
+                    description: INVITE request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  ips-rtp:
+                    description: "Enable/disable allow IPS on RTP.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  log-call-summary:
+                    description: "Enable/disable logging of SIP call summary.   \n\
+                      disable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  log-violations:
+                    description: "Enable/disable logging of SIP violations.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  malformed-header-allow:
+                    description: "Action for malformed Allow header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-call-id:
+                    description: "Action for malformed Call-ID header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-contact:
+                    description: "Action for malformed Contact header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-content-length:
+                    description: "Action for malformed Content-Length header.   \n\
+                      discard:Discard malformed messages.   \npass:Bypass malformed\
+                      \ messages.   \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-content-type:
+                    description: "Action for malformed Content-Type header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-cseq:
+                    description: "Action for malformed CSeq header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-expires:
+                    description: "Action for malformed Expires header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-from:
+                    description: "Action for malformed From header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-max-forwards:
+                    description: "Action for malformed Max-Forwards header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-p-asserted-identity:
+                    description: "Action for malformed P-Asserted-Identity header.\
+                      \   \ndiscard:Discard malformed messages.   \npass:Bypass malformed\
+                      \ messages.   \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-rack:
+                    description: "Action for malformed RAck header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-record-route:
+                    description: "Action for malformed Record-Route header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-route:
+                    description: "Action for malformed Route header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-rseq:
+                    description: "Action for malformed RSeq header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-a:
+                    description: "Action for malformed SDP a line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-b:
+                    description: "Action for malformed SDP b line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-c:
+                    description: "Action for malformed SDP c line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-i:
+                    description: "Action for malformed SDP i line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-k:
+                    description: "Action for malformed SDP k line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-m:
+                    description: "Action for malformed SDP m line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-o:
+                    description: "Action for malformed SDP o line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-r:
+                    description: "Action for malformed SDP r line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-s:
+                    description: "Action for malformed SDP s line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-t:
+                    description: "Action for malformed SDP t line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-v:
+                    description: "Action for malformed SDP v line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-z:
+                    description: "Action for malformed SDP z line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-to:
+                    description: "Action for malformed To header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-via:
+                    description: "Action for malformed VIA header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-request-line:
+                    description: "Action for malformed request line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  max-body-length:
+                    description: Maximum SIP message body length (0 meaning no limit).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  max-dialogs:
+                    description: Maximum number of concurrent calls/dialogs (per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  max-idle-dialogs:
+                    description: Maximum number established but idle dialogs to retain
+                      (per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  max-line-length:
+                    description: Maximum SIP header line length (78-4096).
+                    maximum: 4096
+                    minimum: 78
+                    type: integer
+                  message-rate:
+                    description: MESSAGE request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  nat-port-range:
+                    description: RTP NAT port range.
+                    type: string
+                  nat-trace:
+                    description: "Enable/disable preservation of original IP in SDP\
+                      \ i line.   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  no-sdp-fixup:
+                    description: "Enable/disable no SDP fix-up.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  notify-rate:
+                    description: NOTIFY request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  open-contact-pinhole:
+                    description: "Enable/disable open pinhole for non-REGISTER Contact\
+                      \ port.   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  open-record-route-pinhole:
+                    description: "Enable/disable open pinhole for Record-Route port.\
+                      \   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  open-register-pinhole:
+                    description: "Enable/disable open pinhole for REGISTER Contact\
+                      \ port.   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  open-via-pinhole:
+                    description: "Enable/disable open pinhole for Via port.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  options-rate:
+                    description: OPTIONS request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  prack-rate:
+                    description: PRACK request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  preserve-override:
+                    description: "Override i line to preserve original IPS (default:\
+                      \ append).   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  provisional-invite-expiry-time:
+                    description: Expiry time for provisional INVITE (10 - 3600 sec).
+                    maximum: 3600
+                    minimum: 10
+                    type: integer
+                  publish-rate:
+                    description: PUBLISH request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  refer-rate:
+                    description: REFER request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  register-contact-trace:
+                    description: "Enable/disable trace original IP/port within the\
+                      \ contact header of REGISTER requests.   \ndisable:Disable status.\
+                      \   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  register-rate:
+                    description: REGISTER request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  rfc2543-branch:
+                    description: "Enable/disable support via branch compliant with\
+                      \ RFC 2543.   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  rtp:
+                    description: "Enable/disable create pinholes for RTP traffic to\
+                      \ traverse firewall.   \ndisable:Disable status.   \nenable:Enable\
+                      \ status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  ssl-algorithm:
+                    description: "Relative strength of encryption algorithms accepted\
+                      \ in negotiation.   \nhigh:High encryption. Allow only AES and\
+                      \ ChaCha.   \nmedium:Medium encryption. Allow AES, ChaCha, 3DES,\
+                      \ and RC4.   \nlow:Low encryption. Allow AES, ChaCha, 3DES,\
+                      \ RC4, and DES."
+                    enum:
+                    - high
+                    - medium
+                    - low
+                    type: string
+                  ssl-auth-client:
+                    description: Require a client certificate and authenticate it
+                      with the peer/peergrp.
+                    maxLength: 35
+                    type: string
+                  ssl-auth-server:
+                    description: Authenticate the server's certificate with the peer/peergrp.
+                    maxLength: 35
+                    type: string
+                  ssl-client-certificate:
+                    description: Name of Certificate to offer to server if requested.
+                    maxLength: 35
+                    type: string
+                  ssl-client-renegotiation:
+                    description: "Allow/block client renegotiation by server.   \n\
+                      allow:Allow a SSL client to renegotiate.   \ndeny:Abort any\
+                      \ SSL connection that attempts to renegotiate.   \nsecure:Reject\
+                      \ any SSL connection that does not offer a RFC 5746 Secure Renegotiation\
+                      \ Indication."
+                    enum:
+                    - allow
+                    - deny
+                    - secure
+                    type: string
+                  ssl-max-version:
+                    description: "Highest SSL/TLS version to negotiate.   \nssl-3.0:SSL\
+                      \ 3.0.   \ntls-1.0:TLS 1.0.   \ntls-1.1:TLS 1.1.   \ntls-1.2:TLS\
+                      \ 1.2.   \ntls-1.3:TLS 1.3."
+                    enum:
+                    - ssl-3.0
+                    - tls-1.0
+                    - tls-1.1
+                    - tls-1.2
+                    - tls-1.3
+                    type: string
+                  ssl-min-version:
+                    description: "Lowest SSL/TLS version to negotiate.   \nssl-3.0:SSL\
+                      \ 3.0.   \ntls-1.0:TLS 1.0.   \ntls-1.1:TLS 1.1.   \ntls-1.2:TLS\
+                      \ 1.2.   \ntls-1.3:TLS 1.3."
+                    enum:
+                    - ssl-3.0
+                    - tls-1.0
+                    - tls-1.1
+                    - tls-1.2
+                    - tls-1.3
+                    type: string
+                  ssl-mode:
+                    description: "SSL/TLS mode for encryption & decryption of traffic.\
+                      \   \noff:No SSL.   \nfull:Client to FortiGate and FortiGate\
+                      \ to Server SSL."
+                    enum:
+                    - 'off'
+                    - full
+                    type: string
+                  ssl-pfs:
+                    description: "SSL Perfect Forward Secrecy.   \nrequire:PFS mandatory.\
+                      \   \ndeny:PFS rejected.   \nallow:PFS allowed."
+                    enum:
+                    - require
+                    - deny
+                    - allow
+                    type: string
+                  ssl-send-empty-frags:
+                    description: "Send empty fragments to avoid attack on CBC IV (SSL\
+                      \ 3.0 & TLS 1.0 only).   \nenable:Send empty fragments.   \n\
+                      disable:Do not send empty fragments."
+                    enum:
+                    - enable
+                    - disable
+                    type: string
+                  ssl-server-certificate:
+                    description: Name of Certificate return to the client in every
+                      SSL connection.
+                    maxLength: 35
+                    type: string
+                  status:
+                    description: "Enable/disable SIP.   \ndisable:Disable status.\
+                      \   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  strict-register:
+                    description: "Enable/disable only allow the registrar to connect.\
+                      \   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  subscribe-rate:
+                    description: SUBSCRIBE request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  unknown-header:
+                    description: "Action for unknown SIP header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  update-rate:
+                    description: UPDATE request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+              maxItems: null
+              type: array
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - voip/profile
+  /voip/profile/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - voip/profile
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              comment:
+                description: Comment.
+                maxLength: 255
+                type: string
+              name:
+                description: Profile name.
+                maxLength: 35
+                type: string
+              sccp:
+                description: SCCP.
+                items:
+                  properties:
+                    block-mcast:
+                      description: "Enable/disable block multicast RTP connections.\
+                        \   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    log-call-summary:
+                      description: "Enable/disable log summary of SCCP calls.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    log-violations:
+                      description: "Enable/disable logging of SCCP violations.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    max-calls:
+                      description: Maximum calls per minute per SCCP client (max 65535).
+                      maximum: 65535
+                      minimum: 0
+                      type: integer
+                    status:
+                      description: "Enable/disable SCCP.   \ndisable:Disable status.\
+                        \   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    verify-header:
+                      description: "Enable/disable verify SCCP header content.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              sip:
+                description: SIP.
+                items:
+                  properties:
+                    ack-rate:
+                      description: ACK request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    block-ack:
+                      description: "Enable/disable block ACK requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-bye:
+                      description: "Enable/disable block BYE requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-cancel:
+                      description: "Enable/disable block CANCEL requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-geo-red-options:
+                      description: "Enable/disable block OPTIONS requests, but OPTIONS\
+                        \ requests still notify for redundancy.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-info:
+                      description: "Enable/disable block INFO requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-invite:
+                      description: "Enable/disable block INVITE requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-long-lines:
+                      description: "Enable/disable block requests with headers exceeding\
+                        \ max-line-length.   \ndisable:Disable status.   \nenable:Enable\
+                        \ status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-message:
+                      description: "Enable/disable block MESSAGE requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-notify:
+                      description: "Enable/disable block NOTIFY requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-options:
+                      description: "Enable/disable block OPTIONS requests and no OPTIONS\
+                        \ as notifying message for redundancy either.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-prack:
+                      description: "Enable/disable block prack requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-publish:
+                      description: "Enable/disable block PUBLISH requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-refer:
+                      description: "Enable/disable block REFER requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-register:
+                      description: "Enable/disable block REGISTER requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-subscribe:
+                      description: "Enable/disable block SUBSCRIBE requests.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-unknown:
+                      description: "Block unrecognized SIP requests (enabled by default).\
+                        \   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    block-update:
+                      description: "Enable/disable block UPDATE requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    bye-rate:
+                      description: BYE request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    call-keepalive:
+                      description: Continue tracking calls with no RTP for this many
+                        minutes.
+                      maximum: 10080
+                      minimum: 0
+                      type: integer
+                    cancel-rate:
+                      description: CANCEL request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    contact-fixup:
+                      description: "Fixup contact anyway even if contact's IP:port\
+                        \ doesn't match session's IP:port.   \ndisable:Disable status.\
+                        \   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    hnt-restrict-source-ip:
+                      description: "Enable/disable restrict RTP source IP to be the\
+                        \ same as SIP source IP when HNT is enabled.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    hosted-nat-traversal:
+                      description: "Hosted NAT Traversal (HNT).   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    info-rate:
+                      description: INFO request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    invite-rate:
+                      description: INVITE request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    ips-rtp:
+                      description: "Enable/disable allow IPS on RTP.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    log-call-summary:
+                      description: "Enable/disable logging of SIP call summary.  \
+                        \ \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    log-violations:
+                      description: "Enable/disable logging of SIP violations.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    malformed-header-allow:
+                      description: "Action for malformed Allow header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-call-id:
+                      description: "Action for malformed Call-ID header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-contact:
+                      description: "Action for malformed Contact header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-content-length:
+                      description: "Action for malformed Content-Length header.  \
+                        \ \ndiscard:Discard malformed messages.   \npass:Bypass malformed\
+                        \ messages.   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-content-type:
+                      description: "Action for malformed Content-Type header.   \n\
+                        discard:Discard malformed messages.   \npass:Bypass malformed\
+                        \ messages.   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-cseq:
+                      description: "Action for malformed CSeq header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-expires:
+                      description: "Action for malformed Expires header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-from:
+                      description: "Action for malformed From header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-max-forwards:
+                      description: "Action for malformed Max-Forwards header.   \n\
+                        discard:Discard malformed messages.   \npass:Bypass malformed\
+                        \ messages.   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-p-asserted-identity:
+                      description: "Action for malformed P-Asserted-Identity header.\
+                        \   \ndiscard:Discard malformed messages.   \npass:Bypass\
+                        \ malformed messages.   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-rack:
+                      description: "Action for malformed RAck header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-record-route:
+                      description: "Action for malformed Record-Route header.   \n\
+                        discard:Discard malformed messages.   \npass:Bypass malformed\
+                        \ messages.   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-route:
+                      description: "Action for malformed Route header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-rseq:
+                      description: "Action for malformed RSeq header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-a:
+                      description: "Action for malformed SDP a line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-b:
+                      description: "Action for malformed SDP b line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-c:
+                      description: "Action for malformed SDP c line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-i:
+                      description: "Action for malformed SDP i line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-k:
+                      description: "Action for malformed SDP k line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-m:
+                      description: "Action for malformed SDP m line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-o:
+                      description: "Action for malformed SDP o line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-r:
+                      description: "Action for malformed SDP r line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-s:
+                      description: "Action for malformed SDP s line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-t:
+                      description: "Action for malformed SDP t line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-v:
+                      description: "Action for malformed SDP v line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-sdp-z:
+                      description: "Action for malformed SDP z line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-to:
+                      description: "Action for malformed To header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-header-via:
+                      description: "Action for malformed VIA header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    malformed-request-line:
+                      description: "Action for malformed request line.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    max-body-length:
+                      description: Maximum SIP message body length (0 meaning no limit).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    max-dialogs:
+                      description: Maximum number of concurrent calls/dialogs (per
+                        policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    max-idle-dialogs:
+                      description: Maximum number established but idle dialogs to
+                        retain (per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    max-line-length:
+                      description: Maximum SIP header line length (78-4096).
+                      maximum: 4096
+                      minimum: 78
+                      type: integer
+                    message-rate:
+                      description: MESSAGE request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    nat-port-range:
+                      description: RTP NAT port range.
+                      type: string
+                    nat-trace:
+                      description: "Enable/disable preservation of original IP in\
+                        \ SDP i line.   \ndisable:Disable status.   \nenable:Enable\
+                        \ status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    no-sdp-fixup:
+                      description: "Enable/disable no SDP fix-up.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    notify-rate:
+                      description: NOTIFY request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    open-contact-pinhole:
+                      description: "Enable/disable open pinhole for non-REGISTER Contact\
+                        \ port.   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    open-record-route-pinhole:
+                      description: "Enable/disable open pinhole for Record-Route port.\
+                        \   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    open-register-pinhole:
+                      description: "Enable/disable open pinhole for REGISTER Contact\
+                        \ port.   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    open-via-pinhole:
+                      description: "Enable/disable open pinhole for Via port.   \n\
+                        disable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    options-rate:
+                      description: OPTIONS request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    prack-rate:
+                      description: PRACK request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    preserve-override:
+                      description: "Override i line to preserve original IPS (default:\
+                        \ append).   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    provisional-invite-expiry-time:
+                      description: Expiry time for provisional INVITE (10 - 3600 sec).
+                      maximum: 3600
+                      minimum: 10
+                      type: integer
+                    publish-rate:
+                      description: PUBLISH request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    refer-rate:
+                      description: REFER request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    register-contact-trace:
+                      description: "Enable/disable trace original IP/port within the\
+                        \ contact header of REGISTER requests.   \ndisable:Disable\
+                        \ status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    register-rate:
+                      description: REGISTER request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    rfc2543-branch:
+                      description: "Enable/disable support via branch compliant with\
+                        \ RFC 2543.   \ndisable:Disable status.   \nenable:Enable\
+                        \ status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    rtp:
+                      description: "Enable/disable create pinholes for RTP traffic\
+                        \ to traverse firewall.   \ndisable:Disable status.   \nenable:Enable\
+                        \ status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    ssl-algorithm:
+                      description: "Relative strength of encryption algorithms accepted\
+                        \ in negotiation.   \nhigh:High encryption. Allow only AES\
+                        \ and ChaCha.   \nmedium:Medium encryption. Allow AES, ChaCha,\
+                        \ 3DES, and RC4.   \nlow:Low encryption. Allow AES, ChaCha,\
+                        \ 3DES, RC4, and DES."
+                      enum:
+                      - high
+                      - medium
+                      - low
+                      type: string
+                    ssl-auth-client:
+                      description: Require a client certificate and authenticate it
+                        with the peer/peergrp.
+                      maxLength: 35
+                      type: string
+                    ssl-auth-server:
+                      description: Authenticate the server's certificate with the
+                        peer/peergrp.
+                      maxLength: 35
+                      type: string
+                    ssl-client-certificate:
+                      description: Name of Certificate to offer to server if requested.
+                      maxLength: 35
+                      type: string
+                    ssl-client-renegotiation:
+                      description: "Allow/block client renegotiation by server.  \
+                        \ \nallow:Allow a SSL client to renegotiate.   \ndeny:Abort\
+                        \ any SSL connection that attempts to renegotiate.   \nsecure:Reject\
+                        \ any SSL connection that does not offer a RFC 5746 Secure\
+                        \ Renegotiation Indication."
+                      enum:
+                      - allow
+                      - deny
+                      - secure
+                      type: string
+                    ssl-max-version:
+                      description: "Highest SSL/TLS version to negotiate.   \nssl-3.0:SSL\
+                        \ 3.0.   \ntls-1.0:TLS 1.0.   \ntls-1.1:TLS 1.1.   \ntls-1.2:TLS\
+                        \ 1.2.   \ntls-1.3:TLS 1.3."
+                      enum:
+                      - ssl-3.0
+                      - tls-1.0
+                      - tls-1.1
+                      - tls-1.2
+                      - tls-1.3
+                      type: string
+                    ssl-min-version:
+                      description: "Lowest SSL/TLS version to negotiate.   \nssl-3.0:SSL\
+                        \ 3.0.   \ntls-1.0:TLS 1.0.   \ntls-1.1:TLS 1.1.   \ntls-1.2:TLS\
+                        \ 1.2.   \ntls-1.3:TLS 1.3."
+                      enum:
+                      - ssl-3.0
+                      - tls-1.0
+                      - tls-1.1
+                      - tls-1.2
+                      - tls-1.3
+                      type: string
+                    ssl-mode:
+                      description: "SSL/TLS mode for encryption & decryption of traffic.\
+                        \   \noff:No SSL.   \nfull:Client to FortiGate and FortiGate\
+                        \ to Server SSL."
+                      enum:
+                      - 'off'
+                      - full
+                      type: string
+                    ssl-pfs:
+                      description: "SSL Perfect Forward Secrecy.   \nrequire:PFS mandatory.\
+                        \   \ndeny:PFS rejected.   \nallow:PFS allowed."
+                      enum:
+                      - require
+                      - deny
+                      - allow
+                      type: string
+                    ssl-send-empty-frags:
+                      description: "Send empty fragments to avoid attack on CBC IV\
+                        \ (SSL 3.0 & TLS 1.0 only).   \nenable:Send empty fragments.\
+                        \   \ndisable:Do not send empty fragments."
+                      enum:
+                      - enable
+                      - disable
+                      type: string
+                    ssl-server-certificate:
+                      description: Name of Certificate return to the client in every
+                        SSL connection.
+                      maxLength: 35
+                      type: string
+                    status:
+                      description: "Enable/disable SIP.   \ndisable:Disable status.\
+                        \   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    strict-register:
+                      description: "Enable/disable only allow the registrar to connect.\
+                        \   \ndisable:Disable status.   \nenable:Enable status."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    subscribe-rate:
+                      description: SUBSCRIBE request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    unknown-header:
+                      description: "Action for unknown SIP header.   \ndiscard:Discard\
+                        \ malformed messages.   \npass:Bypass malformed messages.\
+                        \   \nrespond:Respond with error code."
+                      enum:
+                      - discard
+                      - pass
+                      - respond
+                      type: string
+                    update-rate:
+                      description: UPDATE request rate limit (per second, per policy).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                  type: object
+                maxItems: null
+                type: array
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - voip/profile
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            comment:
+              description: Comment.
+              maxLength: 255
+              type: string
+            name:
+              description: Profile name.
+              maxLength: 35
+              type: string
+            sccp:
+              description: SCCP.
+              items:
+                properties:
+                  block-mcast:
+                    description: "Enable/disable block multicast RTP connections.\
+                      \   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  log-call-summary:
+                    description: "Enable/disable log summary of SCCP calls.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  log-violations:
+                    description: "Enable/disable logging of SCCP violations.   \n\
+                      disable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  max-calls:
+                    description: Maximum calls per minute per SCCP client (max 65535).
+                    maximum: 65535
+                    minimum: 0
+                    type: integer
+                  status:
+                    description: "Enable/disable SCCP.   \ndisable:Disable status.\
+                      \   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  verify-header:
+                    description: "Enable/disable verify SCCP header content.   \n\
+                      disable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            sip:
+              description: SIP.
+              items:
+                properties:
+                  ack-rate:
+                    description: ACK request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  block-ack:
+                    description: "Enable/disable block ACK requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-bye:
+                    description: "Enable/disable block BYE requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-cancel:
+                    description: "Enable/disable block CANCEL requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-geo-red-options:
+                    description: "Enable/disable block OPTIONS requests, but OPTIONS\
+                      \ requests still notify for redundancy.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-info:
+                    description: "Enable/disable block INFO requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-invite:
+                    description: "Enable/disable block INVITE requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-long-lines:
+                    description: "Enable/disable block requests with headers exceeding\
+                      \ max-line-length.   \ndisable:Disable status.   \nenable:Enable\
+                      \ status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-message:
+                    description: "Enable/disable block MESSAGE requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-notify:
+                    description: "Enable/disable block NOTIFY requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-options:
+                    description: "Enable/disable block OPTIONS requests and no OPTIONS\
+                      \ as notifying message for redundancy either.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-prack:
+                    description: "Enable/disable block prack requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-publish:
+                    description: "Enable/disable block PUBLISH requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-refer:
+                    description: "Enable/disable block REFER requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-register:
+                    description: "Enable/disable block REGISTER requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-subscribe:
+                    description: "Enable/disable block SUBSCRIBE requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-unknown:
+                    description: "Block unrecognized SIP requests (enabled by default).\
+                      \   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  block-update:
+                    description: "Enable/disable block UPDATE requests.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  bye-rate:
+                    description: BYE request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  call-keepalive:
+                    description: Continue tracking calls with no RTP for this many
+                      minutes.
+                    maximum: 10080
+                    minimum: 0
+                    type: integer
+                  cancel-rate:
+                    description: CANCEL request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  contact-fixup:
+                    description: "Fixup contact anyway even if contact's IP:port doesn't\
+                      \ match session's IP:port.   \ndisable:Disable status.   \n\
+                      enable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  hnt-restrict-source-ip:
+                    description: "Enable/disable restrict RTP source IP to be the\
+                      \ same as SIP source IP when HNT is enabled.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  hosted-nat-traversal:
+                    description: "Hosted NAT Traversal (HNT).   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  info-rate:
+                    description: INFO request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  invite-rate:
+                    description: INVITE request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  ips-rtp:
+                    description: "Enable/disable allow IPS on RTP.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  log-call-summary:
+                    description: "Enable/disable logging of SIP call summary.   \n\
+                      disable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  log-violations:
+                    description: "Enable/disable logging of SIP violations.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  malformed-header-allow:
+                    description: "Action for malformed Allow header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-call-id:
+                    description: "Action for malformed Call-ID header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-contact:
+                    description: "Action for malformed Contact header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-content-length:
+                    description: "Action for malformed Content-Length header.   \n\
+                      discard:Discard malformed messages.   \npass:Bypass malformed\
+                      \ messages.   \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-content-type:
+                    description: "Action for malformed Content-Type header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-cseq:
+                    description: "Action for malformed CSeq header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-expires:
+                    description: "Action for malformed Expires header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-from:
+                    description: "Action for malformed From header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-max-forwards:
+                    description: "Action for malformed Max-Forwards header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-p-asserted-identity:
+                    description: "Action for malformed P-Asserted-Identity header.\
+                      \   \ndiscard:Discard malformed messages.   \npass:Bypass malformed\
+                      \ messages.   \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-rack:
+                    description: "Action for malformed RAck header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-record-route:
+                    description: "Action for malformed Record-Route header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-route:
+                    description: "Action for malformed Route header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-rseq:
+                    description: "Action for malformed RSeq header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-a:
+                    description: "Action for malformed SDP a line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-b:
+                    description: "Action for malformed SDP b line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-c:
+                    description: "Action for malformed SDP c line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-i:
+                    description: "Action for malformed SDP i line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-k:
+                    description: "Action for malformed SDP k line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-m:
+                    description: "Action for malformed SDP m line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-o:
+                    description: "Action for malformed SDP o line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-r:
+                    description: "Action for malformed SDP r line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-s:
+                    description: "Action for malformed SDP s line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-t:
+                    description: "Action for malformed SDP t line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-v:
+                    description: "Action for malformed SDP v line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-sdp-z:
+                    description: "Action for malformed SDP z line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-to:
+                    description: "Action for malformed To header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-header-via:
+                    description: "Action for malformed VIA header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  malformed-request-line:
+                    description: "Action for malformed request line.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  max-body-length:
+                    description: Maximum SIP message body length (0 meaning no limit).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  max-dialogs:
+                    description: Maximum number of concurrent calls/dialogs (per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  max-idle-dialogs:
+                    description: Maximum number established but idle dialogs to retain
+                      (per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  max-line-length:
+                    description: Maximum SIP header line length (78-4096).
+                    maximum: 4096
+                    minimum: 78
+                    type: integer
+                  message-rate:
+                    description: MESSAGE request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  nat-port-range:
+                    description: RTP NAT port range.
+                    type: string
+                  nat-trace:
+                    description: "Enable/disable preservation of original IP in SDP\
+                      \ i line.   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  no-sdp-fixup:
+                    description: "Enable/disable no SDP fix-up.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  notify-rate:
+                    description: NOTIFY request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  open-contact-pinhole:
+                    description: "Enable/disable open pinhole for non-REGISTER Contact\
+                      \ port.   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  open-record-route-pinhole:
+                    description: "Enable/disable open pinhole for Record-Route port.\
+                      \   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  open-register-pinhole:
+                    description: "Enable/disable open pinhole for REGISTER Contact\
+                      \ port.   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  open-via-pinhole:
+                    description: "Enable/disable open pinhole for Via port.   \ndisable:Disable\
+                      \ status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  options-rate:
+                    description: OPTIONS request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  prack-rate:
+                    description: PRACK request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  preserve-override:
+                    description: "Override i line to preserve original IPS (default:\
+                      \ append).   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  provisional-invite-expiry-time:
+                    description: Expiry time for provisional INVITE (10 - 3600 sec).
+                    maximum: 3600
+                    minimum: 10
+                    type: integer
+                  publish-rate:
+                    description: PUBLISH request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  refer-rate:
+                    description: REFER request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  register-contact-trace:
+                    description: "Enable/disable trace original IP/port within the\
+                      \ contact header of REGISTER requests.   \ndisable:Disable status.\
+                      \   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  register-rate:
+                    description: REGISTER request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  rfc2543-branch:
+                    description: "Enable/disable support via branch compliant with\
+                      \ RFC 2543.   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  rtp:
+                    description: "Enable/disable create pinholes for RTP traffic to\
+                      \ traverse firewall.   \ndisable:Disable status.   \nenable:Enable\
+                      \ status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  ssl-algorithm:
+                    description: "Relative strength of encryption algorithms accepted\
+                      \ in negotiation.   \nhigh:High encryption. Allow only AES and\
+                      \ ChaCha.   \nmedium:Medium encryption. Allow AES, ChaCha, 3DES,\
+                      \ and RC4.   \nlow:Low encryption. Allow AES, ChaCha, 3DES,\
+                      \ RC4, and DES."
+                    enum:
+                    - high
+                    - medium
+                    - low
+                    type: string
+                  ssl-auth-client:
+                    description: Require a client certificate and authenticate it
+                      with the peer/peergrp.
+                    maxLength: 35
+                    type: string
+                  ssl-auth-server:
+                    description: Authenticate the server's certificate with the peer/peergrp.
+                    maxLength: 35
+                    type: string
+                  ssl-client-certificate:
+                    description: Name of Certificate to offer to server if requested.
+                    maxLength: 35
+                    type: string
+                  ssl-client-renegotiation:
+                    description: "Allow/block client renegotiation by server.   \n\
+                      allow:Allow a SSL client to renegotiate.   \ndeny:Abort any\
+                      \ SSL connection that attempts to renegotiate.   \nsecure:Reject\
+                      \ any SSL connection that does not offer a RFC 5746 Secure Renegotiation\
+                      \ Indication."
+                    enum:
+                    - allow
+                    - deny
+                    - secure
+                    type: string
+                  ssl-max-version:
+                    description: "Highest SSL/TLS version to negotiate.   \nssl-3.0:SSL\
+                      \ 3.0.   \ntls-1.0:TLS 1.0.   \ntls-1.1:TLS 1.1.   \ntls-1.2:TLS\
+                      \ 1.2.   \ntls-1.3:TLS 1.3."
+                    enum:
+                    - ssl-3.0
+                    - tls-1.0
+                    - tls-1.1
+                    - tls-1.2
+                    - tls-1.3
+                    type: string
+                  ssl-min-version:
+                    description: "Lowest SSL/TLS version to negotiate.   \nssl-3.0:SSL\
+                      \ 3.0.   \ntls-1.0:TLS 1.0.   \ntls-1.1:TLS 1.1.   \ntls-1.2:TLS\
+                      \ 1.2.   \ntls-1.3:TLS 1.3."
+                    enum:
+                    - ssl-3.0
+                    - tls-1.0
+                    - tls-1.1
+                    - tls-1.2
+                    - tls-1.3
+                    type: string
+                  ssl-mode:
+                    description: "SSL/TLS mode for encryption & decryption of traffic.\
+                      \   \noff:No SSL.   \nfull:Client to FortiGate and FortiGate\
+                      \ to Server SSL."
+                    enum:
+                    - 'off'
+                    - full
+                    type: string
+                  ssl-pfs:
+                    description: "SSL Perfect Forward Secrecy.   \nrequire:PFS mandatory.\
+                      \   \ndeny:PFS rejected.   \nallow:PFS allowed."
+                    enum:
+                    - require
+                    - deny
+                    - allow
+                    type: string
+                  ssl-send-empty-frags:
+                    description: "Send empty fragments to avoid attack on CBC IV (SSL\
+                      \ 3.0 & TLS 1.0 only).   \nenable:Send empty fragments.   \n\
+                      disable:Do not send empty fragments."
+                    enum:
+                    - enable
+                    - disable
+                    type: string
+                  ssl-server-certificate:
+                    description: Name of Certificate return to the client in every
+                      SSL connection.
+                    maxLength: 35
+                    type: string
+                  status:
+                    description: "Enable/disable SIP.   \ndisable:Disable status.\
+                      \   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  strict-register:
+                    description: "Enable/disable only allow the registrar to connect.\
+                      \   \ndisable:Disable status.   \nenable:Enable status."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  subscribe-rate:
+                    description: SUBSCRIBE request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  unknown-header:
+                    description: "Action for unknown SIP header.   \ndiscard:Discard\
+                      \ malformed messages.   \npass:Bypass malformed messages.  \
+                      \ \nrespond:Respond with error code."
+                    enum:
+                    - discard
+                    - pass
+                    - respond
+                    type: string
+                  update-rate:
+                    description: UPDATE request rate limit (per second, per policy).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+              maxItems: null
+              type: array
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - voip/profile
+produces:
+- application/json
+schemes:
+- https
+security:
+- APIKeyQueryParam: []
+securityDefinitions:
+  APIKeyQueryParam:
+    in: query
+    name: access_token
+    type: apiKey
+swagger: '2.0'
+tags:
+- description: Configure VoIP profiles.
+  name: voip/profile

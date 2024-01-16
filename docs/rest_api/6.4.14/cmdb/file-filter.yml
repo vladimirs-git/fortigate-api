@@ -1,0 +1,975 @@
+basePath: /api/v2/cmdb
+consumes:
+- application/json
+host: 172.16.177.65
+info:
+  contact:
+    email: fosguiqateam@fortinet.com
+    name: FortiOS Web Application Team
+    url: http://modskristensen.net
+  description: REST API for configuring FortiOS objects and settings
+  termsOfService: http://fortinet.com/terms/
+  title: FortiOS CMDB
+  version: v2
+paths:
+  /file-filter/profile:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              comment:
+                description: Comment.
+                maxLength: 255
+                type: string
+              extended-log:
+                description: "Enable/disable file-filter extended logging.   \ndisable:Disable\
+                  \ extended logging.   \nenable:Enable extended logging."
+                enum:
+                - disable
+                - enable
+                type: string
+              feature-set:
+                description: "Flow/proxy feature set.   \nflow:Flow feature set. \
+                  \  \nproxy:Proxy feature set."
+                enum:
+                - flow
+                - proxy
+                type: string
+              log:
+                description: "Enable/disable file-filter logging.   \ndisable:Disable\
+                  \ logging.   \nenable:Enable logging."
+                enum:
+                - disable
+                - enable
+                type: string
+              name:
+                description: Profile name.
+                maxLength: 35
+                type: string
+              replacemsg-group:
+                description: Replacement message group
+                maxLength: 35
+                type: string
+              rules:
+                description: File filter rules.
+                items:
+                  properties:
+                    action:
+                      description: "Action taken for matched file.   \nlog-only:Allow\
+                        \ the content and write a log message.   \nblock:Block the\
+                        \ content and write a log message."
+                      enum:
+                      - log-only
+                      - block
+                      type: string
+                    comment:
+                      description: Comment.
+                      maxLength: 255
+                      type: string
+                    direction:
+                      description: "Traffic direction. (HTTP, FTP, SSH, CIFS only)\
+                        \   \nincoming:Match files transmitted in the session's reply\
+                        \ direction.   \noutgoing:Match files transmitted in the session's\
+                        \ originating direction.   \nany:Match files transmitted in\
+                        \ the session's originating and reply directions."
+                      enum:
+                      - incoming
+                      - outgoing
+                      - any
+                      type: string
+                    file-type:
+                      description: Select file type.
+                      items:
+                        properties:
+                          name:
+                            description: File type name.
+                            maxLength: 39
+                            type: string
+                        type: object
+                      maxItems: null
+                      type: array
+                    name:
+                      description: File-filter rule name.
+                      maxLength: 35
+                      type: string
+                    password-protected:
+                      description: "Match password-protected files.   \nyes:Match\
+                        \ only password-protected files.   \nany:Match any file."
+                      enum:
+                      - 'yes'
+                      - any
+                      type: string
+                    protocol:
+                      description: "Protocols to apply rule to.   \nhttp:Filter on\
+                        \ HTTP.   \nftp:Filter on FTP.   \nsmtp:Filter on SMTP.  \
+                        \ \nimap:Filter on IMAP.   \npop3:Filter on POP3.   \nmapi:Filter\
+                        \ on MAPI. (Proxy mode only.)   \ncifs:Filter on CIFS.   \n\
+                        ssh:Filter on SFTP and SCP. (Proxy mode only.)"
+                      enum:
+                      - http
+                      - ftp
+                      - smtp
+                      - imap
+                      - pop3
+                      - mapi
+                      - cifs
+                      - ssh
+                      type: string
+                  type: object
+                maxItems: 2000
+                type: array
+              scan-archive-contents:
+                description: "Enable/disable archive contents scan. (Not for CIFS)\
+                  \   \ndisable:Disable scanning archive contents.   \nenable:Enable\
+                  \ scanning archive contents."
+                enum:
+                - disable
+                - enable
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - file-filter/profile
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            comment:
+              description: Comment.
+              maxLength: 255
+              type: string
+            extended-log:
+              description: "Enable/disable file-filter extended logging.   \ndisable:Disable\
+                \ extended logging.   \nenable:Enable extended logging."
+              enum:
+              - disable
+              - enable
+              type: string
+            feature-set:
+              description: "Flow/proxy feature set.   \nflow:Flow feature set.   \n\
+                proxy:Proxy feature set."
+              enum:
+              - flow
+              - proxy
+              type: string
+            log:
+              description: "Enable/disable file-filter logging.   \ndisable:Disable\
+                \ logging.   \nenable:Enable logging."
+              enum:
+              - disable
+              - enable
+              type: string
+            name:
+              description: Profile name.
+              maxLength: 35
+              type: string
+            replacemsg-group:
+              description: Replacement message group
+              maxLength: 35
+              type: string
+            rules:
+              description: File filter rules.
+              items:
+                properties:
+                  action:
+                    description: "Action taken for matched file.   \nlog-only:Allow\
+                      \ the content and write a log message.   \nblock:Block the content\
+                      \ and write a log message."
+                    enum:
+                    - log-only
+                    - block
+                    type: string
+                  comment:
+                    description: Comment.
+                    maxLength: 255
+                    type: string
+                  direction:
+                    description: "Traffic direction. (HTTP, FTP, SSH, CIFS only) \
+                      \  \nincoming:Match files transmitted in the session's reply\
+                      \ direction.   \noutgoing:Match files transmitted in the session's\
+                      \ originating direction.   \nany:Match files transmitted in\
+                      \ the session's originating and reply directions."
+                    enum:
+                    - incoming
+                    - outgoing
+                    - any
+                    type: string
+                  file-type:
+                    description: Select file type.
+                    items:
+                      properties:
+                        name:
+                          description: File type name.
+                          maxLength: 39
+                          type: string
+                      type: object
+                    maxItems: null
+                    type: array
+                  name:
+                    description: File-filter rule name.
+                    maxLength: 35
+                    type: string
+                  password-protected:
+                    description: "Match password-protected files.   \nyes:Match only\
+                      \ password-protected files.   \nany:Match any file."
+                    enum:
+                    - 'yes'
+                    - any
+                    type: string
+                  protocol:
+                    description: "Protocols to apply rule to.   \nhttp:Filter on HTTP.\
+                      \   \nftp:Filter on FTP.   \nsmtp:Filter on SMTP.   \nimap:Filter\
+                      \ on IMAP.   \npop3:Filter on POP3.   \nmapi:Filter on MAPI.\
+                      \ (Proxy mode only.)   \ncifs:Filter on CIFS.   \nssh:Filter\
+                      \ on SFTP and SCP. (Proxy mode only.)"
+                    enum:
+                    - http
+                    - ftp
+                    - smtp
+                    - imap
+                    - pop3
+                    - mapi
+                    - cifs
+                    - ssh
+                    type: string
+                type: object
+              maxItems: 2000
+              type: array
+            scan-archive-contents:
+              description: "Enable/disable archive contents scan. (Not for CIFS) \
+                \  \ndisable:Disable scanning archive contents.   \nenable:Enable\
+                \ scanning archive contents."
+              enum:
+              - disable
+              - enable
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - file-filter/profile
+  /file-filter/profile/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - file-filter/profile
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              comment:
+                description: Comment.
+                maxLength: 255
+                type: string
+              extended-log:
+                description: "Enable/disable file-filter extended logging.   \ndisable:Disable\
+                  \ extended logging.   \nenable:Enable extended logging."
+                enum:
+                - disable
+                - enable
+                type: string
+              feature-set:
+                description: "Flow/proxy feature set.   \nflow:Flow feature set. \
+                  \  \nproxy:Proxy feature set."
+                enum:
+                - flow
+                - proxy
+                type: string
+              log:
+                description: "Enable/disable file-filter logging.   \ndisable:Disable\
+                  \ logging.   \nenable:Enable logging."
+                enum:
+                - disable
+                - enable
+                type: string
+              name:
+                description: Profile name.
+                maxLength: 35
+                type: string
+              replacemsg-group:
+                description: Replacement message group
+                maxLength: 35
+                type: string
+              rules:
+                description: File filter rules.
+                items:
+                  properties:
+                    action:
+                      description: "Action taken for matched file.   \nlog-only:Allow\
+                        \ the content and write a log message.   \nblock:Block the\
+                        \ content and write a log message."
+                      enum:
+                      - log-only
+                      - block
+                      type: string
+                    comment:
+                      description: Comment.
+                      maxLength: 255
+                      type: string
+                    direction:
+                      description: "Traffic direction. (HTTP, FTP, SSH, CIFS only)\
+                        \   \nincoming:Match files transmitted in the session's reply\
+                        \ direction.   \noutgoing:Match files transmitted in the session's\
+                        \ originating direction.   \nany:Match files transmitted in\
+                        \ the session's originating and reply directions."
+                      enum:
+                      - incoming
+                      - outgoing
+                      - any
+                      type: string
+                    file-type:
+                      description: Select file type.
+                      items:
+                        properties:
+                          name:
+                            description: File type name.
+                            maxLength: 39
+                            type: string
+                        type: object
+                      maxItems: null
+                      type: array
+                    name:
+                      description: File-filter rule name.
+                      maxLength: 35
+                      type: string
+                    password-protected:
+                      description: "Match password-protected files.   \nyes:Match\
+                        \ only password-protected files.   \nany:Match any file."
+                      enum:
+                      - 'yes'
+                      - any
+                      type: string
+                    protocol:
+                      description: "Protocols to apply rule to.   \nhttp:Filter on\
+                        \ HTTP.   \nftp:Filter on FTP.   \nsmtp:Filter on SMTP.  \
+                        \ \nimap:Filter on IMAP.   \npop3:Filter on POP3.   \nmapi:Filter\
+                        \ on MAPI. (Proxy mode only.)   \ncifs:Filter on CIFS.   \n\
+                        ssh:Filter on SFTP and SCP. (Proxy mode only.)"
+                      enum:
+                      - http
+                      - ftp
+                      - smtp
+                      - imap
+                      - pop3
+                      - mapi
+                      - cifs
+                      - ssh
+                      type: string
+                  type: object
+                maxItems: 2000
+                type: array
+              scan-archive-contents:
+                description: "Enable/disable archive contents scan. (Not for CIFS)\
+                  \   \ndisable:Disable scanning archive contents.   \nenable:Enable\
+                  \ scanning archive contents."
+                enum:
+                - disable
+                - enable
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - file-filter/profile
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            comment:
+              description: Comment.
+              maxLength: 255
+              type: string
+            extended-log:
+              description: "Enable/disable file-filter extended logging.   \ndisable:Disable\
+                \ extended logging.   \nenable:Enable extended logging."
+              enum:
+              - disable
+              - enable
+              type: string
+            feature-set:
+              description: "Flow/proxy feature set.   \nflow:Flow feature set.   \n\
+                proxy:Proxy feature set."
+              enum:
+              - flow
+              - proxy
+              type: string
+            log:
+              description: "Enable/disable file-filter logging.   \ndisable:Disable\
+                \ logging.   \nenable:Enable logging."
+              enum:
+              - disable
+              - enable
+              type: string
+            name:
+              description: Profile name.
+              maxLength: 35
+              type: string
+            replacemsg-group:
+              description: Replacement message group
+              maxLength: 35
+              type: string
+            rules:
+              description: File filter rules.
+              items:
+                properties:
+                  action:
+                    description: "Action taken for matched file.   \nlog-only:Allow\
+                      \ the content and write a log message.   \nblock:Block the content\
+                      \ and write a log message."
+                    enum:
+                    - log-only
+                    - block
+                    type: string
+                  comment:
+                    description: Comment.
+                    maxLength: 255
+                    type: string
+                  direction:
+                    description: "Traffic direction. (HTTP, FTP, SSH, CIFS only) \
+                      \  \nincoming:Match files transmitted in the session's reply\
+                      \ direction.   \noutgoing:Match files transmitted in the session's\
+                      \ originating direction.   \nany:Match files transmitted in\
+                      \ the session's originating and reply directions."
+                    enum:
+                    - incoming
+                    - outgoing
+                    - any
+                    type: string
+                  file-type:
+                    description: Select file type.
+                    items:
+                      properties:
+                        name:
+                          description: File type name.
+                          maxLength: 39
+                          type: string
+                      type: object
+                    maxItems: null
+                    type: array
+                  name:
+                    description: File-filter rule name.
+                    maxLength: 35
+                    type: string
+                  password-protected:
+                    description: "Match password-protected files.   \nyes:Match only\
+                      \ password-protected files.   \nany:Match any file."
+                    enum:
+                    - 'yes'
+                    - any
+                    type: string
+                  protocol:
+                    description: "Protocols to apply rule to.   \nhttp:Filter on HTTP.\
+                      \   \nftp:Filter on FTP.   \nsmtp:Filter on SMTP.   \nimap:Filter\
+                      \ on IMAP.   \npop3:Filter on POP3.   \nmapi:Filter on MAPI.\
+                      \ (Proxy mode only.)   \ncifs:Filter on CIFS.   \nssh:Filter\
+                      \ on SFTP and SCP. (Proxy mode only.)"
+                    enum:
+                    - http
+                    - ftp
+                    - smtp
+                    - imap
+                    - pop3
+                    - mapi
+                    - cifs
+                    - ssh
+                    type: string
+                type: object
+              maxItems: 2000
+              type: array
+            scan-archive-contents:
+              description: "Enable/disable archive contents scan. (Not for CIFS) \
+                \  \ndisable:Disable scanning archive contents.   \nenable:Enable\
+                \ scanning archive contents."
+              enum:
+              - disable
+              - enable
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - file-filter/profile
+produces:
+- application/json
+schemes:
+- https
+security:
+- APIKeyQueryParam: []
+securityDefinitions:
+  APIKeyQueryParam:
+    in: query
+    name: access_token
+    type: apiKey
+swagger: '2.0'
+tags:
+- description: Configure file-filter profiles.
+  name: file-filter/profile

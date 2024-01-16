@@ -1,0 +1,1703 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "termsOfService": "http:\/\/fortinet.com\/terms\/",
+        "version": "v2",
+        "contact": {
+            "url": "http:\/\/modskristensen.net",
+            "name": "FortiOS Web Application Team",
+            "email": "fosguiqateam@fortinet.com"
+        },
+        "description": "REST API for configuring FortiOS objects and settings",
+        "title": "FortiOS CMDB"
+    },
+    "host": "172.16.177.65",
+    "basePath": "\/api\/v2\/cmdb",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application\/json"
+    ],
+    "produces": [
+        "application\/json"
+    ],
+    "securityDefinitions": {
+        "APIKeyQueryParam": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query"
+        }
+    },
+    "security": [
+        {
+            "APIKeyQueryParam": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "certificate\/ca",
+            "description": "CA certificate."
+        },
+        {
+            "name": "certificate\/crl",
+            "description": "Certificate Revocation List as a PEM file."
+        },
+        {
+            "name": "certificate\/local",
+            "description": "Local keys and certificates."
+        },
+        {
+            "name": "certificate\/remote",
+            "description": "Remote certificate as a PEM file."
+        }
+    ],
+    "paths": {
+        "\/certificate\/ca\/{name}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: vpngrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name.",
+                                    "maxLength": 79
+                                },
+                                "ca": {
+                                    "type": "string",
+                                    "description": "CA certificate as a PEM file."
+                                },
+                                "range": {
+                                    "type": "string",
+                                    "description": "Either global or VDOM IP address range for the CA certificate.   \nglobal:Global range.   \nvdom:VDOM IP address range.",
+                                    "enum": [
+                                        "global",
+                                        "vdom"
+                                    ]
+                                },
+                                "source": {
+                                    "type": "string",
+                                    "description": "CA certificate source type.   \nfactory:Factory installed certificate.   \nuser:User generated certificate.   \nbundle:Bundle file certificate.",
+                                    "enum": [
+                                        "factory",
+                                        "user",
+                                        "bundle"
+                                    ]
+                                },
+                                "ssl-inspection-trusted": {
+                                    "type": "string",
+                                    "description": "Enable\/disable this CA as a trusted CA for SSL inspection.   \nenable:Trusted CA for SSL inspection.   \ndisable:Untrusted CA for SSL inspection.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "scep-url": {
+                                    "type": "string",
+                                    "description": "URL of the SCEP server.",
+                                    "maxLength": 255
+                                },
+                                "auto-update-days": {
+                                    "type": "integer",
+                                    "description": "Number of days to wait before requesting an updated CA certificate (0 - 4294967295, 0 = disabled).",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "auto-update-days-warning": {
+                                    "type": "integer",
+                                    "description": "Number of days before an expiry-warning message is generated (0 - 4294967295, 0 = disabled).",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "source-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Source IP address for communications to the SCEP server."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "certificate\/ca"
+                ]
+            }
+        },
+        "\/certificate\/ca": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: vpngrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name.",
+                                    "maxLength": 79
+                                },
+                                "ca": {
+                                    "type": "string",
+                                    "description": "CA certificate as a PEM file."
+                                },
+                                "range": {
+                                    "type": "string",
+                                    "description": "Either global or VDOM IP address range for the CA certificate.   \nglobal:Global range.   \nvdom:VDOM IP address range.",
+                                    "enum": [
+                                        "global",
+                                        "vdom"
+                                    ]
+                                },
+                                "source": {
+                                    "type": "string",
+                                    "description": "CA certificate source type.   \nfactory:Factory installed certificate.   \nuser:User generated certificate.   \nbundle:Bundle file certificate.",
+                                    "enum": [
+                                        "factory",
+                                        "user",
+                                        "bundle"
+                                    ]
+                                },
+                                "ssl-inspection-trusted": {
+                                    "type": "string",
+                                    "description": "Enable\/disable this CA as a trusted CA for SSL inspection.   \nenable:Trusted CA for SSL inspection.   \ndisable:Untrusted CA for SSL inspection.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "scep-url": {
+                                    "type": "string",
+                                    "description": "URL of the SCEP server.",
+                                    "maxLength": 255
+                                },
+                                "auto-update-days": {
+                                    "type": "integer",
+                                    "description": "Number of days to wait before requesting an updated CA certificate (0 - 4294967295, 0 = disabled).",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "auto-update-days-warning": {
+                                    "type": "integer",
+                                    "description": "Number of days before an expiry-warning message is generated (0 - 4294967295, 0 = disabled).",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "source-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Source IP address for communications to the SCEP server."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "certificate\/ca"
+                ]
+            }
+        },
+        "\/certificate\/crl\/{name}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: vpngrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name.",
+                                    "maxLength": 35
+                                },
+                                "crl": {
+                                    "type": "string",
+                                    "description": "Certificate Revocation List as a PEM file."
+                                },
+                                "range": {
+                                    "type": "string",
+                                    "description": "Either global or VDOM IP address range for the certificate.   \nglobal:Global range.   \nvdom:VDOM IP address range.",
+                                    "enum": [
+                                        "global",
+                                        "vdom"
+                                    ]
+                                },
+                                "source": {
+                                    "type": "string",
+                                    "description": "Certificate source type.   \nfactory:Factory installed certificate.   \nuser:User generated certificate.   \nbundle:Bundle file certificate.",
+                                    "enum": [
+                                        "factory",
+                                        "user",
+                                        "bundle"
+                                    ]
+                                },
+                                "update-vdom": {
+                                    "type": "string",
+                                    "description": "VDOM for CRL update.",
+                                    "maxLength": 31
+                                },
+                                "ldap-server": {
+                                    "type": "string",
+                                    "description": "LDAP server name for CRL auto-update.",
+                                    "maxLength": 35
+                                },
+                                "ldap-username": {
+                                    "type": "string",
+                                    "description": "LDAP server user name.",
+                                    "maxLength": 63
+                                },
+                                "ldap-password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "LDAP server user password."
+                                },
+                                "http-url": {
+                                    "type": "string",
+                                    "description": "HTTP server URL for CRL auto-update.",
+                                    "maxLength": 255
+                                },
+                                "scep-url": {
+                                    "type": "string",
+                                    "description": "SCEP server URL for CRL auto-update.",
+                                    "maxLength": 255
+                                },
+                                "scep-cert": {
+                                    "type": "string",
+                                    "description": "Local certificate for SCEP communication for CRL auto-update.",
+                                    "maxLength": 35
+                                },
+                                "update-interval": {
+                                    "type": "integer",
+                                    "description": "Time in seconds before the FortiGate checks for an updated CRL. Set to 0 to update only when it expires.",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "source-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Source IP address for communications to a HTTP or SCEP CA server."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "certificate\/crl"
+                ]
+            }
+        },
+        "\/certificate\/crl": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: vpngrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name.",
+                                    "maxLength": 35
+                                },
+                                "crl": {
+                                    "type": "string",
+                                    "description": "Certificate Revocation List as a PEM file."
+                                },
+                                "range": {
+                                    "type": "string",
+                                    "description": "Either global or VDOM IP address range for the certificate.   \nglobal:Global range.   \nvdom:VDOM IP address range.",
+                                    "enum": [
+                                        "global",
+                                        "vdom"
+                                    ]
+                                },
+                                "source": {
+                                    "type": "string",
+                                    "description": "Certificate source type.   \nfactory:Factory installed certificate.   \nuser:User generated certificate.   \nbundle:Bundle file certificate.",
+                                    "enum": [
+                                        "factory",
+                                        "user",
+                                        "bundle"
+                                    ]
+                                },
+                                "update-vdom": {
+                                    "type": "string",
+                                    "description": "VDOM for CRL update.",
+                                    "maxLength": 31
+                                },
+                                "ldap-server": {
+                                    "type": "string",
+                                    "description": "LDAP server name for CRL auto-update.",
+                                    "maxLength": 35
+                                },
+                                "ldap-username": {
+                                    "type": "string",
+                                    "description": "LDAP server user name.",
+                                    "maxLength": 63
+                                },
+                                "ldap-password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "LDAP server user password."
+                                },
+                                "http-url": {
+                                    "type": "string",
+                                    "description": "HTTP server URL for CRL auto-update.",
+                                    "maxLength": 255
+                                },
+                                "scep-url": {
+                                    "type": "string",
+                                    "description": "SCEP server URL for CRL auto-update.",
+                                    "maxLength": 255
+                                },
+                                "scep-cert": {
+                                    "type": "string",
+                                    "description": "Local certificate for SCEP communication for CRL auto-update.",
+                                    "maxLength": 35
+                                },
+                                "update-interval": {
+                                    "type": "integer",
+                                    "description": "Time in seconds before the FortiGate checks for an updated CRL. Set to 0 to update only when it expires.",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "source-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Source IP address for communications to a HTTP or SCEP CA server."
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "certificate\/crl"
+                ]
+            }
+        },
+        "\/certificate\/local\/{name}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: vpngrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name.",
+                                    "maxLength": 35
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "Password as a PEM file."
+                                },
+                                "comments": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 511
+                                },
+                                "private-key": {
+                                    "type": "string",
+                                    "description": "PEM format key, encrypted with a password."
+                                },
+                                "certificate": {
+                                    "type": "string",
+                                    "description": "PEM format certificate."
+                                },
+                                "csr": {
+                                    "type": "string",
+                                    "description": "Certificate Signing Request."
+                                },
+                                "state": {
+                                    "type": "string",
+                                    "description": "Certificate Signing Request State."
+                                },
+                                "scep-url": {
+                                    "type": "string",
+                                    "description": "SCEP server URL.",
+                                    "maxLength": 255
+                                },
+                                "range": {
+                                    "type": "string",
+                                    "description": "Either a global or VDOM IP address range for the certificate.   \nglobal:Global range.   \nvdom:VDOM IP address range.",
+                                    "enum": [
+                                        "global",
+                                        "vdom"
+                                    ]
+                                },
+                                "source": {
+                                    "type": "string",
+                                    "description": "Certificate source type.   \nfactory:Factory installed certificate.   \nuser:User generated certificate.   \nbundle:Bundle file certificate.",
+                                    "enum": [
+                                        "factory",
+                                        "user",
+                                        "bundle"
+                                    ]
+                                },
+                                "auto-regenerate-days": {
+                                    "type": "integer",
+                                    "description": "Number of days to wait before expiry of an updated local certificate is requested (0 = disabled).",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "auto-regenerate-days-warning": {
+                                    "type": "integer",
+                                    "description": "Number of days to wait before an expiry warning message is generated (0 = disabled).",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "scep-password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "SCEP server challenge password for auto-regeneration."
+                                },
+                                "ca-identifier": {
+                                    "type": "string",
+                                    "description": "CA identifier of the CA server for signing via SCEP.",
+                                    "maxLength": 255
+                                },
+                                "name-encoding": {
+                                    "type": "string",
+                                    "description": "Name encoding method for auto-regeneration.   \nprintable:Printable encoding (default).   \nutf8:UTF-8 encoding.",
+                                    "enum": [
+                                        "printable",
+                                        "utf8"
+                                    ]
+                                },
+                                "source-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Source IP address for communications to the SCEP server."
+                                },
+                                "ike-localid": {
+                                    "type": "string",
+                                    "description": "Local ID the FortiGate uses for authentication as a VPN client.",
+                                    "maxLength": 63
+                                },
+                                "ike-localid-type": {
+                                    "type": "string",
+                                    "description": "IKE local ID type.   \nasn1dn:ASN.1 distinguished name.   \nfqdn:Fully qualified domain name.",
+                                    "enum": [
+                                        "asn1dn",
+                                        "fqdn"
+                                    ]
+                                },
+                                "enroll-protocol": {
+                                    "type": "string",
+                                    "description": "Certificate enrollment protocol.   \nnone:None (default).   \nscep:Simple Certificate Enrollment Protocol.   \ncmpv2:Certificate Management Protocol Version 2.",
+                                    "enum": [
+                                        "none",
+                                        "scep",
+                                        "cmpv2"
+                                    ]
+                                },
+                                "cmp-server": {
+                                    "type": "string",
+                                    "description": "'ADDRESS:PORT' for CMP server.",
+                                    "maxLength": 63
+                                },
+                                "cmp-path": {
+                                    "type": "string",
+                                    "description": "Path location inside CMP server.",
+                                    "maxLength": 255
+                                },
+                                "cmp-server-cert": {
+                                    "type": "string",
+                                    "description": "CMP server certificate.",
+                                    "maxLength": 79
+                                },
+                                "cmp-regeneration-method": {
+                                    "type": "string",
+                                    "description": "CMP auto-regeneration method.   \nkeyupate:Key Update.   \nrenewal:Renewal.",
+                                    "enum": [
+                                        "keyupate",
+                                        "renewal"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "certificate\/local"
+                ]
+            }
+        },
+        "\/certificate\/local": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: vpngrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name.",
+                                    "maxLength": 35
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "Password as a PEM file."
+                                },
+                                "comments": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 511
+                                },
+                                "private-key": {
+                                    "type": "string",
+                                    "description": "PEM format key, encrypted with a password."
+                                },
+                                "certificate": {
+                                    "type": "string",
+                                    "description": "PEM format certificate."
+                                },
+                                "csr": {
+                                    "type": "string",
+                                    "description": "Certificate Signing Request."
+                                },
+                                "state": {
+                                    "type": "string",
+                                    "description": "Certificate Signing Request State."
+                                },
+                                "scep-url": {
+                                    "type": "string",
+                                    "description": "SCEP server URL.",
+                                    "maxLength": 255
+                                },
+                                "range": {
+                                    "type": "string",
+                                    "description": "Either a global or VDOM IP address range for the certificate.   \nglobal:Global range.   \nvdom:VDOM IP address range.",
+                                    "enum": [
+                                        "global",
+                                        "vdom"
+                                    ]
+                                },
+                                "source": {
+                                    "type": "string",
+                                    "description": "Certificate source type.   \nfactory:Factory installed certificate.   \nuser:User generated certificate.   \nbundle:Bundle file certificate.",
+                                    "enum": [
+                                        "factory",
+                                        "user",
+                                        "bundle"
+                                    ]
+                                },
+                                "auto-regenerate-days": {
+                                    "type": "integer",
+                                    "description": "Number of days to wait before expiry of an updated local certificate is requested (0 = disabled).",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "auto-regenerate-days-warning": {
+                                    "type": "integer",
+                                    "description": "Number of days to wait before an expiry warning message is generated (0 = disabled).",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "scep-password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "SCEP server challenge password for auto-regeneration."
+                                },
+                                "ca-identifier": {
+                                    "type": "string",
+                                    "description": "CA identifier of the CA server for signing via SCEP.",
+                                    "maxLength": 255
+                                },
+                                "name-encoding": {
+                                    "type": "string",
+                                    "description": "Name encoding method for auto-regeneration.   \nprintable:Printable encoding (default).   \nutf8:UTF-8 encoding.",
+                                    "enum": [
+                                        "printable",
+                                        "utf8"
+                                    ]
+                                },
+                                "source-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Source IP address for communications to the SCEP server."
+                                },
+                                "ike-localid": {
+                                    "type": "string",
+                                    "description": "Local ID the FortiGate uses for authentication as a VPN client.",
+                                    "maxLength": 63
+                                },
+                                "ike-localid-type": {
+                                    "type": "string",
+                                    "description": "IKE local ID type.   \nasn1dn:ASN.1 distinguished name.   \nfqdn:Fully qualified domain name.",
+                                    "enum": [
+                                        "asn1dn",
+                                        "fqdn"
+                                    ]
+                                },
+                                "enroll-protocol": {
+                                    "type": "string",
+                                    "description": "Certificate enrollment protocol.   \nnone:None (default).   \nscep:Simple Certificate Enrollment Protocol.   \ncmpv2:Certificate Management Protocol Version 2.",
+                                    "enum": [
+                                        "none",
+                                        "scep",
+                                        "cmpv2"
+                                    ]
+                                },
+                                "cmp-server": {
+                                    "type": "string",
+                                    "description": "'ADDRESS:PORT' for CMP server.",
+                                    "maxLength": 63
+                                },
+                                "cmp-path": {
+                                    "type": "string",
+                                    "description": "Path location inside CMP server.",
+                                    "maxLength": 255
+                                },
+                                "cmp-server-cert": {
+                                    "type": "string",
+                                    "description": "CMP server certificate.",
+                                    "maxLength": 79
+                                },
+                                "cmp-regeneration-method": {
+                                    "type": "string",
+                                    "description": "CMP auto-regeneration method.   \nkeyupate:Key Update.   \nrenewal:Renewal.",
+                                    "enum": [
+                                        "keyupate",
+                                        "renewal"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "certificate\/local"
+                ]
+            }
+        },
+        "\/certificate\/remote\/{name}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: vpngrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name.",
+                                    "maxLength": 35
+                                },
+                                "remote": {
+                                    "type": "string",
+                                    "description": "Remote certificate."
+                                },
+                                "range": {
+                                    "type": "string",
+                                    "description": "Either the global or VDOM IP address range for the remote certificate.   \nglobal:Global range.   \nvdom:VDOM IP address range.",
+                                    "enum": [
+                                        "global",
+                                        "vdom"
+                                    ]
+                                },
+                                "source": {
+                                    "type": "string",
+                                    "description": "Remote certificate source type.   \nfactory:Factory installed certificate.   \nuser:User generated certificate.   \nbundle:Bundle file certificate.",
+                                    "enum": [
+                                        "factory",
+                                        "user",
+                                        "bundle"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "certificate\/remote"
+                ]
+            }
+        },
+        "\/certificate\/remote": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: vpngrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name.",
+                                    "maxLength": 35
+                                },
+                                "remote": {
+                                    "type": "string",
+                                    "description": "Remote certificate."
+                                },
+                                "range": {
+                                    "type": "string",
+                                    "description": "Either the global or VDOM IP address range for the remote certificate.   \nglobal:Global range.   \nvdom:VDOM IP address range.",
+                                    "enum": [
+                                        "global",
+                                        "vdom"
+                                    ]
+                                },
+                                "source": {
+                                    "type": "string",
+                                    "description": "Remote certificate source type.   \nfactory:Factory installed certificate.   \nuser:User generated certificate.   \nbundle:Bundle file certificate.",
+                                    "enum": [
+                                        "factory",
+                                        "user",
+                                        "bundle"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "certificate\/remote"
+                ]
+            }
+        }
+    }
+}

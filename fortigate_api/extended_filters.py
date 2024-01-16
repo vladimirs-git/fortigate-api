@@ -8,8 +8,6 @@ from typing import Tuple
 from vhelpers import vre
 
 from fortigate_api import helpers as h
-from fortigate_api.address import Address
-from fortigate_api.address_group import AddressGroup
 from fortigate_api.types_ import LDAny, LStr, DLStr, DLInet
 
 EFILTER_KEYS = ["dstaddr", "srcaddr"]
@@ -21,19 +19,14 @@ EFILTER_OPERATORS = [
 ]
 
 
-def wrap_efilters(func):
-    """Wrap Extended Filters."""
+def wrap_efilter(func):
+    """Wrap extended filter."""
 
-    # noinspection PyIncorrectDocstring
     @wraps(func)
-    def wrapper(fgt_api, **kwargs):
-        """Wrap Extended Filters.
+    def wrapper(connector, **kwargs):
+        """Wrap extended filter.
 
-        :param FortigateAPI fgt_api: Wrapped object.
-
-        :param efilter: Extended filter: `srcaddr`, `dstaddr` by condition: equals `==`,
-            not equals `!=`,  supernets `>=`, subnets `<=`.
-        :type efilter: str or List[str]
+        :param PolicyFC connector: Wrapped connector object.
 
         :param kwargs: Parameters for wrapped object.
 
@@ -41,18 +34,18 @@ def wrap_efilters(func):
         :rtype: List[dict]
         """
         if efilters := h.pop_lstr(key="efilter", data=kwargs):
-            _valid_efilters(efilters)
+            _check_efilter(efilters)
 
-        datas = func(fgt_api, **kwargs)
+        policies: LDAny = func(connector, **kwargs)
 
         for efilter in efilters:
-            efilter_by_sdst(policies=datas, efilter=efilter, rest=fgt_api.rest)
-        return datas
+            efilter_by_sdst(policies=policies, efilter=efilter, connector=connector)
+        return policies
 
     return wrapper
 
 
-def efilter_by_sdst(policies: LDAny, efilter: str, rest) -> None:
+def efilter_by_sdst(policies: LDAny, efilter: str, connector) -> None:
     """Filter policies by efilter `srcaddr`, `dstaddr`.
 
     :param policies: Policies (side effect).
@@ -60,15 +53,16 @@ def efilter_by_sdst(policies: LDAny, efilter: str, rest) -> None:
 
     :param str efilter: Extended filter.
 
-    :param Fortigate rest: Fortigate REST API connector.
+    :param PolicyFC connector: Wrapped connector object.
 
     :return: None. Updates policies (side effect). Pass policies matched by efilter.
     """
     if not _split_efilter(efilter)[0]:
         return
     # get addresses and address-groups from the Fortigate
-    addresses: LDAny = Address(rest).get()
-    addr_groups: LDAny = AddressGroup(rest).get()
+    fortigate = connector.fortigate
+    addresses: LDAny = fortigate.get_results(url=f"{fortigate.url}/api/v2/cmdb/firewall/address")
+    addr_groups: LDAny = fortigate.get_results(url=f"{fortigate.url}/api/v2/cmdb/firewall/addrgrp")
     names_subnets_d: DLStr = _get_names_subnets(addresses, addr_groups)
     names_ipnets_d: DLInet = _convert_subnets_to_ipnets(names_subnets_d)
 
@@ -109,7 +103,7 @@ def _get_names_subnets(addresses: LDAny, addr_groups: LDAny) -> DLStr:
         addgr_name = addgr_d["name"]
         members_ = [d["name"] for d in addgr_d["member"]]
         for member_name in members_:
-            subnets = members_d[member_name]
+            subnets = list(members_d.get(member_name) or [])
             members_d[addgr_name].extend(subnets)
     return members_d
 
@@ -143,38 +137,38 @@ def _convert_subnets_to_ipnets(members_d: DLStr) -> DLInet:
     return ipnets_d
 
 
-def _valid_efilters(efilters: LStr) -> None:
-    """Validate efilters key, operator, value.
+def _check_efilter(efilter: LStr) -> None:
+    """Check efilter key, operator, value.
 
-    :param efilters: Extended filters keys.
-    :type efilters: List[str]
+    :param efilter: Extended filter keys.
+    :type efilter: List[str]
 
-    :return: None. efilters has valid format.
+    :return: None. efilter has valid format.
 
     :raises ValueError: If efilter has invalid format.
     """
     re_operators = "|".join(EFILTER_OPERATORS)
-    regex = fr"(\w+?)({re_operators})(.+)"
+    regex = rf"(\w+?)({re_operators})(.+)"
     keys: LStr = []
-    for efilter in efilters:
-        key, operator, _ = vre.find3(pattern=regex, string=efilter)
+    for efilter_ in efilter:
+        key, operator, _ = vre.find3(pattern=regex, string=efilter_)
         keys.append(key)
         expected = EFILTER_KEYS
         if key not in expected:
-            raise ValueError(f"Invalid {efilter=}, {expected=}.")
+            raise ValueError(f"Invalid {efilter_=}, {expected=}.")
         expected = EFILTER_OPERATORS
         if operator not in expected:
             raise ValueError(f"Invalid {operator=}, {expected=}.")
 
     counts = Counter(keys)
     if invalid := [k for k, v in counts.items() if v > 1]:
-        raise ValueError(f"{invalid=} in {efilters=}, expected only one key.")
+        raise ValueError(f"{invalid=} in {efilter=}, expected only one key.")
 
 
 def _filter_policy_by_ipnets(  # pylint: disable=too-many-branches
-        efilter: str,
-        policies: LDAny,
-        names_ipnets_d: DLInet,
+    efilter: str,
+    policies: LDAny,
+    names_ipnets_d: DLInet,
 ) -> LDAny:
     """Filter `policies` by `efilter` `srcaddr`, `dstaddr`.
 

@@ -6,10 +6,11 @@ from http.cookiejar import Cookie
 from typing import Any
 from urllib.parse import urlparse
 
+import pytest
 from pytest_mock import MockerFixture
 from requests import Response, Session
 
-from fortigate_api import helpers as h
+from fortigate_api import helpers as h, FortiGateAPI
 
 NAME1 = {
     "name": "NAME1",
@@ -42,15 +43,54 @@ UID_NAME = [
     "firewall.service/group",
     "firewall/address",
     "firewall/addrgrp",
-    "firewall/internet-service",
     "firewall/ippool",
     "firewall/vip",
-    "system.snmp/community",
     "system/external-resource",
     "system/interface",
     "system/vdom",
     "system/zone",
 ]
+UID_ID = [
+    "firewall/internet-service",
+    "firewall/policy",
+    "system.snmp/community",
+]
+
+
+@pytest.fixture
+def connectors_name():
+    """Init Connector with uid key="name"."""
+    api = FortiGateAPI(host="host")
+    api.fortigate._session = Session()
+    items = [
+        api.cmdb.antivirus.profile,
+        api.cmdb.application.list,
+        api.cmdb.firewall.address,
+        api.cmdb.firewall.addrgrp,
+        api.cmdb.firewall.ippool,
+        api.cmdb.firewall.vip,
+        api.cmdb.firewall_schedule.onetime,
+        api.cmdb.firewall_service.category,
+        api.cmdb.firewall_service.custom,
+        api.cmdb.firewall_service.group,
+        api.cmdb.system.external_resource,
+        api.cmdb.system.interface,
+        api.cmdb.system.vdom,
+        api.cmdb.system.zone,
+    ]
+    return items
+
+
+@pytest.fixture
+def connectors_id():
+    """Init Connector with uid key="id"."""
+    api = FortiGateAPI(host="host")
+    api.fortigate._session = Session()
+    items = [
+        # api.cmdb.firewall.internet_service,
+        api.cmdb.system_snmp.community,
+    ]
+    return items
 
 
 def create_cookie(name: str, value: str) -> Cookie:
@@ -125,7 +165,9 @@ def session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     if app_model in UID_NAME:
         resp = connector_delete(url)
     elif app_model == "firewall/policy":
-        resp = policy_delete(url)
+        resp = firewall_policy_delete(url)
+    elif app_model in UID_ID:
+        resp = firewall_policy_delete(url)
     # invalid url
     else:
         resp = create_response("delete", url, 400)
@@ -137,9 +179,13 @@ def session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
     if app_model in UID_NAME:
-        resp = connector_get(url)
+        resp = connector_get_name(url)
     elif app_model == "firewall/policy":
-        resp = policy_get(url)
+        resp = firewall_policy_get(url)
+    elif app_model == "firewall.ipmacbinding/setting":
+        resp = firewall_ipmacbinding_setting_get(url)
+    elif app_model in UID_ID:
+        resp = connector_get_id(url)
     # invalid url
     else:
         resp = create_response("get", url, 400)
@@ -153,7 +199,9 @@ def session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     if app_model in UID_NAME:
         resp = connector_post(url, data=kwargs)
     elif app_model == "firewall/policy":
-        resp = policy_post(url, data=kwargs)
+        resp = firewall_policy_post(url, data=kwargs)
+    elif app_model in UID_ID:
+        resp = connector_post(url, data=kwargs)
     # invalid url
     else:
         resp = create_response("post", url, 400)
@@ -167,7 +215,9 @@ def session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
     if app_model in UID_NAME:
         resp = connector_put(url)
     elif app_model == "firewall/policy":
-        resp = policy_put(url)
+        resp = firewall_policy_put(url)
+    elif app_model in UID_ID:
+        resp = firewall_policy_put(url)
     # invalid url
     else:
         resp = create_response("put", url, 400)
@@ -188,7 +238,7 @@ def connector_delete(url: str) -> Response:
     return create_response("delete", url, status_code)
 
 
-def connector_get(url: str) -> Response:
+def connector_get_name(url: str) -> Response:
     """Get"""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
@@ -202,7 +252,20 @@ def connector_get(url: str) -> Response:
         ("", "filter=name%3D%3DNAME1"): [NAME1],
     }.get(key)
     status_code = 404 if items is None else 200
-    return create_response("get", url, status_code, items)
+    return create_response("get", url, status_code, data=items)
+
+
+def connector_get_id(url: str) -> Response:
+    """Get"""
+    uid = h.url_to_uid(url)
+    query = urlparse(url).query
+    key = (uid, query)
+    items = {
+        ("", ""): [NAME1, NAME3],
+        ("1", ""): [NAME1],
+    }.get(key)
+    status_code = 404 if items is None else 200
+    return create_response("get", url, status_code, data=items)
 
 
 def connector_post(url: str, data: dict) -> Response:
@@ -225,9 +288,9 @@ def connector_put(url: str) -> Response:
     return create_response("get", url, status_code)
 
 
-# ============================== policy ==============================
+# ======================= cmdb/firewall/policy =======================
 
-def policy_delete(url: str) -> Response:
+def firewall_policy_delete(url: str) -> Response:
     """Delete"""
     uid = h.url_to_uid(url)
     status_code = {
@@ -236,7 +299,7 @@ def policy_delete(url: str) -> Response:
     return create_response("delete", url, status_code)
 
 
-def policy_get(url: str) -> Response:
+def firewall_policy_get(url: str) -> Response:
     """Get"""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
@@ -250,10 +313,10 @@ def policy_get(url: str) -> Response:
         ("2", ""): [],
     }.get(key)
     status_code = 404 if items is None else 200
-    return create_response("get", url, status_code, items)
+    return create_response("get", url, status_code, data=items)
 
 
-def policy_post(url: str, data: dict) -> Response:
+def firewall_policy_post(url: str, data: dict) -> Response:
     """Create"""
     data = json.loads(data["data"])
     name = data["name"]
@@ -263,7 +326,7 @@ def policy_post(url: str, data: dict) -> Response:
     return create_response("post", url, status_code)
 
 
-def policy_put(url: str) -> Response:
+def firewall_policy_put(url: str) -> Response:
     """Update"""
     uid = h.url_to_uid(url)
     status_code = {
@@ -271,3 +334,17 @@ def policy_put(url: str) -> Response:
         "4": 500,  # not moved, only for policy.move()
     }.get(uid, 404)
     return create_response("put", url, status_code)
+
+
+# ======================= cmdb/firewall/policy =======================
+
+def firewall_ipmacbinding_setting_get(url: str) -> Response:
+    """Get"""
+    uid = h.url_to_uid(url)
+    query = urlparse(url).query
+    key = (uid, query)
+    items = {
+        ("", ""): {"bindthroughfw": "disable"},
+    }.get(key)
+    status_code = 404 if items is None else 200
+    return create_response("get", url, status_code, data=items)

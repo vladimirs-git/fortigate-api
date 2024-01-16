@@ -1,0 +1,9 @@
+FortiOS v{{ version }} {{ scope }}
+{{ "=" * (9 + version|length + 1 + scope|length) }}
+
+.. toctree::
+  :maxdepth: 1
+
+  {% for app_path in app_paths %}
+  {{ app_path }} <{{ scope }}/{{ app_path }}.rst>
+  {% endfor %}

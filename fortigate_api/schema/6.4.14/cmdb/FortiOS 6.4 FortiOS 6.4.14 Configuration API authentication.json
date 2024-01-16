@@ -1,0 +1,2118 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "termsOfService": "http:\/\/fortinet.com\/terms\/",
+        "version": "v2",
+        "contact": {
+            "url": "http:\/\/modskristensen.net",
+            "name": "FortiOS Web Application Team",
+            "email": "fosguiqateam@fortinet.com"
+        },
+        "description": "REST API for configuring FortiOS objects and settings",
+        "title": "FortiOS CMDB"
+    },
+    "host": "172.16.177.65",
+    "basePath": "\/api\/v2\/cmdb",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application\/json"
+    ],
+    "produces": [
+        "application\/json"
+    ],
+    "securityDefinitions": {
+        "APIKeyQueryParam": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query"
+        }
+    },
+    "security": [
+        {
+            "APIKeyQueryParam": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "authentication\/rule",
+            "description": "Configure Authentication Rules."
+        },
+        {
+            "name": "authentication\/scheme",
+            "description": "Configure Authentication Schemes."
+        },
+        {
+            "name": "authentication\/setting",
+            "description": "Configure authentication setting."
+        }
+    ],
+    "paths": {
+        "\/authentication\/rule\/{name}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Authentication rule name.",
+                                    "maxLength": 35
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Enable\/disable this authentication rule.   \nenable:Enable this authentication rule.   \ndisable:Disable this authentication rule.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "protocol": {
+                                    "type": "string",
+                                    "description": "Authentication is required for the selected protocol (default = HTTP).   \nhttp:HTTP traffic is matched and authentication is required.   \nftp:FTP traffic is matched and authentication is required.   \nsocks:SOCKS traffic is matched and authentication is required.   \nssh:SSH traffic is matched and authentication is required.",
+                                    "enum": [
+                                        "http",
+                                        "ftp",
+                                        "socks",
+                                        "ssh"
+                                    ]
+                                },
+                                "srcaddr": {
+                                    "description": "Authentication is required for the selected IPv4 source address.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Address name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "srcaddr6": {
+                                    "description": "Authentication is required for the selected IPv6 source address.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Address name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ip-based": {
+                                    "type": "string",
+                                    "description": "Enable\/disable IP-based authentication. When enabled, previously authenticated users from the same IP address will be exempted.   \nenable:Enable IP-based authentication.   \ndisable:Disable IP-based authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "active-auth-method": {
+                                    "type": "string",
+                                    "description": "Select an active authentication method.",
+                                    "maxLength": 35
+                                },
+                                "sso-auth-method": {
+                                    "type": "string",
+                                    "description": "Select a single-sign on (SSO) authentication method.",
+                                    "maxLength": 35
+                                },
+                                "web-auth-cookie": {
+                                    "type": "string",
+                                    "description": "Enable\/disable Web authentication cookies (default = disable).   \nenable:Enable Web authentication cookie.   \ndisable:Disable Web authentication cookie.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "transaction-based": {
+                                    "type": "string",
+                                    "description": "Enable\/disable transaction based authentication (default = disable).   \nenable:Enable transaction based authentication.   \ndisable:Disable transaction based authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "web-portal": {
+                                    "type": "string",
+                                    "description": "Enable\/disable web portal for proxy transparent policy (default = enable).   \nenable:Enable web-portal.   \ndisable:Disable web-portal.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "comments": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 1023
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "authentication\/rule"
+                ]
+            },
+            "put": {
+                "summary": "Update this specific resource.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Authentication rule name.",
+                                    "maxLength": 35
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Enable\/disable this authentication rule.   \nenable:Enable this authentication rule.   \ndisable:Disable this authentication rule.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "protocol": {
+                                    "type": "string",
+                                    "description": "Authentication is required for the selected protocol (default = HTTP).   \nhttp:HTTP traffic is matched and authentication is required.   \nftp:FTP traffic is matched and authentication is required.   \nsocks:SOCKS traffic is matched and authentication is required.   \nssh:SSH traffic is matched and authentication is required.",
+                                    "enum": [
+                                        "http",
+                                        "ftp",
+                                        "socks",
+                                        "ssh"
+                                    ]
+                                },
+                                "srcaddr": {
+                                    "description": "Authentication is required for the selected IPv4 source address.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Address name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "srcaddr6": {
+                                    "description": "Authentication is required for the selected IPv6 source address.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Address name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ip-based": {
+                                    "type": "string",
+                                    "description": "Enable\/disable IP-based authentication. When enabled, previously authenticated users from the same IP address will be exempted.   \nenable:Enable IP-based authentication.   \ndisable:Disable IP-based authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "active-auth-method": {
+                                    "type": "string",
+                                    "description": "Select an active authentication method.",
+                                    "maxLength": 35
+                                },
+                                "sso-auth-method": {
+                                    "type": "string",
+                                    "description": "Select a single-sign on (SSO) authentication method.",
+                                    "maxLength": 35
+                                },
+                                "web-auth-cookie": {
+                                    "type": "string",
+                                    "description": "Enable\/disable Web authentication cookies (default = disable).   \nenable:Enable Web authentication cookie.   \ndisable:Disable Web authentication cookie.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "transaction-based": {
+                                    "type": "string",
+                                    "description": "Enable\/disable transaction based authentication (default = disable).   \nenable:Enable transaction based authentication.   \ndisable:Disable transaction based authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "web-portal": {
+                                    "type": "string",
+                                    "description": "Enable\/disable web portal for proxy transparent policy (default = enable).   \nenable:Enable web-portal.   \ndisable:Disable web-portal.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "comments": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 1023
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_move_: Move this specific resource.\nWhen *action=move* is set, one of the extra parameters (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "move"
+                        ]
+                    },
+                    {
+                        "name": "before",
+                        "in": "query",
+                        "description": "If *action=move*, use *before* to specify the ID of the resource that this resource will be moved before.\nFor example, to move `object 1` to before `object 2`, use:\n__action=move&before=2__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "If *action=move*, use *after* to specify the ID of the resource that this resource will be moved after.\nFor example, to move `object 1` to after `object 3`, use:\n__action=move&after=3__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "authentication\/rule"
+                ]
+            },
+            "delete": {
+                "summary": "Delete this specific resource.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "authentication\/rule"
+                ]
+            }
+        },
+        "\/authentication\/rule": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Authentication rule name.",
+                                    "maxLength": 35
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Enable\/disable this authentication rule.   \nenable:Enable this authentication rule.   \ndisable:Disable this authentication rule.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "protocol": {
+                                    "type": "string",
+                                    "description": "Authentication is required for the selected protocol (default = HTTP).   \nhttp:HTTP traffic is matched and authentication is required.   \nftp:FTP traffic is matched and authentication is required.   \nsocks:SOCKS traffic is matched and authentication is required.   \nssh:SSH traffic is matched and authentication is required.",
+                                    "enum": [
+                                        "http",
+                                        "ftp",
+                                        "socks",
+                                        "ssh"
+                                    ]
+                                },
+                                "srcaddr": {
+                                    "description": "Authentication is required for the selected IPv4 source address.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Address name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "srcaddr6": {
+                                    "description": "Authentication is required for the selected IPv6 source address.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Address name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ip-based": {
+                                    "type": "string",
+                                    "description": "Enable\/disable IP-based authentication. When enabled, previously authenticated users from the same IP address will be exempted.   \nenable:Enable IP-based authentication.   \ndisable:Disable IP-based authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "active-auth-method": {
+                                    "type": "string",
+                                    "description": "Select an active authentication method.",
+                                    "maxLength": 35
+                                },
+                                "sso-auth-method": {
+                                    "type": "string",
+                                    "description": "Select a single-sign on (SSO) authentication method.",
+                                    "maxLength": 35
+                                },
+                                "web-auth-cookie": {
+                                    "type": "string",
+                                    "description": "Enable\/disable Web authentication cookies (default = disable).   \nenable:Enable Web authentication cookie.   \ndisable:Disable Web authentication cookie.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "transaction-based": {
+                                    "type": "string",
+                                    "description": "Enable\/disable transaction based authentication (default = disable).   \nenable:Enable transaction based authentication.   \ndisable:Disable transaction based authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "web-portal": {
+                                    "type": "string",
+                                    "description": "Enable\/disable web portal for proxy transparent policy (default = enable).   \nenable:Enable web-portal.   \ndisable:Disable web-portal.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "comments": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 1023
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "authentication\/rule"
+                ]
+            },
+            "post": {
+                "summary": "Create object(s) in this table.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Authentication rule name.",
+                                    "maxLength": 35
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Enable\/disable this authentication rule.   \nenable:Enable this authentication rule.   \ndisable:Disable this authentication rule.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "protocol": {
+                                    "type": "string",
+                                    "description": "Authentication is required for the selected protocol (default = HTTP).   \nhttp:HTTP traffic is matched and authentication is required.   \nftp:FTP traffic is matched and authentication is required.   \nsocks:SOCKS traffic is matched and authentication is required.   \nssh:SSH traffic is matched and authentication is required.",
+                                    "enum": [
+                                        "http",
+                                        "ftp",
+                                        "socks",
+                                        "ssh"
+                                    ]
+                                },
+                                "srcaddr": {
+                                    "description": "Authentication is required for the selected IPv4 source address.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Address name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "srcaddr6": {
+                                    "description": "Authentication is required for the selected IPv6 source address.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Address name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ip-based": {
+                                    "type": "string",
+                                    "description": "Enable\/disable IP-based authentication. When enabled, previously authenticated users from the same IP address will be exempted.   \nenable:Enable IP-based authentication.   \ndisable:Disable IP-based authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "active-auth-method": {
+                                    "type": "string",
+                                    "description": "Select an active authentication method.",
+                                    "maxLength": 35
+                                },
+                                "sso-auth-method": {
+                                    "type": "string",
+                                    "description": "Select a single-sign on (SSO) authentication method.",
+                                    "maxLength": 35
+                                },
+                                "web-auth-cookie": {
+                                    "type": "string",
+                                    "description": "Enable\/disable Web authentication cookies (default = disable).   \nenable:Enable Web authentication cookie.   \ndisable:Disable Web authentication cookie.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "transaction-based": {
+                                    "type": "string",
+                                    "description": "Enable\/disable transaction based authentication (default = disable).   \nenable:Enable transaction based authentication.   \ndisable:Disable transaction based authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "web-portal": {
+                                    "type": "string",
+                                    "description": "Enable\/disable web portal for proxy transparent policy (default = enable).   \nenable:Enable web-portal.   \ndisable:Disable web-portal.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "comments": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 1023
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_clone_: Clone this specific resource.\nWhen *action=clone* is set, the extra parameters *nkey* must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "clone"
+                        ]
+                    },
+                    {
+                        "name": "nkey",
+                        "in": "query",
+                        "description": " If *action=clone*, use *nkey* to specify the ID for the new resource to be created.\nFor example, to clone `address1` to `address1_clone`, use:\n__action=clone&nkey=address1_clone__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *clone*.\n",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "authentication\/rule"
+                ]
+            }
+        },
+        "\/authentication\/scheme\/{name}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Authentication scheme name.",
+                                    "maxLength": 35
+                                },
+                                "method": {
+                                    "type": "string",
+                                    "description": "Authentication methods (default = basic).   \nntlm:NTLM authentication.   \nbasic:Basic HTTP authentication.   \ndigest:Digest HTTP authentication.   \nform:Form-based HTTP authentication.   \nnegotiate:Negotiate authentication.   \nfsso:Fortinet Single Sign-On (FSSO) authentication.   \nrsso:RADIUS Single Sign-On (RSSO) authentication.   \nssh-publickey:Public key based SSH authentication.",
+                                    "enum": [
+                                        "ntlm",
+                                        "basic",
+                                        "digest",
+                                        "form",
+                                        "negotiate",
+                                        "fsso",
+                                        "rsso",
+                                        "ssh-publickey"
+                                    ]
+                                },
+                                "negotiate-ntlm": {
+                                    "type": "string",
+                                    "description": "Enable\/disable negotiate authentication for NTLM (default = disable).   \nenable:Enable negotiate authentication for NTLM.   \ndisable:Disable negotiate authentication for NTLM.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "kerberos-keytab": {
+                                    "type": "string",
+                                    "description": "Kerberos keytab setting.",
+                                    "maxLength": 35
+                                },
+                                "domain-controller": {
+                                    "type": "string",
+                                    "description": "Domain controller setting.",
+                                    "maxLength": 35
+                                },
+                                "fsso-agent-for-ntlm": {
+                                    "type": "string",
+                                    "description": "FSSO agent to use for NTLM authentication.",
+                                    "maxLength": 35
+                                },
+                                "require-tfa": {
+                                    "type": "string",
+                                    "description": "Enable\/disable two-factor authentication (default = disable).   \nenable:Enable two-factor authentication.   \ndisable:Disable two-factor authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "fsso-guest": {
+                                    "type": "string",
+                                    "description": "Enable\/disable user fsso-guest authentication (default = disable).   \nenable:Enable user fsso-guest authentication.   \ndisable:Disable user fsso-guest authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "user-database": {
+                                    "description": "Authentication server to contain user information; \"local\" (default) or \"123\" (for LDAP).",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Authentication server name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ssh-ca": {
+                                    "type": "string",
+                                    "description": "SSH CA name.",
+                                    "maxLength": 35
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "authentication\/scheme"
+                ]
+            },
+            "put": {
+                "summary": "Update this specific resource.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Authentication scheme name.",
+                                    "maxLength": 35
+                                },
+                                "method": {
+                                    "type": "string",
+                                    "description": "Authentication methods (default = basic).   \nntlm:NTLM authentication.   \nbasic:Basic HTTP authentication.   \ndigest:Digest HTTP authentication.   \nform:Form-based HTTP authentication.   \nnegotiate:Negotiate authentication.   \nfsso:Fortinet Single Sign-On (FSSO) authentication.   \nrsso:RADIUS Single Sign-On (RSSO) authentication.   \nssh-publickey:Public key based SSH authentication.",
+                                    "enum": [
+                                        "ntlm",
+                                        "basic",
+                                        "digest",
+                                        "form",
+                                        "negotiate",
+                                        "fsso",
+                                        "rsso",
+                                        "ssh-publickey"
+                                    ]
+                                },
+                                "negotiate-ntlm": {
+                                    "type": "string",
+                                    "description": "Enable\/disable negotiate authentication for NTLM (default = disable).   \nenable:Enable negotiate authentication for NTLM.   \ndisable:Disable negotiate authentication for NTLM.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "kerberos-keytab": {
+                                    "type": "string",
+                                    "description": "Kerberos keytab setting.",
+                                    "maxLength": 35
+                                },
+                                "domain-controller": {
+                                    "type": "string",
+                                    "description": "Domain controller setting.",
+                                    "maxLength": 35
+                                },
+                                "fsso-agent-for-ntlm": {
+                                    "type": "string",
+                                    "description": "FSSO agent to use for NTLM authentication.",
+                                    "maxLength": 35
+                                },
+                                "require-tfa": {
+                                    "type": "string",
+                                    "description": "Enable\/disable two-factor authentication (default = disable).   \nenable:Enable two-factor authentication.   \ndisable:Disable two-factor authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "fsso-guest": {
+                                    "type": "string",
+                                    "description": "Enable\/disable user fsso-guest authentication (default = disable).   \nenable:Enable user fsso-guest authentication.   \ndisable:Disable user fsso-guest authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "user-database": {
+                                    "description": "Authentication server to contain user information; \"local\" (default) or \"123\" (for LDAP).",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Authentication server name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ssh-ca": {
+                                    "type": "string",
+                                    "description": "SSH CA name.",
+                                    "maxLength": 35
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_move_: Move this specific resource.\nWhen *action=move* is set, one of the extra parameters (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "move"
+                        ]
+                    },
+                    {
+                        "name": "before",
+                        "in": "query",
+                        "description": "If *action=move*, use *before* to specify the ID of the resource that this resource will be moved before.\nFor example, to move `object 1` to before `object 2`, use:\n__action=move&before=2__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "If *action=move*, use *after* to specify the ID of the resource that this resource will be moved after.\nFor example, to move `object 1` to after `object 3`, use:\n__action=move&after=3__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "authentication\/scheme"
+                ]
+            },
+            "delete": {
+                "summary": "Delete this specific resource.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "authentication\/scheme"
+                ]
+            }
+        },
+        "\/authentication\/scheme": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Authentication scheme name.",
+                                    "maxLength": 35
+                                },
+                                "method": {
+                                    "type": "string",
+                                    "description": "Authentication methods (default = basic).   \nntlm:NTLM authentication.   \nbasic:Basic HTTP authentication.   \ndigest:Digest HTTP authentication.   \nform:Form-based HTTP authentication.   \nnegotiate:Negotiate authentication.   \nfsso:Fortinet Single Sign-On (FSSO) authentication.   \nrsso:RADIUS Single Sign-On (RSSO) authentication.   \nssh-publickey:Public key based SSH authentication.",
+                                    "enum": [
+                                        "ntlm",
+                                        "basic",
+                                        "digest",
+                                        "form",
+                                        "negotiate",
+                                        "fsso",
+                                        "rsso",
+                                        "ssh-publickey"
+                                    ]
+                                },
+                                "negotiate-ntlm": {
+                                    "type": "string",
+                                    "description": "Enable\/disable negotiate authentication for NTLM (default = disable).   \nenable:Enable negotiate authentication for NTLM.   \ndisable:Disable negotiate authentication for NTLM.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "kerberos-keytab": {
+                                    "type": "string",
+                                    "description": "Kerberos keytab setting.",
+                                    "maxLength": 35
+                                },
+                                "domain-controller": {
+                                    "type": "string",
+                                    "description": "Domain controller setting.",
+                                    "maxLength": 35
+                                },
+                                "fsso-agent-for-ntlm": {
+                                    "type": "string",
+                                    "description": "FSSO agent to use for NTLM authentication.",
+                                    "maxLength": 35
+                                },
+                                "require-tfa": {
+                                    "type": "string",
+                                    "description": "Enable\/disable two-factor authentication (default = disable).   \nenable:Enable two-factor authentication.   \ndisable:Disable two-factor authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "fsso-guest": {
+                                    "type": "string",
+                                    "description": "Enable\/disable user fsso-guest authentication (default = disable).   \nenable:Enable user fsso-guest authentication.   \ndisable:Disable user fsso-guest authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "user-database": {
+                                    "description": "Authentication server to contain user information; \"local\" (default) or \"123\" (for LDAP).",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Authentication server name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ssh-ca": {
+                                    "type": "string",
+                                    "description": "SSH CA name.",
+                                    "maxLength": 35
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "authentication\/scheme"
+                ]
+            },
+            "post": {
+                "summary": "Create object(s) in this table.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Authentication scheme name.",
+                                    "maxLength": 35
+                                },
+                                "method": {
+                                    "type": "string",
+                                    "description": "Authentication methods (default = basic).   \nntlm:NTLM authentication.   \nbasic:Basic HTTP authentication.   \ndigest:Digest HTTP authentication.   \nform:Form-based HTTP authentication.   \nnegotiate:Negotiate authentication.   \nfsso:Fortinet Single Sign-On (FSSO) authentication.   \nrsso:RADIUS Single Sign-On (RSSO) authentication.   \nssh-publickey:Public key based SSH authentication.",
+                                    "enum": [
+                                        "ntlm",
+                                        "basic",
+                                        "digest",
+                                        "form",
+                                        "negotiate",
+                                        "fsso",
+                                        "rsso",
+                                        "ssh-publickey"
+                                    ]
+                                },
+                                "negotiate-ntlm": {
+                                    "type": "string",
+                                    "description": "Enable\/disable negotiate authentication for NTLM (default = disable).   \nenable:Enable negotiate authentication for NTLM.   \ndisable:Disable negotiate authentication for NTLM.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "kerberos-keytab": {
+                                    "type": "string",
+                                    "description": "Kerberos keytab setting.",
+                                    "maxLength": 35
+                                },
+                                "domain-controller": {
+                                    "type": "string",
+                                    "description": "Domain controller setting.",
+                                    "maxLength": 35
+                                },
+                                "fsso-agent-for-ntlm": {
+                                    "type": "string",
+                                    "description": "FSSO agent to use for NTLM authentication.",
+                                    "maxLength": 35
+                                },
+                                "require-tfa": {
+                                    "type": "string",
+                                    "description": "Enable\/disable two-factor authentication (default = disable).   \nenable:Enable two-factor authentication.   \ndisable:Disable two-factor authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "fsso-guest": {
+                                    "type": "string",
+                                    "description": "Enable\/disable user fsso-guest authentication (default = disable).   \nenable:Enable user fsso-guest authentication.   \ndisable:Disable user fsso-guest authentication.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "user-database": {
+                                    "description": "Authentication server to contain user information; \"local\" (default) or \"123\" (for LDAP).",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "Authentication server name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ssh-ca": {
+                                    "type": "string",
+                                    "description": "SSH CA name.",
+                                    "maxLength": 35
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_clone_: Clone this specific resource.\nWhen *action=clone* is set, the extra parameters *nkey* must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "clone"
+                        ]
+                    },
+                    {
+                        "name": "nkey",
+                        "in": "query",
+                        "description": " If *action=clone*, use *nkey* to specify the ID for the new resource to be created.\nFor example, to clone `address1` to `address1_clone`, use:\n__action=clone&nkey=address1_clone__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *clone*.\n",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "authentication\/scheme"
+                ]
+            }
+        },
+        "\/authentication\/setting": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "active-auth-scheme": {
+                                    "type": "string",
+                                    "description": "Active authentication method (scheme name).",
+                                    "maxLength": 35
+                                },
+                                "sso-auth-scheme": {
+                                    "type": "string",
+                                    "description": "Single-Sign-On authentication method (scheme name).",
+                                    "maxLength": 35
+                                },
+                                "captive-portal-type": {
+                                    "type": "string",
+                                    "description": "Captive portal type.   \nfqdn:Use FQDN for captive portal.   \nip:Use an IP address for captive portal.",
+                                    "enum": [
+                                        "fqdn",
+                                        "ip"
+                                    ]
+                                },
+                                "captive-portal-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Captive portal IP address."
+                                },
+                                "captive-portal-ip6": {
+                                    "type": "string",
+                                    "format": "ipv6",
+                                    "description": "Captive portal IPv6 address."
+                                },
+                                "captive-portal": {
+                                    "type": "string",
+                                    "description": "Captive portal host name.",
+                                    "maxLength": 255
+                                },
+                                "captive-portal6": {
+                                    "type": "string",
+                                    "description": "IPv6 captive portal host name.",
+                                    "maxLength": 255
+                                },
+                                "captive-portal-port": {
+                                    "type": "integer",
+                                    "description": "Captive portal port number (1 - 65535, default = 7830).",
+                                    "maximum": 65535,
+                                    "minimum": 1
+                                },
+                                "auth-https": {
+                                    "type": "string",
+                                    "description": "Enable\/disable redirecting HTTP user authentication to HTTPS.   \nenable:Enable setting.   \ndisable:Disable setting.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "captive-portal-ssl-port": {
+                                    "type": "integer",
+                                    "description": "Captive portal SSL port number (1 - 65535, default = 7831).",
+                                    "maximum": 65535,
+                                    "minimum": 1
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "authentication\/setting"
+                ]
+            },
+            "put": {
+                "summary": "Update this specific resource.\n Access Group: authgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "active-auth-scheme": {
+                                    "type": "string",
+                                    "description": "Active authentication method (scheme name).",
+                                    "maxLength": 35
+                                },
+                                "sso-auth-scheme": {
+                                    "type": "string",
+                                    "description": "Single-Sign-On authentication method (scheme name).",
+                                    "maxLength": 35
+                                },
+                                "captive-portal-type": {
+                                    "type": "string",
+                                    "description": "Captive portal type.   \nfqdn:Use FQDN for captive portal.   \nip:Use an IP address for captive portal.",
+                                    "enum": [
+                                        "fqdn",
+                                        "ip"
+                                    ]
+                                },
+                                "captive-portal-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Captive portal IP address."
+                                },
+                                "captive-portal-ip6": {
+                                    "type": "string",
+                                    "format": "ipv6",
+                                    "description": "Captive portal IPv6 address."
+                                },
+                                "captive-portal": {
+                                    "type": "string",
+                                    "description": "Captive portal host name.",
+                                    "maxLength": 255
+                                },
+                                "captive-portal6": {
+                                    "type": "string",
+                                    "description": "IPv6 captive portal host name.",
+                                    "maxLength": 255
+                                },
+                                "captive-portal-port": {
+                                    "type": "integer",
+                                    "description": "Captive portal port number (1 - 65535, default = 7830).",
+                                    "maximum": 65535,
+                                    "minimum": 1
+                                },
+                                "auth-https": {
+                                    "type": "string",
+                                    "description": "Enable\/disable redirecting HTTP user authentication to HTTPS.   \nenable:Enable setting.   \ndisable:Disable setting.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "captive-portal-ssl-port": {
+                                    "type": "integer",
+                                    "description": "Captive portal SSL port number (1 - 65535, default = 7831).",
+                                    "maximum": 65535,
+                                    "minimum": 1
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_move_: Move this specific resource.\nWhen *action=move* is set, one of the extra parameters (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "move"
+                        ]
+                    },
+                    {
+                        "name": "before",
+                        "in": "query",
+                        "description": "If *action=move*, use *before* to specify the ID of the resource that this resource will be moved before.\nFor example, to move `object 1` to before `object 2`, use:\n__action=move&before=2__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "If *action=move*, use *after* to specify the ID of the resource that this resource will be moved after.\nFor example, to move `object 1` to after `object 3`, use:\n__action=move&after=3__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "authentication\/setting"
+                ]
+            }
+        }
+    }
+}

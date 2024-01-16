@@ -1,0 +1,2019 @@
+basePath: /api/v2/cmdb
+consumes:
+- application/json
+host: 172.16.177.65
+info:
+  contact:
+    email: fosguiqateam@fortinet.com
+    name: FortiOS Web Application Team
+    url: http://modskristensen.net
+  description: REST API for configuring FortiOS objects and settings
+  termsOfService: http://fortinet.com/terms/
+  title: FortiOS CMDB
+  version: v2
+paths:
+  /icap/profile:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              icap-headers:
+                description: Configure ICAP forwarded request headers.
+                items:
+                  properties:
+                    base64-encoding:
+                      description: "Enable/disable use of base64 encoding of HTTP\
+                        \ content.   \ndisable:Disable use of base64 encoding of HTTP\
+                        \ content.   \nenable:Enable use of base64 encoding of HTTP\
+                        \ content."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    content:
+                      description: HTTP header content.
+                      maxLength: 255
+                      type: string
+                    id:
+                      description: HTTP forwarded header ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    name:
+                      description: HTTP forwarded header name.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              methods:
+                description: "The allowed HTTP methods that will be sent to ICAP server\
+                  \ for further processing.   \ndelete:Forward HTTP request or response\
+                  \ with DELETE method to ICAP server for further processing.   \n\
+                  get:Forward HTTP request or response with GET method to ICAP server\
+                  \ for further processing.   \nhead:Forward HTTP request or response\
+                  \ with HEAD method to ICAP server for further processing.   \noptions:Forward\
+                  \ HTTP request or response with OPTIONS method to ICAP server for\
+                  \ further processing.   \npost:Forward HTTP request or response\
+                  \ with POST method to ICAP server for further processing.   \nput:Forward\
+                  \ HTTP request or response with PUT method to ICAP server for further\
+                  \ processing.   \ntrace:Forward HTTP request or response with TRACE\
+                  \ method to ICAP server for further processing.   \nother:Forward\
+                  \ HTTP request or response with All other methods to ICAP server\
+                  \ for further processing."
+                enum:
+                - delete
+                - get
+                - head
+                - options
+                - post
+                - put
+                - trace
+                - other
+                type: string
+              name:
+                description: ICAP profile name.
+                maxLength: 35
+                type: string
+              preview:
+                description: "Enable/disable preview of data to ICAP server.   \n\
+                  disable:Disable preview of data to ICAP server.   \nenable:Enable\
+                  \ preview of data to ICAP server."
+                enum:
+                - disable
+                - enable
+                type: string
+              preview-data-length:
+                description: Preview data length to be sent to ICAP server.
+                maximum: 4096
+                minimum: 0
+                type: integer
+              replacemsg-group:
+                description: Replacement message group.
+                maxLength: 35
+                type: string
+              request:
+                description: "Enable/disable whether an HTTP request is passed to\
+                  \ an ICAP server.   \ndisable:Disable HTTP request passing to ICAP\
+                  \ server.   \nenable:Enable HTTP request passing to ICAP server."
+                enum:
+                - disable
+                - enable
+                type: string
+              request-failure:
+                description: "Action to take if the ICAP server cannot be contacted\
+                  \ when processing an HTTP request.   \nerror:Error.   \nbypass:Bypass."
+                enum:
+                - error
+                - bypass
+                type: string
+              request-path:
+                description: Path component of the ICAP URI that identifies the HTTP
+                  request processing service.
+                maxLength: 127
+                type: string
+              request-server:
+                description: ICAP server to use for an HTTP request.
+                maxLength: 35
+                type: string
+              respmod-default-action:
+                description: "Default action to ICAP response modification (respmod)\
+                  \ processing.   \nforward:Forward response to icap server unless\
+                  \ a rule specifies not to.   \nbypass:Don't forward request to icap\
+                  \ server unless a rule specifies to forward the request."
+                enum:
+                - forward
+                - bypass
+                type: string
+              respmod-forward-rules:
+                description: ICAP response mode forward rules.
+                items:
+                  properties:
+                    action:
+                      description: "Action to be taken for ICAP server.   \nforward:Forward\
+                        \ request to ICAP server when this rule is matched.   \nbypass:Don't\
+                        \ forward request to ICAP server when this rule is matched."
+                      enum:
+                      - forward
+                      - bypass
+                      type: string
+                    header-group:
+                      description: HTTP header group.
+                      items:
+                        properties:
+                          case-sensitivity:
+                            description: "Enable/disable case sensitivity when matching\
+                              \ header.   \ndisable:Ignore case when matching header.\
+                              \   \nenable:Do not ignore case when matching header."
+                            enum:
+                            - disable
+                            - enable
+                            type: string
+                          header:
+                            description: HTTP header regular expression.
+                            maxLength: 255
+                            type: string
+                          header-name:
+                            description: HTTP header.
+                            maxLength: 79
+                            type: string
+                          id:
+                            description: ID.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    host:
+                      description: Address object for the host.
+                      maxLength: 79
+                      type: string
+                    http-resp-status-code:
+                      description: HTTP response status code.
+                      items:
+                        properties:
+                          code:
+                            description: HTTP response status code.
+                            maximum: 599
+                            minimum: 100
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    name:
+                      description: Address name.
+                      maxLength: 63
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              response:
+                description: "Enable/disable whether an HTTP response is passed to\
+                  \ an ICAP server.   \ndisable:Disable HTTP response passing to ICAP\
+                  \ server.   \nenable:Enable HTTP response passing to ICAP server."
+                enum:
+                - disable
+                - enable
+                type: string
+              response-failure:
+                description: "Action to take if the ICAP server cannot be contacted\
+                  \ when processing an HTTP response.   \nerror:Error.   \nbypass:Bypass."
+                enum:
+                - error
+                - bypass
+                type: string
+              response-path:
+                description: Path component of the ICAP URI that identifies the HTTP
+                  response processing service.
+                maxLength: 127
+                type: string
+              response-req-hdr:
+                description: "Enable/disable addition of req-hdr for ICAP response\
+                  \ modification (respmod) processing.   \ndisable:Do not add req-hdr\
+                  \ for response modification (respmod) processing.   \nenable:Add\
+                  \ req-hdr for response modification (respmod) processing."
+                enum:
+                - disable
+                - enable
+                type: string
+              response-server:
+                description: ICAP server to use for an HTTP response.
+                maxLength: 35
+                type: string
+              streaming-content-bypass:
+                description: "Enable/disable bypassing of ICAP server for streaming\
+                  \ content.   \ndisable:Disable bypassing of ICAP server for streaming\
+                  \ content.   \nenable:Enable bypassing of ICAP server for streaming\
+                  \ content."
+                enum:
+                - disable
+                - enable
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - icap/profile
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            icap-headers:
+              description: Configure ICAP forwarded request headers.
+              items:
+                properties:
+                  base64-encoding:
+                    description: "Enable/disable use of base64 encoding of HTTP content.\
+                      \   \ndisable:Disable use of base64 encoding of HTTP content.\
+                      \   \nenable:Enable use of base64 encoding of HTTP content."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  content:
+                    description: HTTP header content.
+                    maxLength: 255
+                    type: string
+                  id:
+                    description: HTTP forwarded header ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  name:
+                    description: HTTP forwarded header name.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            methods:
+              description: "The allowed HTTP methods that will be sent to ICAP server\
+                \ for further processing.   \ndelete:Forward HTTP request or response\
+                \ with DELETE method to ICAP server for further processing.   \nget:Forward\
+                \ HTTP request or response with GET method to ICAP server for further\
+                \ processing.   \nhead:Forward HTTP request or response with HEAD\
+                \ method to ICAP server for further processing.   \noptions:Forward\
+                \ HTTP request or response with OPTIONS method to ICAP server for\
+                \ further processing.   \npost:Forward HTTP request or response with\
+                \ POST method to ICAP server for further processing.   \nput:Forward\
+                \ HTTP request or response with PUT method to ICAP server for further\
+                \ processing.   \ntrace:Forward HTTP request or response with TRACE\
+                \ method to ICAP server for further processing.   \nother:Forward\
+                \ HTTP request or response with All other methods to ICAP server for\
+                \ further processing."
+              enum:
+              - delete
+              - get
+              - head
+              - options
+              - post
+              - put
+              - trace
+              - other
+              type: string
+            name:
+              description: ICAP profile name.
+              maxLength: 35
+              type: string
+            preview:
+              description: "Enable/disable preview of data to ICAP server.   \ndisable:Disable\
+                \ preview of data to ICAP server.   \nenable:Enable preview of data\
+                \ to ICAP server."
+              enum:
+              - disable
+              - enable
+              type: string
+            preview-data-length:
+              description: Preview data length to be sent to ICAP server.
+              maximum: 4096
+              minimum: 0
+              type: integer
+            replacemsg-group:
+              description: Replacement message group.
+              maxLength: 35
+              type: string
+            request:
+              description: "Enable/disable whether an HTTP request is passed to an\
+                \ ICAP server.   \ndisable:Disable HTTP request passing to ICAP server.\
+                \   \nenable:Enable HTTP request passing to ICAP server."
+              enum:
+              - disable
+              - enable
+              type: string
+            request-failure:
+              description: "Action to take if the ICAP server cannot be contacted\
+                \ when processing an HTTP request.   \nerror:Error.   \nbypass:Bypass."
+              enum:
+              - error
+              - bypass
+              type: string
+            request-path:
+              description: Path component of the ICAP URI that identifies the HTTP
+                request processing service.
+              maxLength: 127
+              type: string
+            request-server:
+              description: ICAP server to use for an HTTP request.
+              maxLength: 35
+              type: string
+            respmod-default-action:
+              description: "Default action to ICAP response modification (respmod)\
+                \ processing.   \nforward:Forward response to icap server unless a\
+                \ rule specifies not to.   \nbypass:Don't forward request to icap\
+                \ server unless a rule specifies to forward the request."
+              enum:
+              - forward
+              - bypass
+              type: string
+            respmod-forward-rules:
+              description: ICAP response mode forward rules.
+              items:
+                properties:
+                  action:
+                    description: "Action to be taken for ICAP server.   \nforward:Forward\
+                      \ request to ICAP server when this rule is matched.   \nbypass:Don't\
+                      \ forward request to ICAP server when this rule is matched."
+                    enum:
+                    - forward
+                    - bypass
+                    type: string
+                  header-group:
+                    description: HTTP header group.
+                    items:
+                      properties:
+                        case-sensitivity:
+                          description: "Enable/disable case sensitivity when matching\
+                            \ header.   \ndisable:Ignore case when matching header.\
+                            \   \nenable:Do not ignore case when matching header."
+                          enum:
+                          - disable
+                          - enable
+                          type: string
+                        header:
+                          description: HTTP header regular expression.
+                          maxLength: 255
+                          type: string
+                        header-name:
+                          description: HTTP header.
+                          maxLength: 79
+                          type: string
+                        id:
+                          description: ID.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  host:
+                    description: Address object for the host.
+                    maxLength: 79
+                    type: string
+                  http-resp-status-code:
+                    description: HTTP response status code.
+                    items:
+                      properties:
+                        code:
+                          description: HTTP response status code.
+                          maximum: 599
+                          minimum: 100
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  name:
+                    description: Address name.
+                    maxLength: 63
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            response:
+              description: "Enable/disable whether an HTTP response is passed to an\
+                \ ICAP server.   \ndisable:Disable HTTP response passing to ICAP server.\
+                \   \nenable:Enable HTTP response passing to ICAP server."
+              enum:
+              - disable
+              - enable
+              type: string
+            response-failure:
+              description: "Action to take if the ICAP server cannot be contacted\
+                \ when processing an HTTP response.   \nerror:Error.   \nbypass:Bypass."
+              enum:
+              - error
+              - bypass
+              type: string
+            response-path:
+              description: Path component of the ICAP URI that identifies the HTTP
+                response processing service.
+              maxLength: 127
+              type: string
+            response-req-hdr:
+              description: "Enable/disable addition of req-hdr for ICAP response modification\
+                \ (respmod) processing.   \ndisable:Do not add req-hdr for response\
+                \ modification (respmod) processing.   \nenable:Add req-hdr for response\
+                \ modification (respmod) processing."
+              enum:
+              - disable
+              - enable
+              type: string
+            response-server:
+              description: ICAP server to use for an HTTP response.
+              maxLength: 35
+              type: string
+            streaming-content-bypass:
+              description: "Enable/disable bypassing of ICAP server for streaming\
+                \ content.   \ndisable:Disable bypassing of ICAP server for streaming\
+                \ content.   \nenable:Enable bypassing of ICAP server for streaming\
+                \ content."
+              enum:
+              - disable
+              - enable
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - icap/profile
+  /icap/profile/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - icap/profile
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              icap-headers:
+                description: Configure ICAP forwarded request headers.
+                items:
+                  properties:
+                    base64-encoding:
+                      description: "Enable/disable use of base64 encoding of HTTP\
+                        \ content.   \ndisable:Disable use of base64 encoding of HTTP\
+                        \ content.   \nenable:Enable use of base64 encoding of HTTP\
+                        \ content."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    content:
+                      description: HTTP header content.
+                      maxLength: 255
+                      type: string
+                    id:
+                      description: HTTP forwarded header ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    name:
+                      description: HTTP forwarded header name.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              methods:
+                description: "The allowed HTTP methods that will be sent to ICAP server\
+                  \ for further processing.   \ndelete:Forward HTTP request or response\
+                  \ with DELETE method to ICAP server for further processing.   \n\
+                  get:Forward HTTP request or response with GET method to ICAP server\
+                  \ for further processing.   \nhead:Forward HTTP request or response\
+                  \ with HEAD method to ICAP server for further processing.   \noptions:Forward\
+                  \ HTTP request or response with OPTIONS method to ICAP server for\
+                  \ further processing.   \npost:Forward HTTP request or response\
+                  \ with POST method to ICAP server for further processing.   \nput:Forward\
+                  \ HTTP request or response with PUT method to ICAP server for further\
+                  \ processing.   \ntrace:Forward HTTP request or response with TRACE\
+                  \ method to ICAP server for further processing.   \nother:Forward\
+                  \ HTTP request or response with All other methods to ICAP server\
+                  \ for further processing."
+                enum:
+                - delete
+                - get
+                - head
+                - options
+                - post
+                - put
+                - trace
+                - other
+                type: string
+              name:
+                description: ICAP profile name.
+                maxLength: 35
+                type: string
+              preview:
+                description: "Enable/disable preview of data to ICAP server.   \n\
+                  disable:Disable preview of data to ICAP server.   \nenable:Enable\
+                  \ preview of data to ICAP server."
+                enum:
+                - disable
+                - enable
+                type: string
+              preview-data-length:
+                description: Preview data length to be sent to ICAP server.
+                maximum: 4096
+                minimum: 0
+                type: integer
+              replacemsg-group:
+                description: Replacement message group.
+                maxLength: 35
+                type: string
+              request:
+                description: "Enable/disable whether an HTTP request is passed to\
+                  \ an ICAP server.   \ndisable:Disable HTTP request passing to ICAP\
+                  \ server.   \nenable:Enable HTTP request passing to ICAP server."
+                enum:
+                - disable
+                - enable
+                type: string
+              request-failure:
+                description: "Action to take if the ICAP server cannot be contacted\
+                  \ when processing an HTTP request.   \nerror:Error.   \nbypass:Bypass."
+                enum:
+                - error
+                - bypass
+                type: string
+              request-path:
+                description: Path component of the ICAP URI that identifies the HTTP
+                  request processing service.
+                maxLength: 127
+                type: string
+              request-server:
+                description: ICAP server to use for an HTTP request.
+                maxLength: 35
+                type: string
+              respmod-default-action:
+                description: "Default action to ICAP response modification (respmod)\
+                  \ processing.   \nforward:Forward response to icap server unless\
+                  \ a rule specifies not to.   \nbypass:Don't forward request to icap\
+                  \ server unless a rule specifies to forward the request."
+                enum:
+                - forward
+                - bypass
+                type: string
+              respmod-forward-rules:
+                description: ICAP response mode forward rules.
+                items:
+                  properties:
+                    action:
+                      description: "Action to be taken for ICAP server.   \nforward:Forward\
+                        \ request to ICAP server when this rule is matched.   \nbypass:Don't\
+                        \ forward request to ICAP server when this rule is matched."
+                      enum:
+                      - forward
+                      - bypass
+                      type: string
+                    header-group:
+                      description: HTTP header group.
+                      items:
+                        properties:
+                          case-sensitivity:
+                            description: "Enable/disable case sensitivity when matching\
+                              \ header.   \ndisable:Ignore case when matching header.\
+                              \   \nenable:Do not ignore case when matching header."
+                            enum:
+                            - disable
+                            - enable
+                            type: string
+                          header:
+                            description: HTTP header regular expression.
+                            maxLength: 255
+                            type: string
+                          header-name:
+                            description: HTTP header.
+                            maxLength: 79
+                            type: string
+                          id:
+                            description: ID.
+                            maximum: 4294967295
+                            minimum: 0
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    host:
+                      description: Address object for the host.
+                      maxLength: 79
+                      type: string
+                    http-resp-status-code:
+                      description: HTTP response status code.
+                      items:
+                        properties:
+                          code:
+                            description: HTTP response status code.
+                            maximum: 599
+                            minimum: 100
+                            type: integer
+                        type: object
+                      maxItems: null
+                      type: array
+                    name:
+                      description: Address name.
+                      maxLength: 63
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              response:
+                description: "Enable/disable whether an HTTP response is passed to\
+                  \ an ICAP server.   \ndisable:Disable HTTP response passing to ICAP\
+                  \ server.   \nenable:Enable HTTP response passing to ICAP server."
+                enum:
+                - disable
+                - enable
+                type: string
+              response-failure:
+                description: "Action to take if the ICAP server cannot be contacted\
+                  \ when processing an HTTP response.   \nerror:Error.   \nbypass:Bypass."
+                enum:
+                - error
+                - bypass
+                type: string
+              response-path:
+                description: Path component of the ICAP URI that identifies the HTTP
+                  response processing service.
+                maxLength: 127
+                type: string
+              response-req-hdr:
+                description: "Enable/disable addition of req-hdr for ICAP response\
+                  \ modification (respmod) processing.   \ndisable:Do not add req-hdr\
+                  \ for response modification (respmod) processing.   \nenable:Add\
+                  \ req-hdr for response modification (respmod) processing."
+                enum:
+                - disable
+                - enable
+                type: string
+              response-server:
+                description: ICAP server to use for an HTTP response.
+                maxLength: 35
+                type: string
+              streaming-content-bypass:
+                description: "Enable/disable bypassing of ICAP server for streaming\
+                  \ content.   \ndisable:Disable bypassing of ICAP server for streaming\
+                  \ content.   \nenable:Enable bypassing of ICAP server for streaming\
+                  \ content."
+                enum:
+                - disable
+                - enable
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - icap/profile
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            icap-headers:
+              description: Configure ICAP forwarded request headers.
+              items:
+                properties:
+                  base64-encoding:
+                    description: "Enable/disable use of base64 encoding of HTTP content.\
+                      \   \ndisable:Disable use of base64 encoding of HTTP content.\
+                      \   \nenable:Enable use of base64 encoding of HTTP content."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  content:
+                    description: HTTP header content.
+                    maxLength: 255
+                    type: string
+                  id:
+                    description: HTTP forwarded header ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  name:
+                    description: HTTP forwarded header name.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            methods:
+              description: "The allowed HTTP methods that will be sent to ICAP server\
+                \ for further processing.   \ndelete:Forward HTTP request or response\
+                \ with DELETE method to ICAP server for further processing.   \nget:Forward\
+                \ HTTP request or response with GET method to ICAP server for further\
+                \ processing.   \nhead:Forward HTTP request or response with HEAD\
+                \ method to ICAP server for further processing.   \noptions:Forward\
+                \ HTTP request or response with OPTIONS method to ICAP server for\
+                \ further processing.   \npost:Forward HTTP request or response with\
+                \ POST method to ICAP server for further processing.   \nput:Forward\
+                \ HTTP request or response with PUT method to ICAP server for further\
+                \ processing.   \ntrace:Forward HTTP request or response with TRACE\
+                \ method to ICAP server for further processing.   \nother:Forward\
+                \ HTTP request or response with All other methods to ICAP server for\
+                \ further processing."
+              enum:
+              - delete
+              - get
+              - head
+              - options
+              - post
+              - put
+              - trace
+              - other
+              type: string
+            name:
+              description: ICAP profile name.
+              maxLength: 35
+              type: string
+            preview:
+              description: "Enable/disable preview of data to ICAP server.   \ndisable:Disable\
+                \ preview of data to ICAP server.   \nenable:Enable preview of data\
+                \ to ICAP server."
+              enum:
+              - disable
+              - enable
+              type: string
+            preview-data-length:
+              description: Preview data length to be sent to ICAP server.
+              maximum: 4096
+              minimum: 0
+              type: integer
+            replacemsg-group:
+              description: Replacement message group.
+              maxLength: 35
+              type: string
+            request:
+              description: "Enable/disable whether an HTTP request is passed to an\
+                \ ICAP server.   \ndisable:Disable HTTP request passing to ICAP server.\
+                \   \nenable:Enable HTTP request passing to ICAP server."
+              enum:
+              - disable
+              - enable
+              type: string
+            request-failure:
+              description: "Action to take if the ICAP server cannot be contacted\
+                \ when processing an HTTP request.   \nerror:Error.   \nbypass:Bypass."
+              enum:
+              - error
+              - bypass
+              type: string
+            request-path:
+              description: Path component of the ICAP URI that identifies the HTTP
+                request processing service.
+              maxLength: 127
+              type: string
+            request-server:
+              description: ICAP server to use for an HTTP request.
+              maxLength: 35
+              type: string
+            respmod-default-action:
+              description: "Default action to ICAP response modification (respmod)\
+                \ processing.   \nforward:Forward response to icap server unless a\
+                \ rule specifies not to.   \nbypass:Don't forward request to icap\
+                \ server unless a rule specifies to forward the request."
+              enum:
+              - forward
+              - bypass
+              type: string
+            respmod-forward-rules:
+              description: ICAP response mode forward rules.
+              items:
+                properties:
+                  action:
+                    description: "Action to be taken for ICAP server.   \nforward:Forward\
+                      \ request to ICAP server when this rule is matched.   \nbypass:Don't\
+                      \ forward request to ICAP server when this rule is matched."
+                    enum:
+                    - forward
+                    - bypass
+                    type: string
+                  header-group:
+                    description: HTTP header group.
+                    items:
+                      properties:
+                        case-sensitivity:
+                          description: "Enable/disable case sensitivity when matching\
+                            \ header.   \ndisable:Ignore case when matching header.\
+                            \   \nenable:Do not ignore case when matching header."
+                          enum:
+                          - disable
+                          - enable
+                          type: string
+                        header:
+                          description: HTTP header regular expression.
+                          maxLength: 255
+                          type: string
+                        header-name:
+                          description: HTTP header.
+                          maxLength: 79
+                          type: string
+                        id:
+                          description: ID.
+                          maximum: 4294967295
+                          minimum: 0
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  host:
+                    description: Address object for the host.
+                    maxLength: 79
+                    type: string
+                  http-resp-status-code:
+                    description: HTTP response status code.
+                    items:
+                      properties:
+                        code:
+                          description: HTTP response status code.
+                          maximum: 599
+                          minimum: 100
+                          type: integer
+                      type: object
+                    maxItems: null
+                    type: array
+                  name:
+                    description: Address name.
+                    maxLength: 63
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            response:
+              description: "Enable/disable whether an HTTP response is passed to an\
+                \ ICAP server.   \ndisable:Disable HTTP response passing to ICAP server.\
+                \   \nenable:Enable HTTP response passing to ICAP server."
+              enum:
+              - disable
+              - enable
+              type: string
+            response-failure:
+              description: "Action to take if the ICAP server cannot be contacted\
+                \ when processing an HTTP response.   \nerror:Error.   \nbypass:Bypass."
+              enum:
+              - error
+              - bypass
+              type: string
+            response-path:
+              description: Path component of the ICAP URI that identifies the HTTP
+                response processing service.
+              maxLength: 127
+              type: string
+            response-req-hdr:
+              description: "Enable/disable addition of req-hdr for ICAP response modification\
+                \ (respmod) processing.   \ndisable:Do not add req-hdr for response\
+                \ modification (respmod) processing.   \nenable:Add req-hdr for response\
+                \ modification (respmod) processing."
+              enum:
+              - disable
+              - enable
+              type: string
+            response-server:
+              description: ICAP server to use for an HTTP response.
+              maxLength: 35
+              type: string
+            streaming-content-bypass:
+              description: "Enable/disable bypassing of ICAP server for streaming\
+                \ content.   \ndisable:Disable bypassing of ICAP server for streaming\
+                \ content.   \nenable:Enable bypassing of ICAP server for streaming\
+                \ content."
+              enum:
+              - disable
+              - enable
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - icap/profile
+  /icap/server:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              ip-address:
+                description: IPv4 address of the ICAP server.
+                format: ipv4
+                type: string
+              ip-version:
+                description: "IP version.   \n4:IPv4 ICAP address.   \n6:IPv6 ICAP\
+                  \ address."
+                enum:
+                - '4'
+                - '6'
+                type: string
+              ip6-address:
+                description: IPv6 address of the ICAP server.
+                format: ipv6
+                type: string
+              max-connections:
+                description: Maximum number of concurrent connections to ICAP server.
+                  Must not be less than wad-worker-count.
+                maximum: 65535
+                minimum: 1
+                type: integer
+              name:
+                description: Server name.
+                maxLength: 35
+                type: string
+              port:
+                description: ICAP server port.
+                maximum: 65535
+                minimum: 1
+                type: integer
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - icap/server
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            ip-address:
+              description: IPv4 address of the ICAP server.
+              format: ipv4
+              type: string
+            ip-version:
+              description: "IP version.   \n4:IPv4 ICAP address.   \n6:IPv6 ICAP address."
+              enum:
+              - '4'
+              - '6'
+              type: string
+            ip6-address:
+              description: IPv6 address of the ICAP server.
+              format: ipv6
+              type: string
+            max-connections:
+              description: Maximum number of concurrent connections to ICAP server.
+                Must not be less than wad-worker-count.
+              maximum: 65535
+              minimum: 1
+              type: integer
+            name:
+              description: Server name.
+              maxLength: 35
+              type: string
+            port:
+              description: ICAP server port.
+              maximum: 65535
+              minimum: 1
+              type: integer
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - icap/server
+  /icap/server/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - icap/server
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              ip-address:
+                description: IPv4 address of the ICAP server.
+                format: ipv4
+                type: string
+              ip-version:
+                description: "IP version.   \n4:IPv4 ICAP address.   \n6:IPv6 ICAP\
+                  \ address."
+                enum:
+                - '4'
+                - '6'
+                type: string
+              ip6-address:
+                description: IPv6 address of the ICAP server.
+                format: ipv6
+                type: string
+              max-connections:
+                description: Maximum number of concurrent connections to ICAP server.
+                  Must not be less than wad-worker-count.
+                maximum: 65535
+                minimum: 1
+                type: integer
+              name:
+                description: Server name.
+                maxLength: 35
+                type: string
+              port:
+                description: ICAP server port.
+                maximum: 65535
+                minimum: 1
+                type: integer
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - icap/server
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            ip-address:
+              description: IPv4 address of the ICAP server.
+              format: ipv4
+              type: string
+            ip-version:
+              description: "IP version.   \n4:IPv4 ICAP address.   \n6:IPv6 ICAP address."
+              enum:
+              - '4'
+              - '6'
+              type: string
+            ip6-address:
+              description: IPv6 address of the ICAP server.
+              format: ipv6
+              type: string
+            max-connections:
+              description: Maximum number of concurrent connections to ICAP server.
+                Must not be less than wad-worker-count.
+              maximum: 65535
+              minimum: 1
+              type: integer
+            name:
+              description: Server name.
+              maxLength: 35
+              type: string
+            port:
+              description: ICAP server port.
+              maximum: 65535
+              minimum: 1
+              type: integer
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - icap/server
+produces:
+- application/json
+schemes:
+- https
+security:
+- APIKeyQueryParam: []
+securityDefinitions:
+  APIKeyQueryParam:
+    in: query
+    name: access_token
+    type: apiKey
+swagger: '2.0'
+tags:
+- description: Configure ICAP profiles.
+  name: icap/profile
+- description: Configure ICAP servers.
+  name: icap/server

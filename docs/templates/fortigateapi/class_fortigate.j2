@@ -1,0 +1,13 @@
+{{ class_name }}
+{{ "=" * class_name|length }}
+
+.. autoclass:: {{ package }}.{{ class_name }}
+  :members:
+
+{% if usage %}
+Usage
+-----
+
+{{ usage }}
+
+{% endif %}

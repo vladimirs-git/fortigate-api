@@ -1,0 +1,1025 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "termsOfService": "http:\/\/fortinet.com\/terms\/",
+        "version": "v2",
+        "contact": {
+            "url": "http:\/\/modskristensen.net",
+            "name": "FortiOS Web Application Team",
+            "email": "fosguiqateam@fortinet.com"
+        },
+        "description": "REST API for configuring FortiOS objects and settings",
+        "title": "FortiOS CMDB"
+    },
+    "host": "172.16.177.65",
+    "basePath": "\/api\/v2\/cmdb",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application\/json"
+    ],
+    "produces": [
+        "application\/json"
+    ],
+    "securityDefinitions": {
+        "APIKeyQueryParam": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query"
+        }
+    },
+    "security": [
+        {
+            "APIKeyQueryParam": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "file-filter\/profile",
+            "description": "Configure file-filter profiles."
+        }
+    ],
+    "paths": {
+        "\/file-filter\/profile\/{name}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Profile name.",
+                                    "maxLength": 35
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 255
+                                },
+                                "feature-set": {
+                                    "type": "string",
+                                    "description": "Flow\/proxy feature set.   \nflow:Flow feature set.   \nproxy:Proxy feature set.",
+                                    "enum": [
+                                        "flow",
+                                        "proxy"
+                                    ]
+                                },
+                                "replacemsg-group": {
+                                    "type": "string",
+                                    "description": "Replacement message group",
+                                    "maxLength": 35
+                                },
+                                "log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable file-filter logging.   \ndisable:Disable logging.   \nenable:Enable logging.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "extended-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable file-filter extended logging.   \ndisable:Disable extended logging.   \nenable:Enable extended logging.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "scan-archive-contents": {
+                                    "type": "string",
+                                    "description": "Enable\/disable archive contents scan. (Not for CIFS)   \ndisable:Disable scanning archive contents.   \nenable:Enable scanning archive contents.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "rules": {
+                                    "description": "File filter rules.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "File-filter rule name.",
+                                                "maxLength": 35
+                                            },
+                                            "comment": {
+                                                "type": "string",
+                                                "description": "Comment.",
+                                                "maxLength": 255
+                                            },
+                                            "protocol": {
+                                                "type": "string",
+                                                "description": "Protocols to apply rule to.   \nhttp:Filter on HTTP.   \nftp:Filter on FTP.   \nsmtp:Filter on SMTP.   \nimap:Filter on IMAP.   \npop3:Filter on POP3.   \nmapi:Filter on MAPI. (Proxy mode only.)   \ncifs:Filter on CIFS.   \nssh:Filter on SFTP and SCP. (Proxy mode only.)",
+                                                "enum": [
+                                                    "http",
+                                                    "ftp",
+                                                    "smtp",
+                                                    "imap",
+                                                    "pop3",
+                                                    "mapi",
+                                                    "cifs",
+                                                    "ssh"
+                                                ]
+                                            },
+                                            "action": {
+                                                "type": "string",
+                                                "description": "Action taken for matched file.   \nlog-only:Allow the content and write a log message.   \nblock:Block the content and write a log message.",
+                                                "enum": [
+                                                    "log-only",
+                                                    "block"
+                                                ]
+                                            },
+                                            "direction": {
+                                                "type": "string",
+                                                "description": "Traffic direction. (HTTP, FTP, SSH, CIFS only)   \nincoming:Match files transmitted in the session's reply direction.   \noutgoing:Match files transmitted in the session's originating direction.   \nany:Match files transmitted in the session's originating and reply directions.",
+                                                "enum": [
+                                                    "incoming",
+                                                    "outgoing",
+                                                    "any"
+                                                ]
+                                            },
+                                            "password-protected": {
+                                                "type": "string",
+                                                "description": "Match password-protected files.   \nyes:Match only password-protected files.   \nany:Match any file.",
+                                                "enum": [
+                                                    "yes",
+                                                    "any"
+                                                ]
+                                            },
+                                            "file-type": {
+                                                "description": "Select file type.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "name": {
+                                                            "type": "string",
+                                                            "description": "File type name.",
+                                                            "maxLength": 39
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": 2000
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "file-filter\/profile"
+                ]
+            },
+            "put": {
+                "summary": "Update this specific resource.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Profile name.",
+                                    "maxLength": 35
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 255
+                                },
+                                "feature-set": {
+                                    "type": "string",
+                                    "description": "Flow\/proxy feature set.   \nflow:Flow feature set.   \nproxy:Proxy feature set.",
+                                    "enum": [
+                                        "flow",
+                                        "proxy"
+                                    ]
+                                },
+                                "replacemsg-group": {
+                                    "type": "string",
+                                    "description": "Replacement message group",
+                                    "maxLength": 35
+                                },
+                                "log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable file-filter logging.   \ndisable:Disable logging.   \nenable:Enable logging.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "extended-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable file-filter extended logging.   \ndisable:Disable extended logging.   \nenable:Enable extended logging.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "scan-archive-contents": {
+                                    "type": "string",
+                                    "description": "Enable\/disable archive contents scan. (Not for CIFS)   \ndisable:Disable scanning archive contents.   \nenable:Enable scanning archive contents.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "rules": {
+                                    "description": "File filter rules.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "File-filter rule name.",
+                                                "maxLength": 35
+                                            },
+                                            "comment": {
+                                                "type": "string",
+                                                "description": "Comment.",
+                                                "maxLength": 255
+                                            },
+                                            "protocol": {
+                                                "type": "string",
+                                                "description": "Protocols to apply rule to.   \nhttp:Filter on HTTP.   \nftp:Filter on FTP.   \nsmtp:Filter on SMTP.   \nimap:Filter on IMAP.   \npop3:Filter on POP3.   \nmapi:Filter on MAPI. (Proxy mode only.)   \ncifs:Filter on CIFS.   \nssh:Filter on SFTP and SCP. (Proxy mode only.)",
+                                                "enum": [
+                                                    "http",
+                                                    "ftp",
+                                                    "smtp",
+                                                    "imap",
+                                                    "pop3",
+                                                    "mapi",
+                                                    "cifs",
+                                                    "ssh"
+                                                ]
+                                            },
+                                            "action": {
+                                                "type": "string",
+                                                "description": "Action taken for matched file.   \nlog-only:Allow the content and write a log message.   \nblock:Block the content and write a log message.",
+                                                "enum": [
+                                                    "log-only",
+                                                    "block"
+                                                ]
+                                            },
+                                            "direction": {
+                                                "type": "string",
+                                                "description": "Traffic direction. (HTTP, FTP, SSH, CIFS only)   \nincoming:Match files transmitted in the session's reply direction.   \noutgoing:Match files transmitted in the session's originating direction.   \nany:Match files transmitted in the session's originating and reply directions.",
+                                                "enum": [
+                                                    "incoming",
+                                                    "outgoing",
+                                                    "any"
+                                                ]
+                                            },
+                                            "password-protected": {
+                                                "type": "string",
+                                                "description": "Match password-protected files.   \nyes:Match only password-protected files.   \nany:Match any file.",
+                                                "enum": [
+                                                    "yes",
+                                                    "any"
+                                                ]
+                                            },
+                                            "file-type": {
+                                                "description": "Select file type.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "name": {
+                                                            "type": "string",
+                                                            "description": "File type name.",
+                                                            "maxLength": 39
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": 2000
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_move_: Move this specific resource.\nWhen *action=move* is set, one of the extra parameters (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "move"
+                        ]
+                    },
+                    {
+                        "name": "before",
+                        "in": "query",
+                        "description": "If *action=move*, use *before* to specify the ID of the resource that this resource will be moved before.\nFor example, to move `object 1` to before `object 2`, use:\n__action=move&before=2__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "If *action=move*, use *after* to specify the ID of the resource that this resource will be moved after.\nFor example, to move `object 1` to after `object 3`, use:\n__action=move&after=3__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "file-filter\/profile"
+                ]
+            },
+            "delete": {
+                "summary": "Delete this specific resource.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "file-filter\/profile"
+                ]
+            }
+        },
+        "\/file-filter\/profile": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Profile name.",
+                                    "maxLength": 35
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 255
+                                },
+                                "feature-set": {
+                                    "type": "string",
+                                    "description": "Flow\/proxy feature set.   \nflow:Flow feature set.   \nproxy:Proxy feature set.",
+                                    "enum": [
+                                        "flow",
+                                        "proxy"
+                                    ]
+                                },
+                                "replacemsg-group": {
+                                    "type": "string",
+                                    "description": "Replacement message group",
+                                    "maxLength": 35
+                                },
+                                "log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable file-filter logging.   \ndisable:Disable logging.   \nenable:Enable logging.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "extended-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable file-filter extended logging.   \ndisable:Disable extended logging.   \nenable:Enable extended logging.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "scan-archive-contents": {
+                                    "type": "string",
+                                    "description": "Enable\/disable archive contents scan. (Not for CIFS)   \ndisable:Disable scanning archive contents.   \nenable:Enable scanning archive contents.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "rules": {
+                                    "description": "File filter rules.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "File-filter rule name.",
+                                                "maxLength": 35
+                                            },
+                                            "comment": {
+                                                "type": "string",
+                                                "description": "Comment.",
+                                                "maxLength": 255
+                                            },
+                                            "protocol": {
+                                                "type": "string",
+                                                "description": "Protocols to apply rule to.   \nhttp:Filter on HTTP.   \nftp:Filter on FTP.   \nsmtp:Filter on SMTP.   \nimap:Filter on IMAP.   \npop3:Filter on POP3.   \nmapi:Filter on MAPI. (Proxy mode only.)   \ncifs:Filter on CIFS.   \nssh:Filter on SFTP and SCP. (Proxy mode only.)",
+                                                "enum": [
+                                                    "http",
+                                                    "ftp",
+                                                    "smtp",
+                                                    "imap",
+                                                    "pop3",
+                                                    "mapi",
+                                                    "cifs",
+                                                    "ssh"
+                                                ]
+                                            },
+                                            "action": {
+                                                "type": "string",
+                                                "description": "Action taken for matched file.   \nlog-only:Allow the content and write a log message.   \nblock:Block the content and write a log message.",
+                                                "enum": [
+                                                    "log-only",
+                                                    "block"
+                                                ]
+                                            },
+                                            "direction": {
+                                                "type": "string",
+                                                "description": "Traffic direction. (HTTP, FTP, SSH, CIFS only)   \nincoming:Match files transmitted in the session's reply direction.   \noutgoing:Match files transmitted in the session's originating direction.   \nany:Match files transmitted in the session's originating and reply directions.",
+                                                "enum": [
+                                                    "incoming",
+                                                    "outgoing",
+                                                    "any"
+                                                ]
+                                            },
+                                            "password-protected": {
+                                                "type": "string",
+                                                "description": "Match password-protected files.   \nyes:Match only password-protected files.   \nany:Match any file.",
+                                                "enum": [
+                                                    "yes",
+                                                    "any"
+                                                ]
+                                            },
+                                            "file-type": {
+                                                "description": "Select file type.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "name": {
+                                                            "type": "string",
+                                                            "description": "File type name.",
+                                                            "maxLength": 39
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": 2000
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "file-filter\/profile"
+                ]
+            },
+            "post": {
+                "summary": "Create object(s) in this table.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Profile name.",
+                                    "maxLength": 35
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 255
+                                },
+                                "feature-set": {
+                                    "type": "string",
+                                    "description": "Flow\/proxy feature set.   \nflow:Flow feature set.   \nproxy:Proxy feature set.",
+                                    "enum": [
+                                        "flow",
+                                        "proxy"
+                                    ]
+                                },
+                                "replacemsg-group": {
+                                    "type": "string",
+                                    "description": "Replacement message group",
+                                    "maxLength": 35
+                                },
+                                "log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable file-filter logging.   \ndisable:Disable logging.   \nenable:Enable logging.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "extended-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable file-filter extended logging.   \ndisable:Disable extended logging.   \nenable:Enable extended logging.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "scan-archive-contents": {
+                                    "type": "string",
+                                    "description": "Enable\/disable archive contents scan. (Not for CIFS)   \ndisable:Disable scanning archive contents.   \nenable:Enable scanning archive contents.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "rules": {
+                                    "description": "File filter rules.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "File-filter rule name.",
+                                                "maxLength": 35
+                                            },
+                                            "comment": {
+                                                "type": "string",
+                                                "description": "Comment.",
+                                                "maxLength": 255
+                                            },
+                                            "protocol": {
+                                                "type": "string",
+                                                "description": "Protocols to apply rule to.   \nhttp:Filter on HTTP.   \nftp:Filter on FTP.   \nsmtp:Filter on SMTP.   \nimap:Filter on IMAP.   \npop3:Filter on POP3.   \nmapi:Filter on MAPI. (Proxy mode only.)   \ncifs:Filter on CIFS.   \nssh:Filter on SFTP and SCP. (Proxy mode only.)",
+                                                "enum": [
+                                                    "http",
+                                                    "ftp",
+                                                    "smtp",
+                                                    "imap",
+                                                    "pop3",
+                                                    "mapi",
+                                                    "cifs",
+                                                    "ssh"
+                                                ]
+                                            },
+                                            "action": {
+                                                "type": "string",
+                                                "description": "Action taken for matched file.   \nlog-only:Allow the content and write a log message.   \nblock:Block the content and write a log message.",
+                                                "enum": [
+                                                    "log-only",
+                                                    "block"
+                                                ]
+                                            },
+                                            "direction": {
+                                                "type": "string",
+                                                "description": "Traffic direction. (HTTP, FTP, SSH, CIFS only)   \nincoming:Match files transmitted in the session's reply direction.   \noutgoing:Match files transmitted in the session's originating direction.   \nany:Match files transmitted in the session's originating and reply directions.",
+                                                "enum": [
+                                                    "incoming",
+                                                    "outgoing",
+                                                    "any"
+                                                ]
+                                            },
+                                            "password-protected": {
+                                                "type": "string",
+                                                "description": "Match password-protected files.   \nyes:Match only password-protected files.   \nany:Match any file.",
+                                                "enum": [
+                                                    "yes",
+                                                    "any"
+                                                ]
+                                            },
+                                            "file-type": {
+                                                "description": "Select file type.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "name": {
+                                                            "type": "string",
+                                                            "description": "File type name.",
+                                                            "maxLength": 39
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": 2000
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_clone_: Clone this specific resource.\nWhen *action=clone* is set, the extra parameters *nkey* must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "clone"
+                        ]
+                    },
+                    {
+                        "name": "nkey",
+                        "in": "query",
+                        "description": " If *action=clone*, use *nkey* to specify the ID for the new resource to be created.\nFor example, to clone `address1` to `address1_clone`, use:\n__action=clone&nkey=address1_clone__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *clone*.\n",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "file-filter\/profile"
+                ]
+            }
+        }
+    }
+}

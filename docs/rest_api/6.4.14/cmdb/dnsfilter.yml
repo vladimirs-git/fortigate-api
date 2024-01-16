@@ -1,0 +1,2125 @@
+basePath: /api/v2/cmdb
+consumes:
+- application/json
+host: 172.16.177.65
+info:
+  contact:
+    email: fosguiqateam@fortinet.com
+    name: FortiOS Web Application Team
+    url: http://modskristensen.net
+  description: REST API for configuring FortiOS objects and settings
+  termsOfService: http://fortinet.com/terms/
+  title: FortiOS CMDB
+  version: v2
+paths:
+  /dnsfilter/domain-filter:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              comment:
+                description: Optional comments.
+                maxLength: 255
+                type: string
+              entries:
+                description: DNS domain filter entries.
+                items:
+                  properties:
+                    action:
+                      description: "Action to take for domain filter matches.   \n\
+                        block:Block DNS requests matching the domain filter.   \n\
+                        allow:Allow DNS requests matching the domain filter without\
+                        \ logging.   \nmonitor:Allow DNS requests matching the domain\
+                        \ filter with logging."
+                      enum:
+                      - block
+                      - allow
+                      - monitor
+                      type: string
+                    domain:
+                      description: Domain entries to be filtered.
+                      maxLength: 511
+                      type: string
+                    id:
+                      description: Id.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    status:
+                      description: "Enable/disable this domain filter.   \nenable:Enable\
+                        \ this domain filter.   \ndisable:Disable this domain filter."
+                      enum:
+                      - enable
+                      - disable
+                      type: string
+                    type:
+                      description: "DNS domain filter type.   \nsimple:Simple domain\
+                        \ string.   \nregex:Regular expression domain string.   \n\
+                        wildcard:Wildcard domain string."
+                      enum:
+                      - simple
+                      - regex
+                      - wildcard
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              id:
+                description: ID.
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              name:
+                description: Name of table.
+                maxLength: 63
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dnsfilter/domain-filter
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            comment:
+              description: Optional comments.
+              maxLength: 255
+              type: string
+            entries:
+              description: DNS domain filter entries.
+              items:
+                properties:
+                  action:
+                    description: "Action to take for domain filter matches.   \nblock:Block\
+                      \ DNS requests matching the domain filter.   \nallow:Allow DNS\
+                      \ requests matching the domain filter without logging.   \n\
+                      monitor:Allow DNS requests matching the domain filter with logging."
+                    enum:
+                    - block
+                    - allow
+                    - monitor
+                    type: string
+                  domain:
+                    description: Domain entries to be filtered.
+                    maxLength: 511
+                    type: string
+                  id:
+                    description: Id.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  status:
+                    description: "Enable/disable this domain filter.   \nenable:Enable\
+                      \ this domain filter.   \ndisable:Disable this domain filter."
+                    enum:
+                    - enable
+                    - disable
+                    type: string
+                  type:
+                    description: "DNS domain filter type.   \nsimple:Simple domain\
+                      \ string.   \nregex:Regular expression domain string.   \nwildcard:Wildcard\
+                      \ domain string."
+                    enum:
+                    - simple
+                    - regex
+                    - wildcard
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            id:
+              description: ID.
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            name:
+              description: Name of table.
+              maxLength: 63
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - dnsfilter/domain-filter
+  /dnsfilter/domain-filter/{id}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: id
+        required: true
+        type: integer
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dnsfilter/domain-filter
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              comment:
+                description: Optional comments.
+                maxLength: 255
+                type: string
+              entries:
+                description: DNS domain filter entries.
+                items:
+                  properties:
+                    action:
+                      description: "Action to take for domain filter matches.   \n\
+                        block:Block DNS requests matching the domain filter.   \n\
+                        allow:Allow DNS requests matching the domain filter without\
+                        \ logging.   \nmonitor:Allow DNS requests matching the domain\
+                        \ filter with logging."
+                      enum:
+                      - block
+                      - allow
+                      - monitor
+                      type: string
+                    domain:
+                      description: Domain entries to be filtered.
+                      maxLength: 511
+                      type: string
+                    id:
+                      description: Id.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    status:
+                      description: "Enable/disable this domain filter.   \nenable:Enable\
+                        \ this domain filter.   \ndisable:Disable this domain filter."
+                      enum:
+                      - enable
+                      - disable
+                      type: string
+                    type:
+                      description: "DNS domain filter type.   \nsimple:Simple domain\
+                        \ string.   \nregex:Regular expression domain string.   \n\
+                        wildcard:Wildcard domain string."
+                      enum:
+                      - simple
+                      - regex
+                      - wildcard
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              id:
+                description: ID.
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              name:
+                description: Name of table.
+                maxLength: 63
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dnsfilter/domain-filter
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            comment:
+              description: Optional comments.
+              maxLength: 255
+              type: string
+            entries:
+              description: DNS domain filter entries.
+              items:
+                properties:
+                  action:
+                    description: "Action to take for domain filter matches.   \nblock:Block\
+                      \ DNS requests matching the domain filter.   \nallow:Allow DNS\
+                      \ requests matching the domain filter without logging.   \n\
+                      monitor:Allow DNS requests matching the domain filter with logging."
+                    enum:
+                    - block
+                    - allow
+                    - monitor
+                    type: string
+                  domain:
+                    description: Domain entries to be filtered.
+                    maxLength: 511
+                    type: string
+                  id:
+                    description: Id.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  status:
+                    description: "Enable/disable this domain filter.   \nenable:Enable\
+                      \ this domain filter.   \ndisable:Disable this domain filter."
+                    enum:
+                    - enable
+                    - disable
+                    type: string
+                  type:
+                    description: "DNS domain filter type.   \nsimple:Simple domain\
+                      \ string.   \nregex:Regular expression domain string.   \nwildcard:Wildcard\
+                      \ domain string."
+                    enum:
+                    - simple
+                    - regex
+                    - wildcard
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            id:
+              description: ID.
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            name:
+              description: Name of table.
+              maxLength: 63
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dnsfilter/domain-filter
+  /dnsfilter/profile:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              block-action:
+                description: "Action to take for blocked domains.   \nblock:Return\
+                  \ NXDOMAIN for blocked domains.   \nredirect:Redirect blocked domains\
+                  \ to SDNS portal."
+                enum:
+                - block
+                - redirect
+                type: string
+              block-botnet:
+                description: "Enable/disable blocking botnet C&C DNS lookups.   \n\
+                  disable:Disable blocking botnet C&C DNS lookups.   \nenable:Enable\
+                  \ blocking botnet C&C DNS lookups."
+                enum:
+                - disable
+                - enable
+                type: string
+              comment:
+                description: Comment.
+                maxLength: 255
+                type: string
+              dns-translation:
+                description: DNS translation settings.
+                items:
+                  properties:
+                    addr-type:
+                      description: "DNS translation type (IPv4 or IPv6).   \nipv4:IPv4\
+                        \ address type.   \nipv6:IPv6 address type."
+                      enum:
+                      - ipv4
+                      - ipv6
+                      type: string
+                    dst:
+                      description: IPv4 address or subnet on the external network
+                        to substitute for the resolved address in DNS query replies.
+                        Can be single IP address or subnet on the external network,
+                        but number of addresses must equal number of mapped IP addresses
+                        in src.
+                      format: ipv4
+                      type: string
+                    dst6:
+                      description: IPv6 address or subnet on the external network
+                        to substitute for the resolved address in DNS query replies.
+                        Can be single IP address or subnet on the external network,
+                        but number of addresses must equal number of mapped IP addresses
+                        in src6.
+                      format: ipv6
+                      type: string
+                    id:
+                      description: ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    netmask:
+                      description: If src and dst are subnets rather than single IP
+                        addresses, enter the netmask for both src and dst.
+                      type: string
+                    prefix:
+                      description: If src6 and dst6 are subnets rather than single
+                        IP addresses, enter the prefix for both src6 and dst6 (1 -
+                        128, default = 128).
+                      maximum: 128
+                      minimum: 1
+                      type: integer
+                    src:
+                      description: IPv4 address or subnet on the internal network
+                        to compare with the resolved address in DNS query replies.
+                        If the resolved address matches, the resolved address is substituted
+                        with dst.
+                      format: ipv4
+                      type: string
+                    src6:
+                      description: IPv6 address or subnet on the internal network
+                        to compare with the resolved address in DNS query replies.
+                        If the resolved address matches, the resolved address is substituted
+                        with dst6.
+                      format: ipv6
+                      type: string
+                    status:
+                      description: "Enable/disable this DNS translation entry.   \n\
+                        enable:Enable this DNS translation.   \ndisable:Disable this\
+                        \ DNS translation."
+                      enum:
+                      - enable
+                      - disable
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              domain-filter:
+                description: Domain filter settings.
+                items:
+                  properties:
+                    domain-filter-table:
+                      description: DNS domain filter table ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                  type: object
+                maxItems: null
+                type: array
+              external-ip-blocklist:
+                description: One or more external IP block lists.
+                items:
+                  properties:
+                    name:
+                      description: External domain block list name.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              ftgd-dns:
+                description: FortiGuard DNS Filter settings.
+                items:
+                  properties:
+                    filters:
+                      description: FortiGuard DNS domain filters.
+                      items:
+                        properties:
+                          action:
+                            description: "Action to take for DNS requests matching\
+                              \ the category.   \nblock:Block DNS requests matching\
+                              \ the category.   \nmonitor:Allow DNS requests matching\
+                              \ the category and log the result."
+                            enum:
+                            - block
+                            - monitor
+                            type: string
+                          category:
+                            description: Category number.
+                            maximum: 255
+                            minimum: 0
+                            type: integer
+                          id:
+                            description: ID number.
+                            maximum: 255
+                            minimum: 0
+                            type: integer
+                          log:
+                            description: "Enable/disable DNS filter logging for this\
+                              \ DNS profile.   \nenable:Enable DNS filter logging.\
+                              \   \ndisable:Disable DNS filter logging."
+                            enum:
+                            - enable
+                            - disable
+                            type: string
+                        type: object
+                      maxItems: null
+                      type: array
+                    options:
+                      description: "FortiGuard DNS filter options.   \nerror-allow:Allow\
+                        \ all domains when FortiGuard DNS servers fail.   \nftgd-disable:Disable\
+                        \ FortiGuard DNS domain rating."
+                      enum:
+                      - error-allow
+                      - ftgd-disable
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              log-all-domain:
+                description: "Enable/disable logging of all domains visited (detailed\
+                  \ DNS logging).   \nenable:Enable logging of all domains visited.\
+                  \   \ndisable:Disable logging of all domains visited."
+                enum:
+                - enable
+                - disable
+                type: string
+              name:
+                description: Profile name.
+                maxLength: 35
+                type: string
+              redirect-portal:
+                description: IPv4 address of the SDNS redirect portal.
+                format: ipv4
+                type: string
+              redirect-portal6:
+                description: IPv6 address of the SDNS redirect portal.
+                format: ipv6
+                type: string
+              safe-search:
+                description: "Enable/disable Google, Bing, YouTube, Qwant, DuckDuckGo\
+                  \ safe search.   \ndisable:Disable Google, Bing, YouTube, Qwant,\
+                  \ DuckDuckGo safe search.   \nenable:Enable Google, Bing, YouTube,\
+                  \ Qwant, DuckDuckGo safe search."
+                enum:
+                - disable
+                - enable
+                type: string
+              sdns-domain-log:
+                description: "Enable/disable domain filtering and botnet domain logging.\
+                  \   \nenable:Enable domain filtering and botnet domain logging.\
+                  \   \ndisable:Disable domain filtering and botnet domain logging."
+                enum:
+                - enable
+                - disable
+                type: string
+              sdns-ftgd-err-log:
+                description: "Enable/disable FortiGuard SDNS rating error logging.\
+                  \   \nenable:Enable FortiGuard SDNS rating error logging.   \ndisable:Disable\
+                  \ FortiGuard SDNS rating error logging."
+                enum:
+                - enable
+                - disable
+                type: string
+              youtube-restrict:
+                description: "Set safe search for YouTube restriction level.   \n\
+                  strict:Enable strict safe seach for YouTube.   \nmoderate:Enable\
+                  \ moderate safe search for YouTube."
+                enum:
+                - strict
+                - moderate
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dnsfilter/profile
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            block-action:
+              description: "Action to take for blocked domains.   \nblock:Return NXDOMAIN\
+                \ for blocked domains.   \nredirect:Redirect blocked domains to SDNS\
+                \ portal."
+              enum:
+              - block
+              - redirect
+              type: string
+            block-botnet:
+              description: "Enable/disable blocking botnet C&C DNS lookups.   \ndisable:Disable\
+                \ blocking botnet C&C DNS lookups.   \nenable:Enable blocking botnet\
+                \ C&C DNS lookups."
+              enum:
+              - disable
+              - enable
+              type: string
+            comment:
+              description: Comment.
+              maxLength: 255
+              type: string
+            dns-translation:
+              description: DNS translation settings.
+              items:
+                properties:
+                  addr-type:
+                    description: "DNS translation type (IPv4 or IPv6).   \nipv4:IPv4\
+                      \ address type.   \nipv6:IPv6 address type."
+                    enum:
+                    - ipv4
+                    - ipv6
+                    type: string
+                  dst:
+                    description: IPv4 address or subnet on the external network to
+                      substitute for the resolved address in DNS query replies. Can
+                      be single IP address or subnet on the external network, but
+                      number of addresses must equal number of mapped IP addresses
+                      in src.
+                    format: ipv4
+                    type: string
+                  dst6:
+                    description: IPv6 address or subnet on the external network to
+                      substitute for the resolved address in DNS query replies. Can
+                      be single IP address or subnet on the external network, but
+                      number of addresses must equal number of mapped IP addresses
+                      in src6.
+                    format: ipv6
+                    type: string
+                  id:
+                    description: ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  netmask:
+                    description: If src and dst are subnets rather than single IP
+                      addresses, enter the netmask for both src and dst.
+                    type: string
+                  prefix:
+                    description: If src6 and dst6 are subnets rather than single IP
+                      addresses, enter the prefix for both src6 and dst6 (1 - 128,
+                      default = 128).
+                    maximum: 128
+                    minimum: 1
+                    type: integer
+                  src:
+                    description: IPv4 address or subnet on the internal network to
+                      compare with the resolved address in DNS query replies. If the
+                      resolved address matches, the resolved address is substituted
+                      with dst.
+                    format: ipv4
+                    type: string
+                  src6:
+                    description: IPv6 address or subnet on the internal network to
+                      compare with the resolved address in DNS query replies. If the
+                      resolved address matches, the resolved address is substituted
+                      with dst6.
+                    format: ipv6
+                    type: string
+                  status:
+                    description: "Enable/disable this DNS translation entry.   \n\
+                      enable:Enable this DNS translation.   \ndisable:Disable this\
+                      \ DNS translation."
+                    enum:
+                    - enable
+                    - disable
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            domain-filter:
+              description: Domain filter settings.
+              items:
+                properties:
+                  domain-filter-table:
+                    description: DNS domain filter table ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+              maxItems: null
+              type: array
+            external-ip-blocklist:
+              description: One or more external IP block lists.
+              items:
+                properties:
+                  name:
+                    description: External domain block list name.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            ftgd-dns:
+              description: FortiGuard DNS Filter settings.
+              items:
+                properties:
+                  filters:
+                    description: FortiGuard DNS domain filters.
+                    items:
+                      properties:
+                        action:
+                          description: "Action to take for DNS requests matching the\
+                            \ category.   \nblock:Block DNS requests matching the\
+                            \ category.   \nmonitor:Allow DNS requests matching the\
+                            \ category and log the result."
+                          enum:
+                          - block
+                          - monitor
+                          type: string
+                        category:
+                          description: Category number.
+                          maximum: 255
+                          minimum: 0
+                          type: integer
+                        id:
+                          description: ID number.
+                          maximum: 255
+                          minimum: 0
+                          type: integer
+                        log:
+                          description: "Enable/disable DNS filter logging for this\
+                            \ DNS profile.   \nenable:Enable DNS filter logging. \
+                            \  \ndisable:Disable DNS filter logging."
+                          enum:
+                          - enable
+                          - disable
+                          type: string
+                      type: object
+                    maxItems: null
+                    type: array
+                  options:
+                    description: "FortiGuard DNS filter options.   \nerror-allow:Allow\
+                      \ all domains when FortiGuard DNS servers fail.   \nftgd-disable:Disable\
+                      \ FortiGuard DNS domain rating."
+                    enum:
+                    - error-allow
+                    - ftgd-disable
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            log-all-domain:
+              description: "Enable/disable logging of all domains visited (detailed\
+                \ DNS logging).   \nenable:Enable logging of all domains visited.\
+                \   \ndisable:Disable logging of all domains visited."
+              enum:
+              - enable
+              - disable
+              type: string
+            name:
+              description: Profile name.
+              maxLength: 35
+              type: string
+            redirect-portal:
+              description: IPv4 address of the SDNS redirect portal.
+              format: ipv4
+              type: string
+            redirect-portal6:
+              description: IPv6 address of the SDNS redirect portal.
+              format: ipv6
+              type: string
+            safe-search:
+              description: "Enable/disable Google, Bing, YouTube, Qwant, DuckDuckGo\
+                \ safe search.   \ndisable:Disable Google, Bing, YouTube, Qwant, DuckDuckGo\
+                \ safe search.   \nenable:Enable Google, Bing, YouTube, Qwant, DuckDuckGo\
+                \ safe search."
+              enum:
+              - disable
+              - enable
+              type: string
+            sdns-domain-log:
+              description: "Enable/disable domain filtering and botnet domain logging.\
+                \   \nenable:Enable domain filtering and botnet domain logging.  \
+                \ \ndisable:Disable domain filtering and botnet domain logging."
+              enum:
+              - enable
+              - disable
+              type: string
+            sdns-ftgd-err-log:
+              description: "Enable/disable FortiGuard SDNS rating error logging. \
+                \  \nenable:Enable FortiGuard SDNS rating error logging.   \ndisable:Disable\
+                \ FortiGuard SDNS rating error logging."
+              enum:
+              - enable
+              - disable
+              type: string
+            youtube-restrict:
+              description: "Set safe search for YouTube restriction level.   \nstrict:Enable\
+                \ strict safe seach for YouTube.   \nmoderate:Enable moderate safe\
+                \ search for YouTube."
+              enum:
+              - strict
+              - moderate
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - dnsfilter/profile
+  /dnsfilter/profile/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dnsfilter/profile
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              block-action:
+                description: "Action to take for blocked domains.   \nblock:Return\
+                  \ NXDOMAIN for blocked domains.   \nredirect:Redirect blocked domains\
+                  \ to SDNS portal."
+                enum:
+                - block
+                - redirect
+                type: string
+              block-botnet:
+                description: "Enable/disable blocking botnet C&C DNS lookups.   \n\
+                  disable:Disable blocking botnet C&C DNS lookups.   \nenable:Enable\
+                  \ blocking botnet C&C DNS lookups."
+                enum:
+                - disable
+                - enable
+                type: string
+              comment:
+                description: Comment.
+                maxLength: 255
+                type: string
+              dns-translation:
+                description: DNS translation settings.
+                items:
+                  properties:
+                    addr-type:
+                      description: "DNS translation type (IPv4 or IPv6).   \nipv4:IPv4\
+                        \ address type.   \nipv6:IPv6 address type."
+                      enum:
+                      - ipv4
+                      - ipv6
+                      type: string
+                    dst:
+                      description: IPv4 address or subnet on the external network
+                        to substitute for the resolved address in DNS query replies.
+                        Can be single IP address or subnet on the external network,
+                        but number of addresses must equal number of mapped IP addresses
+                        in src.
+                      format: ipv4
+                      type: string
+                    dst6:
+                      description: IPv6 address or subnet on the external network
+                        to substitute for the resolved address in DNS query replies.
+                        Can be single IP address or subnet on the external network,
+                        but number of addresses must equal number of mapped IP addresses
+                        in src6.
+                      format: ipv6
+                      type: string
+                    id:
+                      description: ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    netmask:
+                      description: If src and dst are subnets rather than single IP
+                        addresses, enter the netmask for both src and dst.
+                      type: string
+                    prefix:
+                      description: If src6 and dst6 are subnets rather than single
+                        IP addresses, enter the prefix for both src6 and dst6 (1 -
+                        128, default = 128).
+                      maximum: 128
+                      minimum: 1
+                      type: integer
+                    src:
+                      description: IPv4 address or subnet on the internal network
+                        to compare with the resolved address in DNS query replies.
+                        If the resolved address matches, the resolved address is substituted
+                        with dst.
+                      format: ipv4
+                      type: string
+                    src6:
+                      description: IPv6 address or subnet on the internal network
+                        to compare with the resolved address in DNS query replies.
+                        If the resolved address matches, the resolved address is substituted
+                        with dst6.
+                      format: ipv6
+                      type: string
+                    status:
+                      description: "Enable/disable this DNS translation entry.   \n\
+                        enable:Enable this DNS translation.   \ndisable:Disable this\
+                        \ DNS translation."
+                      enum:
+                      - enable
+                      - disable
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              domain-filter:
+                description: Domain filter settings.
+                items:
+                  properties:
+                    domain-filter-table:
+                      description: DNS domain filter table ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                  type: object
+                maxItems: null
+                type: array
+              external-ip-blocklist:
+                description: One or more external IP block lists.
+                items:
+                  properties:
+                    name:
+                      description: External domain block list name.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              ftgd-dns:
+                description: FortiGuard DNS Filter settings.
+                items:
+                  properties:
+                    filters:
+                      description: FortiGuard DNS domain filters.
+                      items:
+                        properties:
+                          action:
+                            description: "Action to take for DNS requests matching\
+                              \ the category.   \nblock:Block DNS requests matching\
+                              \ the category.   \nmonitor:Allow DNS requests matching\
+                              \ the category and log the result."
+                            enum:
+                            - block
+                            - monitor
+                            type: string
+                          category:
+                            description: Category number.
+                            maximum: 255
+                            minimum: 0
+                            type: integer
+                          id:
+                            description: ID number.
+                            maximum: 255
+                            minimum: 0
+                            type: integer
+                          log:
+                            description: "Enable/disable DNS filter logging for this\
+                              \ DNS profile.   \nenable:Enable DNS filter logging.\
+                              \   \ndisable:Disable DNS filter logging."
+                            enum:
+                            - enable
+                            - disable
+                            type: string
+                        type: object
+                      maxItems: null
+                      type: array
+                    options:
+                      description: "FortiGuard DNS filter options.   \nerror-allow:Allow\
+                        \ all domains when FortiGuard DNS servers fail.   \nftgd-disable:Disable\
+                        \ FortiGuard DNS domain rating."
+                      enum:
+                      - error-allow
+                      - ftgd-disable
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              log-all-domain:
+                description: "Enable/disable logging of all domains visited (detailed\
+                  \ DNS logging).   \nenable:Enable logging of all domains visited.\
+                  \   \ndisable:Disable logging of all domains visited."
+                enum:
+                - enable
+                - disable
+                type: string
+              name:
+                description: Profile name.
+                maxLength: 35
+                type: string
+              redirect-portal:
+                description: IPv4 address of the SDNS redirect portal.
+                format: ipv4
+                type: string
+              redirect-portal6:
+                description: IPv6 address of the SDNS redirect portal.
+                format: ipv6
+                type: string
+              safe-search:
+                description: "Enable/disable Google, Bing, YouTube, Qwant, DuckDuckGo\
+                  \ safe search.   \ndisable:Disable Google, Bing, YouTube, Qwant,\
+                  \ DuckDuckGo safe search.   \nenable:Enable Google, Bing, YouTube,\
+                  \ Qwant, DuckDuckGo safe search."
+                enum:
+                - disable
+                - enable
+                type: string
+              sdns-domain-log:
+                description: "Enable/disable domain filtering and botnet domain logging.\
+                  \   \nenable:Enable domain filtering and botnet domain logging.\
+                  \   \ndisable:Disable domain filtering and botnet domain logging."
+                enum:
+                - enable
+                - disable
+                type: string
+              sdns-ftgd-err-log:
+                description: "Enable/disable FortiGuard SDNS rating error logging.\
+                  \   \nenable:Enable FortiGuard SDNS rating error logging.   \ndisable:Disable\
+                  \ FortiGuard SDNS rating error logging."
+                enum:
+                - enable
+                - disable
+                type: string
+              youtube-restrict:
+                description: "Set safe search for YouTube restriction level.   \n\
+                  strict:Enable strict safe seach for YouTube.   \nmoderate:Enable\
+                  \ moderate safe search for YouTube."
+                enum:
+                - strict
+                - moderate
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dnsfilter/profile
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            block-action:
+              description: "Action to take for blocked domains.   \nblock:Return NXDOMAIN\
+                \ for blocked domains.   \nredirect:Redirect blocked domains to SDNS\
+                \ portal."
+              enum:
+              - block
+              - redirect
+              type: string
+            block-botnet:
+              description: "Enable/disable blocking botnet C&C DNS lookups.   \ndisable:Disable\
+                \ blocking botnet C&C DNS lookups.   \nenable:Enable blocking botnet\
+                \ C&C DNS lookups."
+              enum:
+              - disable
+              - enable
+              type: string
+            comment:
+              description: Comment.
+              maxLength: 255
+              type: string
+            dns-translation:
+              description: DNS translation settings.
+              items:
+                properties:
+                  addr-type:
+                    description: "DNS translation type (IPv4 or IPv6).   \nipv4:IPv4\
+                      \ address type.   \nipv6:IPv6 address type."
+                    enum:
+                    - ipv4
+                    - ipv6
+                    type: string
+                  dst:
+                    description: IPv4 address or subnet on the external network to
+                      substitute for the resolved address in DNS query replies. Can
+                      be single IP address or subnet on the external network, but
+                      number of addresses must equal number of mapped IP addresses
+                      in src.
+                    format: ipv4
+                    type: string
+                  dst6:
+                    description: IPv6 address or subnet on the external network to
+                      substitute for the resolved address in DNS query replies. Can
+                      be single IP address or subnet on the external network, but
+                      number of addresses must equal number of mapped IP addresses
+                      in src6.
+                    format: ipv6
+                    type: string
+                  id:
+                    description: ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  netmask:
+                    description: If src and dst are subnets rather than single IP
+                      addresses, enter the netmask for both src and dst.
+                    type: string
+                  prefix:
+                    description: If src6 and dst6 are subnets rather than single IP
+                      addresses, enter the prefix for both src6 and dst6 (1 - 128,
+                      default = 128).
+                    maximum: 128
+                    minimum: 1
+                    type: integer
+                  src:
+                    description: IPv4 address or subnet on the internal network to
+                      compare with the resolved address in DNS query replies. If the
+                      resolved address matches, the resolved address is substituted
+                      with dst.
+                    format: ipv4
+                    type: string
+                  src6:
+                    description: IPv6 address or subnet on the internal network to
+                      compare with the resolved address in DNS query replies. If the
+                      resolved address matches, the resolved address is substituted
+                      with dst6.
+                    format: ipv6
+                    type: string
+                  status:
+                    description: "Enable/disable this DNS translation entry.   \n\
+                      enable:Enable this DNS translation.   \ndisable:Disable this\
+                      \ DNS translation."
+                    enum:
+                    - enable
+                    - disable
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            domain-filter:
+              description: Domain filter settings.
+              items:
+                properties:
+                  domain-filter-table:
+                    description: DNS domain filter table ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                type: object
+              maxItems: null
+              type: array
+            external-ip-blocklist:
+              description: One or more external IP block lists.
+              items:
+                properties:
+                  name:
+                    description: External domain block list name.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            ftgd-dns:
+              description: FortiGuard DNS Filter settings.
+              items:
+                properties:
+                  filters:
+                    description: FortiGuard DNS domain filters.
+                    items:
+                      properties:
+                        action:
+                          description: "Action to take for DNS requests matching the\
+                            \ category.   \nblock:Block DNS requests matching the\
+                            \ category.   \nmonitor:Allow DNS requests matching the\
+                            \ category and log the result."
+                          enum:
+                          - block
+                          - monitor
+                          type: string
+                        category:
+                          description: Category number.
+                          maximum: 255
+                          minimum: 0
+                          type: integer
+                        id:
+                          description: ID number.
+                          maximum: 255
+                          minimum: 0
+                          type: integer
+                        log:
+                          description: "Enable/disable DNS filter logging for this\
+                            \ DNS profile.   \nenable:Enable DNS filter logging. \
+                            \  \ndisable:Disable DNS filter logging."
+                          enum:
+                          - enable
+                          - disable
+                          type: string
+                      type: object
+                    maxItems: null
+                    type: array
+                  options:
+                    description: "FortiGuard DNS filter options.   \nerror-allow:Allow\
+                      \ all domains when FortiGuard DNS servers fail.   \nftgd-disable:Disable\
+                      \ FortiGuard DNS domain rating."
+                    enum:
+                    - error-allow
+                    - ftgd-disable
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            log-all-domain:
+              description: "Enable/disable logging of all domains visited (detailed\
+                \ DNS logging).   \nenable:Enable logging of all domains visited.\
+                \   \ndisable:Disable logging of all domains visited."
+              enum:
+              - enable
+              - disable
+              type: string
+            name:
+              description: Profile name.
+              maxLength: 35
+              type: string
+            redirect-portal:
+              description: IPv4 address of the SDNS redirect portal.
+              format: ipv4
+              type: string
+            redirect-portal6:
+              description: IPv6 address of the SDNS redirect portal.
+              format: ipv6
+              type: string
+            safe-search:
+              description: "Enable/disable Google, Bing, YouTube, Qwant, DuckDuckGo\
+                \ safe search.   \ndisable:Disable Google, Bing, YouTube, Qwant, DuckDuckGo\
+                \ safe search.   \nenable:Enable Google, Bing, YouTube, Qwant, DuckDuckGo\
+                \ safe search."
+              enum:
+              - disable
+              - enable
+              type: string
+            sdns-domain-log:
+              description: "Enable/disable domain filtering and botnet domain logging.\
+                \   \nenable:Enable domain filtering and botnet domain logging.  \
+                \ \ndisable:Disable domain filtering and botnet domain logging."
+              enum:
+              - enable
+              - disable
+              type: string
+            sdns-ftgd-err-log:
+              description: "Enable/disable FortiGuard SDNS rating error logging. \
+                \  \nenable:Enable FortiGuard SDNS rating error logging.   \ndisable:Disable\
+                \ FortiGuard SDNS rating error logging."
+              enum:
+              - enable
+              - disable
+              type: string
+            youtube-restrict:
+              description: "Set safe search for YouTube restriction level.   \nstrict:Enable\
+                \ strict safe seach for YouTube.   \nmoderate:Enable moderate safe\
+                \ search for YouTube."
+              enum:
+              - strict
+              - moderate
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dnsfilter/profile
+produces:
+- application/json
+schemes:
+- https
+security:
+- APIKeyQueryParam: []
+securityDefinitions:
+  APIKeyQueryParam:
+    in: query
+    name: access_token
+    type: apiKey
+swagger: '2.0'
+tags:
+- description: Configure DNS domain filters.
+  name: dnsfilter/domain-filter
+- description: Configure DNS domain filter profiles.
+  name: dnsfilter/profile

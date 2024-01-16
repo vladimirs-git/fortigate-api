@@ -1,0 +1,7 @@
+"""{{ docstring }}"""
+
+from fortigate_api.{{ scope_name }}.{{ scope_file }} import {{ scope_class }}
+{%- for item in items %}
+from fortigate_api.{{ scope_name }}.{{ item.app_name }}.{{ item.app_file }} import {{ item.app_class }}
+{%- endfor %}
+

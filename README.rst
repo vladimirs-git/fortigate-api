@@ -10,19 +10,12 @@
 fortigate-api
 =============
 
-Python package to configure Fortigate (Fortios) devices using REST API and SSH.
-With this package, you can modify objects in the Fortigate. The most commonly used `Objects`
-are implemented in the `FortigateAPI` methods, but you can manipulate any other objects
-that can be accessed through the REST API using the `Fortigate` methods.
-Additionally, you can retrieve and modify the Fortigate configuration through `Ssh`.
+Python package to configure Fortigate (Fortios) devices using REST API.
 
-Main features:
+    - FortiGateAPI - Python connector to Fortigate API endpoints.
+    - FortiGate - Python wrapper for the FortiOS REST API.
 
-- REST API to create, delete, get, update objects. Move policy before, after other policy
-- Session-based (user, password) and Token-based authentication
-- SSH Netmiko connector to work with CLI commands
-- Usage `Examples`
-
+Checked with FortiOS = v6.4.14.
 Fully documented on `Read the Docs`_.
 
 
@@ -43,23 +36,24 @@ or from github.com repository
 
     pip install git+https://github.com/vladimirs-git/fortigate-api
 
-
-FortigateAPI demonstration:
-
-- Create address in the Fortigate,
-- Get all addresses from the Fortigate,
-- Get filtered address by name (unique identifier),
-- Filter address by operator contains `=@`,
-- Update address data in the Fortigate,
-- Delete address from the Fortigate by name (unique identifier),
-- Check for absence of address in the Fortigate,
+----------------------------------------------------------------------------------------
 
 .. code:: python
+
+    """Quickstart FortiGateAPI.
+
+    - Create address in the Fortigate
+    - Get all addresses from the Fortigate vdom root
+    - Get address by name (unique identifier)
+    - Filter address by operator contains `=@`
+    - Update address data in the Fortigate
+    - Delete address from the Fortigate
+    """
 
     import logging
     from pprint import pprint
 
-    from fortigate_api import FortigateAPI
+    from fortigate_api import FortiGateAPI
 
     logging.getLogger().setLevel(logging.DEBUG)
 
@@ -67,7 +61,7 @@ FortigateAPI demonstration:
     USERNAME = "username"
     PASSWORD = "password"
 
-    fgt = FortigateAPI(host=HOST, username=USERNAME, password=PASSWORD)
+    api = FortiGateAPI(host=HOST, username=USERNAME, password=PASSWORD)
 
     # Create address in the Fortigate
     data = {
@@ -76,16 +70,17 @@ FortigateAPI demonstration:
         "subnet": "127.0.0.100 255.255.255.252",
         "type": "ipmask",
     }
-    response = fgt.address.create(data)
+    response = api.cmdb.firewall.address.create(data)
     print(f"address.create {response}")  # address.create <Response [200]>
 
-    # Get all addresses from the Fortigate
-    addresses = fgt.address.get()
-    print(f"All addresses count={len(addresses)}")  # All addresses count=14
+    # Get all addresses from the Fortigate vdom root
+    items = api.cmdb.firewall.address.get()
+    print(f"All addresses count={len(items)}")  # All addresses count=14
 
-    # Get filtered address by name (unique identifier)
-    addresses = fgt.address.get(uid="ADDRESS")
-    pprint(addresses)
+    # Get address by name (unique identifier)
+    items = api.cmdb.firewall.address.get(name="ADDRESS")
+    print(f"addresses count={len(items)}")  # addresses count=1
+    pprint(items)
     #  [{"comment": "",
     #    "name": "ADDRESS",
     #    "subnet": "127.0.0.100 255.255.255.252",
@@ -93,40 +88,36 @@ FortigateAPI demonstration:
     #    ...
     #    }]
 
-    # Filter address by operator *contains* `=@`
-    addresses = fgt.address.get(filter="subnet=@127.0")
-    print(f"Filtered by `=@`, count={len(addresses)}")  # Filtered by `=@`, count=2
+    # Filter address by operator contains `=@`
+    items = api.cmdb.firewall.address.get(filter="subnet=@127.0")
+    print(f"Filtered by `=@`, count={len(items)}")  # Filtered by `=@`, count=2
 
     # Update address data in the Fortigate
-    data = dict(name="ADDRESS", subnet="127.0.0.255 255.255.255.255", color=6)
-    response = fgt.address.update(uid="ADDRESS", data=data)
+    data = {"name": "ADDRESS", "subnet": "127.0.0.255 255.255.255.255"}
+    response = api.cmdb.firewall.address.update(data)
     print(f"address.update {response}")  # address.update <Response [200]>
 
-    # Delete address from the Fortigate by name (unique identifier)
-    response = fgt.address.delete(uid="ADDRESS")
+    # Delete address from the Fortigate
+    response = api.cmdb.firewall.address.delete("ADDRESS")
     print(f"address.delete {response}")  # address.delete <Response [200]>
 
-    # Check for absence of address in the Fortigate
-    response = fgt.address.is_exist(uid="ADDRESS")
-    print(f"address.is_exist {response}")  # address.is_exist False
+    api.logout()
 
-    fgt.logout()
-
-
-
-Fortigate demonstration:
-
-- Create address in the Fortigate,
-- Get address by name (unique identifier) from the Fortigate,
-- Update address data in the Fortigate,
-- Delete address from the Fortigate by name (unique identifier),
 
 .. code:: python
+
+    """Quickstart FortiGate.
+
+    - Creates address in the Fortigate
+    - Get address by name (unique identifier)
+    - Updates address data in the Fortigate
+    - Delete address from the Fortigate
+    """
 
     import logging
     from pprint import pprint
 
-    from fortigate_api import Fortigate
+    from fortigate_api import FortiGate
 
     logging.getLogger().setLevel(logging.DEBUG)
 
@@ -134,7 +125,7 @@ Fortigate demonstration:
     USERNAME = "username"
     PASSWORD = "password"
 
-    fgt = Fortigate(host=HOST, username=USERNAME, password=PASSWORD)
+    fgt = FortiGate(host=HOST, username=USERNAME, password=PASSWORD)
 
     # Creates address in the Fortigate
     data = {
@@ -146,23 +137,23 @@ Fortigate demonstration:
     response = fgt.post(url="api/v2/cmdb/firewall/address/", data=data)
     print(f"POST {response}", )  # POST <Response [200]>
 
-    # Get address by name (unique identifier) from the Fortigate
-    addresses = fgt.get(url="api/v2/cmdb/firewall/address/")
-    addresses = [d for d in addresses if d["name"] == "ADDRESS"]
-    pprint(addresses)
-    #  [{"comment": "",
-    #    "name": "ADDRESS",
+    # Get address by name (unique identifier)
+    response = fgt.get(url="api/v2/cmdb/firewall/address/ADDRESS")
+    print(f"GET {response}", )  # POST <Response [200]>
+    result = response.json()["results"]
+    pprint(result)
+    #  [{"name": "ADDRESS",
     #    "subnet": "127.0.0.100 255.255.255.252",
     #    "uuid": "a386e4b0-d6cb-51ec-1e28-01e0bc0de43c",
     #    ...
     #    }]
 
     # Updates address data in the Fortigate
-    data = dict(color=6)
+    data = {"name": "ADDRESS", "subnet": "127.0.0.255 255.255.255.255"}
     response = fgt.put(url="api/v2/cmdb/firewall/address/ADDRESS", data=data)
     print(f"PUT {response}")  # PUT <Response [200]>
 
-    # Delete address from the Fortigate by name (unique identifier)
+    # Delete address from the Fortigate
     response = fgt.delete(url="api/v2/cmdb/firewall/address/ADDRESS")
     print(f"DELETE {response}", )  # DELETE <Response [200]>
 
@@ -170,5 +161,18 @@ Fortigate demonstration:
 
 
 ----------------------------------------------------------------------------------------
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+
+
+----------------------------------------------------------------------------------------
+
+.. _`GitHub`: https://github.com/vladimirs-git/fortigate-api
+
 
 .. _`Read the Docs`: https://fortigate-api.readthedocs.io/en/latest/

@@ -1,48 +1,33 @@
-"""FortigateAPI, a set of connectors to work with commonly used objects."""
+"""FortiGateAPI - Python connector to Fortigate API endpoints."""
 
 from __future__ import annotations
 
-from fortigate_api.address import Address
-from fortigate_api.address_group import AddressGroup
-from fortigate_api.antivirus import Antivirus
-from fortigate_api.application import Application
-from fortigate_api.dhcp_server import DhcpServer
-from fortigate_api.external_resource import ExternalResource
-from fortigate_api.fortigate import Fortigate, HTTPS, TIMEOUT, VDOM
-from fortigate_api.interface import Interface
-from fortigate_api.internet_service import InternetService
-from fortigate_api.ip_pool import IpPool
-from fortigate_api.policy import Policy
-from fortigate_api.schedule import Schedule
-from fortigate_api.service import Service
-from fortigate_api.service_category import ServiceCategory
-from fortigate_api.service_group import ServiceGroup
-from fortigate_api.snmp_community import SnmpCommunity
-from fortigate_api.ssh import SSH
-from fortigate_api.types_ import LStr, ODAny
-from fortigate_api.vdoms import Vdoms
-from fortigate_api.virtual_ip import VirtualIp
-from fortigate_api.zone import Zone
+from fortigate_api.cmdb.cmdb_s import CmdbS
+from fortigate_api.fortigate import HTTPS, TIMEOUT, VDOM, FortiGate
+from fortigate_api.log.log_s import LogS
+from fortigate_api.monitor.monitor_s import MonitorS
+from fortigate_api.types_ import LStr
 
 
-class FortigateAPI:
-    """FortigateAPI, a set of connectors to work with commonly used fortigate-objects."""
+class FortiGateAPI:
+    """FortiGateAPI - Python connector to Fortigate API endpoints."""
 
-    def __init__(  # pylint: disable=too-many-arguments
-            self,
-            host: str,
-            username: str = "",
-            password: str = "",
-            token: str = "",
-            scheme: str = HTTPS,
-            port: int = 0,
-            timeout: int = TIMEOUT,
-            verify: bool = False,
-            vdom: str = VDOM,
-            ssh: ODAny = None,
-            **kwargs,
+    def __init__(
+        self,
+        host: str,
+        username: str = "",
+        password: str = "",
+        token: str = "",
+        scheme: str = HTTPS,
+        port: int = 0,
+        timeout: int = TIMEOUT,
+        verify: bool = False,
+        vdom: str = VDOM,
+        logging: bool = False,
+        logging_error: bool = False,
+        **kwargs,
     ):
-        """Init FortigateAPI.
+        """Init FortiGateAPI.
 
         :param str host: Fortigate hostname or ip address.
 
@@ -64,11 +49,14 @@ class FortigateAPI:
             Default is `False`.
 
         :param str vdom: Name of the virtual domain. Default is `root`.
-            This is only used in the REST API and not in SSH.
 
-        :param dict ssh: Netmiko ConnectHandler parameters.
+        :param bool logging: Logging REST API response.
+            `Ture` - Enable response logging, `False` - otherwise. Default is `False`.
+
+        :param bool logging_error: Logging only the REST API response with error.
+            `Ture` - Enable errors logging, `False` - otherwise. Default is `False`.
         """
-        kwargs = {
+        api_params = {
             "host": host,
             "username": username,
             "password": password,
@@ -78,141 +66,76 @@ class FortigateAPI:
             "timeout": timeout,
             "verify": verify,
             "vdom": vdom,
-            "ssh": ssh,
+            "logging": logging,
+            "logging_error": logging_error,
             **kwargs,
         }
 
-        self.rest = Fortigate(**kwargs)
-        """:py:class:`.Fortigate`"""
+        self.fortigate = FortiGate(**api_params)
+        """:py:class:`.FortiGate` REST API connector."""
 
-        self.ssh = SSH(**kwargs)
-        """:py:class:`.SSH`"""
+        self.cmdb = CmdbS(self.fortigate, **api_params)
+        """:py:class:`.CmdbS` CMDB scope connectors."""
 
-        # Object connectors
+        self.log = LogS(self.fortigate, **api_params)  # todo LogS
+        """:py:class:`.LogS` Log scope connectors. (not ready)"""
 
-        self.address = Address(self.rest)
-        """:py:class:`.Address`"""
-
-        self.address_group = AddressGroup(self.rest)
-        """:py:class:`.AddressGroup`"""
-
-        self.antivirus = Antivirus(self.rest)
-        """:py:class:`.Antivirus`"""
-
-        self.application = Application(self.rest)
-        """:py:class:`.Application`"""
-
-        self.dhcp_server = DhcpServer(self.rest)
-        """:py:class:`.DhcpServer`"""
-
-        self.external_resource = ExternalResource(self.rest)
-        """:py:class:`.ExternalResource`"""
-
-        self.interface = Interface(self.rest)
-        """:py:class:`.Interface`"""
-
-        self.internet_service = InternetService(self.rest)
-        """:py:class:`.InternetService`"""
-
-        self.ip_pool = IpPool(self.rest)
-        """:py:class:`.IpPool`"""
-
-        self.policy = Policy(self.rest)
-        """:py:class:`.Policy`"""
-
-        self.schedule = Schedule(self.rest)
-        """:py:class:`.Schedule`"""
-
-        self.service = Service(self.rest)
-        """:py:class:`.Service`"""
-
-        self.service_category = ServiceCategory(self.rest)
-        """:py:class:`.ServiceCategory`"""
-
-        self.service_group = ServiceGroup(self.rest)
-        """:py:class:`.ServiceGroup`"""
-
-        self.snmp_community = SnmpCommunity(self.rest)
-        """:py:class:`.SnmpCommunity`"""
-
-        self.vdoms = Vdoms(self.rest)
-        """:py:class:`.Vdoms`"""
-
-        self.virtual_ip = VirtualIp(self.rest)
-        """:py:class:`.VirtualIp`"""
-
-        self.zone = Zone(self.rest)
-        """:py:class:`.Zone`"""
+        self.monitor = MonitorS(self.fortigate, **api_params)  # todo MonitorS
+        """:py:class:`.MonitorS` Monitor scope connectors. (not ready)"""
 
     def __repr__(self):
         """Return a string representation related to this object."""
-        return self.rest.__repr__()
+        name = self.__class__.__name__
+        host = self.fortigate.host
+        return f"<{name}: {host}>"
 
     def __enter__(self):
-        """Enter the runtime context.
-
-        No need login REST and SSH. Session will be logged in after the first request.
-        """
+        """Enter the runtime context related to this object."""
+        self.fortigate.login()
         return self
 
     def __exit__(self, *args):
-        """Exit the runtime context, logout REST and SSH sessions."""
-        self.rest.__exit__()
-        self.ssh.__exit__()
+        """Exit the runtime context related to this object."""
+        self.fortigate.logout()
 
     # ============================= property =============================
 
     @property
     def vdom(self) -> str:
         """Actual virtual domain."""
-        return self.rest.vdom
+        return self.fortigate.vdom
 
     @vdom.setter
     def vdom(self, vdom: str) -> None:
-        vdom = str(vdom)
         if not vdom:
             vdom = VDOM
-        self.rest.vdom = vdom
+        self.fortigate.vdom = str(vdom)
 
     # =========================== methods ============================
 
-    def login(self) -> FortigateAPI:
-        """Login to the Fortigate using REST API and creates a Session object.
+    def login(self) -> None:
+        """Login to the Fortigate using REST API and creates a Session.
 
         - Validate `token` if object has been initialized with `token` parameter.
         - Validate  `password` if object has been initialized with `username` parameter.
 
-        :return: None. Creates Session object.
+        :return: None. Creates Session.
         """
-        self.rest.login()
-        return self
+        self.fortigate.login()
 
     def logout(self) -> None:
-        """Logout from the Fortigate using REST API, deletes Session object.
+        """Logout from the Fortigate using REST API and deletes Session.
 
         - No need to logout if object has been initialized with `token` parameter.
         - Logout if object has been initialized with `username` parameter.
 
-        :return: None. Deletes Session object
+        :return: None. Deletes Session.
         """
-        self.rest.logout()
+        self.fortigate.logout()
 
     # ============================= helpers ==============================
 
-    def _get_connectors(self) -> LStr:
-        """Return all Object connectors."""
-        connectors: LStr = []
-        for attr in dir(self):
-            if attr in ["rest", "ssh"]:
-                continue
-            if attr.startswith("_"):
-                continue
-            obj = getattr(self, attr)
-            if callable(obj):
-                continue
-            if callable(getattr(self, attr)):
-                continue
-            if getattr(FortigateAPI, attr, None):  # property
-                continue
-            connectors.append(attr)
-        return connectors
+    @staticmethod
+    def _get_scopes() -> LStr:
+        """Return all API scopes."""
+        return ["cmdb", "log", "monitor"]

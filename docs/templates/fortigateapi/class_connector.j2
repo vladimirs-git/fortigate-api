@@ -1,0 +1,11 @@
+{{ class_name }}
+{{ "=" * class_name|length }}
+
+.. autoclass:: {{ package }}.{{ connector }}.{{ class_name }}
+  :members:
+  :inherited-members:
+  :class-doc-from: class
+
+{% if example %}
+{{ example }}
+{% endif %}

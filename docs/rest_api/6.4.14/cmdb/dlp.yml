@@ -1,0 +1,4242 @@
+basePath: /api/v2/cmdb
+consumes:
+- application/json
+host: 172.16.177.65
+info:
+  contact:
+    email: fosguiqateam@fortinet.com
+    name: FortiOS Web Application Team
+    url: http://modskristensen.net
+  description: REST API for configuring FortiOS objects and settings
+  termsOfService: http://fortinet.com/terms/
+  title: FortiOS CMDB
+  version: v2
+paths:
+  /dlp/filepattern:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              comment:
+                description: Optional comments.
+                maxLength: 255
+                type: string
+              entries:
+                description: Configure file patterns used by DLP blocking.
+                items:
+                  properties:
+                    file-type:
+                      description: "Select a file type.   \n7z:Match 7-zip files.\
+                        \   \narj:Match arj compressed files.   \ncab:Match Windows\
+                        \ cab files.   \nlzh:Match lzh compressed files.   \nrar:Match\
+                        \ rar archives.   \ntar:Match tar files.   \nzip:Match zip\
+                        \ files.   \nbzip:Match bzip files.   \ngzip:Match gzip files.\
+                        \   \nbzip2:Match bzip2 files.   \nxz:Match xz files.   \n\
+                        bat:Match Windows batch files.   \nuue:Match uue files.  \
+                        \ \nmime:Match mime files.   \nbase64:Match base64 files.\
+                        \   \nbinhex:Match binhex files.   \nelf:Match elf files.\
+                        \   \nexe:Match Windows executable files.   \nhta:Match hta\
+                        \ files.   \nhtml:Match html files.   \njad:Match jad files.\
+                        \   \nclass:Match class files.   \ncod:Match cod files.  \
+                        \ \njavascript:Match javascript files.   \nmsoffice:Match\
+                        \ MS-Office files. For example, doc, xls, ppt, and so on.\
+                        \   \nmsofficex:Match MS-Office XML files. For example, docx,\
+                        \ xlsx, pptx, and so on.   \nfsg:Match fsg files.   \nupx:Match\
+                        \ upx files.   \npetite:Match petite files.   \naspack:Match\
+                        \ aspack files.   \nsis:Match sis files.   \nhlp:Match Windows\
+                        \ help files.   \nactivemime:Match activemime files.   \n\
+                        jpeg:Match jpeg files.   \ngif:Match gif files.   \ntiff:Match\
+                        \ tiff files.   \npng:Match png files.   \nbmp:Match bmp files.\
+                        \   \nunknown:Match unknown files.   \nmpeg:Match mpeg files.\
+                        \   \nmov:Match mov files.   \nmp3:Match mp3 files.   \nwma:Match\
+                        \ wma files.   \nwav:Match wav files.   \npdf:Match Acrobat\
+                        \ PDF files.   \navi:Match avi files.   \nrm:Match rm files.\
+                        \   \ntorrent:Match torrent files.   \nhibun:Match special-file-23-support\
+                        \ files.   \nmsi:Match Windows Installer msi files.   \nmach-o:Match\
+                        \ Mach object files.   \ndmg:Match Apple disk image files.\
+                        \   \n.net:Match .NET files.   \nxar:Match xar archive files.\
+                        \   \nchm:Match Windows compiled HTML help files.   \niso:Match\
+                        \ ISO archive files.   \ncrx:Match Chrome extension files.\
+                        \   \nflac:Match flac files."
+                      enum:
+                      - 7z
+                      - arj
+                      - cab
+                      - lzh
+                      - rar
+                      - tar
+                      - zip
+                      - bzip
+                      - gzip
+                      - bzip2
+                      - xz
+                      - bat
+                      - uue
+                      - mime
+                      - base64
+                      - binhex
+                      - elf
+                      - exe
+                      - hta
+                      - html
+                      - jad
+                      - class
+                      - cod
+                      - javascript
+                      - msoffice
+                      - msofficex
+                      - fsg
+                      - upx
+                      - petite
+                      - aspack
+                      - sis
+                      - hlp
+                      - activemime
+                      - jpeg
+                      - gif
+                      - tiff
+                      - png
+                      - bmp
+                      - unknown
+                      - mpeg
+                      - mov
+                      - mp3
+                      - wma
+                      - wav
+                      - pdf
+                      - avi
+                      - rm
+                      - torrent
+                      - hibun
+                      - msi
+                      - mach-o
+                      - dmg
+                      - .net
+                      - xar
+                      - chm
+                      - iso
+                      - crx
+                      - flac
+                      type: string
+                    filter-type:
+                      description: "Filter by file name pattern or by file type. \
+                        \  \npattern:Filter by file name pattern.   \ntype:Filter\
+                        \ by file type."
+                      enum:
+                      - pattern
+                      - type
+                      type: string
+                    pattern:
+                      description: Add a file name pattern.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: 32000
+                type: array
+              id:
+                description: ID.
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              name:
+                description: Name of table containing the file pattern list.
+                maxLength: 63
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dlp/filepattern
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            comment:
+              description: Optional comments.
+              maxLength: 255
+              type: string
+            entries:
+              description: Configure file patterns used by DLP blocking.
+              items:
+                properties:
+                  file-type:
+                    description: "Select a file type.   \n7z:Match 7-zip files.  \
+                      \ \narj:Match arj compressed files.   \ncab:Match Windows cab\
+                      \ files.   \nlzh:Match lzh compressed files.   \nrar:Match rar\
+                      \ archives.   \ntar:Match tar files.   \nzip:Match zip files.\
+                      \   \nbzip:Match bzip files.   \ngzip:Match gzip files.   \n\
+                      bzip2:Match bzip2 files.   \nxz:Match xz files.   \nbat:Match\
+                      \ Windows batch files.   \nuue:Match uue files.   \nmime:Match\
+                      \ mime files.   \nbase64:Match base64 files.   \nbinhex:Match\
+                      \ binhex files.   \nelf:Match elf files.   \nexe:Match Windows\
+                      \ executable files.   \nhta:Match hta files.   \nhtml:Match\
+                      \ html files.   \njad:Match jad files.   \nclass:Match class\
+                      \ files.   \ncod:Match cod files.   \njavascript:Match javascript\
+                      \ files.   \nmsoffice:Match MS-Office files. For example, doc,\
+                      \ xls, ppt, and so on.   \nmsofficex:Match MS-Office XML files.\
+                      \ For example, docx, xlsx, pptx, and so on.   \nfsg:Match fsg\
+                      \ files.   \nupx:Match upx files.   \npetite:Match petite files.\
+                      \   \naspack:Match aspack files.   \nsis:Match sis files.  \
+                      \ \nhlp:Match Windows help files.   \nactivemime:Match activemime\
+                      \ files.   \njpeg:Match jpeg files.   \ngif:Match gif files.\
+                      \   \ntiff:Match tiff files.   \npng:Match png files.   \nbmp:Match\
+                      \ bmp files.   \nunknown:Match unknown files.   \nmpeg:Match\
+                      \ mpeg files.   \nmov:Match mov files.   \nmp3:Match mp3 files.\
+                      \   \nwma:Match wma files.   \nwav:Match wav files.   \npdf:Match\
+                      \ Acrobat PDF files.   \navi:Match avi files.   \nrm:Match rm\
+                      \ files.   \ntorrent:Match torrent files.   \nhibun:Match special-file-23-support\
+                      \ files.   \nmsi:Match Windows Installer msi files.   \nmach-o:Match\
+                      \ Mach object files.   \ndmg:Match Apple disk image files. \
+                      \  \n.net:Match .NET files.   \nxar:Match xar archive files.\
+                      \   \nchm:Match Windows compiled HTML help files.   \niso:Match\
+                      \ ISO archive files.   \ncrx:Match Chrome extension files. \
+                      \  \nflac:Match flac files."
+                    enum:
+                    - 7z
+                    - arj
+                    - cab
+                    - lzh
+                    - rar
+                    - tar
+                    - zip
+                    - bzip
+                    - gzip
+                    - bzip2
+                    - xz
+                    - bat
+                    - uue
+                    - mime
+                    - base64
+                    - binhex
+                    - elf
+                    - exe
+                    - hta
+                    - html
+                    - jad
+                    - class
+                    - cod
+                    - javascript
+                    - msoffice
+                    - msofficex
+                    - fsg
+                    - upx
+                    - petite
+                    - aspack
+                    - sis
+                    - hlp
+                    - activemime
+                    - jpeg
+                    - gif
+                    - tiff
+                    - png
+                    - bmp
+                    - unknown
+                    - mpeg
+                    - mov
+                    - mp3
+                    - wma
+                    - wav
+                    - pdf
+                    - avi
+                    - rm
+                    - torrent
+                    - hibun
+                    - msi
+                    - mach-o
+                    - dmg
+                    - .net
+                    - xar
+                    - chm
+                    - iso
+                    - crx
+                    - flac
+                    type: string
+                  filter-type:
+                    description: "Filter by file name pattern or by file type.   \n\
+                      pattern:Filter by file name pattern.   \ntype:Filter by file\
+                      \ type."
+                    enum:
+                    - pattern
+                    - type
+                    type: string
+                  pattern:
+                    description: Add a file name pattern.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: 32000
+              type: array
+            id:
+              description: ID.
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            name:
+              description: Name of table containing the file pattern list.
+              maxLength: 63
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - dlp/filepattern
+  /dlp/filepattern/{id}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: id
+        required: true
+        type: integer
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dlp/filepattern
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              comment:
+                description: Optional comments.
+                maxLength: 255
+                type: string
+              entries:
+                description: Configure file patterns used by DLP blocking.
+                items:
+                  properties:
+                    file-type:
+                      description: "Select a file type.   \n7z:Match 7-zip files.\
+                        \   \narj:Match arj compressed files.   \ncab:Match Windows\
+                        \ cab files.   \nlzh:Match lzh compressed files.   \nrar:Match\
+                        \ rar archives.   \ntar:Match tar files.   \nzip:Match zip\
+                        \ files.   \nbzip:Match bzip files.   \ngzip:Match gzip files.\
+                        \   \nbzip2:Match bzip2 files.   \nxz:Match xz files.   \n\
+                        bat:Match Windows batch files.   \nuue:Match uue files.  \
+                        \ \nmime:Match mime files.   \nbase64:Match base64 files.\
+                        \   \nbinhex:Match binhex files.   \nelf:Match elf files.\
+                        \   \nexe:Match Windows executable files.   \nhta:Match hta\
+                        \ files.   \nhtml:Match html files.   \njad:Match jad files.\
+                        \   \nclass:Match class files.   \ncod:Match cod files.  \
+                        \ \njavascript:Match javascript files.   \nmsoffice:Match\
+                        \ MS-Office files. For example, doc, xls, ppt, and so on.\
+                        \   \nmsofficex:Match MS-Office XML files. For example, docx,\
+                        \ xlsx, pptx, and so on.   \nfsg:Match fsg files.   \nupx:Match\
+                        \ upx files.   \npetite:Match petite files.   \naspack:Match\
+                        \ aspack files.   \nsis:Match sis files.   \nhlp:Match Windows\
+                        \ help files.   \nactivemime:Match activemime files.   \n\
+                        jpeg:Match jpeg files.   \ngif:Match gif files.   \ntiff:Match\
+                        \ tiff files.   \npng:Match png files.   \nbmp:Match bmp files.\
+                        \   \nunknown:Match unknown files.   \nmpeg:Match mpeg files.\
+                        \   \nmov:Match mov files.   \nmp3:Match mp3 files.   \nwma:Match\
+                        \ wma files.   \nwav:Match wav files.   \npdf:Match Acrobat\
+                        \ PDF files.   \navi:Match avi files.   \nrm:Match rm files.\
+                        \   \ntorrent:Match torrent files.   \nhibun:Match special-file-23-support\
+                        \ files.   \nmsi:Match Windows Installer msi files.   \nmach-o:Match\
+                        \ Mach object files.   \ndmg:Match Apple disk image files.\
+                        \   \n.net:Match .NET files.   \nxar:Match xar archive files.\
+                        \   \nchm:Match Windows compiled HTML help files.   \niso:Match\
+                        \ ISO archive files.   \ncrx:Match Chrome extension files.\
+                        \   \nflac:Match flac files."
+                      enum:
+                      - 7z
+                      - arj
+                      - cab
+                      - lzh
+                      - rar
+                      - tar
+                      - zip
+                      - bzip
+                      - gzip
+                      - bzip2
+                      - xz
+                      - bat
+                      - uue
+                      - mime
+                      - base64
+                      - binhex
+                      - elf
+                      - exe
+                      - hta
+                      - html
+                      - jad
+                      - class
+                      - cod
+                      - javascript
+                      - msoffice
+                      - msofficex
+                      - fsg
+                      - upx
+                      - petite
+                      - aspack
+                      - sis
+                      - hlp
+                      - activemime
+                      - jpeg
+                      - gif
+                      - tiff
+                      - png
+                      - bmp
+                      - unknown
+                      - mpeg
+                      - mov
+                      - mp3
+                      - wma
+                      - wav
+                      - pdf
+                      - avi
+                      - rm
+                      - torrent
+                      - hibun
+                      - msi
+                      - mach-o
+                      - dmg
+                      - .net
+                      - xar
+                      - chm
+                      - iso
+                      - crx
+                      - flac
+                      type: string
+                    filter-type:
+                      description: "Filter by file name pattern or by file type. \
+                        \  \npattern:Filter by file name pattern.   \ntype:Filter\
+                        \ by file type."
+                      enum:
+                      - pattern
+                      - type
+                      type: string
+                    pattern:
+                      description: Add a file name pattern.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: 32000
+                type: array
+              id:
+                description: ID.
+                maximum: 4294967295
+                minimum: 0
+                type: integer
+              name:
+                description: Name of table containing the file pattern list.
+                maxLength: 63
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dlp/filepattern
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            comment:
+              description: Optional comments.
+              maxLength: 255
+              type: string
+            entries:
+              description: Configure file patterns used by DLP blocking.
+              items:
+                properties:
+                  file-type:
+                    description: "Select a file type.   \n7z:Match 7-zip files.  \
+                      \ \narj:Match arj compressed files.   \ncab:Match Windows cab\
+                      \ files.   \nlzh:Match lzh compressed files.   \nrar:Match rar\
+                      \ archives.   \ntar:Match tar files.   \nzip:Match zip files.\
+                      \   \nbzip:Match bzip files.   \ngzip:Match gzip files.   \n\
+                      bzip2:Match bzip2 files.   \nxz:Match xz files.   \nbat:Match\
+                      \ Windows batch files.   \nuue:Match uue files.   \nmime:Match\
+                      \ mime files.   \nbase64:Match base64 files.   \nbinhex:Match\
+                      \ binhex files.   \nelf:Match elf files.   \nexe:Match Windows\
+                      \ executable files.   \nhta:Match hta files.   \nhtml:Match\
+                      \ html files.   \njad:Match jad files.   \nclass:Match class\
+                      \ files.   \ncod:Match cod files.   \njavascript:Match javascript\
+                      \ files.   \nmsoffice:Match MS-Office files. For example, doc,\
+                      \ xls, ppt, and so on.   \nmsofficex:Match MS-Office XML files.\
+                      \ For example, docx, xlsx, pptx, and so on.   \nfsg:Match fsg\
+                      \ files.   \nupx:Match upx files.   \npetite:Match petite files.\
+                      \   \naspack:Match aspack files.   \nsis:Match sis files.  \
+                      \ \nhlp:Match Windows help files.   \nactivemime:Match activemime\
+                      \ files.   \njpeg:Match jpeg files.   \ngif:Match gif files.\
+                      \   \ntiff:Match tiff files.   \npng:Match png files.   \nbmp:Match\
+                      \ bmp files.   \nunknown:Match unknown files.   \nmpeg:Match\
+                      \ mpeg files.   \nmov:Match mov files.   \nmp3:Match mp3 files.\
+                      \   \nwma:Match wma files.   \nwav:Match wav files.   \npdf:Match\
+                      \ Acrobat PDF files.   \navi:Match avi files.   \nrm:Match rm\
+                      \ files.   \ntorrent:Match torrent files.   \nhibun:Match special-file-23-support\
+                      \ files.   \nmsi:Match Windows Installer msi files.   \nmach-o:Match\
+                      \ Mach object files.   \ndmg:Match Apple disk image files. \
+                      \  \n.net:Match .NET files.   \nxar:Match xar archive files.\
+                      \   \nchm:Match Windows compiled HTML help files.   \niso:Match\
+                      \ ISO archive files.   \ncrx:Match Chrome extension files. \
+                      \  \nflac:Match flac files."
+                    enum:
+                    - 7z
+                    - arj
+                    - cab
+                    - lzh
+                    - rar
+                    - tar
+                    - zip
+                    - bzip
+                    - gzip
+                    - bzip2
+                    - xz
+                    - bat
+                    - uue
+                    - mime
+                    - base64
+                    - binhex
+                    - elf
+                    - exe
+                    - hta
+                    - html
+                    - jad
+                    - class
+                    - cod
+                    - javascript
+                    - msoffice
+                    - msofficex
+                    - fsg
+                    - upx
+                    - petite
+                    - aspack
+                    - sis
+                    - hlp
+                    - activemime
+                    - jpeg
+                    - gif
+                    - tiff
+                    - png
+                    - bmp
+                    - unknown
+                    - mpeg
+                    - mov
+                    - mp3
+                    - wma
+                    - wav
+                    - pdf
+                    - avi
+                    - rm
+                    - torrent
+                    - hibun
+                    - msi
+                    - mach-o
+                    - dmg
+                    - .net
+                    - xar
+                    - chm
+                    - iso
+                    - crx
+                    - flac
+                    type: string
+                  filter-type:
+                    description: "Filter by file name pattern or by file type.   \n\
+                      pattern:Filter by file name pattern.   \ntype:Filter by file\
+                      \ type."
+                    enum:
+                    - pattern
+                    - type
+                    type: string
+                  pattern:
+                    description: Add a file name pattern.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: 32000
+              type: array
+            id:
+              description: ID.
+              maximum: 4294967295
+              minimum: 0
+              type: integer
+            name:
+              description: Name of table containing the file pattern list.
+              maxLength: 63
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dlp/filepattern
+  /dlp/fp-doc-source:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              date:
+                description: Day of the month on which to scan the server (1 - 31).
+                maximum: 31
+                minimum: 1
+                type: integer
+              file-path:
+                description: Path on the server to the fingerprint files (max 119
+                  characters).
+                maxLength: 119
+                type: string
+              file-pattern:
+                description: Files matching this pattern on the server are fingerprinted.
+                  Optionally use the * and ? wildcards.
+                maxLength: 35
+                type: string
+              keep-modified:
+                description: "Enable so that when a file is changed on the server\
+                  \ the FortiGate keeps the old fingerprint and adds a new fingerprint\
+                  \ to the database.   \nenable:Keep the old fingerprint and add a\
+                  \ new fingerprint when a file is changed on the server.   \ndisable:Replace\
+                  \ the old fingerprint with the new fingerprint when a file is changed\
+                  \ on the server."
+                enum:
+                - enable
+                - disable
+                type: string
+              name:
+                description: Name of the DLP fingerprint database.
+                maxLength: 35
+                type: string
+              password:
+                description: Password required to log into the file server.
+                format: password
+                type: string
+              period:
+                description: "Frequency for which the FortiGate checks the server\
+                  \ for new or changed files.   \nnone:Check the server when the FortiGate\
+                  \ starts up.   \ndaily:Check the server once a day.   \nweekly:Check\
+                  \ the server once a week.   \nmonthly:Check the server once a month."
+                enum:
+                - none
+                - daily
+                - weekly
+                - monthly
+                type: string
+              remove-deleted:
+                description: "Enable to keep the fingerprint database up to date when\
+                  \ a file is deleted from the server.   \nenable:Keep the fingerprint\
+                  \ database up to date when a file is deleted from the server.  \
+                  \ \ndisable:Do not check for deleted files on the server. Saves\
+                  \ system resources."
+                enum:
+                - enable
+                - disable
+                type: string
+              scan-on-creation:
+                description: "Enable to keep the fingerprint database up to date when\
+                  \ a file is added or changed on the server.   \nenable:Keep the\
+                  \ fingerprint database up to date when a file is added or changed\
+                  \ on the server.   \ndisable:Do not check for added or changed files\
+                  \ on the server. Saves system resources."
+                enum:
+                - enable
+                - disable
+                type: string
+              scan-subdirectories:
+                description: "Enable/disable scanning subdirectories to find files\
+                  \ to create fingerprints from.   \nenable:Scan subdirectories. \
+                  \  \ndisable:Do not scan subdirectories."
+                enum:
+                - enable
+                - disable
+                type: string
+              sensitivity:
+                description: Select a sensitivity or threat level for matches with
+                  this fingerprint database. Add sensitivities using sensitivity.
+                maxLength: 35
+                type: string
+              server:
+                description: IPv4 or IPv6 address of the server.
+                maxLength: 35
+                type: string
+              server-type:
+                description: "Protocol used to communicate with the file server. Currently\
+                  \ only Samba (SMB) servers are supported.   \nsamba:SAMBA server."
+                enum:
+                - samba
+                type: string
+              tod-hour:
+                description: Hour of the day on which to scan the server (0 - 23,
+                  default = 1).
+                maximum: 23
+                minimum: 0
+                type: integer
+              tod-min:
+                description: Minute of the hour on which to scan the server (0 - 59).
+                maximum: 59
+                minimum: 0
+                type: integer
+              username:
+                description: User name required to log into the file server.
+                maxLength: 35
+                type: string
+              vdom:
+                description: "Select the VDOM that can communicate with the file server.\
+                  \   \nmgmt:Communicate with the file server through the management\
+                  \ VDOM.   \ncurrent:Communicate with the file server through the\
+                  \ VDOM containing this DLP fingerprint database configuration."
+                enum:
+                - mgmt
+                - current
+                type: string
+              weekday:
+                description: "Day of the week on which to scan the server.   \nsunday:Sunday\
+                  \   \nmonday:Monday   \ntuesday:Tuesday   \nwednesday:Wednesday\
+                  \   \nthursday:Thursday   \nfriday:Friday   \nsaturday:Saturday"
+                enum:
+                - sunday
+                - monday
+                - tuesday
+                - wednesday
+                - thursday
+                - friday
+                - saturday
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dlp/fp-doc-source
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            date:
+              description: Day of the month on which to scan the server (1 - 31).
+              maximum: 31
+              minimum: 1
+              type: integer
+            file-path:
+              description: Path on the server to the fingerprint files (max 119 characters).
+              maxLength: 119
+              type: string
+            file-pattern:
+              description: Files matching this pattern on the server are fingerprinted.
+                Optionally use the * and ? wildcards.
+              maxLength: 35
+              type: string
+            keep-modified:
+              description: "Enable so that when a file is changed on the server the\
+                \ FortiGate keeps the old fingerprint and adds a new fingerprint to\
+                \ the database.   \nenable:Keep the old fingerprint and add a new\
+                \ fingerprint when a file is changed on the server.   \ndisable:Replace\
+                \ the old fingerprint with the new fingerprint when a file is changed\
+                \ on the server."
+              enum:
+              - enable
+              - disable
+              type: string
+            name:
+              description: Name of the DLP fingerprint database.
+              maxLength: 35
+              type: string
+            password:
+              description: Password required to log into the file server.
+              format: password
+              type: string
+            period:
+              description: "Frequency for which the FortiGate checks the server for\
+                \ new or changed files.   \nnone:Check the server when the FortiGate\
+                \ starts up.   \ndaily:Check the server once a day.   \nweekly:Check\
+                \ the server once a week.   \nmonthly:Check the server once a month."
+              enum:
+              - none
+              - daily
+              - weekly
+              - monthly
+              type: string
+            remove-deleted:
+              description: "Enable to keep the fingerprint database up to date when\
+                \ a file is deleted from the server.   \nenable:Keep the fingerprint\
+                \ database up to date when a file is deleted from the server.   \n\
+                disable:Do not check for deleted files on the server. Saves system\
+                \ resources."
+              enum:
+              - enable
+              - disable
+              type: string
+            scan-on-creation:
+              description: "Enable to keep the fingerprint database up to date when\
+                \ a file is added or changed on the server.   \nenable:Keep the fingerprint\
+                \ database up to date when a file is added or changed on the server.\
+                \   \ndisable:Do not check for added or changed files on the server.\
+                \ Saves system resources."
+              enum:
+              - enable
+              - disable
+              type: string
+            scan-subdirectories:
+              description: "Enable/disable scanning subdirectories to find files to\
+                \ create fingerprints from.   \nenable:Scan subdirectories.   \ndisable:Do\
+                \ not scan subdirectories."
+              enum:
+              - enable
+              - disable
+              type: string
+            sensitivity:
+              description: Select a sensitivity or threat level for matches with this
+                fingerprint database. Add sensitivities using sensitivity.
+              maxLength: 35
+              type: string
+            server:
+              description: IPv4 or IPv6 address of the server.
+              maxLength: 35
+              type: string
+            server-type:
+              description: "Protocol used to communicate with the file server. Currently\
+                \ only Samba (SMB) servers are supported.   \nsamba:SAMBA server."
+              enum:
+              - samba
+              type: string
+            tod-hour:
+              description: Hour of the day on which to scan the server (0 - 23, default
+                = 1).
+              maximum: 23
+              minimum: 0
+              type: integer
+            tod-min:
+              description: Minute of the hour on which to scan the server (0 - 59).
+              maximum: 59
+              minimum: 0
+              type: integer
+            username:
+              description: User name required to log into the file server.
+              maxLength: 35
+              type: string
+            vdom:
+              description: "Select the VDOM that can communicate with the file server.\
+                \   \nmgmt:Communicate with the file server through the management\
+                \ VDOM.   \ncurrent:Communicate with the file server through the VDOM\
+                \ containing this DLP fingerprint database configuration."
+              enum:
+              - mgmt
+              - current
+              type: string
+            weekday:
+              description: "Day of the week on which to scan the server.   \nsunday:Sunday\
+                \   \nmonday:Monday   \ntuesday:Tuesday   \nwednesday:Wednesday  \
+                \ \nthursday:Thursday   \nfriday:Friday   \nsaturday:Saturday"
+              enum:
+              - sunday
+              - monday
+              - tuesday
+              - wednesday
+              - thursday
+              - friday
+              - saturday
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - dlp/fp-doc-source
+  /dlp/fp-doc-source/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dlp/fp-doc-source
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              date:
+                description: Day of the month on which to scan the server (1 - 31).
+                maximum: 31
+                minimum: 1
+                type: integer
+              file-path:
+                description: Path on the server to the fingerprint files (max 119
+                  characters).
+                maxLength: 119
+                type: string
+              file-pattern:
+                description: Files matching this pattern on the server are fingerprinted.
+                  Optionally use the * and ? wildcards.
+                maxLength: 35
+                type: string
+              keep-modified:
+                description: "Enable so that when a file is changed on the server\
+                  \ the FortiGate keeps the old fingerprint and adds a new fingerprint\
+                  \ to the database.   \nenable:Keep the old fingerprint and add a\
+                  \ new fingerprint when a file is changed on the server.   \ndisable:Replace\
+                  \ the old fingerprint with the new fingerprint when a file is changed\
+                  \ on the server."
+                enum:
+                - enable
+                - disable
+                type: string
+              name:
+                description: Name of the DLP fingerprint database.
+                maxLength: 35
+                type: string
+              password:
+                description: Password required to log into the file server.
+                format: password
+                type: string
+              period:
+                description: "Frequency for which the FortiGate checks the server\
+                  \ for new or changed files.   \nnone:Check the server when the FortiGate\
+                  \ starts up.   \ndaily:Check the server once a day.   \nweekly:Check\
+                  \ the server once a week.   \nmonthly:Check the server once a month."
+                enum:
+                - none
+                - daily
+                - weekly
+                - monthly
+                type: string
+              remove-deleted:
+                description: "Enable to keep the fingerprint database up to date when\
+                  \ a file is deleted from the server.   \nenable:Keep the fingerprint\
+                  \ database up to date when a file is deleted from the server.  \
+                  \ \ndisable:Do not check for deleted files on the server. Saves\
+                  \ system resources."
+                enum:
+                - enable
+                - disable
+                type: string
+              scan-on-creation:
+                description: "Enable to keep the fingerprint database up to date when\
+                  \ a file is added or changed on the server.   \nenable:Keep the\
+                  \ fingerprint database up to date when a file is added or changed\
+                  \ on the server.   \ndisable:Do not check for added or changed files\
+                  \ on the server. Saves system resources."
+                enum:
+                - enable
+                - disable
+                type: string
+              scan-subdirectories:
+                description: "Enable/disable scanning subdirectories to find files\
+                  \ to create fingerprints from.   \nenable:Scan subdirectories. \
+                  \  \ndisable:Do not scan subdirectories."
+                enum:
+                - enable
+                - disable
+                type: string
+              sensitivity:
+                description: Select a sensitivity or threat level for matches with
+                  this fingerprint database. Add sensitivities using sensitivity.
+                maxLength: 35
+                type: string
+              server:
+                description: IPv4 or IPv6 address of the server.
+                maxLength: 35
+                type: string
+              server-type:
+                description: "Protocol used to communicate with the file server. Currently\
+                  \ only Samba (SMB) servers are supported.   \nsamba:SAMBA server."
+                enum:
+                - samba
+                type: string
+              tod-hour:
+                description: Hour of the day on which to scan the server (0 - 23,
+                  default = 1).
+                maximum: 23
+                minimum: 0
+                type: integer
+              tod-min:
+                description: Minute of the hour on which to scan the server (0 - 59).
+                maximum: 59
+                minimum: 0
+                type: integer
+              username:
+                description: User name required to log into the file server.
+                maxLength: 35
+                type: string
+              vdom:
+                description: "Select the VDOM that can communicate with the file server.\
+                  \   \nmgmt:Communicate with the file server through the management\
+                  \ VDOM.   \ncurrent:Communicate with the file server through the\
+                  \ VDOM containing this DLP fingerprint database configuration."
+                enum:
+                - mgmt
+                - current
+                type: string
+              weekday:
+                description: "Day of the week on which to scan the server.   \nsunday:Sunday\
+                  \   \nmonday:Monday   \ntuesday:Tuesday   \nwednesday:Wednesday\
+                  \   \nthursday:Thursday   \nfriday:Friday   \nsaturday:Saturday"
+                enum:
+                - sunday
+                - monday
+                - tuesday
+                - wednesday
+                - thursday
+                - friday
+                - saturday
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dlp/fp-doc-source
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            date:
+              description: Day of the month on which to scan the server (1 - 31).
+              maximum: 31
+              minimum: 1
+              type: integer
+            file-path:
+              description: Path on the server to the fingerprint files (max 119 characters).
+              maxLength: 119
+              type: string
+            file-pattern:
+              description: Files matching this pattern on the server are fingerprinted.
+                Optionally use the * and ? wildcards.
+              maxLength: 35
+              type: string
+            keep-modified:
+              description: "Enable so that when a file is changed on the server the\
+                \ FortiGate keeps the old fingerprint and adds a new fingerprint to\
+                \ the database.   \nenable:Keep the old fingerprint and add a new\
+                \ fingerprint when a file is changed on the server.   \ndisable:Replace\
+                \ the old fingerprint with the new fingerprint when a file is changed\
+                \ on the server."
+              enum:
+              - enable
+              - disable
+              type: string
+            name:
+              description: Name of the DLP fingerprint database.
+              maxLength: 35
+              type: string
+            password:
+              description: Password required to log into the file server.
+              format: password
+              type: string
+            period:
+              description: "Frequency for which the FortiGate checks the server for\
+                \ new or changed files.   \nnone:Check the server when the FortiGate\
+                \ starts up.   \ndaily:Check the server once a day.   \nweekly:Check\
+                \ the server once a week.   \nmonthly:Check the server once a month."
+              enum:
+              - none
+              - daily
+              - weekly
+              - monthly
+              type: string
+            remove-deleted:
+              description: "Enable to keep the fingerprint database up to date when\
+                \ a file is deleted from the server.   \nenable:Keep the fingerprint\
+                \ database up to date when a file is deleted from the server.   \n\
+                disable:Do not check for deleted files on the server. Saves system\
+                \ resources."
+              enum:
+              - enable
+              - disable
+              type: string
+            scan-on-creation:
+              description: "Enable to keep the fingerprint database up to date when\
+                \ a file is added or changed on the server.   \nenable:Keep the fingerprint\
+                \ database up to date when a file is added or changed on the server.\
+                \   \ndisable:Do not check for added or changed files on the server.\
+                \ Saves system resources."
+              enum:
+              - enable
+              - disable
+              type: string
+            scan-subdirectories:
+              description: "Enable/disable scanning subdirectories to find files to\
+                \ create fingerprints from.   \nenable:Scan subdirectories.   \ndisable:Do\
+                \ not scan subdirectories."
+              enum:
+              - enable
+              - disable
+              type: string
+            sensitivity:
+              description: Select a sensitivity or threat level for matches with this
+                fingerprint database. Add sensitivities using sensitivity.
+              maxLength: 35
+              type: string
+            server:
+              description: IPv4 or IPv6 address of the server.
+              maxLength: 35
+              type: string
+            server-type:
+              description: "Protocol used to communicate with the file server. Currently\
+                \ only Samba (SMB) servers are supported.   \nsamba:SAMBA server."
+              enum:
+              - samba
+              type: string
+            tod-hour:
+              description: Hour of the day on which to scan the server (0 - 23, default
+                = 1).
+              maximum: 23
+              minimum: 0
+              type: integer
+            tod-min:
+              description: Minute of the hour on which to scan the server (0 - 59).
+              maximum: 59
+              minimum: 0
+              type: integer
+            username:
+              description: User name required to log into the file server.
+              maxLength: 35
+              type: string
+            vdom:
+              description: "Select the VDOM that can communicate with the file server.\
+                \   \nmgmt:Communicate with the file server through the management\
+                \ VDOM.   \ncurrent:Communicate with the file server through the VDOM\
+                \ containing this DLP fingerprint database configuration."
+              enum:
+              - mgmt
+              - current
+              type: string
+            weekday:
+              description: "Day of the week on which to scan the server.   \nsunday:Sunday\
+                \   \nmonday:Monday   \ntuesday:Tuesday   \nwednesday:Wednesday  \
+                \ \nthursday:Thursday   \nfriday:Friday   \nsaturday:Saturday"
+              enum:
+              - sunday
+              - monday
+              - tuesday
+              - wednesday
+              - thursday
+              - friday
+              - saturday
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dlp/fp-doc-source
+  /dlp/sensitivity:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              name:
+                description: DLP Sensitivity Levels.
+                maxLength: 35
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dlp/sensitivity
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            name:
+              description: DLP Sensitivity Levels.
+              maxLength: 35
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - dlp/sensitivity
+  /dlp/sensitivity/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dlp/sensitivity
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              name:
+                description: DLP Sensitivity Levels.
+                maxLength: 35
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dlp/sensitivity
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            name:
+              description: DLP Sensitivity Levels.
+              maxLength: 35
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dlp/sensitivity
+  /dlp/sensor:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              comment:
+                description: Comment.
+                maxLength: 255
+                type: string
+              dlp-log:
+                description: "Enable/disable DLP logging.   \nenable:Enable DLP logging.\
+                  \   \ndisable:Disable DLP logging."
+                enum:
+                - enable
+                - disable
+                type: string
+              extended-log:
+                description: "Enable/disable extended logging for data leak prevention.\
+                  \   \nenable:Enable setting.   \ndisable:Disable setting."
+                enum:
+                - enable
+                - disable
+                type: string
+              feature-set:
+                description: "Flow/proxy feature set.   \nflow:Flow feature set. \
+                  \  \nproxy:Proxy feature set."
+                enum:
+                - flow
+                - proxy
+                type: string
+              filter:
+                description: Set up DLP filters for this sensor.
+                items:
+                  properties:
+                    action:
+                      description: "Action to take with content that this DLP sensor\
+                        \ matches.   \nallow:Allow the content to pass through the\
+                        \ FortiGate and do not create a log message.   \nlog-only:Allow\
+                        \ the content to pass through the FortiGate, but write a log\
+                        \ message.   \nblock:Block the content and write a log message.\
+                        \   \nquarantine-ip:Quarantine all traffic from the IP address\
+                        \ and write a log message."
+                      enum:
+                      - allow
+                      - log-only
+                      - block
+                      - quarantine-ip
+                      type: string
+                    archive:
+                      description: "Enable/disable DLP archiving.   \ndisable:No DLP\
+                        \ archiving.   \nenable:Enable full DLP archiving."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    company-identifier:
+                      description: Enter a company identifier watermark to match.
+                        Only watermarks that your company has placed on the files
+                        are matched.
+                      maxLength: 35
+                      type: string
+                    expiry:
+                      description: Quarantine duration in days, hours, minutes format
+                        (dddhhmm).
+                      type: string
+                    file-size:
+                      description: Match files this size or larger (0 - 4294967295
+                        kbytes).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    file-type:
+                      description: Select the number of a DLP file pattern table to
+                        match.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    filter-by:
+                      description: "Select the type of content to match.   \ncredit-card:Match\
+                        \ credit cards.   \nssn:Match social security numbers.   \n\
+                        regexp:Use a regular expression to match content.   \nfile-type:Match\
+                        \ a DLP file pattern list.   \nfile-size:Match any file over\
+                        \ with a size over the threshold.   \nfingerprint:Match against\
+                        \ a fingerprint sensitivity.   \nwatermark:Look for defined\
+                        \ file watermarks.   \nencrypted:Look for encrypted files."
+                      enum:
+                      - credit-card
+                      - ssn
+                      - regexp
+                      - file-type
+                      - file-size
+                      - fingerprint
+                      - watermark
+                      - encrypted
+                      type: string
+                    id:
+                      description: ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    match-percentage:
+                      description: Percentage of fingerprints in the fingerprint databases
+                        designated with the selected sensitivity to match.
+                      maximum: 100
+                      minimum: 1
+                      type: integer
+                    name:
+                      description: Filter name.
+                      maxLength: 35
+                      type: string
+                    proto:
+                      description: "Check messages or files over one or more of these\
+                        \ protocols.   \nsmtp:SMTP.   \npop3:POP3.   \nimap:IMAP.\
+                        \   \nhttp-get:HTTP GET.   \nhttp-post:HTTP POST.   \nftp:FTP.\
+                        \   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP and SCP.   \n\
+                        cifs:CIFS."
+                      enum:
+                      - smtp
+                      - pop3
+                      - imap
+                      - http-get
+                      - http-post
+                      - ftp
+                      - nntp
+                      - mapi
+                      - ssh
+                      - cifs
+                      type: string
+                    regexp:
+                      description: Enter a regular expression to match (max. 255 characters).
+                      maxLength: 255
+                      type: string
+                    sensitivity:
+                      description: Select a DLP file pattern sensitivity to match.
+                      items:
+                        properties:
+                          name:
+                            description: Select a DLP sensitivity.
+                            maxLength: 35
+                            type: string
+                        type: object
+                      maxItems: null
+                      type: array
+                    severity:
+                      description: "Select the severity or threat level that matches\
+                        \ this filter.   \ninfo:Informational.   \nlow:Low.   \nmedium:Medium.\
+                        \   \nhigh:High.   \ncritical:Critical."
+                      enum:
+                      - info
+                      - low
+                      - medium
+                      - high
+                      - critical
+                      type: string
+                    type:
+                      description: "Select whether to check the content of messages\
+                        \ (an email message) or files (downloaded files or email attachments).\
+                        \    \nfile:Check the contents of downloaded or attached files.\
+                        \   \nmessage:Check the contents of email messages, web pages,\
+                        \ etc."
+                      enum:
+                      - file
+                      - message
+                      type: string
+                  type: object
+                maxItems: 2000
+                type: array
+              full-archive-proto:
+                description: "Protocols to always content archive.   \nsmtp:SMTP.\
+                  \   \npop3:POP3.   \nimap:IMAP.   \nhttp-get:HTTP GET.   \nhttp-post:HTTP\
+                  \ POST.   \nftp:FTP.   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP\
+                  \ and SCP.   \ncifs:CIFS."
+                enum:
+                - smtp
+                - pop3
+                - imap
+                - http-get
+                - http-post
+                - ftp
+                - nntp
+                - mapi
+                - ssh
+                - cifs
+                type: string
+              nac-quar-log:
+                description: "Enable/disable NAC quarantine logging.   \nenable:Enable\
+                  \ NAC quarantine logging.   \ndisable:Disable NAC quarantine logging."
+                enum:
+                - enable
+                - disable
+                type: string
+              name:
+                description: Name of the DLP sensor.
+                maxLength: 35
+                type: string
+              replacemsg-group:
+                description: Replacement message group used by this DLP sensor.
+                maxLength: 35
+                type: string
+              summary-proto:
+                description: "Protocols to always log summary.   \nsmtp:SMTP.   \n\
+                  pop3:POP3.   \nimap:IMAP.   \nhttp-get:HTTP GET.   \nhttp-post:HTTP\
+                  \ POST.   \nftp:FTP.   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP\
+                  \ and SCP.   \ncifs:CIFS."
+                enum:
+                - smtp
+                - pop3
+                - imap
+                - http-get
+                - http-post
+                - ftp
+                - nntp
+                - mapi
+                - ssh
+                - cifs
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dlp/sensor
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            comment:
+              description: Comment.
+              maxLength: 255
+              type: string
+            dlp-log:
+              description: "Enable/disable DLP logging.   \nenable:Enable DLP logging.\
+                \   \ndisable:Disable DLP logging."
+              enum:
+              - enable
+              - disable
+              type: string
+            extended-log:
+              description: "Enable/disable extended logging for data leak prevention.\
+                \   \nenable:Enable setting.   \ndisable:Disable setting."
+              enum:
+              - enable
+              - disable
+              type: string
+            feature-set:
+              description: "Flow/proxy feature set.   \nflow:Flow feature set.   \n\
+                proxy:Proxy feature set."
+              enum:
+              - flow
+              - proxy
+              type: string
+            filter:
+              description: Set up DLP filters for this sensor.
+              items:
+                properties:
+                  action:
+                    description: "Action to take with content that this DLP sensor\
+                      \ matches.   \nallow:Allow the content to pass through the FortiGate\
+                      \ and do not create a log message.   \nlog-only:Allow the content\
+                      \ to pass through the FortiGate, but write a log message.  \
+                      \ \nblock:Block the content and write a log message.   \nquarantine-ip:Quarantine\
+                      \ all traffic from the IP address and write a log message."
+                    enum:
+                    - allow
+                    - log-only
+                    - block
+                    - quarantine-ip
+                    type: string
+                  archive:
+                    description: "Enable/disable DLP archiving.   \ndisable:No DLP\
+                      \ archiving.   \nenable:Enable full DLP archiving."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  company-identifier:
+                    description: Enter a company identifier watermark to match. Only
+                      watermarks that your company has placed on the files are matched.
+                    maxLength: 35
+                    type: string
+                  expiry:
+                    description: Quarantine duration in days, hours, minutes format
+                      (dddhhmm).
+                    type: string
+                  file-size:
+                    description: Match files this size or larger (0 - 4294967295 kbytes).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  file-type:
+                    description: Select the number of a DLP file pattern table to
+                      match.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  filter-by:
+                    description: "Select the type of content to match.   \ncredit-card:Match\
+                      \ credit cards.   \nssn:Match social security numbers.   \n\
+                      regexp:Use a regular expression to match content.   \nfile-type:Match\
+                      \ a DLP file pattern list.   \nfile-size:Match any file over\
+                      \ with a size over the threshold.   \nfingerprint:Match against\
+                      \ a fingerprint sensitivity.   \nwatermark:Look for defined\
+                      \ file watermarks.   \nencrypted:Look for encrypted files."
+                    enum:
+                    - credit-card
+                    - ssn
+                    - regexp
+                    - file-type
+                    - file-size
+                    - fingerprint
+                    - watermark
+                    - encrypted
+                    type: string
+                  id:
+                    description: ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  match-percentage:
+                    description: Percentage of fingerprints in the fingerprint databases
+                      designated with the selected sensitivity to match.
+                    maximum: 100
+                    minimum: 1
+                    type: integer
+                  name:
+                    description: Filter name.
+                    maxLength: 35
+                    type: string
+                  proto:
+                    description: "Check messages or files over one or more of these\
+                      \ protocols.   \nsmtp:SMTP.   \npop3:POP3.   \nimap:IMAP.  \
+                      \ \nhttp-get:HTTP GET.   \nhttp-post:HTTP POST.   \nftp:FTP.\
+                      \   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP and SCP.   \ncifs:CIFS."
+                    enum:
+                    - smtp
+                    - pop3
+                    - imap
+                    - http-get
+                    - http-post
+                    - ftp
+                    - nntp
+                    - mapi
+                    - ssh
+                    - cifs
+                    type: string
+                  regexp:
+                    description: Enter a regular expression to match (max. 255 characters).
+                    maxLength: 255
+                    type: string
+                  sensitivity:
+                    description: Select a DLP file pattern sensitivity to match.
+                    items:
+                      properties:
+                        name:
+                          description: Select a DLP sensitivity.
+                          maxLength: 35
+                          type: string
+                      type: object
+                    maxItems: null
+                    type: array
+                  severity:
+                    description: "Select the severity or threat level that matches\
+                      \ this filter.   \ninfo:Informational.   \nlow:Low.   \nmedium:Medium.\
+                      \   \nhigh:High.   \ncritical:Critical."
+                    enum:
+                    - info
+                    - low
+                    - medium
+                    - high
+                    - critical
+                    type: string
+                  type:
+                    description: "Select whether to check the content of messages\
+                      \ (an email message) or files (downloaded files or email attachments).\
+                      \    \nfile:Check the contents of downloaded or attached files.\
+                      \   \nmessage:Check the contents of email messages, web pages,\
+                      \ etc."
+                    enum:
+                    - file
+                    - message
+                    type: string
+                type: object
+              maxItems: 2000
+              type: array
+            full-archive-proto:
+              description: "Protocols to always content archive.   \nsmtp:SMTP.  \
+                \ \npop3:POP3.   \nimap:IMAP.   \nhttp-get:HTTP GET.   \nhttp-post:HTTP\
+                \ POST.   \nftp:FTP.   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP and\
+                \ SCP.   \ncifs:CIFS."
+              enum:
+              - smtp
+              - pop3
+              - imap
+              - http-get
+              - http-post
+              - ftp
+              - nntp
+              - mapi
+              - ssh
+              - cifs
+              type: string
+            nac-quar-log:
+              description: "Enable/disable NAC quarantine logging.   \nenable:Enable\
+                \ NAC quarantine logging.   \ndisable:Disable NAC quarantine logging."
+              enum:
+              - enable
+              - disable
+              type: string
+            name:
+              description: Name of the DLP sensor.
+              maxLength: 35
+              type: string
+            replacemsg-group:
+              description: Replacement message group used by this DLP sensor.
+              maxLength: 35
+              type: string
+            summary-proto:
+              description: "Protocols to always log summary.   \nsmtp:SMTP.   \npop3:POP3.\
+                \   \nimap:IMAP.   \nhttp-get:HTTP GET.   \nhttp-post:HTTP POST. \
+                \  \nftp:FTP.   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP and SCP.\
+                \   \ncifs:CIFS."
+              enum:
+              - smtp
+              - pop3
+              - imap
+              - http-get
+              - http-post
+              - ftp
+              - nntp
+              - mapi
+              - ssh
+              - cifs
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: utmgrp"
+      tags:
+      - dlp/sensor
+  /dlp/sensor/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dlp/sensor
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              comment:
+                description: Comment.
+                maxLength: 255
+                type: string
+              dlp-log:
+                description: "Enable/disable DLP logging.   \nenable:Enable DLP logging.\
+                  \   \ndisable:Disable DLP logging."
+                enum:
+                - enable
+                - disable
+                type: string
+              extended-log:
+                description: "Enable/disable extended logging for data leak prevention.\
+                  \   \nenable:Enable setting.   \ndisable:Disable setting."
+                enum:
+                - enable
+                - disable
+                type: string
+              feature-set:
+                description: "Flow/proxy feature set.   \nflow:Flow feature set. \
+                  \  \nproxy:Proxy feature set."
+                enum:
+                - flow
+                - proxy
+                type: string
+              filter:
+                description: Set up DLP filters for this sensor.
+                items:
+                  properties:
+                    action:
+                      description: "Action to take with content that this DLP sensor\
+                        \ matches.   \nallow:Allow the content to pass through the\
+                        \ FortiGate and do not create a log message.   \nlog-only:Allow\
+                        \ the content to pass through the FortiGate, but write a log\
+                        \ message.   \nblock:Block the content and write a log message.\
+                        \   \nquarantine-ip:Quarantine all traffic from the IP address\
+                        \ and write a log message."
+                      enum:
+                      - allow
+                      - log-only
+                      - block
+                      - quarantine-ip
+                      type: string
+                    archive:
+                      description: "Enable/disable DLP archiving.   \ndisable:No DLP\
+                        \ archiving.   \nenable:Enable full DLP archiving."
+                      enum:
+                      - disable
+                      - enable
+                      type: string
+                    company-identifier:
+                      description: Enter a company identifier watermark to match.
+                        Only watermarks that your company has placed on the files
+                        are matched.
+                      maxLength: 35
+                      type: string
+                    expiry:
+                      description: Quarantine duration in days, hours, minutes format
+                        (dddhhmm).
+                      type: string
+                    file-size:
+                      description: Match files this size or larger (0 - 4294967295
+                        kbytes).
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    file-type:
+                      description: Select the number of a DLP file pattern table to
+                        match.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    filter-by:
+                      description: "Select the type of content to match.   \ncredit-card:Match\
+                        \ credit cards.   \nssn:Match social security numbers.   \n\
+                        regexp:Use a regular expression to match content.   \nfile-type:Match\
+                        \ a DLP file pattern list.   \nfile-size:Match any file over\
+                        \ with a size over the threshold.   \nfingerprint:Match against\
+                        \ a fingerprint sensitivity.   \nwatermark:Look for defined\
+                        \ file watermarks.   \nencrypted:Look for encrypted files."
+                      enum:
+                      - credit-card
+                      - ssn
+                      - regexp
+                      - file-type
+                      - file-size
+                      - fingerprint
+                      - watermark
+                      - encrypted
+                      type: string
+                    id:
+                      description: ID.
+                      maximum: 4294967295
+                      minimum: 0
+                      type: integer
+                    match-percentage:
+                      description: Percentage of fingerprints in the fingerprint databases
+                        designated with the selected sensitivity to match.
+                      maximum: 100
+                      minimum: 1
+                      type: integer
+                    name:
+                      description: Filter name.
+                      maxLength: 35
+                      type: string
+                    proto:
+                      description: "Check messages or files over one or more of these\
+                        \ protocols.   \nsmtp:SMTP.   \npop3:POP3.   \nimap:IMAP.\
+                        \   \nhttp-get:HTTP GET.   \nhttp-post:HTTP POST.   \nftp:FTP.\
+                        \   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP and SCP.   \n\
+                        cifs:CIFS."
+                      enum:
+                      - smtp
+                      - pop3
+                      - imap
+                      - http-get
+                      - http-post
+                      - ftp
+                      - nntp
+                      - mapi
+                      - ssh
+                      - cifs
+                      type: string
+                    regexp:
+                      description: Enter a regular expression to match (max. 255 characters).
+                      maxLength: 255
+                      type: string
+                    sensitivity:
+                      description: Select a DLP file pattern sensitivity to match.
+                      items:
+                        properties:
+                          name:
+                            description: Select a DLP sensitivity.
+                            maxLength: 35
+                            type: string
+                        type: object
+                      maxItems: null
+                      type: array
+                    severity:
+                      description: "Select the severity or threat level that matches\
+                        \ this filter.   \ninfo:Informational.   \nlow:Low.   \nmedium:Medium.\
+                        \   \nhigh:High.   \ncritical:Critical."
+                      enum:
+                      - info
+                      - low
+                      - medium
+                      - high
+                      - critical
+                      type: string
+                    type:
+                      description: "Select whether to check the content of messages\
+                        \ (an email message) or files (downloaded files or email attachments).\
+                        \    \nfile:Check the contents of downloaded or attached files.\
+                        \   \nmessage:Check the contents of email messages, web pages,\
+                        \ etc."
+                      enum:
+                      - file
+                      - message
+                      type: string
+                  type: object
+                maxItems: 2000
+                type: array
+              full-archive-proto:
+                description: "Protocols to always content archive.   \nsmtp:SMTP.\
+                  \   \npop3:POP3.   \nimap:IMAP.   \nhttp-get:HTTP GET.   \nhttp-post:HTTP\
+                  \ POST.   \nftp:FTP.   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP\
+                  \ and SCP.   \ncifs:CIFS."
+                enum:
+                - smtp
+                - pop3
+                - imap
+                - http-get
+                - http-post
+                - ftp
+                - nntp
+                - mapi
+                - ssh
+                - cifs
+                type: string
+              nac-quar-log:
+                description: "Enable/disable NAC quarantine logging.   \nenable:Enable\
+                  \ NAC quarantine logging.   \ndisable:Disable NAC quarantine logging."
+                enum:
+                - enable
+                - disable
+                type: string
+              name:
+                description: Name of the DLP sensor.
+                maxLength: 35
+                type: string
+              replacemsg-group:
+                description: Replacement message group used by this DLP sensor.
+                maxLength: 35
+                type: string
+              summary-proto:
+                description: "Protocols to always log summary.   \nsmtp:SMTP.   \n\
+                  pop3:POP3.   \nimap:IMAP.   \nhttp-get:HTTP GET.   \nhttp-post:HTTP\
+                  \ POST.   \nftp:FTP.   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP\
+                  \ and SCP.   \ncifs:CIFS."
+                enum:
+                - smtp
+                - pop3
+                - imap
+                - http-get
+                - http-post
+                - ftp
+                - nntp
+                - mapi
+                - ssh
+                - cifs
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dlp/sensor
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            comment:
+              description: Comment.
+              maxLength: 255
+              type: string
+            dlp-log:
+              description: "Enable/disable DLP logging.   \nenable:Enable DLP logging.\
+                \   \ndisable:Disable DLP logging."
+              enum:
+              - enable
+              - disable
+              type: string
+            extended-log:
+              description: "Enable/disable extended logging for data leak prevention.\
+                \   \nenable:Enable setting.   \ndisable:Disable setting."
+              enum:
+              - enable
+              - disable
+              type: string
+            feature-set:
+              description: "Flow/proxy feature set.   \nflow:Flow feature set.   \n\
+                proxy:Proxy feature set."
+              enum:
+              - flow
+              - proxy
+              type: string
+            filter:
+              description: Set up DLP filters for this sensor.
+              items:
+                properties:
+                  action:
+                    description: "Action to take with content that this DLP sensor\
+                      \ matches.   \nallow:Allow the content to pass through the FortiGate\
+                      \ and do not create a log message.   \nlog-only:Allow the content\
+                      \ to pass through the FortiGate, but write a log message.  \
+                      \ \nblock:Block the content and write a log message.   \nquarantine-ip:Quarantine\
+                      \ all traffic from the IP address and write a log message."
+                    enum:
+                    - allow
+                    - log-only
+                    - block
+                    - quarantine-ip
+                    type: string
+                  archive:
+                    description: "Enable/disable DLP archiving.   \ndisable:No DLP\
+                      \ archiving.   \nenable:Enable full DLP archiving."
+                    enum:
+                    - disable
+                    - enable
+                    type: string
+                  company-identifier:
+                    description: Enter a company identifier watermark to match. Only
+                      watermarks that your company has placed on the files are matched.
+                    maxLength: 35
+                    type: string
+                  expiry:
+                    description: Quarantine duration in days, hours, minutes format
+                      (dddhhmm).
+                    type: string
+                  file-size:
+                    description: Match files this size or larger (0 - 4294967295 kbytes).
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  file-type:
+                    description: Select the number of a DLP file pattern table to
+                      match.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  filter-by:
+                    description: "Select the type of content to match.   \ncredit-card:Match\
+                      \ credit cards.   \nssn:Match social security numbers.   \n\
+                      regexp:Use a regular expression to match content.   \nfile-type:Match\
+                      \ a DLP file pattern list.   \nfile-size:Match any file over\
+                      \ with a size over the threshold.   \nfingerprint:Match against\
+                      \ a fingerprint sensitivity.   \nwatermark:Look for defined\
+                      \ file watermarks.   \nencrypted:Look for encrypted files."
+                    enum:
+                    - credit-card
+                    - ssn
+                    - regexp
+                    - file-type
+                    - file-size
+                    - fingerprint
+                    - watermark
+                    - encrypted
+                    type: string
+                  id:
+                    description: ID.
+                    maximum: 4294967295
+                    minimum: 0
+                    type: integer
+                  match-percentage:
+                    description: Percentage of fingerprints in the fingerprint databases
+                      designated with the selected sensitivity to match.
+                    maximum: 100
+                    minimum: 1
+                    type: integer
+                  name:
+                    description: Filter name.
+                    maxLength: 35
+                    type: string
+                  proto:
+                    description: "Check messages or files over one or more of these\
+                      \ protocols.   \nsmtp:SMTP.   \npop3:POP3.   \nimap:IMAP.  \
+                      \ \nhttp-get:HTTP GET.   \nhttp-post:HTTP POST.   \nftp:FTP.\
+                      \   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP and SCP.   \ncifs:CIFS."
+                    enum:
+                    - smtp
+                    - pop3
+                    - imap
+                    - http-get
+                    - http-post
+                    - ftp
+                    - nntp
+                    - mapi
+                    - ssh
+                    - cifs
+                    type: string
+                  regexp:
+                    description: Enter a regular expression to match (max. 255 characters).
+                    maxLength: 255
+                    type: string
+                  sensitivity:
+                    description: Select a DLP file pattern sensitivity to match.
+                    items:
+                      properties:
+                        name:
+                          description: Select a DLP sensitivity.
+                          maxLength: 35
+                          type: string
+                      type: object
+                    maxItems: null
+                    type: array
+                  severity:
+                    description: "Select the severity or threat level that matches\
+                      \ this filter.   \ninfo:Informational.   \nlow:Low.   \nmedium:Medium.\
+                      \   \nhigh:High.   \ncritical:Critical."
+                    enum:
+                    - info
+                    - low
+                    - medium
+                    - high
+                    - critical
+                    type: string
+                  type:
+                    description: "Select whether to check the content of messages\
+                      \ (an email message) or files (downloaded files or email attachments).\
+                      \    \nfile:Check the contents of downloaded or attached files.\
+                      \   \nmessage:Check the contents of email messages, web pages,\
+                      \ etc."
+                    enum:
+                    - file
+                    - message
+                    type: string
+                type: object
+              maxItems: 2000
+              type: array
+            full-archive-proto:
+              description: "Protocols to always content archive.   \nsmtp:SMTP.  \
+                \ \npop3:POP3.   \nimap:IMAP.   \nhttp-get:HTTP GET.   \nhttp-post:HTTP\
+                \ POST.   \nftp:FTP.   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP and\
+                \ SCP.   \ncifs:CIFS."
+              enum:
+              - smtp
+              - pop3
+              - imap
+              - http-get
+              - http-post
+              - ftp
+              - nntp
+              - mapi
+              - ssh
+              - cifs
+              type: string
+            nac-quar-log:
+              description: "Enable/disable NAC quarantine logging.   \nenable:Enable\
+                \ NAC quarantine logging.   \ndisable:Disable NAC quarantine logging."
+              enum:
+              - enable
+              - disable
+              type: string
+            name:
+              description: Name of the DLP sensor.
+              maxLength: 35
+              type: string
+            replacemsg-group:
+              description: Replacement message group used by this DLP sensor.
+              maxLength: 35
+              type: string
+            summary-proto:
+              description: "Protocols to always log summary.   \nsmtp:SMTP.   \npop3:POP3.\
+                \   \nimap:IMAP.   \nhttp-get:HTTP GET.   \nhttp-post:HTTP POST. \
+                \  \nftp:FTP.   \nnntp:NNTP.   \nmapi:MAPI.   \nssh:SFTP and SCP.\
+                \   \ncifs:CIFS."
+              enum:
+              - smtp
+              - pop3
+              - imap
+              - http-get
+              - http-post
+              - ftp
+              - nntp
+              - mapi
+              - ssh
+              - cifs
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dlp/sensor
+  /dlp/settings:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              cache-mem-percent:
+                description: Maximum percentage of available memory allocated to caching
+                  (1 - 15%).
+                maximum: 15
+                minimum: 1
+                type: integer
+              chunk-size:
+                description: Maximum fingerprint chunk size.  **Changing will flush
+                  the entire database**.
+                maximum: 100000
+                minimum: 100
+                type: integer
+              db-mode:
+                description: "Behaviour when the maximum size is reached.   \nstop-adding:Stop\
+                  \ adding entries.   \nremove-modified-then-oldest:Remove modified\
+                  \ chunks first, then oldest file entries.   \nremove-oldest:Remove\
+                  \ the oldest files first."
+                enum:
+                - stop-adding
+                - remove-modified-then-oldest
+                - remove-oldest
+                type: string
+              size:
+                description: Maximum total size of files within the storage (MB).
+                maximum: 4294967295
+                minimum: 16
+                type: integer
+              storage-device:
+                description: Storage device name.
+                maxLength: 35
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: utmgrp"
+      tags:
+      - dlp/settings
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            cache-mem-percent:
+              description: Maximum percentage of available memory allocated to caching
+                (1 - 15%).
+              maximum: 15
+              minimum: 1
+              type: integer
+            chunk-size:
+              description: Maximum fingerprint chunk size.  **Changing will flush
+                the entire database**.
+              maximum: 100000
+              minimum: 100
+              type: integer
+            db-mode:
+              description: "Behaviour when the maximum size is reached.   \nstop-adding:Stop\
+                \ adding entries.   \nremove-modified-then-oldest:Remove modified\
+                \ chunks first, then oldest file entries.   \nremove-oldest:Remove\
+                \ the oldest files first."
+              enum:
+              - stop-adding
+              - remove-modified-then-oldest
+              - remove-oldest
+              type: string
+            size:
+              description: Maximum total size of files within the storage (MB).
+              maximum: 4294967295
+              minimum: 16
+              type: integer
+            storage-device:
+              description: Storage device name.
+              maxLength: 35
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: utmgrp"
+      tags:
+      - dlp/settings
+produces:
+- application/json
+schemes:
+- https
+security:
+- APIKeyQueryParam: []
+securityDefinitions:
+  APIKeyQueryParam:
+    in: query
+    name: access_token
+    type: apiKey
+swagger: '2.0'
+tags:
+- description: Configure file patterns used by DLP blocking.
+  name: dlp/filepattern
+- description: Create a DLP fingerprint database by allowing the FortiGate to access
+    a file server containing files from which to create fingerprints.
+  name: dlp/fp-doc-source
+- description: Create self-explanatory DLP sensitivity levels to be used when setting
+    sensitivity under config fp-doc-source.
+  name: dlp/sensitivity
+- description: Configure DLP sensors.
+  name: dlp/sensor
+- description: Designate logical storage for DLP fingerprint database.
+  name: dlp/settings

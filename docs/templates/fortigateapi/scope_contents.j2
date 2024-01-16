@@ -1,0 +1,10 @@
+{{ api_class }}.{{ scope }}
+{{ "=" * (api_class|length + 1 + scope|length) }}
+
+.. toctree::
+  :maxdepth: 1
+
+  {% for app_name in app_names -%}
+  {{ app_name }} <{{ app_name }}/_contents.rst>
+  {% endfor -%}
+

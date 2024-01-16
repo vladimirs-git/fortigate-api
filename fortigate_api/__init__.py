@@ -1,9 +1,9 @@
 """fortigate-api."""
 
-from fortigate_api.fortigate import Fortigate
-from fortigate_api.fortigate_api import FortigateAPI
+from fortigate_api.fortigate import FortiGate
+from fortigate_api.fortigate_api import FortiGateAPI
 
 __all__ = [
-    "Fortigate",
-    "FortigateAPI",
+    "FortiGate",
+    "FortiGateAPI",
 ]

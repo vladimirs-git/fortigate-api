@@ -1,14 +1,8 @@
-"""Monitor examples.
-
-- Get directory of monitor options (schema)
-- Get all ipv4 routes
-- Get static ipv4 routes
-- Get route to interested ip address
-"""
+"""Monitor examples."""
 import logging
 from pprint import pprint
 
-from fortigate_api import Fortigate
+from fortigate_api import FortiGate
 
 logging.getLogger().setLevel(logging.DEBUG)
 
@@ -16,7 +10,7 @@ HOST = "host"
 USERNAME = "username"
 PASSWORD = "password"
 
-fgt = Fortigate(host=HOST, username=USERNAME, password=PASSWORD)
+fgt = FortiGate(host=HOST, username=USERNAME, password=PASSWORD)
 
 # Get directory of monitor options (schema)
 directory = fgt.directory("api/v2/monitor")
@@ -65,7 +59,7 @@ pprint(routes)
 # ]
 
 # Get route to interested ip address
-routes = fgt.get(url="api/v2/monitor/router/lookup?destination=10.1.1.1")
+routes = fgt.get_result(url="api/v2/monitor/router/lookup?destination=10.1.1.1")
 pprint(routes)
 # {"gateway": "10.0.0.1",
 #  "interface": "tunnel1",

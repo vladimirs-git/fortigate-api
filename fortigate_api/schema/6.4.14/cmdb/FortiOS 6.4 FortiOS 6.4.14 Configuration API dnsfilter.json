@@ -1,0 +1,2193 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "termsOfService": "http:\/\/fortinet.com\/terms\/",
+        "version": "v2",
+        "contact": {
+            "url": "http:\/\/modskristensen.net",
+            "name": "FortiOS Web Application Team",
+            "email": "fosguiqateam@fortinet.com"
+        },
+        "description": "REST API for configuring FortiOS objects and settings",
+        "title": "FortiOS CMDB"
+    },
+    "host": "172.16.177.65",
+    "basePath": "\/api\/v2\/cmdb",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application\/json"
+    ],
+    "produces": [
+        "application\/json"
+    ],
+    "securityDefinitions": {
+        "APIKeyQueryParam": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query"
+        }
+    },
+    "security": [
+        {
+            "APIKeyQueryParam": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "dnsfilter\/domain-filter",
+            "description": "Configure DNS domain filters."
+        },
+        {
+            "name": "dnsfilter\/profile",
+            "description": "Configure DNS domain filter profiles."
+        }
+    ],
+    "paths": {
+        "\/dnsfilter\/domain-filter\/{id}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "ID.",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of table.",
+                                    "maxLength": 63
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Optional comments.",
+                                    "maxLength": 255
+                                },
+                                "entries": {
+                                    "description": "DNS domain filter entries.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "description": "Id.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "domain": {
+                                                "type": "string",
+                                                "description": "Domain entries to be filtered.",
+                                                "maxLength": 511
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "description": "DNS domain filter type.   \nsimple:Simple domain string.   \nregex:Regular expression domain string.   \nwildcard:Wildcard domain string.",
+                                                "enum": [
+                                                    "simple",
+                                                    "regex",
+                                                    "wildcard"
+                                                ]
+                                            },
+                                            "action": {
+                                                "type": "string",
+                                                "description": "Action to take for domain filter matches.   \nblock:Block DNS requests matching the domain filter.   \nallow:Allow DNS requests matching the domain filter without logging.   \nmonitor:Allow DNS requests matching the domain filter with logging.",
+                                                "enum": [
+                                                    "block",
+                                                    "allow",
+                                                    "monitor"
+                                                ]
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "description": "Enable\/disable this domain filter.   \nenable:Enable this domain filter.   \ndisable:Disable this domain filter.",
+                                                "enum": [
+                                                    "enable",
+                                                    "disable"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "dnsfilter\/domain-filter"
+                ]
+            },
+            "put": {
+                "summary": "Update this specific resource.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "ID.",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of table.",
+                                    "maxLength": 63
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Optional comments.",
+                                    "maxLength": 255
+                                },
+                                "entries": {
+                                    "description": "DNS domain filter entries.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "description": "Id.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "domain": {
+                                                "type": "string",
+                                                "description": "Domain entries to be filtered.",
+                                                "maxLength": 511
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "description": "DNS domain filter type.   \nsimple:Simple domain string.   \nregex:Regular expression domain string.   \nwildcard:Wildcard domain string.",
+                                                "enum": [
+                                                    "simple",
+                                                    "regex",
+                                                    "wildcard"
+                                                ]
+                                            },
+                                            "action": {
+                                                "type": "string",
+                                                "description": "Action to take for domain filter matches.   \nblock:Block DNS requests matching the domain filter.   \nallow:Allow DNS requests matching the domain filter without logging.   \nmonitor:Allow DNS requests matching the domain filter with logging.",
+                                                "enum": [
+                                                    "block",
+                                                    "allow",
+                                                    "monitor"
+                                                ]
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "description": "Enable\/disable this domain filter.   \nenable:Enable this domain filter.   \ndisable:Disable this domain filter.",
+                                                "enum": [
+                                                    "enable",
+                                                    "disable"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_move_: Move this specific resource.\nWhen *action=move* is set, one of the extra parameters (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "move"
+                        ]
+                    },
+                    {
+                        "name": "before",
+                        "in": "query",
+                        "description": "If *action=move*, use *before* to specify the ID of the resource that this resource will be moved before.\nFor example, to move `object 1` to before `object 2`, use:\n__action=move&before=2__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "If *action=move*, use *after* to specify the ID of the resource that this resource will be moved after.\nFor example, to move `object 1` to after `object 3`, use:\n__action=move&after=3__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "dnsfilter\/domain-filter"
+                ]
+            },
+            "delete": {
+                "summary": "Delete this specific resource.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "mkey"
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "dnsfilter\/domain-filter"
+                ]
+            }
+        },
+        "\/dnsfilter\/domain-filter": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "ID.",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of table.",
+                                    "maxLength": 63
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Optional comments.",
+                                    "maxLength": 255
+                                },
+                                "entries": {
+                                    "description": "DNS domain filter entries.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "description": "Id.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "domain": {
+                                                "type": "string",
+                                                "description": "Domain entries to be filtered.",
+                                                "maxLength": 511
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "description": "DNS domain filter type.   \nsimple:Simple domain string.   \nregex:Regular expression domain string.   \nwildcard:Wildcard domain string.",
+                                                "enum": [
+                                                    "simple",
+                                                    "regex",
+                                                    "wildcard"
+                                                ]
+                                            },
+                                            "action": {
+                                                "type": "string",
+                                                "description": "Action to take for domain filter matches.   \nblock:Block DNS requests matching the domain filter.   \nallow:Allow DNS requests matching the domain filter without logging.   \nmonitor:Allow DNS requests matching the domain filter with logging.",
+                                                "enum": [
+                                                    "block",
+                                                    "allow",
+                                                    "monitor"
+                                                ]
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "description": "Enable\/disable this domain filter.   \nenable:Enable this domain filter.   \ndisable:Disable this domain filter.",
+                                                "enum": [
+                                                    "enable",
+                                                    "disable"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "dnsfilter\/domain-filter"
+                ]
+            },
+            "post": {
+                "summary": "Create object(s) in this table.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "description": "ID.",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "Name of table.",
+                                    "maxLength": 63
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Optional comments.",
+                                    "maxLength": 255
+                                },
+                                "entries": {
+                                    "description": "DNS domain filter entries.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "description": "Id.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "domain": {
+                                                "type": "string",
+                                                "description": "Domain entries to be filtered.",
+                                                "maxLength": 511
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "description": "DNS domain filter type.   \nsimple:Simple domain string.   \nregex:Regular expression domain string.   \nwildcard:Wildcard domain string.",
+                                                "enum": [
+                                                    "simple",
+                                                    "regex",
+                                                    "wildcard"
+                                                ]
+                                            },
+                                            "action": {
+                                                "type": "string",
+                                                "description": "Action to take for domain filter matches.   \nblock:Block DNS requests matching the domain filter.   \nallow:Allow DNS requests matching the domain filter without logging.   \nmonitor:Allow DNS requests matching the domain filter with logging.",
+                                                "enum": [
+                                                    "block",
+                                                    "allow",
+                                                    "monitor"
+                                                ]
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "description": "Enable\/disable this domain filter.   \nenable:Enable this domain filter.   \ndisable:Disable this domain filter.",
+                                                "enum": [
+                                                    "enable",
+                                                    "disable"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_clone_: Clone this specific resource.\nWhen *action=clone* is set, the extra parameters *nkey* must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "clone"
+                        ]
+                    },
+                    {
+                        "name": "nkey",
+                        "in": "query",
+                        "description": " If *action=clone*, use *nkey* to specify the ID for the new resource to be created.\nFor example, to clone `address1` to `address1_clone`, use:\n__action=clone&nkey=address1_clone__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *clone*.\n",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "dnsfilter\/domain-filter"
+                ]
+            }
+        },
+        "\/dnsfilter\/profile\/{name}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Profile name.",
+                                    "maxLength": 35
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 255
+                                },
+                                "domain-filter": {
+                                    "description": "Domain filter settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "domain-filter-table": {
+                                                "type": "integer",
+                                                "description": "DNS domain filter table ID.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ftgd-dns": {
+                                    "description": "FortiGuard DNS Filter settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "options": {
+                                                "type": "string",
+                                                "description": "FortiGuard DNS filter options.   \nerror-allow:Allow all domains when FortiGuard DNS servers fail.   \nftgd-disable:Disable FortiGuard DNS domain rating.",
+                                                "enum": [
+                                                    "error-allow",
+                                                    "ftgd-disable"
+                                                ]
+                                            },
+                                            "filters": {
+                                                "description": "FortiGuard DNS domain filters.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "description": "ID number.",
+                                                            "maximum": 255,
+                                                            "minimum": 0
+                                                        },
+                                                        "category": {
+                                                            "type": "integer",
+                                                            "description": "Category number.",
+                                                            "maximum": 255,
+                                                            "minimum": 0
+                                                        },
+                                                        "action": {
+                                                            "type": "string",
+                                                            "description": "Action to take for DNS requests matching the category.   \nblock:Block DNS requests matching the category.   \nmonitor:Allow DNS requests matching the category and log the result.",
+                                                            "enum": [
+                                                                "block",
+                                                                "monitor"
+                                                            ]
+                                                        },
+                                                        "log": {
+                                                            "type": "string",
+                                                            "description": "Enable\/disable DNS filter logging for this DNS profile.   \nenable:Enable DNS filter logging.   \ndisable:Disable DNS filter logging.",
+                                                            "enum": [
+                                                                "enable",
+                                                                "disable"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "log-all-domain": {
+                                    "type": "string",
+                                    "description": "Enable\/disable logging of all domains visited (detailed DNS logging).   \nenable:Enable logging of all domains visited.   \ndisable:Disable logging of all domains visited.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "sdns-ftgd-err-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FortiGuard SDNS rating error logging.   \nenable:Enable FortiGuard SDNS rating error logging.   \ndisable:Disable FortiGuard SDNS rating error logging.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "sdns-domain-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable domain filtering and botnet domain logging.   \nenable:Enable domain filtering and botnet domain logging.   \ndisable:Disable domain filtering and botnet domain logging.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "block-action": {
+                                    "type": "string",
+                                    "description": "Action to take for blocked domains.   \nblock:Return NXDOMAIN for blocked domains.   \nredirect:Redirect blocked domains to SDNS portal.",
+                                    "enum": [
+                                        "block",
+                                        "redirect"
+                                    ]
+                                },
+                                "redirect-portal": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "IPv4 address of the SDNS redirect portal."
+                                },
+                                "redirect-portal6": {
+                                    "type": "string",
+                                    "format": "ipv6",
+                                    "description": "IPv6 address of the SDNS redirect portal."
+                                },
+                                "block-botnet": {
+                                    "type": "string",
+                                    "description": "Enable\/disable blocking botnet C&C DNS lookups.   \ndisable:Disable blocking botnet C&C DNS lookups.   \nenable:Enable blocking botnet C&C DNS lookups.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "safe-search": {
+                                    "type": "string",
+                                    "description": "Enable\/disable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.   \ndisable:Disable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.   \nenable:Enable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "youtube-restrict": {
+                                    "type": "string",
+                                    "description": "Set safe search for YouTube restriction level.   \nstrict:Enable strict safe seach for YouTube.   \nmoderate:Enable moderate safe search for YouTube.",
+                                    "enum": [
+                                        "strict",
+                                        "moderate"
+                                    ]
+                                },
+                                "external-ip-blocklist": {
+                                    "description": "One or more external IP block lists.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "External domain block list name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "dns-translation": {
+                                    "description": "DNS translation settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "description": "ID.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "addr-type": {
+                                                "type": "string",
+                                                "description": "DNS translation type (IPv4 or IPv6).   \nipv4:IPv4 address type.   \nipv6:IPv6 address type.",
+                                                "enum": [
+                                                    "ipv4",
+                                                    "ipv6"
+                                                ]
+                                            },
+                                            "src": {
+                                                "type": "string",
+                                                "format": "ipv4",
+                                                "description": "IPv4 address or subnet on the internal network to compare with the resolved address in DNS query replies. If the resolved address matches, the resolved address is substituted with dst."
+                                            },
+                                            "dst": {
+                                                "type": "string",
+                                                "format": "ipv4",
+                                                "description": "IPv4 address or subnet on the external network to substitute for the resolved address in DNS query replies. Can be single IP address or subnet on the external network, but number of addresses must equal number of mapped IP addresses in src."
+                                            },
+                                            "netmask": {
+                                                "type": "string",
+                                                "description": "If src and dst are subnets rather than single IP addresses, enter the netmask for both src and dst."
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "description": "Enable\/disable this DNS translation entry.   \nenable:Enable this DNS translation.   \ndisable:Disable this DNS translation.",
+                                                "enum": [
+                                                    "enable",
+                                                    "disable"
+                                                ]
+                                            },
+                                            "src6": {
+                                                "type": "string",
+                                                "format": "ipv6",
+                                                "description": "IPv6 address or subnet on the internal network to compare with the resolved address in DNS query replies. If the resolved address matches, the resolved address is substituted with dst6."
+                                            },
+                                            "dst6": {
+                                                "type": "string",
+                                                "format": "ipv6",
+                                                "description": "IPv6 address or subnet on the external network to substitute for the resolved address in DNS query replies. Can be single IP address or subnet on the external network, but number of addresses must equal number of mapped IP addresses in src6."
+                                            },
+                                            "prefix": {
+                                                "type": "integer",
+                                                "description": "If src6 and dst6 are subnets rather than single IP addresses, enter the prefix for both src6 and dst6 (1 - 128, default = 128).",
+                                                "maximum": 128,
+                                                "minimum": 1
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "dnsfilter\/profile"
+                ]
+            },
+            "put": {
+                "summary": "Update this specific resource.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Profile name.",
+                                    "maxLength": 35
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 255
+                                },
+                                "domain-filter": {
+                                    "description": "Domain filter settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "domain-filter-table": {
+                                                "type": "integer",
+                                                "description": "DNS domain filter table ID.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ftgd-dns": {
+                                    "description": "FortiGuard DNS Filter settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "options": {
+                                                "type": "string",
+                                                "description": "FortiGuard DNS filter options.   \nerror-allow:Allow all domains when FortiGuard DNS servers fail.   \nftgd-disable:Disable FortiGuard DNS domain rating.",
+                                                "enum": [
+                                                    "error-allow",
+                                                    "ftgd-disable"
+                                                ]
+                                            },
+                                            "filters": {
+                                                "description": "FortiGuard DNS domain filters.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "description": "ID number.",
+                                                            "maximum": 255,
+                                                            "minimum": 0
+                                                        },
+                                                        "category": {
+                                                            "type": "integer",
+                                                            "description": "Category number.",
+                                                            "maximum": 255,
+                                                            "minimum": 0
+                                                        },
+                                                        "action": {
+                                                            "type": "string",
+                                                            "description": "Action to take for DNS requests matching the category.   \nblock:Block DNS requests matching the category.   \nmonitor:Allow DNS requests matching the category and log the result.",
+                                                            "enum": [
+                                                                "block",
+                                                                "monitor"
+                                                            ]
+                                                        },
+                                                        "log": {
+                                                            "type": "string",
+                                                            "description": "Enable\/disable DNS filter logging for this DNS profile.   \nenable:Enable DNS filter logging.   \ndisable:Disable DNS filter logging.",
+                                                            "enum": [
+                                                                "enable",
+                                                                "disable"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "log-all-domain": {
+                                    "type": "string",
+                                    "description": "Enable\/disable logging of all domains visited (detailed DNS logging).   \nenable:Enable logging of all domains visited.   \ndisable:Disable logging of all domains visited.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "sdns-ftgd-err-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FortiGuard SDNS rating error logging.   \nenable:Enable FortiGuard SDNS rating error logging.   \ndisable:Disable FortiGuard SDNS rating error logging.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "sdns-domain-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable domain filtering and botnet domain logging.   \nenable:Enable domain filtering and botnet domain logging.   \ndisable:Disable domain filtering and botnet domain logging.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "block-action": {
+                                    "type": "string",
+                                    "description": "Action to take for blocked domains.   \nblock:Return NXDOMAIN for blocked domains.   \nredirect:Redirect blocked domains to SDNS portal.",
+                                    "enum": [
+                                        "block",
+                                        "redirect"
+                                    ]
+                                },
+                                "redirect-portal": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "IPv4 address of the SDNS redirect portal."
+                                },
+                                "redirect-portal6": {
+                                    "type": "string",
+                                    "format": "ipv6",
+                                    "description": "IPv6 address of the SDNS redirect portal."
+                                },
+                                "block-botnet": {
+                                    "type": "string",
+                                    "description": "Enable\/disable blocking botnet C&C DNS lookups.   \ndisable:Disable blocking botnet C&C DNS lookups.   \nenable:Enable blocking botnet C&C DNS lookups.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "safe-search": {
+                                    "type": "string",
+                                    "description": "Enable\/disable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.   \ndisable:Disable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.   \nenable:Enable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "youtube-restrict": {
+                                    "type": "string",
+                                    "description": "Set safe search for YouTube restriction level.   \nstrict:Enable strict safe seach for YouTube.   \nmoderate:Enable moderate safe search for YouTube.",
+                                    "enum": [
+                                        "strict",
+                                        "moderate"
+                                    ]
+                                },
+                                "external-ip-blocklist": {
+                                    "description": "One or more external IP block lists.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "External domain block list name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "dns-translation": {
+                                    "description": "DNS translation settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "description": "ID.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "addr-type": {
+                                                "type": "string",
+                                                "description": "DNS translation type (IPv4 or IPv6).   \nipv4:IPv4 address type.   \nipv6:IPv6 address type.",
+                                                "enum": [
+                                                    "ipv4",
+                                                    "ipv6"
+                                                ]
+                                            },
+                                            "src": {
+                                                "type": "string",
+                                                "format": "ipv4",
+                                                "description": "IPv4 address or subnet on the internal network to compare with the resolved address in DNS query replies. If the resolved address matches, the resolved address is substituted with dst."
+                                            },
+                                            "dst": {
+                                                "type": "string",
+                                                "format": "ipv4",
+                                                "description": "IPv4 address or subnet on the external network to substitute for the resolved address in DNS query replies. Can be single IP address or subnet on the external network, but number of addresses must equal number of mapped IP addresses in src."
+                                            },
+                                            "netmask": {
+                                                "type": "string",
+                                                "description": "If src and dst are subnets rather than single IP addresses, enter the netmask for both src and dst."
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "description": "Enable\/disable this DNS translation entry.   \nenable:Enable this DNS translation.   \ndisable:Disable this DNS translation.",
+                                                "enum": [
+                                                    "enable",
+                                                    "disable"
+                                                ]
+                                            },
+                                            "src6": {
+                                                "type": "string",
+                                                "format": "ipv6",
+                                                "description": "IPv6 address or subnet on the internal network to compare with the resolved address in DNS query replies. If the resolved address matches, the resolved address is substituted with dst6."
+                                            },
+                                            "dst6": {
+                                                "type": "string",
+                                                "format": "ipv6",
+                                                "description": "IPv6 address or subnet on the external network to substitute for the resolved address in DNS query replies. Can be single IP address or subnet on the external network, but number of addresses must equal number of mapped IP addresses in src6."
+                                            },
+                                            "prefix": {
+                                                "type": "integer",
+                                                "description": "If src6 and dst6 are subnets rather than single IP addresses, enter the prefix for both src6 and dst6 (1 - 128, default = 128).",
+                                                "maximum": 128,
+                                                "minimum": 1
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_move_: Move this specific resource.\nWhen *action=move* is set, one of the extra parameters (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "move"
+                        ]
+                    },
+                    {
+                        "name": "before",
+                        "in": "query",
+                        "description": "If *action=move*, use *before* to specify the ID of the resource that this resource will be moved before.\nFor example, to move `object 1` to before `object 2`, use:\n__action=move&before=2__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "If *action=move*, use *after* to specify the ID of the resource that this resource will be moved after.\nFor example, to move `object 1` to after `object 3`, use:\n__action=move&after=3__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "dnsfilter\/profile"
+                ]
+            },
+            "delete": {
+                "summary": "Delete this specific resource.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "dnsfilter\/profile"
+                ]
+            }
+        },
+        "\/dnsfilter\/profile": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Profile name.",
+                                    "maxLength": 35
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 255
+                                },
+                                "domain-filter": {
+                                    "description": "Domain filter settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "domain-filter-table": {
+                                                "type": "integer",
+                                                "description": "DNS domain filter table ID.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ftgd-dns": {
+                                    "description": "FortiGuard DNS Filter settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "options": {
+                                                "type": "string",
+                                                "description": "FortiGuard DNS filter options.   \nerror-allow:Allow all domains when FortiGuard DNS servers fail.   \nftgd-disable:Disable FortiGuard DNS domain rating.",
+                                                "enum": [
+                                                    "error-allow",
+                                                    "ftgd-disable"
+                                                ]
+                                            },
+                                            "filters": {
+                                                "description": "FortiGuard DNS domain filters.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "description": "ID number.",
+                                                            "maximum": 255,
+                                                            "minimum": 0
+                                                        },
+                                                        "category": {
+                                                            "type": "integer",
+                                                            "description": "Category number.",
+                                                            "maximum": 255,
+                                                            "minimum": 0
+                                                        },
+                                                        "action": {
+                                                            "type": "string",
+                                                            "description": "Action to take for DNS requests matching the category.   \nblock:Block DNS requests matching the category.   \nmonitor:Allow DNS requests matching the category and log the result.",
+                                                            "enum": [
+                                                                "block",
+                                                                "monitor"
+                                                            ]
+                                                        },
+                                                        "log": {
+                                                            "type": "string",
+                                                            "description": "Enable\/disable DNS filter logging for this DNS profile.   \nenable:Enable DNS filter logging.   \ndisable:Disable DNS filter logging.",
+                                                            "enum": [
+                                                                "enable",
+                                                                "disable"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "log-all-domain": {
+                                    "type": "string",
+                                    "description": "Enable\/disable logging of all domains visited (detailed DNS logging).   \nenable:Enable logging of all domains visited.   \ndisable:Disable logging of all domains visited.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "sdns-ftgd-err-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FortiGuard SDNS rating error logging.   \nenable:Enable FortiGuard SDNS rating error logging.   \ndisable:Disable FortiGuard SDNS rating error logging.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "sdns-domain-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable domain filtering and botnet domain logging.   \nenable:Enable domain filtering and botnet domain logging.   \ndisable:Disable domain filtering and botnet domain logging.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "block-action": {
+                                    "type": "string",
+                                    "description": "Action to take for blocked domains.   \nblock:Return NXDOMAIN for blocked domains.   \nredirect:Redirect blocked domains to SDNS portal.",
+                                    "enum": [
+                                        "block",
+                                        "redirect"
+                                    ]
+                                },
+                                "redirect-portal": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "IPv4 address of the SDNS redirect portal."
+                                },
+                                "redirect-portal6": {
+                                    "type": "string",
+                                    "format": "ipv6",
+                                    "description": "IPv6 address of the SDNS redirect portal."
+                                },
+                                "block-botnet": {
+                                    "type": "string",
+                                    "description": "Enable\/disable blocking botnet C&C DNS lookups.   \ndisable:Disable blocking botnet C&C DNS lookups.   \nenable:Enable blocking botnet C&C DNS lookups.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "safe-search": {
+                                    "type": "string",
+                                    "description": "Enable\/disable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.   \ndisable:Disable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.   \nenable:Enable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "youtube-restrict": {
+                                    "type": "string",
+                                    "description": "Set safe search for YouTube restriction level.   \nstrict:Enable strict safe seach for YouTube.   \nmoderate:Enable moderate safe search for YouTube.",
+                                    "enum": [
+                                        "strict",
+                                        "moderate"
+                                    ]
+                                },
+                                "external-ip-blocklist": {
+                                    "description": "One or more external IP block lists.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "External domain block list name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "dns-translation": {
+                                    "description": "DNS translation settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "description": "ID.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "addr-type": {
+                                                "type": "string",
+                                                "description": "DNS translation type (IPv4 or IPv6).   \nipv4:IPv4 address type.   \nipv6:IPv6 address type.",
+                                                "enum": [
+                                                    "ipv4",
+                                                    "ipv6"
+                                                ]
+                                            },
+                                            "src": {
+                                                "type": "string",
+                                                "format": "ipv4",
+                                                "description": "IPv4 address or subnet on the internal network to compare with the resolved address in DNS query replies. If the resolved address matches, the resolved address is substituted with dst."
+                                            },
+                                            "dst": {
+                                                "type": "string",
+                                                "format": "ipv4",
+                                                "description": "IPv4 address or subnet on the external network to substitute for the resolved address in DNS query replies. Can be single IP address or subnet on the external network, but number of addresses must equal number of mapped IP addresses in src."
+                                            },
+                                            "netmask": {
+                                                "type": "string",
+                                                "description": "If src and dst are subnets rather than single IP addresses, enter the netmask for both src and dst."
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "description": "Enable\/disable this DNS translation entry.   \nenable:Enable this DNS translation.   \ndisable:Disable this DNS translation.",
+                                                "enum": [
+                                                    "enable",
+                                                    "disable"
+                                                ]
+                                            },
+                                            "src6": {
+                                                "type": "string",
+                                                "format": "ipv6",
+                                                "description": "IPv6 address or subnet on the internal network to compare with the resolved address in DNS query replies. If the resolved address matches, the resolved address is substituted with dst6."
+                                            },
+                                            "dst6": {
+                                                "type": "string",
+                                                "format": "ipv6",
+                                                "description": "IPv6 address or subnet on the external network to substitute for the resolved address in DNS query replies. Can be single IP address or subnet on the external network, but number of addresses must equal number of mapped IP addresses in src6."
+                                            },
+                                            "prefix": {
+                                                "type": "integer",
+                                                "description": "If src6 and dst6 are subnets rather than single IP addresses, enter the prefix for both src6 and dst6 (1 - 128, default = 128).",
+                                                "maximum": 128,
+                                                "minimum": 1
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "dnsfilter\/profile"
+                ]
+            },
+            "post": {
+                "summary": "Create object(s) in this table.\n Access Group: utmgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Profile name.",
+                                    "maxLength": 35
+                                },
+                                "comment": {
+                                    "type": "string",
+                                    "description": "Comment.",
+                                    "maxLength": 255
+                                },
+                                "domain-filter": {
+                                    "description": "Domain filter settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "domain-filter-table": {
+                                                "type": "integer",
+                                                "description": "DNS domain filter table ID.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "ftgd-dns": {
+                                    "description": "FortiGuard DNS Filter settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "options": {
+                                                "type": "string",
+                                                "description": "FortiGuard DNS filter options.   \nerror-allow:Allow all domains when FortiGuard DNS servers fail.   \nftgd-disable:Disable FortiGuard DNS domain rating.",
+                                                "enum": [
+                                                    "error-allow",
+                                                    "ftgd-disable"
+                                                ]
+                                            },
+                                            "filters": {
+                                                "description": "FortiGuard DNS domain filters.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "description": "ID number.",
+                                                            "maximum": 255,
+                                                            "minimum": 0
+                                                        },
+                                                        "category": {
+                                                            "type": "integer",
+                                                            "description": "Category number.",
+                                                            "maximum": 255,
+                                                            "minimum": 0
+                                                        },
+                                                        "action": {
+                                                            "type": "string",
+                                                            "description": "Action to take for DNS requests matching the category.   \nblock:Block DNS requests matching the category.   \nmonitor:Allow DNS requests matching the category and log the result.",
+                                                            "enum": [
+                                                                "block",
+                                                                "monitor"
+                                                            ]
+                                                        },
+                                                        "log": {
+                                                            "type": "string",
+                                                            "description": "Enable\/disable DNS filter logging for this DNS profile.   \nenable:Enable DNS filter logging.   \ndisable:Disable DNS filter logging.",
+                                                            "enum": [
+                                                                "enable",
+                                                                "disable"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "log-all-domain": {
+                                    "type": "string",
+                                    "description": "Enable\/disable logging of all domains visited (detailed DNS logging).   \nenable:Enable logging of all domains visited.   \ndisable:Disable logging of all domains visited.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "sdns-ftgd-err-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FortiGuard SDNS rating error logging.   \nenable:Enable FortiGuard SDNS rating error logging.   \ndisable:Disable FortiGuard SDNS rating error logging.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "sdns-domain-log": {
+                                    "type": "string",
+                                    "description": "Enable\/disable domain filtering and botnet domain logging.   \nenable:Enable domain filtering and botnet domain logging.   \ndisable:Disable domain filtering and botnet domain logging.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "block-action": {
+                                    "type": "string",
+                                    "description": "Action to take for blocked domains.   \nblock:Return NXDOMAIN for blocked domains.   \nredirect:Redirect blocked domains to SDNS portal.",
+                                    "enum": [
+                                        "block",
+                                        "redirect"
+                                    ]
+                                },
+                                "redirect-portal": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "IPv4 address of the SDNS redirect portal."
+                                },
+                                "redirect-portal6": {
+                                    "type": "string",
+                                    "format": "ipv6",
+                                    "description": "IPv6 address of the SDNS redirect portal."
+                                },
+                                "block-botnet": {
+                                    "type": "string",
+                                    "description": "Enable\/disable blocking botnet C&C DNS lookups.   \ndisable:Disable blocking botnet C&C DNS lookups.   \nenable:Enable blocking botnet C&C DNS lookups.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "safe-search": {
+                                    "type": "string",
+                                    "description": "Enable\/disable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.   \ndisable:Disable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.   \nenable:Enable Google, Bing, YouTube, Qwant, DuckDuckGo safe search.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "youtube-restrict": {
+                                    "type": "string",
+                                    "description": "Set safe search for YouTube restriction level.   \nstrict:Enable strict safe seach for YouTube.   \nmoderate:Enable moderate safe search for YouTube.",
+                                    "enum": [
+                                        "strict",
+                                        "moderate"
+                                    ]
+                                },
+                                "external-ip-blocklist": {
+                                    "description": "One or more external IP block lists.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "description": "External domain block list name.",
+                                                "maxLength": 79
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "dns-translation": {
+                                    "description": "DNS translation settings.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "description": "ID.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "addr-type": {
+                                                "type": "string",
+                                                "description": "DNS translation type (IPv4 or IPv6).   \nipv4:IPv4 address type.   \nipv6:IPv6 address type.",
+                                                "enum": [
+                                                    "ipv4",
+                                                    "ipv6"
+                                                ]
+                                            },
+                                            "src": {
+                                                "type": "string",
+                                                "format": "ipv4",
+                                                "description": "IPv4 address or subnet on the internal network to compare with the resolved address in DNS query replies. If the resolved address matches, the resolved address is substituted with dst."
+                                            },
+                                            "dst": {
+                                                "type": "string",
+                                                "format": "ipv4",
+                                                "description": "IPv4 address or subnet on the external network to substitute for the resolved address in DNS query replies. Can be single IP address or subnet on the external network, but number of addresses must equal number of mapped IP addresses in src."
+                                            },
+                                            "netmask": {
+                                                "type": "string",
+                                                "description": "If src and dst are subnets rather than single IP addresses, enter the netmask for both src and dst."
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "description": "Enable\/disable this DNS translation entry.   \nenable:Enable this DNS translation.   \ndisable:Disable this DNS translation.",
+                                                "enum": [
+                                                    "enable",
+                                                    "disable"
+                                                ]
+                                            },
+                                            "src6": {
+                                                "type": "string",
+                                                "format": "ipv6",
+                                                "description": "IPv6 address or subnet on the internal network to compare with the resolved address in DNS query replies. If the resolved address matches, the resolved address is substituted with dst6."
+                                            },
+                                            "dst6": {
+                                                "type": "string",
+                                                "format": "ipv6",
+                                                "description": "IPv6 address or subnet on the external network to substitute for the resolved address in DNS query replies. Can be single IP address or subnet on the external network, but number of addresses must equal number of mapped IP addresses in src6."
+                                            },
+                                            "prefix": {
+                                                "type": "integer",
+                                                "description": "If src6 and dst6 are subnets rather than single IP addresses, enter the prefix for both src6 and dst6 (1 - 128, default = 128).",
+                                                "maximum": 128,
+                                                "minimum": 1
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_clone_: Clone this specific resource.\nWhen *action=clone* is set, the extra parameters *nkey* must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "clone"
+                        ]
+                    },
+                    {
+                        "name": "nkey",
+                        "in": "query",
+                        "description": " If *action=clone*, use *nkey* to specify the ID for the new resource to be created.\nFor example, to clone `address1` to `address1_clone`, use:\n__action=clone&nkey=address1_clone__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *clone*.\n",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "dnsfilter\/profile"
+                ]
+            }
+        }
+    }
+}

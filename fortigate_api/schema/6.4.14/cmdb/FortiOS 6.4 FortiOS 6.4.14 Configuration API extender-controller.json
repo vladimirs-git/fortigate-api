@@ -1,0 +1,3009 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "termsOfService": "http:\/\/fortinet.com\/terms\/",
+        "version": "v2",
+        "contact": {
+            "url": "http:\/\/modskristensen.net",
+            "name": "FortiOS Web Application Team",
+            "email": "fosguiqateam@fortinet.com"
+        },
+        "description": "REST API for configuring FortiOS objects and settings",
+        "title": "FortiOS CMDB"
+    },
+    "host": "172.16.177.65",
+    "basePath": "\/api\/v2\/cmdb",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application\/json"
+    ],
+    "produces": [
+        "application\/json"
+    ],
+    "securityDefinitions": {
+        "APIKeyQueryParam": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query"
+        }
+    },
+    "security": [
+        {
+            "APIKeyQueryParam": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "extender-controller\/dataplan",
+            "description": "FortiExtender dataplan configuration."
+        },
+        {
+            "name": "extender-controller\/extender",
+            "description": "Extender controller configuration."
+        }
+    ],
+    "paths": {
+        "\/extender-controller\/dataplan\/{name}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: sysgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "FortiExtender dataplan name",
+                                    "maxLength": 31
+                                },
+                                "modem-id": {
+                                    "type": "string",
+                                    "description": "Dataplan's modem specifics, if any.   \nmodem1:Modem one.   \nmodem2:Modem two.   \nall:All modems.",
+                                    "enum": [
+                                        "modem1",
+                                        "modem2",
+                                        "all"
+                                    ]
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "Type preferences configuration.   \ncarrier:Assign by SIM carrier.   \nslot:Assign to SIM slot 1 or 2.   \niccid:Assign to a specific SIM by ICCID.   \ngeneric:Compatible with any SIM. Assigned if no other dataplan matches the chosen SIM.",
+                                    "enum": [
+                                        "carrier",
+                                        "slot",
+                                        "iccid",
+                                        "generic"
+                                    ]
+                                },
+                                "slot": {
+                                    "type": "string",
+                                    "description": "SIM slot configuration.   \nsim1:Sim slot one.   \nsim2:Sim slot two.",
+                                    "enum": [
+                                        "sim1",
+                                        "sim2"
+                                    ]
+                                },
+                                "iccid": {
+                                    "type": "string",
+                                    "description": "ICCID configuration.",
+                                    "maxLength": 31
+                                },
+                                "carrier": {
+                                    "type": "string",
+                                    "description": "Carrier configuration.",
+                                    "maxLength": 31
+                                },
+                                "apn": {
+                                    "type": "string",
+                                    "description": "APN configuration.",
+                                    "maxLength": 63
+                                },
+                                "auth-type": {
+                                    "type": "string",
+                                    "description": "Authentication type.   \nnone:No authentication.   \npap:PAP.   \nchap:CHAP.",
+                                    "enum": [
+                                        "none",
+                                        "pap",
+                                        "chap"
+                                    ]
+                                },
+                                "username": {
+                                    "type": "string",
+                                    "description": "Username.",
+                                    "maxLength": 31
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "Password."
+                                },
+                                "pdn": {
+                                    "type": "string",
+                                    "description": "PDN type.   \nipv4-only:IPv4 only PDN activation.   \nipv6-only:IPv6 only PDN activation.   \nipv4-ipv6:Both IPv4 and IPv6 PDN activations.",
+                                    "enum": [
+                                        "ipv4-only",
+                                        "ipv6-only",
+                                        "ipv4-ipv6"
+                                    ]
+                                },
+                                "signal-threshold": {
+                                    "type": "integer",
+                                    "description": "Signal threshold. Specify the range between 50 - 100, where 50\/100 means -50\/-100 dBm.",
+                                    "maximum": 100,
+                                    "minimum": 50
+                                },
+                                "signal-period": {
+                                    "type": "integer",
+                                    "description": "Signal period (600 to 18000 seconds).",
+                                    "maximum": 18000,
+                                    "minimum": 600
+                                },
+                                "capacity": {
+                                    "type": "integer",
+                                    "description": "Capacity in MB (0 - 102400000).",
+                                    "maximum": 102400000,
+                                    "minimum": 0
+                                },
+                                "monthly-fee": {
+                                    "type": "integer",
+                                    "description": "Monthly fee of dataplan (0 - 100000, in local currency).",
+                                    "maximum": 1000000,
+                                    "minimum": 0
+                                },
+                                "billing-date": {
+                                    "type": "integer",
+                                    "description": "Billing day of the month (1 - 31).",
+                                    "maximum": 31,
+                                    "minimum": 1
+                                },
+                                "overage": {
+                                    "type": "string",
+                                    "description": "Enable\/disable dataplan overage detection.   \ndisable:Disable dataplan overage detection.   \nenable:Enable dataplan overage detection.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "preferred-subnet": {
+                                    "type": "integer",
+                                    "description": "Preferred subnet mask (8 - 32).",
+                                    "maximum": 32,
+                                    "minimum": 8
+                                },
+                                "private-network": {
+                                    "type": "string",
+                                    "description": "Enable\/disable dataplan private network support.   \ndisable:Disable dataplan private network support.   \nenable:Enable dataplan private network support.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "extender-controller\/dataplan"
+                ]
+            },
+            "put": {
+                "summary": "Update this specific resource.\n Access Group: sysgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "FortiExtender dataplan name",
+                                    "maxLength": 31
+                                },
+                                "modem-id": {
+                                    "type": "string",
+                                    "description": "Dataplan's modem specifics, if any.   \nmodem1:Modem one.   \nmodem2:Modem two.   \nall:All modems.",
+                                    "enum": [
+                                        "modem1",
+                                        "modem2",
+                                        "all"
+                                    ]
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "Type preferences configuration.   \ncarrier:Assign by SIM carrier.   \nslot:Assign to SIM slot 1 or 2.   \niccid:Assign to a specific SIM by ICCID.   \ngeneric:Compatible with any SIM. Assigned if no other dataplan matches the chosen SIM.",
+                                    "enum": [
+                                        "carrier",
+                                        "slot",
+                                        "iccid",
+                                        "generic"
+                                    ]
+                                },
+                                "slot": {
+                                    "type": "string",
+                                    "description": "SIM slot configuration.   \nsim1:Sim slot one.   \nsim2:Sim slot two.",
+                                    "enum": [
+                                        "sim1",
+                                        "sim2"
+                                    ]
+                                },
+                                "iccid": {
+                                    "type": "string",
+                                    "description": "ICCID configuration.",
+                                    "maxLength": 31
+                                },
+                                "carrier": {
+                                    "type": "string",
+                                    "description": "Carrier configuration.",
+                                    "maxLength": 31
+                                },
+                                "apn": {
+                                    "type": "string",
+                                    "description": "APN configuration.",
+                                    "maxLength": 63
+                                },
+                                "auth-type": {
+                                    "type": "string",
+                                    "description": "Authentication type.   \nnone:No authentication.   \npap:PAP.   \nchap:CHAP.",
+                                    "enum": [
+                                        "none",
+                                        "pap",
+                                        "chap"
+                                    ]
+                                },
+                                "username": {
+                                    "type": "string",
+                                    "description": "Username.",
+                                    "maxLength": 31
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "Password."
+                                },
+                                "pdn": {
+                                    "type": "string",
+                                    "description": "PDN type.   \nipv4-only:IPv4 only PDN activation.   \nipv6-only:IPv6 only PDN activation.   \nipv4-ipv6:Both IPv4 and IPv6 PDN activations.",
+                                    "enum": [
+                                        "ipv4-only",
+                                        "ipv6-only",
+                                        "ipv4-ipv6"
+                                    ]
+                                },
+                                "signal-threshold": {
+                                    "type": "integer",
+                                    "description": "Signal threshold. Specify the range between 50 - 100, where 50\/100 means -50\/-100 dBm.",
+                                    "maximum": 100,
+                                    "minimum": 50
+                                },
+                                "signal-period": {
+                                    "type": "integer",
+                                    "description": "Signal period (600 to 18000 seconds).",
+                                    "maximum": 18000,
+                                    "minimum": 600
+                                },
+                                "capacity": {
+                                    "type": "integer",
+                                    "description": "Capacity in MB (0 - 102400000).",
+                                    "maximum": 102400000,
+                                    "minimum": 0
+                                },
+                                "monthly-fee": {
+                                    "type": "integer",
+                                    "description": "Monthly fee of dataplan (0 - 100000, in local currency).",
+                                    "maximum": 1000000,
+                                    "minimum": 0
+                                },
+                                "billing-date": {
+                                    "type": "integer",
+                                    "description": "Billing day of the month (1 - 31).",
+                                    "maximum": 31,
+                                    "minimum": 1
+                                },
+                                "overage": {
+                                    "type": "string",
+                                    "description": "Enable\/disable dataplan overage detection.   \ndisable:Disable dataplan overage detection.   \nenable:Enable dataplan overage detection.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "preferred-subnet": {
+                                    "type": "integer",
+                                    "description": "Preferred subnet mask (8 - 32).",
+                                    "maximum": 32,
+                                    "minimum": 8
+                                },
+                                "private-network": {
+                                    "type": "string",
+                                    "description": "Enable\/disable dataplan private network support.   \ndisable:Disable dataplan private network support.   \nenable:Enable dataplan private network support.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_move_: Move this specific resource.\nWhen *action=move* is set, one of the extra parameters (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "move"
+                        ]
+                    },
+                    {
+                        "name": "before",
+                        "in": "query",
+                        "description": "If *action=move*, use *before* to specify the ID of the resource that this resource will be moved before.\nFor example, to move `object 1` to before `object 2`, use:\n__action=move&before=2__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "If *action=move*, use *after* to specify the ID of the resource that this resource will be moved after.\nFor example, to move `object 1` to after `object 3`, use:\n__action=move&after=3__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "extender-controller\/dataplan"
+                ]
+            },
+            "delete": {
+                "summary": "Delete this specific resource.\n Access Group: sysgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "extender-controller\/dataplan"
+                ]
+            }
+        },
+        "\/extender-controller\/dataplan": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: sysgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "FortiExtender dataplan name",
+                                    "maxLength": 31
+                                },
+                                "modem-id": {
+                                    "type": "string",
+                                    "description": "Dataplan's modem specifics, if any.   \nmodem1:Modem one.   \nmodem2:Modem two.   \nall:All modems.",
+                                    "enum": [
+                                        "modem1",
+                                        "modem2",
+                                        "all"
+                                    ]
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "Type preferences configuration.   \ncarrier:Assign by SIM carrier.   \nslot:Assign to SIM slot 1 or 2.   \niccid:Assign to a specific SIM by ICCID.   \ngeneric:Compatible with any SIM. Assigned if no other dataplan matches the chosen SIM.",
+                                    "enum": [
+                                        "carrier",
+                                        "slot",
+                                        "iccid",
+                                        "generic"
+                                    ]
+                                },
+                                "slot": {
+                                    "type": "string",
+                                    "description": "SIM slot configuration.   \nsim1:Sim slot one.   \nsim2:Sim slot two.",
+                                    "enum": [
+                                        "sim1",
+                                        "sim2"
+                                    ]
+                                },
+                                "iccid": {
+                                    "type": "string",
+                                    "description": "ICCID configuration.",
+                                    "maxLength": 31
+                                },
+                                "carrier": {
+                                    "type": "string",
+                                    "description": "Carrier configuration.",
+                                    "maxLength": 31
+                                },
+                                "apn": {
+                                    "type": "string",
+                                    "description": "APN configuration.",
+                                    "maxLength": 63
+                                },
+                                "auth-type": {
+                                    "type": "string",
+                                    "description": "Authentication type.   \nnone:No authentication.   \npap:PAP.   \nchap:CHAP.",
+                                    "enum": [
+                                        "none",
+                                        "pap",
+                                        "chap"
+                                    ]
+                                },
+                                "username": {
+                                    "type": "string",
+                                    "description": "Username.",
+                                    "maxLength": 31
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "Password."
+                                },
+                                "pdn": {
+                                    "type": "string",
+                                    "description": "PDN type.   \nipv4-only:IPv4 only PDN activation.   \nipv6-only:IPv6 only PDN activation.   \nipv4-ipv6:Both IPv4 and IPv6 PDN activations.",
+                                    "enum": [
+                                        "ipv4-only",
+                                        "ipv6-only",
+                                        "ipv4-ipv6"
+                                    ]
+                                },
+                                "signal-threshold": {
+                                    "type": "integer",
+                                    "description": "Signal threshold. Specify the range between 50 - 100, where 50\/100 means -50\/-100 dBm.",
+                                    "maximum": 100,
+                                    "minimum": 50
+                                },
+                                "signal-period": {
+                                    "type": "integer",
+                                    "description": "Signal period (600 to 18000 seconds).",
+                                    "maximum": 18000,
+                                    "minimum": 600
+                                },
+                                "capacity": {
+                                    "type": "integer",
+                                    "description": "Capacity in MB (0 - 102400000).",
+                                    "maximum": 102400000,
+                                    "minimum": 0
+                                },
+                                "monthly-fee": {
+                                    "type": "integer",
+                                    "description": "Monthly fee of dataplan (0 - 100000, in local currency).",
+                                    "maximum": 1000000,
+                                    "minimum": 0
+                                },
+                                "billing-date": {
+                                    "type": "integer",
+                                    "description": "Billing day of the month (1 - 31).",
+                                    "maximum": 31,
+                                    "minimum": 1
+                                },
+                                "overage": {
+                                    "type": "string",
+                                    "description": "Enable\/disable dataplan overage detection.   \ndisable:Disable dataplan overage detection.   \nenable:Enable dataplan overage detection.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "preferred-subnet": {
+                                    "type": "integer",
+                                    "description": "Preferred subnet mask (8 - 32).",
+                                    "maximum": 32,
+                                    "minimum": 8
+                                },
+                                "private-network": {
+                                    "type": "string",
+                                    "description": "Enable\/disable dataplan private network support.   \ndisable:Disable dataplan private network support.   \nenable:Enable dataplan private network support.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "extender-controller\/dataplan"
+                ]
+            },
+            "post": {
+                "summary": "Create object(s) in this table.\n Access Group: sysgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "FortiExtender dataplan name",
+                                    "maxLength": 31
+                                },
+                                "modem-id": {
+                                    "type": "string",
+                                    "description": "Dataplan's modem specifics, if any.   \nmodem1:Modem one.   \nmodem2:Modem two.   \nall:All modems.",
+                                    "enum": [
+                                        "modem1",
+                                        "modem2",
+                                        "all"
+                                    ]
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "Type preferences configuration.   \ncarrier:Assign by SIM carrier.   \nslot:Assign to SIM slot 1 or 2.   \niccid:Assign to a specific SIM by ICCID.   \ngeneric:Compatible with any SIM. Assigned if no other dataplan matches the chosen SIM.",
+                                    "enum": [
+                                        "carrier",
+                                        "slot",
+                                        "iccid",
+                                        "generic"
+                                    ]
+                                },
+                                "slot": {
+                                    "type": "string",
+                                    "description": "SIM slot configuration.   \nsim1:Sim slot one.   \nsim2:Sim slot two.",
+                                    "enum": [
+                                        "sim1",
+                                        "sim2"
+                                    ]
+                                },
+                                "iccid": {
+                                    "type": "string",
+                                    "description": "ICCID configuration.",
+                                    "maxLength": 31
+                                },
+                                "carrier": {
+                                    "type": "string",
+                                    "description": "Carrier configuration.",
+                                    "maxLength": 31
+                                },
+                                "apn": {
+                                    "type": "string",
+                                    "description": "APN configuration.",
+                                    "maxLength": 63
+                                },
+                                "auth-type": {
+                                    "type": "string",
+                                    "description": "Authentication type.   \nnone:No authentication.   \npap:PAP.   \nchap:CHAP.",
+                                    "enum": [
+                                        "none",
+                                        "pap",
+                                        "chap"
+                                    ]
+                                },
+                                "username": {
+                                    "type": "string",
+                                    "description": "Username.",
+                                    "maxLength": 31
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "Password."
+                                },
+                                "pdn": {
+                                    "type": "string",
+                                    "description": "PDN type.   \nipv4-only:IPv4 only PDN activation.   \nipv6-only:IPv6 only PDN activation.   \nipv4-ipv6:Both IPv4 and IPv6 PDN activations.",
+                                    "enum": [
+                                        "ipv4-only",
+                                        "ipv6-only",
+                                        "ipv4-ipv6"
+                                    ]
+                                },
+                                "signal-threshold": {
+                                    "type": "integer",
+                                    "description": "Signal threshold. Specify the range between 50 - 100, where 50\/100 means -50\/-100 dBm.",
+                                    "maximum": 100,
+                                    "minimum": 50
+                                },
+                                "signal-period": {
+                                    "type": "integer",
+                                    "description": "Signal period (600 to 18000 seconds).",
+                                    "maximum": 18000,
+                                    "minimum": 600
+                                },
+                                "capacity": {
+                                    "type": "integer",
+                                    "description": "Capacity in MB (0 - 102400000).",
+                                    "maximum": 102400000,
+                                    "minimum": 0
+                                },
+                                "monthly-fee": {
+                                    "type": "integer",
+                                    "description": "Monthly fee of dataplan (0 - 100000, in local currency).",
+                                    "maximum": 1000000,
+                                    "minimum": 0
+                                },
+                                "billing-date": {
+                                    "type": "integer",
+                                    "description": "Billing day of the month (1 - 31).",
+                                    "maximum": 31,
+                                    "minimum": 1
+                                },
+                                "overage": {
+                                    "type": "string",
+                                    "description": "Enable\/disable dataplan overage detection.   \ndisable:Disable dataplan overage detection.   \nenable:Enable dataplan overage detection.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "preferred-subnet": {
+                                    "type": "integer",
+                                    "description": "Preferred subnet mask (8 - 32).",
+                                    "maximum": 32,
+                                    "minimum": 8
+                                },
+                                "private-network": {
+                                    "type": "string",
+                                    "description": "Enable\/disable dataplan private network support.   \ndisable:Disable dataplan private network support.   \nenable:Enable dataplan private network support.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_clone_: Clone this specific resource.\nWhen *action=clone* is set, the extra parameters *nkey* must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "clone"
+                        ]
+                    },
+                    {
+                        "name": "nkey",
+                        "in": "query",
+                        "description": " If *action=clone*, use *nkey* to specify the ID for the new resource to be created.\nFor example, to clone `address1` to `address1_clone`, use:\n__action=clone&nkey=address1_clone__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *clone*.\n",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "extender-controller\/dataplan"
+                ]
+            }
+        },
+        "\/extender-controller\/extender\/{name}": {
+            "get": {
+                "summary": "Select a specific entry from a CLI table.\n Access Group: sysgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "FortiExtender entry name.",
+                                    "maxLength": 19
+                                },
+                                "id": {
+                                    "type": "string",
+                                    "description": "FortiExtender serial number.",
+                                    "maxLength": 19
+                                },
+                                "authorized": {
+                                    "type": "string",
+                                    "description": "FortiExtender Administration (enable or disable).   \ndisable:Controller is configured to not provide service to this FortiExtender.   \nenable:Controller is configured to provide service to this FortiExtender.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "ext-name": {
+                                    "type": "string",
+                                    "description": "FortiExtender name.",
+                                    "maxLength": 31
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description.",
+                                    "maxLength": 255
+                                },
+                                "vdom": {
+                                    "type": "integer",
+                                    "description": "VDOM",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "login-password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "FortiExtender login password."
+                                },
+                                "controller-report": {
+                                    "description": "FortiExtender controller report configuration.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "status": {
+                                                "type": "string",
+                                                "description": "FortiExtender controller report status.   \ndisable:Controller is configured to not provide service to this FortiExtender.   \nenable:Controller is configured to provide service to this FortiExtender.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "interval": {
+                                                "type": "integer",
+                                                "description": "Controller report interval.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "signal-threshold": {
+                                                "type": "integer",
+                                                "description": "Controller report signal threshold.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "modem1": {
+                                    "description": "Configuration options for modem 1.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ifname": {
+                                                "type": "string",
+                                                "description": "FortiExtender interface name.",
+                                                "maxLength": 15
+                                            },
+                                            "redundant-mode": {
+                                                "type": "string",
+                                                "description": "FortiExtender mode.   \ndisable:Disable interface redundancy.   \nenable:Enable interface redundancy.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "redundant-intf": {
+                                                "type": "string",
+                                                "description": "Redundant interface.",
+                                                "maxLength": 15
+                                            },
+                                            "conn-status": {
+                                                "type": "integer",
+                                                "description": "Connection status.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "default-sim": {
+                                                "type": "string",
+                                                "description": "Default SIM selection.   \nsim1:Use SIM #1 by default.   \nsim2:Use SIM #2 by default.   \ncarrier:Assign default SIM based on carrier.   \ncost:Assign default SIM based on cost.",
+                                                "enum": [
+                                                    "sim1",
+                                                    "sim2",
+                                                    "carrier",
+                                                    "cost"
+                                                ]
+                                            },
+                                            "gps": {
+                                                "type": "string",
+                                                "description": "FortiExtender GPS enable\/disable.   \ndisable:Disable GPS.   \nenable:Enable GPS.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin": {
+                                                "type": "string",
+                                                "description": "SIM #1 PIN status.   \ndisable:Disable SIM #1 pin.   \nenable:Enable SIM #1 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim2-pin": {
+                                                "type": "string",
+                                                "description": "SIM #2 PIN status.   \ndisable:Disable SIM #2 pin.   \nenable:Enable SIM #2 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #1 PIN password."
+                                            },
+                                            "sim2-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #2 PIN password."
+                                            },
+                                            "preferred-carrier": {
+                                                "type": "string",
+                                                "description": "Preferred carrier.",
+                                                "maxLength": 31
+                                            },
+                                            "auto-switch": {
+                                                "description": "FortiExtender auto switch configuration.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "disconnect": {
+                                                            "type": "string",
+                                                            "description": "Auto switch by disconnect.   \ndisable:Disable switching of SIM card based on cellular disconnections.   \nenable:Enable switching of SIM card based on cellular disconnections.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "disconnect-threshold": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect threshold.",
+                                                            "maximum": 4294967295,
+                                                            "minimum": 0
+                                                        },
+                                                        "disconnect-period": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect period.",
+                                                            "maximum": 18000,
+                                                            "minimum": 600
+                                                        },
+                                                        "signal": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on signal strength.   \ndisable:Disable switching of SIM card based on cellular signal quality.   \nenable:Enable switching of SIM card based on cellular signal quality.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "dataplan": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on data usage.   \ndisable:Disable switching of SIM card based on cellular data usage.   \nenable:Enable switching of SIM card based on cellular data usage.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "switch-back": {
+                                                            "type": "string",
+                                                            "description": "Auto switch with switch back multi-options.   \ntime:Switch back based on specific time in UTC (HH:MM).   \ntimer:Switch back based on an interval.",
+                                                            "enum": [
+                                                                "time",
+                                                                "timer"
+                                                            ]
+                                                        },
+                                                        "switch-back-time": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier at a specified time in UTC (HH:MM).",
+                                                            "maxLength": 31
+                                                        },
+                                                        "switch-back-timer": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier after the given time (3600 - 2147483647 sec).",
+                                                            "maximum": 2147483647,
+                                                            "minimum": 3600
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "modem2": {
+                                    "description": "Configuration options for modem 2.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ifname": {
+                                                "type": "string",
+                                                "description": "FortiExtender interface name.",
+                                                "maxLength": 15
+                                            },
+                                            "redundant-mode": {
+                                                "type": "string",
+                                                "description": "FortiExtender mode.   \ndisable:Disable interface redundancy.   \nenable:Enable interface redundancy.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "redundant-intf": {
+                                                "type": "string",
+                                                "description": "Redundant interface.",
+                                                "maxLength": 15
+                                            },
+                                            "conn-status": {
+                                                "type": "integer",
+                                                "description": "Connection status.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "default-sim": {
+                                                "type": "string",
+                                                "description": "Default SIM selection.   \nsim1:Use SIM #1 by default.   \nsim2:Use SIM #2 by default.   \ncarrier:Assign default SIM based on carrier.   \ncost:Assign default SIM based on cost.",
+                                                "enum": [
+                                                    "sim1",
+                                                    "sim2",
+                                                    "carrier",
+                                                    "cost"
+                                                ]
+                                            },
+                                            "gps": {
+                                                "type": "string",
+                                                "description": "FortiExtender GPS enable\/disable.   \ndisable:Disable GPS.   \nenable:Enable GPS.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin": {
+                                                "type": "string",
+                                                "description": "SIM #1 PIN status.   \ndisable:Disable SIM #1 pin.   \nenable:Enable SIM #1 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim2-pin": {
+                                                "type": "string",
+                                                "description": "SIM #2 PIN status.   \ndisable:Disable SIM #2 pin.   \nenable:Enable SIM #2 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #1 PIN password."
+                                            },
+                                            "sim2-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #2 PIN password."
+                                            },
+                                            "preferred-carrier": {
+                                                "type": "string",
+                                                "description": "Preferred carrier.",
+                                                "maxLength": 31
+                                            },
+                                            "auto-switch": {
+                                                "description": "FortiExtender auto switch configuration.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "disconnect": {
+                                                            "type": "string",
+                                                            "description": "Auto switch by disconnect.   \ndisable:Disable switching of SIM card based on cellular disconnections.   \nenable:Enable switching of SIM card based on cellular disconnections.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "disconnect-threshold": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect threshold.",
+                                                            "maximum": 4294967295,
+                                                            "minimum": 0
+                                                        },
+                                                        "disconnect-period": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect period.",
+                                                            "maximum": 18000,
+                                                            "minimum": 600
+                                                        },
+                                                        "signal": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on signal strength.   \ndisable:Disable switching of SIM card based on cellular signal quality.   \nenable:Enable switching of SIM card based on cellular signal quality.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "dataplan": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on data usage.   \ndisable:Disable switching of SIM card based on cellular data usage.   \nenable:Enable switching of SIM card based on cellular data usage.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "switch-back": {
+                                                            "type": "string",
+                                                            "description": "Auto switch with switch back multi-options.   \ntime:Switch back based on specific time in UTC (HH:MM).   \ntimer:Switch back based on an interval.",
+                                                            "enum": [
+                                                                "time",
+                                                                "timer"
+                                                            ]
+                                                        },
+                                                        "switch-back-time": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier at a specified time in UTC (HH:MM).",
+                                                            "maxLength": 31
+                                                        },
+                                                        "switch-back-timer": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier after the given time (3600 - 2147483647 sec).",
+                                                            "maximum": 2147483647,
+                                                            "minimum": 3600
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for this object type.\nschema: Return the CLI schema for this object type.\nrevision: Return the CMDB revision for this object type.\ntransaction-list: List all configuration transaction(s).\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema",
+                            "revision"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "extender-controller\/extender"
+                ]
+            },
+            "put": {
+                "summary": "Update this specific resource.\n Access Group: sysgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "FortiExtender entry name.",
+                                    "maxLength": 19
+                                },
+                                "id": {
+                                    "type": "string",
+                                    "description": "FortiExtender serial number.",
+                                    "maxLength": 19
+                                },
+                                "authorized": {
+                                    "type": "string",
+                                    "description": "FortiExtender Administration (enable or disable).   \ndisable:Controller is configured to not provide service to this FortiExtender.   \nenable:Controller is configured to provide service to this FortiExtender.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "ext-name": {
+                                    "type": "string",
+                                    "description": "FortiExtender name.",
+                                    "maxLength": 31
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description.",
+                                    "maxLength": 255
+                                },
+                                "vdom": {
+                                    "type": "integer",
+                                    "description": "VDOM",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "login-password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "FortiExtender login password."
+                                },
+                                "controller-report": {
+                                    "description": "FortiExtender controller report configuration.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "status": {
+                                                "type": "string",
+                                                "description": "FortiExtender controller report status.   \ndisable:Controller is configured to not provide service to this FortiExtender.   \nenable:Controller is configured to provide service to this FortiExtender.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "interval": {
+                                                "type": "integer",
+                                                "description": "Controller report interval.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "signal-threshold": {
+                                                "type": "integer",
+                                                "description": "Controller report signal threshold.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "modem1": {
+                                    "description": "Configuration options for modem 1.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ifname": {
+                                                "type": "string",
+                                                "description": "FortiExtender interface name.",
+                                                "maxLength": 15
+                                            },
+                                            "redundant-mode": {
+                                                "type": "string",
+                                                "description": "FortiExtender mode.   \ndisable:Disable interface redundancy.   \nenable:Enable interface redundancy.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "redundant-intf": {
+                                                "type": "string",
+                                                "description": "Redundant interface.",
+                                                "maxLength": 15
+                                            },
+                                            "conn-status": {
+                                                "type": "integer",
+                                                "description": "Connection status.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "default-sim": {
+                                                "type": "string",
+                                                "description": "Default SIM selection.   \nsim1:Use SIM #1 by default.   \nsim2:Use SIM #2 by default.   \ncarrier:Assign default SIM based on carrier.   \ncost:Assign default SIM based on cost.",
+                                                "enum": [
+                                                    "sim1",
+                                                    "sim2",
+                                                    "carrier",
+                                                    "cost"
+                                                ]
+                                            },
+                                            "gps": {
+                                                "type": "string",
+                                                "description": "FortiExtender GPS enable\/disable.   \ndisable:Disable GPS.   \nenable:Enable GPS.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin": {
+                                                "type": "string",
+                                                "description": "SIM #1 PIN status.   \ndisable:Disable SIM #1 pin.   \nenable:Enable SIM #1 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim2-pin": {
+                                                "type": "string",
+                                                "description": "SIM #2 PIN status.   \ndisable:Disable SIM #2 pin.   \nenable:Enable SIM #2 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #1 PIN password."
+                                            },
+                                            "sim2-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #2 PIN password."
+                                            },
+                                            "preferred-carrier": {
+                                                "type": "string",
+                                                "description": "Preferred carrier.",
+                                                "maxLength": 31
+                                            },
+                                            "auto-switch": {
+                                                "description": "FortiExtender auto switch configuration.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "disconnect": {
+                                                            "type": "string",
+                                                            "description": "Auto switch by disconnect.   \ndisable:Disable switching of SIM card based on cellular disconnections.   \nenable:Enable switching of SIM card based on cellular disconnections.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "disconnect-threshold": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect threshold.",
+                                                            "maximum": 4294967295,
+                                                            "minimum": 0
+                                                        },
+                                                        "disconnect-period": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect period.",
+                                                            "maximum": 18000,
+                                                            "minimum": 600
+                                                        },
+                                                        "signal": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on signal strength.   \ndisable:Disable switching of SIM card based on cellular signal quality.   \nenable:Enable switching of SIM card based on cellular signal quality.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "dataplan": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on data usage.   \ndisable:Disable switching of SIM card based on cellular data usage.   \nenable:Enable switching of SIM card based on cellular data usage.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "switch-back": {
+                                                            "type": "string",
+                                                            "description": "Auto switch with switch back multi-options.   \ntime:Switch back based on specific time in UTC (HH:MM).   \ntimer:Switch back based on an interval.",
+                                                            "enum": [
+                                                                "time",
+                                                                "timer"
+                                                            ]
+                                                        },
+                                                        "switch-back-time": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier at a specified time in UTC (HH:MM).",
+                                                            "maxLength": 31
+                                                        },
+                                                        "switch-back-timer": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier after the given time (3600 - 2147483647 sec).",
+                                                            "maximum": 2147483647,
+                                                            "minimum": 3600
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "modem2": {
+                                    "description": "Configuration options for modem 2.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ifname": {
+                                                "type": "string",
+                                                "description": "FortiExtender interface name.",
+                                                "maxLength": 15
+                                            },
+                                            "redundant-mode": {
+                                                "type": "string",
+                                                "description": "FortiExtender mode.   \ndisable:Disable interface redundancy.   \nenable:Enable interface redundancy.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "redundant-intf": {
+                                                "type": "string",
+                                                "description": "Redundant interface.",
+                                                "maxLength": 15
+                                            },
+                                            "conn-status": {
+                                                "type": "integer",
+                                                "description": "Connection status.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "default-sim": {
+                                                "type": "string",
+                                                "description": "Default SIM selection.   \nsim1:Use SIM #1 by default.   \nsim2:Use SIM #2 by default.   \ncarrier:Assign default SIM based on carrier.   \ncost:Assign default SIM based on cost.",
+                                                "enum": [
+                                                    "sim1",
+                                                    "sim2",
+                                                    "carrier",
+                                                    "cost"
+                                                ]
+                                            },
+                                            "gps": {
+                                                "type": "string",
+                                                "description": "FortiExtender GPS enable\/disable.   \ndisable:Disable GPS.   \nenable:Enable GPS.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin": {
+                                                "type": "string",
+                                                "description": "SIM #1 PIN status.   \ndisable:Disable SIM #1 pin.   \nenable:Enable SIM #1 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim2-pin": {
+                                                "type": "string",
+                                                "description": "SIM #2 PIN status.   \ndisable:Disable SIM #2 pin.   \nenable:Enable SIM #2 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #1 PIN password."
+                                            },
+                                            "sim2-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #2 PIN password."
+                                            },
+                                            "preferred-carrier": {
+                                                "type": "string",
+                                                "description": "Preferred carrier.",
+                                                "maxLength": 31
+                                            },
+                                            "auto-switch": {
+                                                "description": "FortiExtender auto switch configuration.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "disconnect": {
+                                                            "type": "string",
+                                                            "description": "Auto switch by disconnect.   \ndisable:Disable switching of SIM card based on cellular disconnections.   \nenable:Enable switching of SIM card based on cellular disconnections.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "disconnect-threshold": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect threshold.",
+                                                            "maximum": 4294967295,
+                                                            "minimum": 0
+                                                        },
+                                                        "disconnect-period": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect period.",
+                                                            "maximum": 18000,
+                                                            "minimum": 600
+                                                        },
+                                                        "signal": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on signal strength.   \ndisable:Disable switching of SIM card based on cellular signal quality.   \nenable:Enable switching of SIM card based on cellular signal quality.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "dataplan": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on data usage.   \ndisable:Disable switching of SIM card based on cellular data usage.   \nenable:Enable switching of SIM card based on cellular data usage.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "switch-back": {
+                                                            "type": "string",
+                                                            "description": "Auto switch with switch back multi-options.   \ntime:Switch back based on specific time in UTC (HH:MM).   \ntimer:Switch back based on an interval.",
+                                                            "enum": [
+                                                                "time",
+                                                                "timer"
+                                                            ]
+                                                        },
+                                                        "switch-back-time": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier at a specified time in UTC (HH:MM).",
+                                                            "maxLength": 31
+                                                        },
+                                                        "switch-back-timer": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier after the given time (3600 - 2147483647 sec).",
+                                                            "maximum": 2147483647,
+                                                            "minimum": 3600
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_move_: Move this specific resource.\nWhen *action=move* is set, one of the extra parameters (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "move"
+                        ]
+                    },
+                    {
+                        "name": "before",
+                        "in": "query",
+                        "description": "If *action=move*, use *before* to specify the ID of the resource that this resource will be moved before.\nFor example, to move `object 1` to before `object 2`, use:\n__action=move&before=2__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "If *action=move*, use *after* to specify the ID of the resource that this resource will be moved after.\nFor example, to move `object 1` to after `object 3`, use:\n__action=move&after=3__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    }
+                ],
+                "tags": [
+                    "extender-controller\/extender"
+                ]
+            },
+            "delete": {
+                "summary": "Delete this specific resource.\n Access Group: sysgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "mkey"
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "extender-controller\/extender"
+                ]
+            }
+        },
+        "\/extender-controller\/extender": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: sysgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "FortiExtender entry name.",
+                                    "maxLength": 19
+                                },
+                                "id": {
+                                    "type": "string",
+                                    "description": "FortiExtender serial number.",
+                                    "maxLength": 19
+                                },
+                                "authorized": {
+                                    "type": "string",
+                                    "description": "FortiExtender Administration (enable or disable).   \ndisable:Controller is configured to not provide service to this FortiExtender.   \nenable:Controller is configured to provide service to this FortiExtender.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "ext-name": {
+                                    "type": "string",
+                                    "description": "FortiExtender name.",
+                                    "maxLength": 31
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description.",
+                                    "maxLength": 255
+                                },
+                                "vdom": {
+                                    "type": "integer",
+                                    "description": "VDOM",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "login-password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "FortiExtender login password."
+                                },
+                                "controller-report": {
+                                    "description": "FortiExtender controller report configuration.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "status": {
+                                                "type": "string",
+                                                "description": "FortiExtender controller report status.   \ndisable:Controller is configured to not provide service to this FortiExtender.   \nenable:Controller is configured to provide service to this FortiExtender.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "interval": {
+                                                "type": "integer",
+                                                "description": "Controller report interval.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "signal-threshold": {
+                                                "type": "integer",
+                                                "description": "Controller report signal threshold.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "modem1": {
+                                    "description": "Configuration options for modem 1.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ifname": {
+                                                "type": "string",
+                                                "description": "FortiExtender interface name.",
+                                                "maxLength": 15
+                                            },
+                                            "redundant-mode": {
+                                                "type": "string",
+                                                "description": "FortiExtender mode.   \ndisable:Disable interface redundancy.   \nenable:Enable interface redundancy.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "redundant-intf": {
+                                                "type": "string",
+                                                "description": "Redundant interface.",
+                                                "maxLength": 15
+                                            },
+                                            "conn-status": {
+                                                "type": "integer",
+                                                "description": "Connection status.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "default-sim": {
+                                                "type": "string",
+                                                "description": "Default SIM selection.   \nsim1:Use SIM #1 by default.   \nsim2:Use SIM #2 by default.   \ncarrier:Assign default SIM based on carrier.   \ncost:Assign default SIM based on cost.",
+                                                "enum": [
+                                                    "sim1",
+                                                    "sim2",
+                                                    "carrier",
+                                                    "cost"
+                                                ]
+                                            },
+                                            "gps": {
+                                                "type": "string",
+                                                "description": "FortiExtender GPS enable\/disable.   \ndisable:Disable GPS.   \nenable:Enable GPS.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin": {
+                                                "type": "string",
+                                                "description": "SIM #1 PIN status.   \ndisable:Disable SIM #1 pin.   \nenable:Enable SIM #1 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim2-pin": {
+                                                "type": "string",
+                                                "description": "SIM #2 PIN status.   \ndisable:Disable SIM #2 pin.   \nenable:Enable SIM #2 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #1 PIN password."
+                                            },
+                                            "sim2-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #2 PIN password."
+                                            },
+                                            "preferred-carrier": {
+                                                "type": "string",
+                                                "description": "Preferred carrier.",
+                                                "maxLength": 31
+                                            },
+                                            "auto-switch": {
+                                                "description": "FortiExtender auto switch configuration.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "disconnect": {
+                                                            "type": "string",
+                                                            "description": "Auto switch by disconnect.   \ndisable:Disable switching of SIM card based on cellular disconnections.   \nenable:Enable switching of SIM card based on cellular disconnections.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "disconnect-threshold": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect threshold.",
+                                                            "maximum": 4294967295,
+                                                            "minimum": 0
+                                                        },
+                                                        "disconnect-period": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect period.",
+                                                            "maximum": 18000,
+                                                            "minimum": 600
+                                                        },
+                                                        "signal": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on signal strength.   \ndisable:Disable switching of SIM card based on cellular signal quality.   \nenable:Enable switching of SIM card based on cellular signal quality.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "dataplan": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on data usage.   \ndisable:Disable switching of SIM card based on cellular data usage.   \nenable:Enable switching of SIM card based on cellular data usage.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "switch-back": {
+                                                            "type": "string",
+                                                            "description": "Auto switch with switch back multi-options.   \ntime:Switch back based on specific time in UTC (HH:MM).   \ntimer:Switch back based on an interval.",
+                                                            "enum": [
+                                                                "time",
+                                                                "timer"
+                                                            ]
+                                                        },
+                                                        "switch-back-time": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier at a specified time in UTC (HH:MM).",
+                                                            "maxLength": 31
+                                                        },
+                                                        "switch-back-timer": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier after the given time (3600 - 2147483647 sec).",
+                                                            "maximum": 2147483647,
+                                                            "minimum": 3600
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "modem2": {
+                                    "description": "Configuration options for modem 2.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ifname": {
+                                                "type": "string",
+                                                "description": "FortiExtender interface name.",
+                                                "maxLength": 15
+                                            },
+                                            "redundant-mode": {
+                                                "type": "string",
+                                                "description": "FortiExtender mode.   \ndisable:Disable interface redundancy.   \nenable:Enable interface redundancy.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "redundant-intf": {
+                                                "type": "string",
+                                                "description": "Redundant interface.",
+                                                "maxLength": 15
+                                            },
+                                            "conn-status": {
+                                                "type": "integer",
+                                                "description": "Connection status.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "default-sim": {
+                                                "type": "string",
+                                                "description": "Default SIM selection.   \nsim1:Use SIM #1 by default.   \nsim2:Use SIM #2 by default.   \ncarrier:Assign default SIM based on carrier.   \ncost:Assign default SIM based on cost.",
+                                                "enum": [
+                                                    "sim1",
+                                                    "sim2",
+                                                    "carrier",
+                                                    "cost"
+                                                ]
+                                            },
+                                            "gps": {
+                                                "type": "string",
+                                                "description": "FortiExtender GPS enable\/disable.   \ndisable:Disable GPS.   \nenable:Enable GPS.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin": {
+                                                "type": "string",
+                                                "description": "SIM #1 PIN status.   \ndisable:Disable SIM #1 pin.   \nenable:Enable SIM #1 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim2-pin": {
+                                                "type": "string",
+                                                "description": "SIM #2 PIN status.   \ndisable:Disable SIM #2 pin.   \nenable:Enable SIM #2 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #1 PIN password."
+                                            },
+                                            "sim2-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #2 PIN password."
+                                            },
+                                            "preferred-carrier": {
+                                                "type": "string",
+                                                "description": "Preferred carrier.",
+                                                "maxLength": 31
+                                            },
+                                            "auto-switch": {
+                                                "description": "FortiExtender auto switch configuration.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "disconnect": {
+                                                            "type": "string",
+                                                            "description": "Auto switch by disconnect.   \ndisable:Disable switching of SIM card based on cellular disconnections.   \nenable:Enable switching of SIM card based on cellular disconnections.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "disconnect-threshold": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect threshold.",
+                                                            "maximum": 4294967295,
+                                                            "minimum": 0
+                                                        },
+                                                        "disconnect-period": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect period.",
+                                                            "maximum": 18000,
+                                                            "minimum": 600
+                                                        },
+                                                        "signal": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on signal strength.   \ndisable:Disable switching of SIM card based on cellular signal quality.   \nenable:Enable switching of SIM card based on cellular signal quality.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "dataplan": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on data usage.   \ndisable:Disable switching of SIM card based on cellular data usage.   \nenable:Enable switching of SIM card based on cellular data usage.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "switch-back": {
+                                                            "type": "string",
+                                                            "description": "Auto switch with switch back multi-options.   \ntime:Switch back based on specific time in UTC (HH:MM).   \ntimer:Switch back based on an interval.",
+                                                            "enum": [
+                                                                "time",
+                                                                "timer"
+                                                            ]
+                                                        },
+                                                        "switch-back-time": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier at a specified time in UTC (HH:MM).",
+                                                            "maxLength": 31
+                                                        },
+                                                        "switch-back-timer": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier after the given time (3600 - 2147483647 sec).",
+                                                            "maximum": 2147483647,
+                                                            "minimum": 3600
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "extender-controller\/extender"
+                ]
+            },
+            "post": {
+                "summary": "Create object(s) in this table.\n Access Group: sysgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "FortiExtender entry name.",
+                                    "maxLength": 19
+                                },
+                                "id": {
+                                    "type": "string",
+                                    "description": "FortiExtender serial number.",
+                                    "maxLength": 19
+                                },
+                                "authorized": {
+                                    "type": "string",
+                                    "description": "FortiExtender Administration (enable or disable).   \ndisable:Controller is configured to not provide service to this FortiExtender.   \nenable:Controller is configured to provide service to this FortiExtender.",
+                                    "enum": [
+                                        "disable",
+                                        "enable"
+                                    ]
+                                },
+                                "ext-name": {
+                                    "type": "string",
+                                    "description": "FortiExtender name.",
+                                    "maxLength": 31
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "Description.",
+                                    "maxLength": 255
+                                },
+                                "vdom": {
+                                    "type": "integer",
+                                    "description": "VDOM",
+                                    "maximum": 4294967295,
+                                    "minimum": 0
+                                },
+                                "login-password": {
+                                    "type": "string",
+                                    "format": "password",
+                                    "description": "FortiExtender login password."
+                                },
+                                "controller-report": {
+                                    "description": "FortiExtender controller report configuration.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "status": {
+                                                "type": "string",
+                                                "description": "FortiExtender controller report status.   \ndisable:Controller is configured to not provide service to this FortiExtender.   \nenable:Controller is configured to provide service to this FortiExtender.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "interval": {
+                                                "type": "integer",
+                                                "description": "Controller report interval.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "signal-threshold": {
+                                                "type": "integer",
+                                                "description": "Controller report signal threshold.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "modem1": {
+                                    "description": "Configuration options for modem 1.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ifname": {
+                                                "type": "string",
+                                                "description": "FortiExtender interface name.",
+                                                "maxLength": 15
+                                            },
+                                            "redundant-mode": {
+                                                "type": "string",
+                                                "description": "FortiExtender mode.   \ndisable:Disable interface redundancy.   \nenable:Enable interface redundancy.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "redundant-intf": {
+                                                "type": "string",
+                                                "description": "Redundant interface.",
+                                                "maxLength": 15
+                                            },
+                                            "conn-status": {
+                                                "type": "integer",
+                                                "description": "Connection status.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "default-sim": {
+                                                "type": "string",
+                                                "description": "Default SIM selection.   \nsim1:Use SIM #1 by default.   \nsim2:Use SIM #2 by default.   \ncarrier:Assign default SIM based on carrier.   \ncost:Assign default SIM based on cost.",
+                                                "enum": [
+                                                    "sim1",
+                                                    "sim2",
+                                                    "carrier",
+                                                    "cost"
+                                                ]
+                                            },
+                                            "gps": {
+                                                "type": "string",
+                                                "description": "FortiExtender GPS enable\/disable.   \ndisable:Disable GPS.   \nenable:Enable GPS.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin": {
+                                                "type": "string",
+                                                "description": "SIM #1 PIN status.   \ndisable:Disable SIM #1 pin.   \nenable:Enable SIM #1 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim2-pin": {
+                                                "type": "string",
+                                                "description": "SIM #2 PIN status.   \ndisable:Disable SIM #2 pin.   \nenable:Enable SIM #2 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #1 PIN password."
+                                            },
+                                            "sim2-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #2 PIN password."
+                                            },
+                                            "preferred-carrier": {
+                                                "type": "string",
+                                                "description": "Preferred carrier.",
+                                                "maxLength": 31
+                                            },
+                                            "auto-switch": {
+                                                "description": "FortiExtender auto switch configuration.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "disconnect": {
+                                                            "type": "string",
+                                                            "description": "Auto switch by disconnect.   \ndisable:Disable switching of SIM card based on cellular disconnections.   \nenable:Enable switching of SIM card based on cellular disconnections.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "disconnect-threshold": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect threshold.",
+                                                            "maximum": 4294967295,
+                                                            "minimum": 0
+                                                        },
+                                                        "disconnect-period": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect period.",
+                                                            "maximum": 18000,
+                                                            "minimum": 600
+                                                        },
+                                                        "signal": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on signal strength.   \ndisable:Disable switching of SIM card based on cellular signal quality.   \nenable:Enable switching of SIM card based on cellular signal quality.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "dataplan": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on data usage.   \ndisable:Disable switching of SIM card based on cellular data usage.   \nenable:Enable switching of SIM card based on cellular data usage.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "switch-back": {
+                                                            "type": "string",
+                                                            "description": "Auto switch with switch back multi-options.   \ntime:Switch back based on specific time in UTC (HH:MM).   \ntimer:Switch back based on an interval.",
+                                                            "enum": [
+                                                                "time",
+                                                                "timer"
+                                                            ]
+                                                        },
+                                                        "switch-back-time": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier at a specified time in UTC (HH:MM).",
+                                                            "maxLength": 31
+                                                        },
+                                                        "switch-back-timer": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier after the given time (3600 - 2147483647 sec).",
+                                                            "maximum": 2147483647,
+                                                            "minimum": 3600
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                },
+                                "modem2": {
+                                    "description": "Configuration options for modem 2.",
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ifname": {
+                                                "type": "string",
+                                                "description": "FortiExtender interface name.",
+                                                "maxLength": 15
+                                            },
+                                            "redundant-mode": {
+                                                "type": "string",
+                                                "description": "FortiExtender mode.   \ndisable:Disable interface redundancy.   \nenable:Enable interface redundancy.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "redundant-intf": {
+                                                "type": "string",
+                                                "description": "Redundant interface.",
+                                                "maxLength": 15
+                                            },
+                                            "conn-status": {
+                                                "type": "integer",
+                                                "description": "Connection status.",
+                                                "maximum": 4294967295,
+                                                "minimum": 0
+                                            },
+                                            "default-sim": {
+                                                "type": "string",
+                                                "description": "Default SIM selection.   \nsim1:Use SIM #1 by default.   \nsim2:Use SIM #2 by default.   \ncarrier:Assign default SIM based on carrier.   \ncost:Assign default SIM based on cost.",
+                                                "enum": [
+                                                    "sim1",
+                                                    "sim2",
+                                                    "carrier",
+                                                    "cost"
+                                                ]
+                                            },
+                                            "gps": {
+                                                "type": "string",
+                                                "description": "FortiExtender GPS enable\/disable.   \ndisable:Disable GPS.   \nenable:Enable GPS.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin": {
+                                                "type": "string",
+                                                "description": "SIM #1 PIN status.   \ndisable:Disable SIM #1 pin.   \nenable:Enable SIM #1 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim2-pin": {
+                                                "type": "string",
+                                                "description": "SIM #2 PIN status.   \ndisable:Disable SIM #2 pin.   \nenable:Enable SIM #2 pin.",
+                                                "enum": [
+                                                    "disable",
+                                                    "enable"
+                                                ]
+                                            },
+                                            "sim1-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #1 PIN password."
+                                            },
+                                            "sim2-pin-code": {
+                                                "type": "string",
+                                                "format": "password",
+                                                "description": "SIM #2 PIN password."
+                                            },
+                                            "preferred-carrier": {
+                                                "type": "string",
+                                                "description": "Preferred carrier.",
+                                                "maxLength": 31
+                                            },
+                                            "auto-switch": {
+                                                "description": "FortiExtender auto switch configuration.",
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "disconnect": {
+                                                            "type": "string",
+                                                            "description": "Auto switch by disconnect.   \ndisable:Disable switching of SIM card based on cellular disconnections.   \nenable:Enable switching of SIM card based on cellular disconnections.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "disconnect-threshold": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect threshold.",
+                                                            "maximum": 4294967295,
+                                                            "minimum": 0
+                                                        },
+                                                        "disconnect-period": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch based on disconnect period.",
+                                                            "maximum": 18000,
+                                                            "minimum": 600
+                                                        },
+                                                        "signal": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on signal strength.   \ndisable:Disable switching of SIM card based on cellular signal quality.   \nenable:Enable switching of SIM card based on cellular signal quality.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "dataplan": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch based on data usage.   \ndisable:Disable switching of SIM card based on cellular data usage.   \nenable:Enable switching of SIM card based on cellular data usage.",
+                                                            "enum": [
+                                                                "disable",
+                                                                "enable"
+                                                            ]
+                                                        },
+                                                        "switch-back": {
+                                                            "type": "string",
+                                                            "description": "Auto switch with switch back multi-options.   \ntime:Switch back based on specific time in UTC (HH:MM).   \ntimer:Switch back based on an interval.",
+                                                            "enum": [
+                                                                "time",
+                                                                "timer"
+                                                            ]
+                                                        },
+                                                        "switch-back-time": {
+                                                            "type": "string",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier at a specified time in UTC (HH:MM).",
+                                                            "maxLength": 31
+                                                        },
+                                                        "switch-back-timer": {
+                                                            "type": "integer",
+                                                            "description": "Automatically switch over to preferred SIM\/carrier after the given time (3600 - 2147483647 sec).",
+                                                            "maximum": 2147483647,
+                                                            "minimum": 3600
+                                                        }
+                                                    }
+                                                },
+                                                "maxItems": null
+                                            }
+                                        }
+                                    },
+                                    "maxItems": null
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_clone_: Clone this specific resource.\nWhen *action=clone* is set, the extra parameters *nkey* must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "clone"
+                        ]
+                    },
+                    {
+                        "name": "nkey",
+                        "in": "query",
+                        "description": " If *action=clone*, use *nkey* to specify the ID for the new resource to be created.\nFor example, to clone `address1` to `address1_clone`, use:\n__action=clone&nkey=address1_clone__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *clone*.\n",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "extender-controller\/extender"
+                ]
+            }
+        }
+    }
+}

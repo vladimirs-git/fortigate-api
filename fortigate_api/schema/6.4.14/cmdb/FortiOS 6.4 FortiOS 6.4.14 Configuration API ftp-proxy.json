@@ -1,0 +1,414 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "termsOfService": "http:\/\/fortinet.com\/terms\/",
+        "version": "v2",
+        "contact": {
+            "url": "http:\/\/modskristensen.net",
+            "name": "FortiOS Web Application Team",
+            "email": "fosguiqateam@fortinet.com"
+        },
+        "description": "REST API for configuring FortiOS objects and settings",
+        "title": "FortiOS CMDB"
+    },
+    "host": "172.16.177.65",
+    "basePath": "\/api\/v2\/cmdb",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application\/json"
+    ],
+    "produces": [
+        "application\/json"
+    ],
+    "securityDefinitions": {
+        "APIKeyQueryParam": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query"
+        }
+    },
+    "security": [
+        {
+            "APIKeyQueryParam": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "ftp-proxy\/explicit",
+            "description": "Configure explicit FTP proxy settings."
+        }
+    ],
+    "paths": {
+        "\/ftp-proxy\/explicit": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: netgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "description": "Enable\/disable the explicit FTP proxy.   \nenable:Enable the explicit FTP proxy.   \ndisable:Disable the explicit FTP proxy.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "incoming-port": {
+                                    "type": "string",
+                                    "description": "Accept incoming FTP requests on one or more ports."
+                                },
+                                "incoming-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Accept incoming FTP requests from this IP address. An interface must have this IP address."
+                                },
+                                "outgoing-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Outgoing FTP requests will leave from this IP address. An interface must have this IP address."
+                                },
+                                "sec-default-action": {
+                                    "type": "string",
+                                    "description": "Accept or deny explicit FTP proxy sessions when no FTP proxy firewall policy exists.   \naccept:Accept requests. All explicit FTP proxy traffic is accepted whether there is an explicit FTP proxy policy or not   \ndeny:Deny requests unless there is a matching explicit FTP proxy policy.",
+                                    "enum": [
+                                        "accept",
+                                        "deny"
+                                    ]
+                                },
+                                "ssl": {
+                                    "type": "string",
+                                    "description": "Enable\/disable the explicit FTPS proxy.   \nenable:Enable the explicit FTPS proxy.   \ndisable:Disable the explicit FTPS proxy.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "ssl-cert": {
+                                    "type": "string",
+                                    "description": "Name of certificate for SSL connections to this server (default = \"Fortinet_CA_SSL\").",
+                                    "maxLength": 35
+                                },
+                                "ssl-dh-bits": {
+                                    "type": "string",
+                                    "description": "Bit-size of Diffie-Hellman (DH) prime used in DHE-RSA negotiation (default = 2048).   \n768:768-bit Diffie-Hellman prime.   \n1024:1024-bit Diffie-Hellman prime.   \n1536:1536-bit Diffie-Hellman prime.   \n2048:2048-bit Diffie-Hellman prime.",
+                                    "enum": [
+                                        "768",
+                                        "1024",
+                                        "1536",
+                                        "2048"
+                                    ]
+                                },
+                                "ssl-algorithm": {
+                                    "type": "string",
+                                    "description": "Relative strength of encryption algorithms accepted in negotiation.   \nhigh:High encryption. Allow only AES and ChaCha   \nmedium:Medium encryption. Allow AES, ChaCha, 3DES, and RC4.   \nlow:Low encryption. Allow AES, ChaCha, 3DES, RC4, and DES.",
+                                    "enum": [
+                                        "high",
+                                        "medium",
+                                        "low"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ftp-proxy\/explicit"
+                ]
+            },
+            "put": {
+                "summary": "Update this specific resource.\n Access Group: netgrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "description": "Enable\/disable the explicit FTP proxy.   \nenable:Enable the explicit FTP proxy.   \ndisable:Disable the explicit FTP proxy.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "incoming-port": {
+                                    "type": "string",
+                                    "description": "Accept incoming FTP requests on one or more ports."
+                                },
+                                "incoming-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Accept incoming FTP requests from this IP address. An interface must have this IP address."
+                                },
+                                "outgoing-ip": {
+                                    "type": "string",
+                                    "format": "ipv4",
+                                    "description": "Outgoing FTP requests will leave from this IP address. An interface must have this IP address."
+                                },
+                                "sec-default-action": {
+                                    "type": "string",
+                                    "description": "Accept or deny explicit FTP proxy sessions when no FTP proxy firewall policy exists.   \naccept:Accept requests. All explicit FTP proxy traffic is accepted whether there is an explicit FTP proxy policy or not   \ndeny:Deny requests unless there is a matching explicit FTP proxy policy.",
+                                    "enum": [
+                                        "accept",
+                                        "deny"
+                                    ]
+                                },
+                                "ssl": {
+                                    "type": "string",
+                                    "description": "Enable\/disable the explicit FTPS proxy.   \nenable:Enable the explicit FTPS proxy.   \ndisable:Disable the explicit FTPS proxy.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "ssl-cert": {
+                                    "type": "string",
+                                    "description": "Name of certificate for SSL connections to this server (default = \"Fortinet_CA_SSL\").",
+                                    "maxLength": 35
+                                },
+                                "ssl-dh-bits": {
+                                    "type": "string",
+                                    "description": "Bit-size of Diffie-Hellman (DH) prime used in DHE-RSA negotiation (default = 2048).   \n768:768-bit Diffie-Hellman prime.   \n1024:1024-bit Diffie-Hellman prime.   \n1536:1536-bit Diffie-Hellman prime.   \n2048:2048-bit Diffie-Hellman prime.",
+                                    "enum": [
+                                        "768",
+                                        "1024",
+                                        "1536",
+                                        "2048"
+                                    ]
+                                },
+                                "ssl-algorithm": {
+                                    "type": "string",
+                                    "description": "Relative strength of encryption algorithms accepted in negotiation.   \nhigh:High encryption. Allow only AES and ChaCha   \nmedium:Medium encryption. Allow AES, ChaCha, 3DES, and RC4.   \nlow:Low encryption. Allow AES, ChaCha, 3DES, RC4, and DES.",
+                                    "enum": [
+                                        "high",
+                                        "medium",
+                                        "low"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_move_: Move this specific resource.\nWhen *action=move* is set, one of the extra parameters (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "move"
+                        ]
+                    },
+                    {
+                        "name": "before",
+                        "in": "query",
+                        "description": "If *action=move*, use *before* to specify the ID of the resource that this resource will be moved before.\nFor example, to move `object 1` to before `object 2`, use:\n__action=move&before=2__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "If *action=move*, use *after* to specify the ID of the resource that this resource will be moved after.\nFor example, to move `object 1` to after `object 3`, use:\n__action=move&after=3__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "ftp-proxy\/explicit"
+                ]
+            }
+        }
+    }
+}

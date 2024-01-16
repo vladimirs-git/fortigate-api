@@ -18,9 +18,9 @@ https://github.com/vladimirs-git/fortigate-api/tree/main/examples/external_resou
     - Create external_resource in the Fortigate
     - Get all external_resources from the Fortigate
     - Get filtered external_resource by name (unique identifier)
-    - Filter external_resource by operator *equals* `==`
-    - Filter external_resource by operator *contains* `=@`
-    - Filter external_resource by operator *not equals* `!=`
+    - Filter external_resource by operator equals `==`
+    - Filter external_resource by operator contains `=@`
+    - Filter external_resource by operator not equals `!=`
     - Update external_resource data in the Fortigate
     - Check for presence of external_resource in the Fortigate
     - Delete external_resource from the Fortigate by name

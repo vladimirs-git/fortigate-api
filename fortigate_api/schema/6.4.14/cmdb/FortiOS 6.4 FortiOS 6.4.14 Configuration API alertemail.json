@@ -1,0 +1,810 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "termsOfService": "http:\/\/fortinet.com\/terms\/",
+        "version": "v2",
+        "contact": {
+            "url": "http:\/\/modskristensen.net",
+            "name": "FortiOS Web Application Team",
+            "email": "fosguiqateam@fortinet.com"
+        },
+        "description": "REST API for configuring FortiOS objects and settings",
+        "title": "FortiOS CMDB"
+    },
+    "host": "172.16.177.65",
+    "basePath": "\/api\/v2\/cmdb",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application\/json"
+    ],
+    "produces": [
+        "application\/json"
+    ],
+    "securityDefinitions": {
+        "APIKeyQueryParam": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query"
+        }
+    },
+    "security": [
+        {
+            "APIKeyQueryParam": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "alertemail\/setting",
+            "description": "Configure alert email settings."
+        }
+    ],
+    "paths": {
+        "\/alertemail\/setting": {
+            "get": {
+                "summary": "Select all entries in a CLI table.\n Access Group: loggrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful",
+                        "schema": {
+                            "properties": {
+                                "username": {
+                                    "type": "string",
+                                    "description": "Name that appears in the From: field of alert emails (max. 63 characters).",
+                                    "maxLength": 63
+                                },
+                                "mailto1": {
+                                    "type": "string",
+                                    "description": "Email address to send alert email to (usually a system administrator) (max. 63 characters).",
+                                    "maxLength": 63
+                                },
+                                "mailto2": {
+                                    "type": "string",
+                                    "description": "Optional second email address to send alert email to (max. 63 characters).",
+                                    "maxLength": 63
+                                },
+                                "mailto3": {
+                                    "type": "string",
+                                    "description": "Optional third email address to send alert email to (max. 63 characters).",
+                                    "maxLength": 63
+                                },
+                                "filter-mode": {
+                                    "type": "string",
+                                    "description": "How to filter log messages that are sent to alert emails.   \ncategory:Filter based on category.   \nthreshold:Filter based on severity.",
+                                    "enum": [
+                                        "category",
+                                        "threshold"
+                                    ]
+                                },
+                                "email-interval": {
+                                    "type": "integer",
+                                    "description": "Interval between sending alert emails (1 - 99999 min, default = 5).",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "IPS-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable IPS logs in alert email.   \nenable:Enable IPS logs in alert email.   \ndisable:Disable IPS logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "firewall-authentication-failure-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable firewall authentication failure logs in alert email.   \nenable:Enable firewall authentication failure logs in alert email.   \ndisable:Disable firewall authentication failure logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "HA-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable HA logs in alert email.   \nenable:Enable HA logs in alert email.   \ndisable:Disable HA logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "IPsec-errors-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable IPsec error logs in alert email.   \nenable:Enable IPsec error logs in alert email.   \ndisable:Disable IPsec error logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "FDS-update-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FortiGuard update logs in alert email.   \nenable:Enable FortiGuard update logs in alert email.   \ndisable:Disable FortiGuard update logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "PPP-errors-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable PPP error logs in alert email.   \nenable:Enable PPP error logs in alert email.   \ndisable:Disable PPP error logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "sslvpn-authentication-errors-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable SSL-VPN authentication error logs in alert email.   \nenable:Enable SSL-VPN authentication error logs in alert email.   \ndisable:Disable SSL-VPN authentication error logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "antivirus-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable antivirus logs in alert email.   \nenable:Enable antivirus logs in alert email.   \ndisable:Disable antivirus logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "webfilter-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable web filter logs in alert email.   \nenable:Enable web filter logs in alert email.   \ndisable:Disable web filter logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "configuration-changes-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable configuration change logs in alert email.   \nenable:Enable configuration change logs in alert email.   \ndisable:Disable configuration change logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "violation-traffic-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable violation traffic logs in alert email.   \nenable:Enable violation traffic logs in alert email.   \ndisable:Disable violation traffic logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "admin-login-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable administrator login\/logout logs in alert email.   \nenable:Enable administrator login\/logout logs in alert email.   \ndisable:Disable administrator login\/logout logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "FDS-license-expiring-warning": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FortiGuard license expiration warnings in alert email.   \nenable:Enable FortiGuard license expiration warnings in alert email.   \ndisable:Disable FortiGuard license expiration warnings in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "log-disk-usage-warning": {
+                                    "type": "string",
+                                    "description": "Enable\/disable disk usage warnings in alert email.   \nenable:Enable disk usage warnings in alert email.   \ndisable:Disable disk usage warnings in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "fortiguard-log-quota-warning": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FortiCloud log quota warnings in alert email.   \nenable:Enable FortiCloud log quota warnings in alert email.   \ndisable:Disable FortiCloud log quota warnings in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "amc-interface-bypass-mode": {
+                                    "type": "string",
+                                    "description": "Enable\/disable Fortinet Advanced Mezzanine Card (AMC) interface bypass mode logs in alert email.   \nenable:Enable Fortinet Advanced Mezzanine Card (AMC) interface bypass mode logs in alert email.   \ndisable:Disable Fortinet Advanced Mezzanine Card (AMC) interface bypass mode logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "FIPS-CC-errors": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FIPS and Common Criteria error logs in alert email.   \nenable:Enable FIPS and Common Criteria error logs in alert email.   \ndisable:Disable FIPS and Common Criteria error logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "FSSO-disconnect-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable logging of FSSO collector agent disconnect.   \nenable:Enable logging of FSSO collector agent disconnect.   \ndisable:Disable logging of FSSO collector agent disconnect.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "ssh-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable SSH logs in alert email.   \nenable:Enable SSH logs in alert email.   \ndisable:Disable SSH logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "FDS-license-expiring-days": {
+                                    "type": "integer",
+                                    "description": "Number of days to send alert email prior to FortiGuard license expiration (1 - 100 days, default = 100).",
+                                    "maximum": 100,
+                                    "minimum": 1
+                                },
+                                "local-disk-usage": {
+                                    "type": "integer",
+                                    "description": "Disk usage percentage at which to send alert email (1 - 99 percent, default = 75).",
+                                    "maximum": 99,
+                                    "minimum": 1
+                                },
+                                "emergency-interval": {
+                                    "type": "integer",
+                                    "description": "Emergency alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "alert-interval": {
+                                    "type": "integer",
+                                    "description": "Alert alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "critical-interval": {
+                                    "type": "integer",
+                                    "description": "Critical alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "error-interval": {
+                                    "type": "integer",
+                                    "description": "Error alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "warning-interval": {
+                                    "type": "integer",
+                                    "description": "Warning alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "notification-interval": {
+                                    "type": "integer",
+                                    "description": "Notification alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "information-interval": {
+                                    "type": "integer",
+                                    "description": "Information alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "debug-interval": {
+                                    "type": "integer",
+                                    "description": "Debug alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "severity": {
+                                    "type": "string",
+                                    "description": "Lowest severity level to log.   \nemergency:Emergency level.   \nalert:Alert level.   \ncritical:Critical level.   \nerror:Error level.   \nwarning:Warning level.   \nnotification:Notification level.   \ninformation:Information level.   \ndebug:Debug level.",
+                                    "enum": [
+                                        "emergency",
+                                        "alert",
+                                        "critical",
+                                        "error",
+                                        "warning",
+                                        "notification",
+                                        "information",
+                                        "debug"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "datasource",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include datasource information for each linked object."
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Starting entry index."
+                    },
+                    {
+                        "name": "count",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "description": "Maximum number of entries to return."
+                    },
+                    {
+                        "name": "with_meta",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include meta information about each object (type id, references, etc)."
+                    },
+                    {
+                        "name": "with_contents_hash",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to include a checksum of each object's contents."
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Enable to call CLI skip operator to hide skipped properties."
+                    },
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "List of property names to include in results, separated by | (i.e. policyid|srcintf).",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "pipes",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Filtering multiple key\/value pairs\nOperator     |   Description\n==     |   Case insensitive match with pattern.\n!=     |    Does not match with pattern (case insensitive).\n=@     |    Pattern found in object value (case insensitive).\n!@     |    \ufeffPattern not\ufeff found in object value (case insensitive).\n<=     |    Value must be less than or equal to \ufeffpattern\ufeff.\n<     |    Value must be less than pattern\ufeff.\n.>=    |    Value must be greater than or equal to \ufeffpattern\ufeff.\n.>     |    Value must be greater than \ufeffpattern\ufeff.\nLogical OR    |    Separate filters using commas ','\nLogical AND    |    Filter strings can be combined to create logical AND queries by including multiple filters in the request.\nCombining AND and OR    |    You can combine AND and OR filters together to create more complex filters.\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "multi",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "key",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this name."
+                    },
+                    {
+                        "name": "pattern",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "If present, objects will be filtered on property with this value."
+                    },
+                    {
+                        "name": "scope",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "description": "Scope [global|vdom|both*]"
+                    },
+                    {
+                        "name": "exclude-default-values",
+                        "in": "query",
+                        "required": false,
+                        "type": "boolean",
+                        "description": "Exclude properties\/objects with default value"
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "default: Return the CLI default values for entire CLI tree.\nmeta: Return meta data for a specific object, table, or the entire CLI tree.\nschema: Return schema for entire CLI tree.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "default",
+                            "schema"
+                        ]
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "tags": [
+                    "alertemail\/setting"
+                ]
+            },
+            "put": {
+                "summary": "Update this specific resource.\n Access Group: loggrp",
+                "responses": {
+                    "400": {
+                        "description": "Bad Request: Request cannot be processed by the API"
+                    },
+                    "401": {
+                        "description": "Not Authorized: Request without successful login session"
+                    },
+                    "403": {
+                        "description": "Forbidden: Request is missing CSRF token or administrator is missing access profile permissions."
+                    },
+                    "404": {
+                        "description": "Resource Not Found: Unable to find the specified resource."
+                    },
+                    "405": {
+                        "description": "Method Not Allowed: Specified HTTP method is not allowed for this resource. "
+                    },
+                    "424": {
+                        "description": "Failed Dependency: Fail dependency can be duplicate resource, missing required parameter, missing required attribute, invalid attribute value"
+                    },
+                    "200": {
+                        "description": "OK: Request returns successful"
+                    },
+                    "500": {
+                        "description": "Internal Server Error: Internal error when processing the request "
+                    },
+                    "413": {
+                        "description": "Request Entity Too Large: Request cannot be processed due to large entity "
+                    },
+                    "429": {
+                        "description": "Access temporarily blocked: Maximum failed authentications reached. The offended source is temporarily blocked for certain amount of time."
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Possible parameters to go in the body for the request",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "username": {
+                                    "type": "string",
+                                    "description": "Name that appears in the From: field of alert emails (max. 63 characters).",
+                                    "maxLength": 63
+                                },
+                                "mailto1": {
+                                    "type": "string",
+                                    "description": "Email address to send alert email to (usually a system administrator) (max. 63 characters).",
+                                    "maxLength": 63
+                                },
+                                "mailto2": {
+                                    "type": "string",
+                                    "description": "Optional second email address to send alert email to (max. 63 characters).",
+                                    "maxLength": 63
+                                },
+                                "mailto3": {
+                                    "type": "string",
+                                    "description": "Optional third email address to send alert email to (max. 63 characters).",
+                                    "maxLength": 63
+                                },
+                                "filter-mode": {
+                                    "type": "string",
+                                    "description": "How to filter log messages that are sent to alert emails.   \ncategory:Filter based on category.   \nthreshold:Filter based on severity.",
+                                    "enum": [
+                                        "category",
+                                        "threshold"
+                                    ]
+                                },
+                                "email-interval": {
+                                    "type": "integer",
+                                    "description": "Interval between sending alert emails (1 - 99999 min, default = 5).",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "IPS-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable IPS logs in alert email.   \nenable:Enable IPS logs in alert email.   \ndisable:Disable IPS logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "firewall-authentication-failure-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable firewall authentication failure logs in alert email.   \nenable:Enable firewall authentication failure logs in alert email.   \ndisable:Disable firewall authentication failure logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "HA-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable HA logs in alert email.   \nenable:Enable HA logs in alert email.   \ndisable:Disable HA logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "IPsec-errors-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable IPsec error logs in alert email.   \nenable:Enable IPsec error logs in alert email.   \ndisable:Disable IPsec error logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "FDS-update-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FortiGuard update logs in alert email.   \nenable:Enable FortiGuard update logs in alert email.   \ndisable:Disable FortiGuard update logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "PPP-errors-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable PPP error logs in alert email.   \nenable:Enable PPP error logs in alert email.   \ndisable:Disable PPP error logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "sslvpn-authentication-errors-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable SSL-VPN authentication error logs in alert email.   \nenable:Enable SSL-VPN authentication error logs in alert email.   \ndisable:Disable SSL-VPN authentication error logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "antivirus-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable antivirus logs in alert email.   \nenable:Enable antivirus logs in alert email.   \ndisable:Disable antivirus logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "webfilter-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable web filter logs in alert email.   \nenable:Enable web filter logs in alert email.   \ndisable:Disable web filter logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "configuration-changes-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable configuration change logs in alert email.   \nenable:Enable configuration change logs in alert email.   \ndisable:Disable configuration change logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "violation-traffic-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable violation traffic logs in alert email.   \nenable:Enable violation traffic logs in alert email.   \ndisable:Disable violation traffic logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "admin-login-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable administrator login\/logout logs in alert email.   \nenable:Enable administrator login\/logout logs in alert email.   \ndisable:Disable administrator login\/logout logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "FDS-license-expiring-warning": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FortiGuard license expiration warnings in alert email.   \nenable:Enable FortiGuard license expiration warnings in alert email.   \ndisable:Disable FortiGuard license expiration warnings in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "log-disk-usage-warning": {
+                                    "type": "string",
+                                    "description": "Enable\/disable disk usage warnings in alert email.   \nenable:Enable disk usage warnings in alert email.   \ndisable:Disable disk usage warnings in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "fortiguard-log-quota-warning": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FortiCloud log quota warnings in alert email.   \nenable:Enable FortiCloud log quota warnings in alert email.   \ndisable:Disable FortiCloud log quota warnings in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "amc-interface-bypass-mode": {
+                                    "type": "string",
+                                    "description": "Enable\/disable Fortinet Advanced Mezzanine Card (AMC) interface bypass mode logs in alert email.   \nenable:Enable Fortinet Advanced Mezzanine Card (AMC) interface bypass mode logs in alert email.   \ndisable:Disable Fortinet Advanced Mezzanine Card (AMC) interface bypass mode logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "FIPS-CC-errors": {
+                                    "type": "string",
+                                    "description": "Enable\/disable FIPS and Common Criteria error logs in alert email.   \nenable:Enable FIPS and Common Criteria error logs in alert email.   \ndisable:Disable FIPS and Common Criteria error logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "FSSO-disconnect-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable logging of FSSO collector agent disconnect.   \nenable:Enable logging of FSSO collector agent disconnect.   \ndisable:Disable logging of FSSO collector agent disconnect.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "ssh-logs": {
+                                    "type": "string",
+                                    "description": "Enable\/disable SSH logs in alert email.   \nenable:Enable SSH logs in alert email.   \ndisable:Disable SSH logs in alert email.",
+                                    "enum": [
+                                        "enable",
+                                        "disable"
+                                    ]
+                                },
+                                "FDS-license-expiring-days": {
+                                    "type": "integer",
+                                    "description": "Number of days to send alert email prior to FortiGuard license expiration (1 - 100 days, default = 100).",
+                                    "maximum": 100,
+                                    "minimum": 1
+                                },
+                                "local-disk-usage": {
+                                    "type": "integer",
+                                    "description": "Disk usage percentage at which to send alert email (1 - 99 percent, default = 75).",
+                                    "maximum": 99,
+                                    "minimum": 1
+                                },
+                                "emergency-interval": {
+                                    "type": "integer",
+                                    "description": "Emergency alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "alert-interval": {
+                                    "type": "integer",
+                                    "description": "Alert alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "critical-interval": {
+                                    "type": "integer",
+                                    "description": "Critical alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "error-interval": {
+                                    "type": "integer",
+                                    "description": "Error alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "warning-interval": {
+                                    "type": "integer",
+                                    "description": "Warning alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "notification-interval": {
+                                    "type": "integer",
+                                    "description": "Notification alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "information-interval": {
+                                    "type": "integer",
+                                    "description": "Information alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "debug-interval": {
+                                    "type": "integer",
+                                    "description": "Debug alert interval in minutes.",
+                                    "maximum": 99999,
+                                    "minimum": 1
+                                },
+                                "severity": {
+                                    "type": "string",
+                                    "description": "Lowest severity level to log.   \nemergency:Emergency level.   \nalert:Alert level.   \ncritical:Critical level.   \nerror:Error level.   \nwarning:Warning level.   \nnotification:Notification level.   \ninformation:Information level.   \ndebug:Debug level.",
+                                    "enum": [
+                                        "emergency",
+                                        "alert",
+                                        "critical",
+                                        "error",
+                                        "warning",
+                                        "notification",
+                                        "information",
+                                        "debug"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "vdom",
+                        "in": "query",
+                        "description": "Specify the Virtual Domain(s) from which results are returned or changes are applied to. If this parameter is not provided, the management VDOM will be used. If the admin does not have access to the VDOM, a permission error will be returned.\nThe URL parameter is one of:\nvdom=root (Single VDOM)\nvdom=vdom1,vdom2 (Multiple VDOMs)\nvdom=* (All VDOMs)\n",
+                        "required": false,
+                        "type": "array",
+                        "collectionFormat": "csv",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "action",
+                        "in": "query",
+                        "description": "If supported, an action can be specified.\n_move_: Move this specific resource.\nWhen *action=move* is set, one of the extra parameters (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is provided when not supported, the action will be ignored and an \u201cinvalid request\u201d error will be returned.\n",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "move"
+                        ]
+                    },
+                    {
+                        "name": "before",
+                        "in": "query",
+                        "description": "If *action=move*, use *before* to specify the ID of the resource that this resource will be moved before.\nFor example, to move `object 1` to before `object 2`, use:\n__action=move&before=2__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "after",
+                        "in": "query",
+                        "description": "If *action=move*, use *after* to specify the ID of the resource that this resource will be moved after.\nFor example, to move `object 1` to after `object 3`, use:\n__action=move&after=3__\n__*Note:*__ This parameter can only be used when the *action* parameter is set to *move*.\n",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "alertemail\/setting"
+                ]
+            }
+        }
+    }
+}

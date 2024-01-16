@@ -1,0 +1,16 @@
+{{ api_class }}.{{ scope }}.{{ app_name }}.{{ model_name }}
+{{ "=" * (api_class|length + 1 + scope|length + 1 + app_name|length + 1 + model_name|length) }}
+
+.. autoclass:: {{ package }}.{{ scope }}.{{ app_name }}.{{ model_class }}
+  :members:
+  :undoc-members:
+  :inherited-members:
+  :class-doc-from: class
+
+{% if usage %}
+Usage
+-----
+
+{{ usage }}
+
+{% endif %}

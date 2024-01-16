@@ -1,22 +1,21 @@
-"""Fortigate examples.
+"""FortiGate examples.
 
-- User-Based Authentication,
-- Create address in the Fortigate,
-- Get address by name (unique identifier) from the Fortigate,
-- Update address data in the Fortigate,
-- Check for presence of address in the Fortigate,
-- Delete address from the Fortigate by name (unique identifier),
-- Check for absence of address in the Fortigate,
-- Get logs traffic forward, value in JSON section with key="results",
-- Get monitor policy, value in JSON root section,
+- FortiGate.post() - Create fortigate-object in the Fortigate
+- FortiGate.get() - GetResponse object from the Fortigate
+- FortiGate.get_results() - Get list of fortigate-objects from the JSON results section
+- FortiGate.get_result() - Get single fortigate-object from the JSON results section
+- FortiGate.get_list() - Get list of items from the JSON root section
+- FortiGate.put() - Update existing fortigate-object in the Fortigate
+- FortiGate.delete() - Delete the fortigate-object from the Fortigate
+- FortiGate.exist() - Check iffortigate-object exists in the Fortigate
 - Get Directory
-- Fortigate `with` statement,
+- FortiGate `with` statement
 """
 
 import logging
 from pprint import pprint
 
-from fortigate_api import Fortigate
+from fortigate_api import FortiGate
 
 logging.getLogger().setLevel(logging.DEBUG)
 
@@ -24,9 +23,10 @@ HOST = "host"
 USERNAME = "username"
 PASSWORD = "password"
 
-fgt = Fortigate(host=HOST, username=USERNAME, password=PASSWORD)
+fgt = FortiGate(host=HOST, username=USERNAME, password=PASSWORD)
+fgt.login()  # login is optional
 
-# Creates address in the Fortigate
+# FortiGate.post() - Create fortigate-object in the Fortigate
 data = {
     "name": "ADDRESS",
     "obj-type": "ip",
@@ -36,43 +36,31 @@ data = {
 response = fgt.post(url="api/v2/cmdb/firewall/address/", data=data)
 print(f"POST {response}", )  # POST <Response [200]>
 
-# Get address by name (unique identifier) from the Fortigate
-addresses = fgt.get(url="api/v2/cmdb/firewall/address/")
-addresses = [d for d in addresses if d["name"] == "ADDRESS"]
-pprint(addresses)
-#  [{"comment": "",
-#    "name": "ADDRESS",
+# FortiGate.get() - GetResponse object from the Fortigate
+response = fgt.get(url="api/v2/cmdb/firewall/address/ADDRESS")
+print(f"GET {response}", )  # POST <Response [200]>
+result = response.json()["results"]
+pprint(result)
+#  [{"name": "ADDRESS",
 #    "subnet": "127.0.0.100 255.255.255.252",
 #    "uuid": "a386e4b0-d6cb-51ec-1e28-01e0bc0de43c",
 #    ...
 #    }]
 
-# Updates address data in the Fortigate
-data = dict(color=6)
-response = fgt.put(url="api/v2/cmdb/firewall/address/ADDRESS", data=data)
-print(f"PUT {response}")  # PUT <Response [200]>
+# FortiGate.get_results() - Get list of fortigate-objects from the JSON results section
+items = fgt.get_results(url="api/v2/cmdb/firewall/address")
+print(f"addresses count={len(items)}")  # addresses count=14
 
-# Delete address from the Fortigate by name (unique identifier)
-response = fgt.delete(url="api/v2/cmdb/firewall/address/ADDRESS")
-print(f"DELETE {response}", )  # DELETE <Response [200]>
+# FortiGate.get_result() - Get single fortigate-object from the JSON results section
+data = fgt.get_result(url="api/v2/cmdb/alertemail/setting")
+pprint(data)
+# {'FDS-license-expiring-days': 15,
+#  'FDS-license-expiring-warning': 'disable',
+#  'FDS-update-logs': 'disable',
+#  ...
 
-# Checks for absence of address in the Fortigate
-response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
-print(f"Exist {response}", )  # Exist <Response [404]>
-
-# Get logs traffic forward, value in JSON section with key="results"
-output = fgt.get(url="/api/v2/log/memory/traffic/forward")
-pprint(output)
-# [{'_metadata': {'#': 1, 'archive': False, 'logid': 13, 'roll': 63501, ...},
-#   'action': 'deny',
-#   'appcat': 'unscanned',
-#   'craction': 131072,
-#   'crlevel': 'high',
-#   'crscore': 30,
-# ...
-
-# Get monitor policy, value in JSON root section
-output = fgt.get_l(url="/api/v2/monitor/firewall/policy?global=1")
+# FortiGate.get_list() - Get list of items from the JSON root section
+output = fgt.get_list(url="/api/v2/monitor/firewall/policy?global=1")
 pprint(output)
 # [{'build': 2093,
 #   'http_method': 'GET',
@@ -83,6 +71,18 @@ pprint(output)
 #                'asic_packets': 0,
 # ...
 
+# FortiGate.put() - Update existing fortigate-object in the Fortigate
+data = {"name": "ADDRESS", "subnet": "127.0.0.255 255.255.255.255"}
+response = fgt.put(url="api/v2/cmdb/firewall/address/ADDRESS", data=data)
+print(f"PUT {response}")  # PUT <Response [200]>
+
+# FortiGate.delete() - Delete the fortigate-object from the Fortigate
+response = fgt.delete(url="api/v2/cmdb/firewall/address/ADDRESS")
+print(f"DELETE {response}", )  # DELETE <Response [200]>
+
+# FortiGate.exist() - Check iffortigate-object exists in the Fortigate
+response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
+print(f"exist {response}", )  # exist <Response [404]>
 
 # Get Directory
 output = fgt.directory(url="/api/v2/log")
@@ -92,7 +92,7 @@ pprint(output)
 
 fgt.logout()
 
-# Fortigate `with` statement
-with Fortigate(host=HOST, username=USERNAME, password=PASSWORD) as fgt:
+# FortiGate `with` statement
+with FortiGate(host=HOST, username=USERNAME, password=PASSWORD) as fgt:
     response = fgt.exist(url="api/v2/cmdb/firewall/address/ADDRESS")
-    print("Exist", response)  # Exist <Response [404]>
+    print("exist", response)  # exist <Response [404]>

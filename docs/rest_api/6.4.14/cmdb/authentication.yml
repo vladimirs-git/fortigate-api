@@ -1,0 +1,2071 @@
+basePath: /api/v2/cmdb
+consumes:
+- application/json
+host: 172.16.177.65
+info:
+  contact:
+    email: fosguiqateam@fortinet.com
+    name: FortiOS Web Application Team
+    url: http://modskristensen.net
+  description: REST API for configuring FortiOS objects and settings
+  termsOfService: http://fortinet.com/terms/
+  title: FortiOS CMDB
+  version: v2
+paths:
+  /authentication/rule:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              active-auth-method:
+                description: Select an active authentication method.
+                maxLength: 35
+                type: string
+              comments:
+                description: Comment.
+                maxLength: 1023
+                type: string
+              ip-based:
+                description: "Enable/disable IP-based authentication. When enabled,\
+                  \ previously authenticated users from the same IP address will be\
+                  \ exempted.   \nenable:Enable IP-based authentication.   \ndisable:Disable\
+                  \ IP-based authentication."
+                enum:
+                - enable
+                - disable
+                type: string
+              name:
+                description: Authentication rule name.
+                maxLength: 35
+                type: string
+              protocol:
+                description: "Authentication is required for the selected protocol\
+                  \ (default = HTTP).   \nhttp:HTTP traffic is matched and authentication\
+                  \ is required.   \nftp:FTP traffic is matched and authentication\
+                  \ is required.   \nsocks:SOCKS traffic is matched and authentication\
+                  \ is required.   \nssh:SSH traffic is matched and authentication\
+                  \ is required."
+                enum:
+                - http
+                - ftp
+                - socks
+                - ssh
+                type: string
+              srcaddr:
+                description: Authentication is required for the selected IPv4 source
+                  address.
+                items:
+                  properties:
+                    name:
+                      description: Address name.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              srcaddr6:
+                description: Authentication is required for the selected IPv6 source
+                  address.
+                items:
+                  properties:
+                    name:
+                      description: Address name.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              sso-auth-method:
+                description: Select a single-sign on (SSO) authentication method.
+                maxLength: 35
+                type: string
+              status:
+                description: "Enable/disable this authentication rule.   \nenable:Enable\
+                  \ this authentication rule.   \ndisable:Disable this authentication\
+                  \ rule."
+                enum:
+                - enable
+                - disable
+                type: string
+              transaction-based:
+                description: "Enable/disable transaction based authentication (default\
+                  \ = disable).   \nenable:Enable transaction based authentication.\
+                  \   \ndisable:Disable transaction based authentication."
+                enum:
+                - enable
+                - disable
+                type: string
+              web-auth-cookie:
+                description: "Enable/disable Web authentication cookies (default =\
+                  \ disable).   \nenable:Enable Web authentication cookie.   \ndisable:Disable\
+                  \ Web authentication cookie."
+                enum:
+                - enable
+                - disable
+                type: string
+              web-portal:
+                description: "Enable/disable web portal for proxy transparent policy\
+                  \ (default = enable).   \nenable:Enable web-portal.   \ndisable:Disable\
+                  \ web-portal."
+                enum:
+                - enable
+                - disable
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: authgrp"
+      tags:
+      - authentication/rule
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            active-auth-method:
+              description: Select an active authentication method.
+              maxLength: 35
+              type: string
+            comments:
+              description: Comment.
+              maxLength: 1023
+              type: string
+            ip-based:
+              description: "Enable/disable IP-based authentication. When enabled,\
+                \ previously authenticated users from the same IP address will be\
+                \ exempted.   \nenable:Enable IP-based authentication.   \ndisable:Disable\
+                \ IP-based authentication."
+              enum:
+              - enable
+              - disable
+              type: string
+            name:
+              description: Authentication rule name.
+              maxLength: 35
+              type: string
+            protocol:
+              description: "Authentication is required for the selected protocol (default\
+                \ = HTTP).   \nhttp:HTTP traffic is matched and authentication is\
+                \ required.   \nftp:FTP traffic is matched and authentication is required.\
+                \   \nsocks:SOCKS traffic is matched and authentication is required.\
+                \   \nssh:SSH traffic is matched and authentication is required."
+              enum:
+              - http
+              - ftp
+              - socks
+              - ssh
+              type: string
+            srcaddr:
+              description: Authentication is required for the selected IPv4 source
+                address.
+              items:
+                properties:
+                  name:
+                    description: Address name.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            srcaddr6:
+              description: Authentication is required for the selected IPv6 source
+                address.
+              items:
+                properties:
+                  name:
+                    description: Address name.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            sso-auth-method:
+              description: Select a single-sign on (SSO) authentication method.
+              maxLength: 35
+              type: string
+            status:
+              description: "Enable/disable this authentication rule.   \nenable:Enable\
+                \ this authentication rule.   \ndisable:Disable this authentication\
+                \ rule."
+              enum:
+              - enable
+              - disable
+              type: string
+            transaction-based:
+              description: "Enable/disable transaction based authentication (default\
+                \ = disable).   \nenable:Enable transaction based authentication.\
+                \   \ndisable:Disable transaction based authentication."
+              enum:
+              - enable
+              - disable
+              type: string
+            web-auth-cookie:
+              description: "Enable/disable Web authentication cookies (default = disable).\
+                \   \nenable:Enable Web authentication cookie.   \ndisable:Disable\
+                \ Web authentication cookie."
+              enum:
+              - enable
+              - disable
+              type: string
+            web-portal:
+              description: "Enable/disable web portal for proxy transparent policy\
+                \ (default = enable).   \nenable:Enable web-portal.   \ndisable:Disable\
+                \ web-portal."
+              enum:
+              - enable
+              - disable
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: authgrp"
+      tags:
+      - authentication/rule
+  /authentication/rule/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: authgrp"
+      tags:
+      - authentication/rule
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              active-auth-method:
+                description: Select an active authentication method.
+                maxLength: 35
+                type: string
+              comments:
+                description: Comment.
+                maxLength: 1023
+                type: string
+              ip-based:
+                description: "Enable/disable IP-based authentication. When enabled,\
+                  \ previously authenticated users from the same IP address will be\
+                  \ exempted.   \nenable:Enable IP-based authentication.   \ndisable:Disable\
+                  \ IP-based authentication."
+                enum:
+                - enable
+                - disable
+                type: string
+              name:
+                description: Authentication rule name.
+                maxLength: 35
+                type: string
+              protocol:
+                description: "Authentication is required for the selected protocol\
+                  \ (default = HTTP).   \nhttp:HTTP traffic is matched and authentication\
+                  \ is required.   \nftp:FTP traffic is matched and authentication\
+                  \ is required.   \nsocks:SOCKS traffic is matched and authentication\
+                  \ is required.   \nssh:SSH traffic is matched and authentication\
+                  \ is required."
+                enum:
+                - http
+                - ftp
+                - socks
+                - ssh
+                type: string
+              srcaddr:
+                description: Authentication is required for the selected IPv4 source
+                  address.
+                items:
+                  properties:
+                    name:
+                      description: Address name.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              srcaddr6:
+                description: Authentication is required for the selected IPv6 source
+                  address.
+                items:
+                  properties:
+                    name:
+                      description: Address name.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+              sso-auth-method:
+                description: Select a single-sign on (SSO) authentication method.
+                maxLength: 35
+                type: string
+              status:
+                description: "Enable/disable this authentication rule.   \nenable:Enable\
+                  \ this authentication rule.   \ndisable:Disable this authentication\
+                  \ rule."
+                enum:
+                - enable
+                - disable
+                type: string
+              transaction-based:
+                description: "Enable/disable transaction based authentication (default\
+                  \ = disable).   \nenable:Enable transaction based authentication.\
+                  \   \ndisable:Disable transaction based authentication."
+                enum:
+                - enable
+                - disable
+                type: string
+              web-auth-cookie:
+                description: "Enable/disable Web authentication cookies (default =\
+                  \ disable).   \nenable:Enable Web authentication cookie.   \ndisable:Disable\
+                  \ Web authentication cookie."
+                enum:
+                - enable
+                - disable
+                type: string
+              web-portal:
+                description: "Enable/disable web portal for proxy transparent policy\
+                  \ (default = enable).   \nenable:Enable web-portal.   \ndisable:Disable\
+                  \ web-portal."
+                enum:
+                - enable
+                - disable
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: authgrp"
+      tags:
+      - authentication/rule
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            active-auth-method:
+              description: Select an active authentication method.
+              maxLength: 35
+              type: string
+            comments:
+              description: Comment.
+              maxLength: 1023
+              type: string
+            ip-based:
+              description: "Enable/disable IP-based authentication. When enabled,\
+                \ previously authenticated users from the same IP address will be\
+                \ exempted.   \nenable:Enable IP-based authentication.   \ndisable:Disable\
+                \ IP-based authentication."
+              enum:
+              - enable
+              - disable
+              type: string
+            name:
+              description: Authentication rule name.
+              maxLength: 35
+              type: string
+            protocol:
+              description: "Authentication is required for the selected protocol (default\
+                \ = HTTP).   \nhttp:HTTP traffic is matched and authentication is\
+                \ required.   \nftp:FTP traffic is matched and authentication is required.\
+                \   \nsocks:SOCKS traffic is matched and authentication is required.\
+                \   \nssh:SSH traffic is matched and authentication is required."
+              enum:
+              - http
+              - ftp
+              - socks
+              - ssh
+              type: string
+            srcaddr:
+              description: Authentication is required for the selected IPv4 source
+                address.
+              items:
+                properties:
+                  name:
+                    description: Address name.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            srcaddr6:
+              description: Authentication is required for the selected IPv6 source
+                address.
+              items:
+                properties:
+                  name:
+                    description: Address name.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+            sso-auth-method:
+              description: Select a single-sign on (SSO) authentication method.
+              maxLength: 35
+              type: string
+            status:
+              description: "Enable/disable this authentication rule.   \nenable:Enable\
+                \ this authentication rule.   \ndisable:Disable this authentication\
+                \ rule."
+              enum:
+              - enable
+              - disable
+              type: string
+            transaction-based:
+              description: "Enable/disable transaction based authentication (default\
+                \ = disable).   \nenable:Enable transaction based authentication.\
+                \   \ndisable:Disable transaction based authentication."
+              enum:
+              - enable
+              - disable
+              type: string
+            web-auth-cookie:
+              description: "Enable/disable Web authentication cookies (default = disable).\
+                \   \nenable:Enable Web authentication cookie.   \ndisable:Disable\
+                \ Web authentication cookie."
+              enum:
+              - enable
+              - disable
+              type: string
+            web-portal:
+              description: "Enable/disable web portal for proxy transparent policy\
+                \ (default = enable).   \nenable:Enable web-portal.   \ndisable:Disable\
+                \ web-portal."
+              enum:
+              - enable
+              - disable
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: authgrp"
+      tags:
+      - authentication/rule
+  /authentication/scheme:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              domain-controller:
+                description: Domain controller setting.
+                maxLength: 35
+                type: string
+              fsso-agent-for-ntlm:
+                description: FSSO agent to use for NTLM authentication.
+                maxLength: 35
+                type: string
+              fsso-guest:
+                description: "Enable/disable user fsso-guest authentication (default\
+                  \ = disable).   \nenable:Enable user fsso-guest authentication.\
+                  \   \ndisable:Disable user fsso-guest authentication."
+                enum:
+                - enable
+                - disable
+                type: string
+              kerberos-keytab:
+                description: Kerberos keytab setting.
+                maxLength: 35
+                type: string
+              method:
+                description: "Authentication methods (default = basic).   \nntlm:NTLM\
+                  \ authentication.   \nbasic:Basic HTTP authentication.   \ndigest:Digest\
+                  \ HTTP authentication.   \nform:Form-based HTTP authentication.\
+                  \   \nnegotiate:Negotiate authentication.   \nfsso:Fortinet Single\
+                  \ Sign-On (FSSO) authentication.   \nrsso:RADIUS Single Sign-On\
+                  \ (RSSO) authentication.   \nssh-publickey:Public key based SSH\
+                  \ authentication."
+                enum:
+                - ntlm
+                - basic
+                - digest
+                - form
+                - negotiate
+                - fsso
+                - rsso
+                - ssh-publickey
+                type: string
+              name:
+                description: Authentication scheme name.
+                maxLength: 35
+                type: string
+              negotiate-ntlm:
+                description: "Enable/disable negotiate authentication for NTLM (default\
+                  \ = disable).   \nenable:Enable negotiate authentication for NTLM.\
+                  \   \ndisable:Disable negotiate authentication for NTLM."
+                enum:
+                - enable
+                - disable
+                type: string
+              require-tfa:
+                description: "Enable/disable two-factor authentication (default =\
+                  \ disable).   \nenable:Enable two-factor authentication.   \ndisable:Disable\
+                  \ two-factor authentication."
+                enum:
+                - enable
+                - disable
+                type: string
+              ssh-ca:
+                description: SSH CA name.
+                maxLength: 35
+                type: string
+              user-database:
+                description: Authentication server to contain user information; "local"
+                  (default) or "123" (for LDAP).
+                items:
+                  properties:
+                    name:
+                      description: Authentication server name.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: authgrp"
+      tags:
+      - authentication/scheme
+    post:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            domain-controller:
+              description: Domain controller setting.
+              maxLength: 35
+              type: string
+            fsso-agent-for-ntlm:
+              description: FSSO agent to use for NTLM authentication.
+              maxLength: 35
+              type: string
+            fsso-guest:
+              description: "Enable/disable user fsso-guest authentication (default\
+                \ = disable).   \nenable:Enable user fsso-guest authentication.  \
+                \ \ndisable:Disable user fsso-guest authentication."
+              enum:
+              - enable
+              - disable
+              type: string
+            kerberos-keytab:
+              description: Kerberos keytab setting.
+              maxLength: 35
+              type: string
+            method:
+              description: "Authentication methods (default = basic).   \nntlm:NTLM\
+                \ authentication.   \nbasic:Basic HTTP authentication.   \ndigest:Digest\
+                \ HTTP authentication.   \nform:Form-based HTTP authentication.  \
+                \ \nnegotiate:Negotiate authentication.   \nfsso:Fortinet Single Sign-On\
+                \ (FSSO) authentication.   \nrsso:RADIUS Single Sign-On (RSSO) authentication.\
+                \   \nssh-publickey:Public key based SSH authentication."
+              enum:
+              - ntlm
+              - basic
+              - digest
+              - form
+              - negotiate
+              - fsso
+              - rsso
+              - ssh-publickey
+              type: string
+            name:
+              description: Authentication scheme name.
+              maxLength: 35
+              type: string
+            negotiate-ntlm:
+              description: "Enable/disable negotiate authentication for NTLM (default\
+                \ = disable).   \nenable:Enable negotiate authentication for NTLM.\
+                \   \ndisable:Disable negotiate authentication for NTLM."
+              enum:
+              - enable
+              - disable
+              type: string
+            require-tfa:
+              description: "Enable/disable two-factor authentication (default = disable).\
+                \   \nenable:Enable two-factor authentication.   \ndisable:Disable\
+                \ two-factor authentication."
+              enum:
+              - enable
+              - disable
+              type: string
+            ssh-ca:
+              description: SSH CA name.
+              maxLength: 35
+              type: string
+            user-database:
+              description: Authentication server to contain user information; "local"
+                (default) or "123" (for LDAP).
+              items:
+                properties:
+                  name:
+                    description: Authentication server name.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_clone_: Clone this\
+          \ specific resource.\nWhen *action=clone* is set, the extra parameters *nkey*\
+          \ must be provided.\n__*Note:*__ If this parameter is provided when not\
+          \ supported, the action will be ignored and an \u201Cinvalid request\u201D\
+          \ error will be returned.\n"
+        enum:
+        - clone
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: ' If *action=clone*, use *nkey* to specify the ID for the new
+          resource to be created.
+
+          For example, to clone `address1` to `address1_clone`, use:
+
+          __action=clone&nkey=address1_clone__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *clone*.
+
+          '
+        in: query
+        name: nkey
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Create object(s) in this table.\n Access Group: authgrp"
+      tags:
+      - authentication/scheme
+  /authentication/scheme/{name}:
+    delete:
+      parameters:
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Delete this specific resource.\n Access Group: authgrp"
+      tags:
+      - authentication/scheme
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - description: 'default: Return the CLI default values for this object type.
+
+          schema: Return the CLI schema for this object type.
+
+          revision: Return the CMDB revision for this object type.
+
+          transaction-list: List all configuration transaction(s).
+
+          '
+        enum:
+        - default
+        - schema
+        - revision
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              domain-controller:
+                description: Domain controller setting.
+                maxLength: 35
+                type: string
+              fsso-agent-for-ntlm:
+                description: FSSO agent to use for NTLM authentication.
+                maxLength: 35
+                type: string
+              fsso-guest:
+                description: "Enable/disable user fsso-guest authentication (default\
+                  \ = disable).   \nenable:Enable user fsso-guest authentication.\
+                  \   \ndisable:Disable user fsso-guest authentication."
+                enum:
+                - enable
+                - disable
+                type: string
+              kerberos-keytab:
+                description: Kerberos keytab setting.
+                maxLength: 35
+                type: string
+              method:
+                description: "Authentication methods (default = basic).   \nntlm:NTLM\
+                  \ authentication.   \nbasic:Basic HTTP authentication.   \ndigest:Digest\
+                  \ HTTP authentication.   \nform:Form-based HTTP authentication.\
+                  \   \nnegotiate:Negotiate authentication.   \nfsso:Fortinet Single\
+                  \ Sign-On (FSSO) authentication.   \nrsso:RADIUS Single Sign-On\
+                  \ (RSSO) authentication.   \nssh-publickey:Public key based SSH\
+                  \ authentication."
+                enum:
+                - ntlm
+                - basic
+                - digest
+                - form
+                - negotiate
+                - fsso
+                - rsso
+                - ssh-publickey
+                type: string
+              name:
+                description: Authentication scheme name.
+                maxLength: 35
+                type: string
+              negotiate-ntlm:
+                description: "Enable/disable negotiate authentication for NTLM (default\
+                  \ = disable).   \nenable:Enable negotiate authentication for NTLM.\
+                  \   \ndisable:Disable negotiate authentication for NTLM."
+                enum:
+                - enable
+                - disable
+                type: string
+              require-tfa:
+                description: "Enable/disable two-factor authentication (default =\
+                  \ disable).   \nenable:Enable two-factor authentication.   \ndisable:Disable\
+                  \ two-factor authentication."
+                enum:
+                - enable
+                - disable
+                type: string
+              ssh-ca:
+                description: SSH CA name.
+                maxLength: 35
+                type: string
+              user-database:
+                description: Authentication server to contain user information; "local"
+                  (default) or "123" (for LDAP).
+                items:
+                  properties:
+                    name:
+                      description: Authentication server name.
+                      maxLength: 79
+                      type: string
+                  type: object
+                maxItems: null
+                type: array
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select a specific entry from a CLI table.\n Access Group: authgrp"
+      tags:
+      - authentication/scheme
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            domain-controller:
+              description: Domain controller setting.
+              maxLength: 35
+              type: string
+            fsso-agent-for-ntlm:
+              description: FSSO agent to use for NTLM authentication.
+              maxLength: 35
+              type: string
+            fsso-guest:
+              description: "Enable/disable user fsso-guest authentication (default\
+                \ = disable).   \nenable:Enable user fsso-guest authentication.  \
+                \ \ndisable:Disable user fsso-guest authentication."
+              enum:
+              - enable
+              - disable
+              type: string
+            kerberos-keytab:
+              description: Kerberos keytab setting.
+              maxLength: 35
+              type: string
+            method:
+              description: "Authentication methods (default = basic).   \nntlm:NTLM\
+                \ authentication.   \nbasic:Basic HTTP authentication.   \ndigest:Digest\
+                \ HTTP authentication.   \nform:Form-based HTTP authentication.  \
+                \ \nnegotiate:Negotiate authentication.   \nfsso:Fortinet Single Sign-On\
+                \ (FSSO) authentication.   \nrsso:RADIUS Single Sign-On (RSSO) authentication.\
+                \   \nssh-publickey:Public key based SSH authentication."
+              enum:
+              - ntlm
+              - basic
+              - digest
+              - form
+              - negotiate
+              - fsso
+              - rsso
+              - ssh-publickey
+              type: string
+            name:
+              description: Authentication scheme name.
+              maxLength: 35
+              type: string
+            negotiate-ntlm:
+              description: "Enable/disable negotiate authentication for NTLM (default\
+                \ = disable).   \nenable:Enable negotiate authentication for NTLM.\
+                \   \ndisable:Disable negotiate authentication for NTLM."
+              enum:
+              - enable
+              - disable
+              type: string
+            require-tfa:
+              description: "Enable/disable two-factor authentication (default = disable).\
+                \   \nenable:Enable two-factor authentication.   \ndisable:Disable\
+                \ two-factor authentication."
+              enum:
+              - enable
+              - disable
+              type: string
+            ssh-ca:
+              description: SSH CA name.
+              maxLength: 35
+              type: string
+            user-database:
+              description: Authentication server to contain user information; "local"
+                (default) or "123" (for LDAP).
+              items:
+                properties:
+                  name:
+                    description: Authentication server name.
+                    maxLength: 79
+                    type: string
+                type: object
+              maxItems: null
+              type: array
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      - description: mkey
+        in: path
+        name: name
+        required: true
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: authgrp"
+      tags:
+      - authentication/scheme
+  /authentication/setting:
+    get:
+      parameters:
+      - description: Enable to include datasource information for each linked object.
+        in: query
+        name: datasource
+        required: false
+        type: boolean
+      - description: Starting entry index.
+        in: query
+        name: start
+        required: false
+        type: integer
+      - description: Maximum number of entries to return.
+        in: query
+        name: count
+        required: false
+        type: integer
+      - description: Enable to include meta information about each object (type id,
+          references, etc).
+        in: query
+        name: with_meta
+        required: false
+        type: boolean
+      - description: Enable to include a checksum of each object's contents.
+        in: query
+        name: with_contents_hash
+        required: false
+        type: boolean
+      - description: Enable to call CLI skip operator to hide skipped properties.
+        in: query
+        name: skip
+        required: false
+        type: boolean
+      - collectionFormat: pipes
+        description: List of property names to include in results, separated by |
+          (i.e. policyid|srcintf).
+        in: query
+        items:
+          type: string
+        name: format
+        required: false
+        type: array
+      - collectionFormat: multi
+        description: "Filtering multiple key/value pairs\nOperator     |   Description\n\
+          ==     |   Case insensitive match with pattern.\n!=     |    Does not match\
+          \ with pattern (case insensitive).\n=@     |    Pattern found in object\
+          \ value (case insensitive).\n!@     |    \uFEFFPattern not\uFEFF found in\
+          \ object value (case insensitive).\n<=     |    Value must be less than\
+          \ or equal to \uFEFFpattern\uFEFF.\n<     |    Value must be less than pattern\uFEFF\
+          .\n.>=    |    Value must be greater than or equal to \uFEFFpattern\uFEFF\
+          .\n.>     |    Value must be greater than \uFEFFpattern\uFEFF.\nLogical\
+          \ OR    |    Separate filters using commas ','\nLogical AND    |    Filter\
+          \ strings can be combined to create logical AND queries by including multiple\
+          \ filters in the request.\nCombining AND and OR    |    You can combine\
+          \ AND and OR filters together to create more complex filters.\n"
+        in: query
+        items:
+          type: string
+        name: filter
+        required: false
+        type: array
+      - description: If present, objects will be filtered on property with this name.
+        in: query
+        name: key
+        required: false
+        type: string
+      - description: If present, objects will be filtered on property with this value.
+        in: query
+        name: pattern
+        required: false
+        type: string
+      - description: Scope [global|vdom|both*]
+        in: query
+        name: scope
+        required: false
+        type: string
+      - description: Exclude properties/objects with default value
+        in: query
+        name: exclude-default-values
+        required: false
+        type: boolean
+      - description: 'default: Return the CLI default values for entire CLI tree.
+
+          meta: Return meta data for a specific object, table, or the entire CLI tree.
+
+          schema: Return schema for entire CLI tree.
+
+          '
+        enum:
+        - default
+        - schema
+        in: query
+        name: action
+        required: false
+        type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+          schema:
+            properties:
+              active-auth-scheme:
+                description: Active authentication method (scheme name).
+                maxLength: 35
+                type: string
+              auth-https:
+                description: "Enable/disable redirecting HTTP user authentication\
+                  \ to HTTPS.   \nenable:Enable setting.   \ndisable:Disable setting."
+                enum:
+                - enable
+                - disable
+                type: string
+              captive-portal:
+                description: Captive portal host name.
+                maxLength: 255
+                type: string
+              captive-portal-ip:
+                description: Captive portal IP address.
+                format: ipv4
+                type: string
+              captive-portal-ip6:
+                description: Captive portal IPv6 address.
+                format: ipv6
+                type: string
+              captive-portal-port:
+                description: Captive portal port number (1 - 65535, default = 7830).
+                maximum: 65535
+                minimum: 1
+                type: integer
+              captive-portal-ssl-port:
+                description: Captive portal SSL port number (1 - 65535, default =
+                  7831).
+                maximum: 65535
+                minimum: 1
+                type: integer
+              captive-portal-type:
+                description: "Captive portal type.   \nfqdn:Use FQDN for captive portal.\
+                  \   \nip:Use an IP address for captive portal."
+                enum:
+                - fqdn
+                - ip
+                type: string
+              captive-portal6:
+                description: IPv6 captive portal host name.
+                maxLength: 255
+                type: string
+              sso-auth-scheme:
+                description: Single-Sign-On authentication method (scheme name).
+                maxLength: 35
+                type: string
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Select all entries in a CLI table.\n Access Group: authgrp"
+      tags:
+      - authentication/setting
+    put:
+      parameters:
+      - description: Possible parameters to go in the body for the request
+        in: body
+        name: body
+        required: true
+        schema:
+          properties:
+            active-auth-scheme:
+              description: Active authentication method (scheme name).
+              maxLength: 35
+              type: string
+            auth-https:
+              description: "Enable/disable redirecting HTTP user authentication to\
+                \ HTTPS.   \nenable:Enable setting.   \ndisable:Disable setting."
+              enum:
+              - enable
+              - disable
+              type: string
+            captive-portal:
+              description: Captive portal host name.
+              maxLength: 255
+              type: string
+            captive-portal-ip:
+              description: Captive portal IP address.
+              format: ipv4
+              type: string
+            captive-portal-ip6:
+              description: Captive portal IPv6 address.
+              format: ipv6
+              type: string
+            captive-portal-port:
+              description: Captive portal port number (1 - 65535, default = 7830).
+              maximum: 65535
+              minimum: 1
+              type: integer
+            captive-portal-ssl-port:
+              description: Captive portal SSL port number (1 - 65535, default = 7831).
+              maximum: 65535
+              minimum: 1
+              type: integer
+            captive-portal-type:
+              description: "Captive portal type.   \nfqdn:Use FQDN for captive portal.\
+                \   \nip:Use an IP address for captive portal."
+              enum:
+              - fqdn
+              - ip
+              type: string
+            captive-portal6:
+              description: IPv6 captive portal host name.
+              maxLength: 255
+              type: string
+            sso-auth-scheme:
+              description: Single-Sign-On authentication method (scheme name).
+              maxLength: 35
+              type: string
+      - collectionFormat: csv
+        description: 'Specify the Virtual Domain(s) from which results are returned
+          or changes are applied to. If this parameter is not provided, the management
+          VDOM will be used. If the admin does not have access to the VDOM, a permission
+          error will be returned.
+
+          The URL parameter is one of:
+
+          vdom=root (Single VDOM)
+
+          vdom=vdom1,vdom2 (Multiple VDOMs)
+
+          vdom=* (All VDOMs)
+
+          '
+        in: query
+        items:
+          type: string
+        name: vdom
+        required: false
+        type: array
+      - description: "If supported, an action can be specified.\n_move_: Move this\
+          \ specific resource.\nWhen *action=move* is set, one of the extra parameters\
+          \ (*before*, *after*) must be provided.\n__*Note:*__ If this parameter is\
+          \ provided when not supported, the action will be ignored and an \u201C\
+          invalid request\u201D error will be returned.\n"
+        enum:
+        - move
+        in: query
+        name: action
+        required: false
+        type: string
+      - description: 'If *action=move*, use *before* to specify the ID of the resource
+          that this resource will be moved before.
+
+          For example, to move `object 1` to before `object 2`, use:
+
+          __action=move&before=2__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: before
+        required: false
+        type: string
+      - description: 'If *action=move*, use *after* to specify the ID of the resource
+          that this resource will be moved after.
+
+          For example, to move `object 1` to after `object 3`, use:
+
+          __action=move&after=3__
+
+          __*Note:*__ This parameter can only be used when the *action* parameter
+          is set to *move*.
+
+          '
+        in: query
+        name: after
+        required: false
+        type: string
+      responses:
+        '200':
+          description: 'OK: Request returns successful'
+        '400':
+          description: 'Bad Request: Request cannot be processed by the API'
+        '401':
+          description: 'Not Authorized: Request without successful login session'
+        '403':
+          description: 'Forbidden: Request is missing CSRF token or administrator
+            is missing access profile permissions.'
+        '404':
+          description: 'Resource Not Found: Unable to find the specified resource.'
+        '405':
+          description: 'Method Not Allowed: Specified HTTP method is not allowed for
+            this resource. '
+        '413':
+          description: 'Request Entity Too Large: Request cannot be processed due
+            to large entity '
+        '424':
+          description: 'Failed Dependency: Fail dependency can be duplicate resource,
+            missing required parameter, missing required attribute, invalid attribute
+            value'
+        '429':
+          description: 'Access temporarily blocked: Maximum failed authentications
+            reached. The offended source is temporarily blocked for certain amount
+            of time.'
+        '500':
+          description: 'Internal Server Error: Internal error when processing the
+            request '
+      summary: "Update this specific resource.\n Access Group: authgrp"
+      tags:
+      - authentication/setting
+produces:
+- application/json
+schemes:
+- https
+security:
+- APIKeyQueryParam: []
+securityDefinitions:
+  APIKeyQueryParam:
+    in: query
+    name: access_token
+    type: apiKey
+swagger: '2.0'
+tags:
+- description: Configure Authentication Rules.
+  name: authentication/rule
+- description: Configure Authentication Schemes.
+  name: authentication/scheme
+- description: Configure authentication setting.
+  name: authentication/setting

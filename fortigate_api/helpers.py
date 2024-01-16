@@ -1,19 +1,159 @@
 """Helper functions."""
 
-import os
 import time
-from datetime import datetime
+from operator import attrgetter
 from urllib import parse
 from urllib.parse import urlencode, urlparse, parse_qs, ParseResult
 
-from vhelpers import vdict
+from requests import Response
+from vhelpers import vdict, vlist
 
-from fortigate_api.types_ import Any, DAny, IStr, LStr, SDate, TLists
+from fortigate_api.types_ import Any, DAny, SeqStr, LStr, LResponse
+from fortigate_api.types_ import StrInt, UStr, TLists, T3Str, T2Str
+
+
+# ========================= scope app model ==========================
+
+
+def scope_names(scope: str) -> T3Str:
+    """Create class name for scope.
+    :example:
+        scope_names("cmdb") -> "cmdb", "cmdb_s", "CmdbS"
+    """
+    scope_name = part_to_attr(scope)
+    scope_class = scope.capitalize() + "S"
+    scope_file = scope + "_s"
+    return scope_name, scope_file, scope_class
+
+
+def app_names(scope: str, app: str) -> T3Str:
+    """Create class name for app.
+    :example:
+        app_names("cmdb", "firewall") -> "firewall", "firewall_c", "FirewallC"
+    """
+    scope_name = part_to_attr(scope)
+    app_name = part_to_attr(app)
+
+    scope_char = scope_name[0].upper()
+    app_class = "".join([s.capitalize() for s in app_name.split("_")])
+    app_class += scope_char
+    app_file = app_name + "_" + scope_char.lower()
+    return app_name, app_file, app_class
+
+
+def model_names(scope: str, app: str, model: str) -> T2Str:
+    """Create class name for model.
+    :example:
+        model_names("cmdb", "firewall", "address") -> address, "AddressFC"
+    """
+    scope_name = part_to_attr(scope)
+    app_name = part_to_attr(app)
+    model_name = part_to_attr(model)
+
+    reserved_keywords = ["global"]
+    if model_name in reserved_keywords:
+        model_name += "_"
+    scope_char = scope_name[0].upper()
+    app_char = "".join([s[0] for s in app_name.split("_")])
+    app_char = app_char.capitalize()
+    model_class = "".join([s.capitalize() for s in model_name.split("_")])
+    if model_class[0].isdigit():
+        model_class = f"_{model_class}"
+    model_class = model_class + app_char + scope_char
+    return model_name, model_class
+
+
+def part_to_attr(part: str) -> str:
+    """Convert path part to attribute name.
+
+    :param part: The path part to be converted.
+
+    :return: The converted attribute name.
+
+    :example:
+        part_to_attr("firewall.ssh") -> "firewall_ssh"
+    """
+    attr = part.lower()
+    items = vlist.split(attr, ignore="_")
+    attr = "_".join(items)
+    if attr[0].isdigit():
+        attr = f"_{attr}"
+    return attr
+
+
+def attr_to_app(attr: str) -> str:
+    """Convert attribute name to app name.
+
+    :param attr: The attribute name to be converted.
+
+    :return: The converted app name.
+
+    :example:
+        attr_to_app("firewall_ssh") -> "firewall.ssh"
+    """
+    return attr.replace("_", ".")
+
+
+def attr_to_model(attr: str) -> str:
+    """Convert attribute name to model name.
+
+    :param attr: The attribute name to be converted.
+
+    :return: The converted model name.
+
+    :example:
+        attr_to_model("local_ca") -> "local-ca"
+    """
+    return attr.replace("_", "-")
+
+
+def path_to_attrs(path: str) -> T3Str:
+    """Convert path scope/app/model to attribute names.
+
+    :param path: The path to be converted.
+
+    :return: Tuple of converted attribute names.
+
+    :example:
+        path_to_attrs("/cmdb/firewall.ssh/local-ca") -> "cmdb", "firewall_ssh", "local_ca"
+    """
+    scope, app, model = path_to_parts(path)
+    app = part_to_attr(app)
+    model = part_to_attr(model)
+    return scope, app, model
+
+
+def path_to_parts(path: str) -> T3Str:
+    """Convert path scope/app/model to path parts.
+
+    :param path: The path to be converted.
+
+    :return: Tuple of converted part names.
+
+    :example:
+        path_to_parts("/cmdb/firewall.ssh/local-ca") -> "cmdb", "firewall.ssh", local-ca
+    """
+    path = path.strip("/")
+    if path.startswith("api/v2/"):
+        path = path.replace("api/v2/", "", 1)
+    items = path.split("/")
+    if len(items) == 3:
+        scope = items[0]
+        app = items[1]
+        model = items[2]
+    elif len(items) == 2:
+        scope = ""
+        app = items[0]
+        model = items[1]
+    else:
+        raise ValueError(f"Invalid {path=}.")
+    return scope, app, model
 
 
 # =============================== dict ===============================
 
-def check_mandatory(keys: IStr, **kwargs) -> None:
+
+def check_mandatory(keys: SeqStr, **kwargs) -> None:
     """Check all of `keys` are mandatory in `kwargs`.
 
     :param keys: Interested keys, all of them should be in `kwargs`.
@@ -28,7 +168,7 @@ def check_mandatory(keys: IStr, **kwargs) -> None:
         raise KeyError(f"Mandatory {keys_absent=} in {list(kwargs)}.")
 
 
-def check_only_one(keys: IStr, **kwargs) -> None:
+def check_only_one(keys: SeqStr, **kwargs) -> None:
     """Check only one of keys should be in `kwargs`.
 
     :param keys: Interested keys, only one of them should be in `kwargs`.
@@ -39,10 +179,10 @@ def check_only_one(keys: IStr, **kwargs) -> None:
     allowed = set(kwargs)
     intersection = keys1.intersection(allowed)
     if len(intersection) > 1:
-        raise KeyError(f"Expected only one key, keys={intersection} are not allowed in {allowed}.")
+        raise KeyError(f"Expected only one key, {intersection} are not allowed in {allowed}.")
 
 
-def check_one_of(keys: IStr, **kwargs) -> None:
+def check_one_of(keys: SeqStr, **kwargs) -> None:
     """Check one of key is mandatory in `kwargs`.
 
     :param keys: Interested keys, one of them should be in `kwargs`.
@@ -57,33 +197,17 @@ def check_one_of(keys: IStr, **kwargs) -> None:
     raise KeyError(f"Mandatory one of {keys=} in {list(kwargs)}.")
 
 
-def get_quoted(key: str, **kwargs) -> str:
-    """Get mandatory key/value from `kwargs` and return quoted value as a string.
-
-    :param key: The key to retrieve the value from `kwargs`.
-    :param kwargs: The keyword arguments containing the key/value pairs.
-    :return: The quoted value as a string.
-    """
-    check_mandatory(keys=[key], **kwargs)
-    value = str(kwargs[key])
-    return parse.quote(string=value, safe="")
-
-
-def pop_int(key: str, data: DAny) -> int:
-    """Pop key/value from `data` and return value as an integer.
-
-    If key is absent in data return zero.
-
-    :param key: The `key` to be popped from `data`.
-    :param data: The dictionary from which the key is to be popped.
-    :return: The value as integer. Update `data`, remove `key`.
-    """
-    value = vdict.pop(key, data)
-    if value is None:
-        return 0
-    if not str(value).isdigit():
-        raise TypeError(f"{key=} {value=} {int} expected.")
-    return int(value)
+# noinspection PyShadowingBuiltins
+def check_uid_filter(
+    uid: StrInt = "",
+    filter: UStr = "",  # pylint: disable=redefined-builtin
+) -> None:
+    """Check `uid` and `filter` parameters."""
+    params = ["uid", "filter"]
+    if not (uid or filter):
+        raise ValueError(f"One of {params} is required.")
+    if uid and filter:
+        raise ValueError(f"Only one of {params} is expected.")
 
 
 def pop_lstr(key: str, data: DAny) -> LStr:
@@ -108,72 +232,15 @@ def pop_lstr(key: str, data: DAny) -> LStr:
     return list(values)
 
 
-def pop_str(key: str, data: DAny) -> str:
-    """Pop key/value from `data` and return value as a string.
-
-    If key is absent in data return empty string.
-
-    :param key: The `key` to be popped from `data`.
-    :param data: The dictionary from which the key is to be popped.
-    :return: The value as a string. Update `data`, remove `key`.
-    """
-    return str(vdict.pop(key, data) or "")
-
-
-def pop_quoted(key: str, data: DAny) -> str:
-    """Pop key/value from `data` and return quoted value as a string.
-
-    If key is absent in data return empty string.
-
-    :param key: The `key` to be popped from `data`.
-    :param data: The dictionary from which the key is to be popped.
-    :return: The quoted value as a string. Update `data`, remove `key`.
-    """
-    value: str = pop_str(key, data)
-    return parse.quote(string=value, safe="")
-
-
 # =============================== str ================================
 
-def attr_to_class(attr: str) -> str:
-    """Replace lower-case attribute name camel-case class name.
 
-    :param attr: Attribute name.
-
-    :return: class name.
-
-    :example: attr_to_class("address_group") -> "AddressGroup"
-    """
-    return "".join([s.capitalize() for s in attr.split("_")])
-
-
-def class_to_attr(word: str) -> str:
-    """Replace upper character with underscore and lower.
-
-    :param word: The word to be modified.
-
-    :return: The modified word.
-
-    :example: replace_upper("IpAddresses") -> "ip_addresses"
-    """
-    if not word:
-        return ""
-    word = word[0].lower() + word[1:]
-    new_word = ""
-    for char in word:
-        if char.isupper():
-            new_word += "_" + char.lower()
-        else:
-            new_word += char
-    return new_word
-
-
-def make_url(url: str, **params) -> str:
+def join_url_params(url: str, **params) -> str:
     """Add params to URL.
 
-    :param url: URL with old params
-    :param params: New params
-    :return: URL with old and new params
+    :param url: URL with old params.
+    :param params: New params.
+    :return: URL with old and new params.
 
     :example:
         url: "https://fomain.com?a=a"
@@ -194,7 +261,10 @@ def quote(string: Any) -> str:
     :param string: Line to by quoted
     :example: "10.0.0.0/8" > "10.0.0.0%2F8"
     """
-    return parse.quote(string=str(string), safe="")
+    if string is None:
+        return ""
+    string = str(string)
+    return parse.quote(string=string, safe="")
 
 
 def url_to_app_model(url: str) -> str:
@@ -215,23 +285,6 @@ def url_to_app_model(url: str) -> str:
     return f"{app}/{model}"
 
 
-def url_to_model(url: str) -> str:
-    """Parse model name from the URL.
-
-    :param url: The URL to parse.
-    :return: The model name parsed from the URL.
-    :example:
-        url_to_model("https://domain.com/api/v2/cmdb/firewall/policy/1") -> "policy"
-    """
-    url_o: ParseResult = urlparse(url)
-    path = url_o.path.strip("/")
-    items = path.split("/")
-    if len(items) <= 4:
-        return ""
-    model = items[4]
-    return model
-
-
 def url_to_uid(url: str) -> str:
     """Parse UID name from the URL.
 
@@ -249,7 +302,41 @@ def url_to_uid(url: str) -> str:
     return model
 
 
+def rst_code(text: str, code: str = "python") -> str:
+    """Wrap text to restructuredtext code pyton."""
+    tab = "    "
+    lines = [
+        f".. code:: {code}",
+        "",
+        *[f"{tab}{s}" for s in text.splitlines()],
+        "",
+    ]
+    return "\n".join(lines)
+
+
+# ============================= unsorted ==============================
+
+
+def highest_response(responses: LResponse) -> Response:
+    """Return Response object with the highest status_code
+
+    :param responses: List of Response objects.
+    :type responses: List[Response]
+
+    :return: Response with the highest (worst) status_code or <Response [404]>.
+        If no objects have been found, return <Response [404]>.
+    :rtype: Response
+    """
+    if responses:
+        responses = sorted(responses, key=attrgetter("status_code"))
+        return responses[-1]
+    response = Response()
+    response.status_code = 404
+    return response
+
+
 # ============================= wrapper ==============================
+
 
 def time_spent(func):
     """Wrap measure function execution time."""
@@ -269,30 +356,3 @@ def time_spent(func):
         return _return
 
     return wrap
-
-
-# ============================= unsorted =============================
-
-def files_py(root: str) -> LStr:
-    """Paths to .py file."""
-    paths: LStr = []
-    for root_i, _, files_i in os.walk(root):
-        for file_ in files_i:
-            if file_.endswith(".py"):
-                path = os.path.join(root_i, file_)
-                paths.append(path)
-    return paths
-
-
-def last_modified_date(root: str) -> str:
-    """Paths to .py files with last modified dates."""
-    dates: SDate = set()
-    paths = files_py(root)
-    for path in paths:
-        stat = os.stat(path)
-        date_ = datetime.fromtimestamp(stat.st_mtime).date()
-        dates.add(date_)
-    if not dates:
-        return ""
-    date_max = max(dates)
-    return str(date_max)

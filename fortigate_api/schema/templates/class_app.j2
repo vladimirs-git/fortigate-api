@@ -1,0 +1,18 @@
+"""{{ docstring }}"""
+
+from fortigate_api.fortigate import FortiGate
+{%- for item in items %}
+from fortigate_api.{{ scope_name }}.{{ app_name }}.{{ item.model_name }} import {{ item.model_class }}
+{%- endfor %}
+
+
+class {{ app_class }}:
+    """{{ docstring }}"""
+
+    def __init__(self, fortigate: FortiGate, **kwargs):
+        """Init {{ app_class }}."""
+        {% for item in items %}
+        self.{{ item.model_name }} = {{ item.model_class }}(fortigate, **kwargs)
+        """:py:class:`.{{ item.model_class }}` {{ scope_name }}{{ item.path }}."""
+        {% endfor %}
+
