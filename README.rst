@@ -162,17 +162,4 @@ or from github.com repository
 
 ----------------------------------------------------------------------------------------
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
-
-----------------------------------------------------------------------------------------
-
-.. _`GitHub`: https://github.com/vladimirs-git/fortigate-api
-
-
 .. _`Read the Docs`: https://fortigate-api.readthedocs.io/en/latest/

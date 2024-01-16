@@ -17,7 +17,7 @@ Unreleased
 
 The package has been fully refactored.
 The skeleton has been changed to make it possible to implement any endpoint
-in a manner similar to REST API documentation.
+in a manner similar to `FortiOS REST API`_ documentation.
 
 Breaking changes
 ----------------
@@ -145,3 +145,8 @@ The behavior is the same as in the Fortigate PUT method.
 **Added:** `with` statement for FortigateAPI and Fortigate.
 
 **Fixed:** setup.py, ModuleNotFoundError: No module named requests.
+
+
+----------------------------------------------------------------------------------------
+
+.. _`FortiOS REST API`: https://fndn.fortinet.net/index.php?/fortiapi/1-fortios/
