@@ -62,12 +62,9 @@ or from github.com repository
     - Delete address from the Fortigate
     """
     
-    import logging
     from pprint import pprint
     
     from fortigate_api import FortiGateAPI
-    
-    logging.getLogger().setLevel(logging.DEBUG)
     
     HOST = "host"
     USERNAME = "username"
@@ -126,12 +123,9 @@ or from github.com repository
     - Delete address from the Fortigate
     """
     
-    import logging
     from pprint import pprint
     
     from fortigate_api import FortiGate
-    
-    logging.getLogger().setLevel(logging.DEBUG)
     
     HOST = "host"
     USERNAME = "username"
