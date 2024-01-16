@@ -9,11 +9,7 @@
 - Delete policy, address-group, addresses from the Fortigate (order is important)
 """
 
-import logging
-
 from fortigate_api import FortiGateAPI
-
-logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 USERNAME = "username"

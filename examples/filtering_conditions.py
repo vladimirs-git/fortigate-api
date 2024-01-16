@@ -10,11 +10,7 @@
 - Check addresses have been deleted
 """
 
-import logging
-
 from fortigate_api import FortiGateAPI
-
-logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 USERNAME = "username"

@@ -8,12 +8,9 @@
 - Check for presence of interface in the Fortigate
 """
 
-import logging
 from pprint import pprint
 
 from fortigate_api import FortiGateAPI
-
-logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 USERNAME = "username"

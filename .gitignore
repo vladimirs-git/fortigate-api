@@ -130,6 +130,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+#pypi
+.pypirc
+
 # Temp
 _notes/
 temp/

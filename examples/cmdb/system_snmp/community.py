@@ -11,11 +11,7 @@
 - Check for presence of snmp-community in the Fortigate
 """
 
-import logging
-
 from fortigate_api import FortiGateAPI
-
-logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 USERNAME = "username"

@@ -23,7 +23,7 @@ HOST = "host"
 USERNAME = "username"
 PASSWORD = "password"
 
-fgt = FortiGate(host=HOST, username=USERNAME, password=PASSWORD)
+fgt = FortiGate(host=HOST, username=USERNAME, password=PASSWORD, logging_error=True)
 fgt.login()  # login is optional
 
 # FortiGate.post() - Create fortigate-object in the Fortigate

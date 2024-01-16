@@ -26,7 +26,7 @@ HOST = "host"
 USERNAME = "username"
 PASSWORD = "password"
 
-api = FortiGateAPI(host=HOST, username=USERNAME, password=PASSWORD)
+api = FortiGateAPI(host=HOST, username=USERNAME, password=PASSWORD, logging_error=True)
 api.login()  # login is optional
 
 # Create address in the Fortigate

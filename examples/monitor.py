@@ -1,10 +1,14 @@
-"""Monitor examples."""
-import logging
+"""Monitor examples.
+
+- Get directory of monitor options (schema)
+- Get all ipv4 routes
+- Get static ipv4 routes
+- Get route to interested ip address
+"""
+
 from pprint import pprint
 
 from fortigate_api import FortiGate
-
-logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 USERNAME = "username"

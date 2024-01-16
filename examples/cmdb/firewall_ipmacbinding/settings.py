@@ -4,12 +4,9 @@
 - Format output data to return only required key values
 """
 
-import logging
 from pprint import pprint
 
 from fortigate_api import FortiGateAPI
-
-logging.getLogger().setLevel(logging.DEBUG)
 
 HOST = "host"
 USERNAME = "username"
