@@ -1,5 +1,6 @@
 """FortiGate examples.
 
+- Initialize FortiGate with optional parameters scheme=`https`, port=443
 - FortiGate.post() - Create fortigate-object in the Fortigate
 - FortiGate.get() - GetResponse object from the Fortigate
 - FortiGate.get_results() - Get list of fortigate-objects from the JSON results section
@@ -23,7 +24,15 @@ HOST = "host"
 USERNAME = "username"
 PASSWORD = "password"
 
-fgt = FortiGate(host=HOST, username=USERNAME, password=PASSWORD, logging_error=True)
+# Initialize FortiGate with optional parameters scheme=`https`, port=443
+fgt = FortiGate(
+    host=HOST,
+    username=USERNAME,
+    password=PASSWORD,
+    scheme="https",
+    port=443,
+    logging_error=True,
+)
 fgt.login()  # login is optional
 
 # FortiGate.post() - Create fortigate-object in the Fortigate

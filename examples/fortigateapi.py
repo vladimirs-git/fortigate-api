@@ -1,5 +1,6 @@
 """FortiGateAPI examples.
 
+- Initialize FortiGateAPI with optional parameters scheme=`https`, port=443
 - Create address in the Fortigate
 - Get address by name (unique identifier)
 - Update address data in the Fortigate
@@ -18,7 +19,15 @@ HOST = "host"
 USERNAME = "username"
 PASSWORD = "password"
 
-api = FortiGateAPI(host=HOST, username=USERNAME, password=PASSWORD, logging_error=True)
+# Initialize FortiGateAPI with optional parameters scheme=`https`, port=443
+api = FortiGateAPI(
+    host=HOST,
+    username=USERNAME,
+    password=PASSWORD,
+    scheme="https",
+    port=443,
+    logging_error=True,
+)
 api.login()  # login is optional
 
 # Create address in the Fortigate

@@ -1,6 +1,6 @@
 """api/v2/cmdb/firewall/address
 
-- Create address in the Fortigate
+- Create address in the Fortigate, in the default vdom root
 - Get all addresses from the Fortigate vdom root
 - Format output data to return only required key values
 - Get address by name (unique identifier)
@@ -12,7 +12,11 @@
 - Delete address from the Fortigate by name (unique identifier)
 - Delete addresses from the Fortigate by filter
 - Check for absence of address in the Fortigate
-- Get all addresses from the vdom
+
+VDOM
+- Create address in the Fortigate, in the custom vdom
+- Get all addresses from the custom vdom
+- Delete addresses from the custom vdom
 """
 
 import logging
@@ -29,7 +33,7 @@ PASSWORD = "password"
 api = FortiGateAPI(host=HOST, username=USERNAME, password=PASSWORD, logging_error=True)
 api.login()  # login is optional
 
-# Create address in the Fortigate
+# Create address in the Fortigate, in the default vdom root
 data = {
     "name": "ADDRESS",
     "obj-type": "ip",
@@ -98,9 +102,25 @@ print(f"address.is_exist {response}")  # address.is_exist False
 
 api.logout()
 
-# Get all addresses from the vdom="VDOM9"
+# VDOM
+# Create address in the Fortigate, in the custom vdom
 api = FortiGateAPI(host=HOST, username=USERNAME, password=PASSWORD, vdom="VDOM9")
+data = {
+    "name": "ADDRESS",
+    "obj-type": "ip",
+    "subnet": "127.0.0.100 255.255.255.252",
+    "type": "ipmask",
+}
+response = api.cmdb.firewall.address.create(data)
+print(f"address.create {response}")  # address.create <Response [200]>
+
+# Get all addresses from the custom vdom
+
 items = api.cmdb.firewall.address.get()
 print(f"addresses count={len(items)}")  # addresses count=10
+
+# Delete addresses from the custom vdom
+response = api.cmdb.firewall.address.delete("ADDRESS")
+print(f"address.delete {response}")  # address.delete <Response [200]>
 
 api.logout()
