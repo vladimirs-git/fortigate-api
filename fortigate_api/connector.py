@@ -73,7 +73,8 @@ class Connector:
             - `<Response [404]>` Object not found in the Fortigate.
         :rtype: Response
         """
-        _ = kwargs  # noqa todo extract uid key from kwargs (if uid not specified)
+        if not uid:
+            uid = str(kwargs.get(self.uid) or "")
         h.check_uid_filter(uid, filter)
         if filter:
             return self._delete_by_filter(filter)
@@ -101,25 +102,6 @@ class Connector:
             items = [item]
         return items
 
-    def update(self, data: DAny) -> Response:
-        """Update fortigate-object on the Fortigate.
-
-        :param dict data: Data of the fortigate-object to update.
-            More details can be found at https://fndn.fortinet.net for related ``PUT`` method.
-
-        :return: Session response.
-
-            - `<Response [200]>` Object successfully updated,
-            - `<Response [404]>` Object has not been updated.
-        :rtype: Response
-        """
-        uid = str(data[self.uid])
-        uid = h.quote(uid)
-        if not uid:
-            raise ValueError(f"{self.uid} value is required.")
-        url = f"{self.url}/{uid}"
-        return self.fortigate.put(url=url, data=data)
-
     def is_exist(self, uid: StrInt) -> bool:
         """Check if a fortigate-object exists in the Fortigate.
 
@@ -136,7 +118,21 @@ class Connector:
         response = self.fortigate.exist(url)
         return response.ok
 
-    # =========================== helpers ===========================
+    def update(self, data: DAny) -> Response:
+        """Update fortigate-object on the Fortigate.
+
+        :param dict data: Data of the fortigate-object to update.
+            More details can be found at https://fndn.fortinet.net for related ``PUT`` method.
+
+        :return: Session response.
+
+            - `<Response [200]>` Object successfully updated,
+            - `<Response [404]>` Object has not been updated.
+        :rtype: Response
+        """
+        uid: str = self._get_uid(data)
+        url = f"{self.url}/{uid}".rstrip("/")
+        return self.fortigate.put(url=url, data=data)
 
     # noinspection PyShadowingBuiltins
     def _delete_by_filter(self, filter: UStr) -> Response:  # pylint: disable=redefined-builtin
@@ -161,3 +157,18 @@ class Connector:
             response = self.fortigate.delete(url=url)
             responses.append(response)
         return h.highest_response(responses)
+
+    def _get_uid(self, data) -> str:
+        """Get UID value based on the UID key
+
+        :param data: A dictionary containing the UID value.
+        :return: The UID value extracted from the data.
+        :raises ValueError: If the UID is required but not present in the data.
+        """
+        if not self.uid:
+            return ""
+        if self.uid not in data:
+            raise ValueError(f"{self.uid} value is required.")
+        uid = str(data[self.uid])
+        uid = h.quote(uid)
+        return uid

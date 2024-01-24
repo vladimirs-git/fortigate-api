@@ -12,6 +12,11 @@ Unreleased
 **New:** `FortiGateAPI.monitor` connectors, to work with all `Monitor API` endpoints.
 
 
+2.0.1 (2024-01-24)
+------------------
+**Fixed:** FortigateAPI `get`, `update` methods for objects without UID
+
+
 2.0.0 (2024-01-16)
 ------------------
 

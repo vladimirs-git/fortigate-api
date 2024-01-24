@@ -53,6 +53,9 @@ SETTINGS: DAny = {
             "external-resource": {
                 "path_ui": "ng/external-connector",
             },
+            "global": {
+                "path_ui": "/ng/system/settings",
+            },
             "interface": {
                 "is_custom_model": True,
             },

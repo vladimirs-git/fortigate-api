@@ -8,3 +8,4 @@ class GlobalSC(Connector):
 
     uid = ""
     _path = "api/v2/cmdb/system/global"
+    _path_ui = "/ng/system/settings"
