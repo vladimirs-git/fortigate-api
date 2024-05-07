@@ -144,7 +144,7 @@ class FortiGateBase:
         if self.token:
             try:
                 response: Response = session.get(
-                    url=f"{self.url}/api/v2/cmdb/system/status",
+                    url=f"{self.url}/api/v2/monitor/system/status",
                     headers=self._bearer_token(),
                     verify=self.verify,
                 )
