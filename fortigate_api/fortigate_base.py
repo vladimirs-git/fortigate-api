@@ -220,21 +220,14 @@ class FortiGateBase:
 
         :raises ValueError: If the ccsrftoken cookie is absent.
         """
-        while True:
-            # fortios < v7
-            cookie_name = "ccsrftoken"
-            if cookies := [o for o in session.cookies if o and o.name == cookie_name]:
-                break
-
-            # fortios >= v7
-            cookie_name += "_"
-            if cookies := [o for o in session.cookies if o and o.name.startswith(cookie_name)]:
-                break
-
+        cookie_prefix = "ccsrftoken"
+        if cookies := [o for o in session.cookies if o and o.name.startswith(cookie_prefix)]:
+            token = str(cookies[0].value).strip('"')
+            return token
+        else:
             raise ValueError("Invalid login credentials. Cookie 'ccsrftoken' is missing.")
 
-        token = str(cookies[0].value).strip('"')
-        return token
+
 
     def _hide_secret(self, string: str) -> str:
         """Hide password, secretkey in text (for safe logging)."""
