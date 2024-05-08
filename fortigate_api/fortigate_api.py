@@ -44,17 +44,17 @@ class FortiGateAPI:
         :param int timeout: Session timeout (minutes). Default is 15.
 
         :param bool verify: Transport Layer Security.
-            `True` - A TLS certificate required,
+            `True` - A trusted TLS certificate is required.
             `False` - Requests will accept any TLS certificate.
             Default is `False`.
 
         :param str vdom: Name of the virtual domain. Default is `root`.
 
         :param bool logging: Logging REST API response.
-            `Ture` - Enable response logging, `False` - otherwise. Default is `False`.
+            `True` - Enable response logging, `False` - otherwise. Default is `False`.
 
         :param bool logging_error: Logging only the REST API response with error.
-            `Ture` - Enable errors logging, `False` - otherwise. Default is `False`.
+            `True` - Enable errors logging, `False` - otherwise. Default is `False`.
         """
         api_params = {
             "host": host,
@@ -117,7 +117,7 @@ class FortiGateAPI:
         """Login to the Fortigate using REST API and creates a Session.
 
         - Validate `token` if object has been initialized with `token` parameter.
-        - Validate  `password` if object has been initialized with `username` parameter.
+        - Validate `password` if object has been initialized with `username` parameter.
 
         :return: None. Creates Session.
         """

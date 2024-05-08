@@ -133,8 +133,8 @@ class FortiGateBase:
     def login(self) -> None:
         """Login to the Fortigate using REST API and creates a Session object.
 
-        - Validate 'token' if object has been initialized with `token` parameter.
-        - Validate  `password` if object has been initialized with `username` parameter.
+        - Validate `token` if object has been initialized with `token` parameter.
+        - Validate `password` if object has been initialized with `username` parameter.
 
         :return: None. Creates Session object.
         """

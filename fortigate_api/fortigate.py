@@ -44,16 +44,16 @@ class FortiGate(FortiGateBase):
         :param int timeout: Session timeout (minutes). Default is 15.
 
         :param bool verify: Transport Layer Security.
-            `True` - A TLS certificate required,
+            `True` - A trusted TLS certificate is required.
             `False` - Requests will accept any TLS certificate. Default is `False`.
 
         :param str vdom: Name of the virtual domain. Default is `root`.
 
         :param bool logging: Logging REST API response.
-            `Ture` - Enable response logging, `False` - otherwise. Default is `False`.
+            `True` - Enable response logging, `False` - otherwise. Default is `False`.
 
         :param bool logging_error: Logging only the REST API response with error.
-            `Ture` - Enable errors logging, `False` - otherwise. Default is `False`.
+            `True` - Enable errors logging, `False` - otherwise. Default is `False`.
         """
         kwargs = {
             "host": host,
@@ -74,8 +74,8 @@ class FortiGate(FortiGateBase):
     def login(self) -> None:  # pylint: disable=useless-parent-delegation
         """Login to the Fortigate using REST API and creates a Session object.
 
-        - Validate 'token' if object has been initialized with `token` parameter.
-        - Validate  `password` if object has been initialized with `username` parameter.
+        - Validate `token` if object has been initialized with `token` parameter.
+        - Validate `password` if object has been initialized with `username` parameter.
 
         :return: None. Creates Session object.
         """
@@ -84,7 +84,7 @@ class FortiGate(FortiGateBase):
     def logout(self) -> None:  # pylint: disable=useless-parent-delegation
         """Logout from the Fortigate using REST API, deletes Session object.
 
-        - No need to logo ut if object has been initialized with `token` parameter.
+        - No need to log out if object has been initialized with `token` parameter.
         - Log out if object has been initialized with `username` parameter.
 
         :return: None. Deletes Session object
