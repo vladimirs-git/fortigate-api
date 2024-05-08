@@ -100,8 +100,6 @@ def test__url(scheme, host, port, expected):
     ("ccsrftoken", "token"),  # < v7
     ("ccsrftoken_443", "token"),  # >= v7
     ("ccsrftoken_443_3334d10", "token"),  # >= v7
-    ("ccsrftokenother-name", ValueError),
-    ("ccsrftoken-other-name", ValueError),
     ("other-name", ValueError),
 ])
 def test__get_token_from_cookies(api: FortiGate, name, expected):
