@@ -47,16 +47,16 @@ class FortiGateBase:
         :param int timeout: Session timeout (minutes). Default is 15.
 
         :param bool verify: Transport Layer Security.
-            `True` - A TLS certificate required,
+            `True` - A trusted TLS certificate is required.
             `False` - Requests will accept any TLS certificate. Default is `False`.
 
         :param str vdom: Name of the virtual domain. Default is `root`.
 
         :param bool logging: Logging REST API response.
-            `Ture` - Enable response logging, `False` - otherwise. Default is `False`.
+            `True` - Enable response logging, `False` - otherwise. Default is `False`.
 
         :param bool logging_error: Logging only the REST API response with error.
-            `Ture` - Enable errors logging, `False` - otherwise. Default is `False`.
+            `True` - Enable errors logging, `False` - otherwise. Default is `False`.
         """
         self.host = str(kwargs.get("host"))
         self.username = str(kwargs.get("username"))
@@ -172,7 +172,7 @@ class FortiGateBase:
     def logout(self) -> None:
         """Logout from the Fortigate using REST API, deletes Session object.
 
-        - No need to logo ut if object has been initialized with `token` parameter.
+        - No need to log out if object has been initialized with `token` parameter.
         - Log out if object has been initialized with `username` parameter.
 
         :return: None. Deletes Session object
@@ -209,7 +209,7 @@ class FortiGateBase:
     def _get_token_from_cookies(session: Session) -> str:
         """Retrieve the token from the cookies in the session.
 
-        Look for a cookie that is named `ccsrftoken` or stars with `ccsrftoken_`.
+        Look for a cookie that starts with `ccsrftoken`.
 
         :param session: The session object containing cookies.
 
@@ -274,9 +274,9 @@ class FortiGateBase:
 
         :param str method: Session method: `delete`, `get`, `post`, `put`.
 
-        :param str url: REST API URL to the fortigate-object.
+        :param str url: REST API URL to the FortiGate object.
 
-        :param data: Data of the fortigate-object.
+        :param data: Data of the FortiGate object.
 
         :return: Session response.
         :rtype: Response
@@ -329,7 +329,7 @@ def _init_token(**kwargs) -> str:
     if not token:
         return ""
     if kwargs.get("username"):
-        raise ValueError("Mutually excluded: username, token.")
+        raise ValueError("Mutually exclusive: username, token.")
     if kwargs.get("password"):
-        raise ValueError("Mutually excluded: password, token.")
+        raise ValueError("Mutually exclusive: password, token.")
     return token
