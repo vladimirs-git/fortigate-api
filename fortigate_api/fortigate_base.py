@@ -156,7 +156,7 @@ class FortiGateBase:
 
         # password
         try:
-            session.post(
+            response: Response = session.post(
                 url=f"{self.url}/logincheck",
                 data=urlencode([("username", self.username), ("secretkey", self.password)]),
                 timeout=self.timeout,
@@ -164,12 +164,9 @@ class FortiGateBase:
             )
         except Exception as ex:
             raise self._hide_secret_ex(ex)
-
+        response.raise_for_status()
         token = self._get_token_from_cookies(session)
         session.headers.update({"X-CSRFTOKEN": token})
-
-        response = session.get(url=f"{self.url}/api/v2/cmdb/system/vdom")
-        response.raise_for_status()
         self._session = session
 
     def logout(self) -> None:
