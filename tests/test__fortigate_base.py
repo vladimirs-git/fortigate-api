@@ -1,9 +1,12 @@
 """Test fortigate_base.py"""
+from collections import OrderedDict
 from unittest.mock import patch
 
 import pytest
+import requests_mock
 from pytest_mock import MockerFixture
 from requests import Session
+from requests_mock import Mocker
 
 from fortigate_api import fortigate_base
 from fortigate_api.fortigate import FortiGate
@@ -96,12 +99,53 @@ def test__url(scheme, host, port, expected):
     assert actual == expected
 
 
+# ============================ login =============================
+
+# noinspection PyUnresolvedReferences
+@pytest.mark.parametrize("token, expected, headers", [
+    ("", "TOKEN", ("X-CSRFTOKEN", "TOKEN")),
+    ("TOKEN", "", None),
+])
+def test__login(token, expected, headers):
+    """FortiGateBase.login() for username."""
+    api = FortiGate(host="HOST", token=token)
+    with requests_mock.Mocker() as mock:
+        if token:
+            mock.get("https://host/api/v2/monitor/system/status")
+        else:
+            mock.post("https://host/logincheck")
+
+        with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value=expected):
+            api.login()
+            assert isinstance(api._session, Session)
+            store: OrderedDict = getattr(api._session.headers, "_store")
+            actual = store.get("x-csrftoken")
+            assert actual == headers
+
+
+# =========================== helpers ============================
+
+def test__get_session(api: FortiGate, mocker: MockerFixture):
+    """FortiGateBase._get_session()"""
+    # session
+    api._session = Session()
+    session = api._get_session()
+    assert isinstance(session, Session)
+
+    # login
+    api._session = None
+    mock_response = mocker.Mock()
+    mocker.patch(target="requests.Session.post", return_value=mock_response)
+    mocker.patch(target="requests.Session.get", return_value=tst.crate_response(200))
+    with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value="token"):
+        session = api._get_session()
+        assert isinstance(session, Session) is True
+
+
 @pytest.mark.parametrize("name, expected", [
     ("ccsrftoken", "token"),  # < v7
     ("ccsrftoken_443", "token"),  # >= v7
     ("ccsrftoken_443_3334d10", "token"),  # >= v7
-    ("ccsrftokenother-name", ValueError),
-    ("ccsrftoken-other-name", ValueError),
     ("other-name", ValueError),
 ])
 def test__get_token_from_cookies(api: FortiGate, name, expected):
@@ -113,6 +157,22 @@ def test__get_token_from_cookies(api: FortiGate, name, expected):
     else:
         with pytest.raises(expected):
             api._get_token_from_cookies(session=session)
+
+
+@pytest.mark.parametrize("string, password, expected", [
+    ("", "", ""),
+    ("", "secret", ""),
+    ("text", "", "text"),
+    ("text", "secret", "text"),
+    ("_secret_", "secret", "_<hidden>_"),
+    ("_%5B_", "secret", "_%5B_"),
+    ("_secret%5B_", "secret[", "_<hidden>_"),
+])
+def test__hide_secret(string, password, expected):
+    """FortiGateBase._hide_secret()"""
+    fgt = FortiGate(host="host", password=password)
+    actual = fgt._hide_secret(string=string)
+    assert actual == expected
 
 
 @pytest.mark.parametrize("kwargs, scheme, expected", [
@@ -158,41 +218,6 @@ def test__valid_url(kwargs, url, expected):
 
     actual = fgt._valid_url(url=url)
     assert actual == expected
-
-
-@pytest.mark.parametrize("string, password, expected", [
-    ("", "", ""),
-    ("", "secret", ""),
-    ("text", "", "text"),
-    ("text", "secret", "text"),
-    ("_secret_", "secret", "_<hidden>_"),
-    ("_%5B_", "secret", "_%5B_"),
-    ("_secret%5B_", "secret[", "_<hidden>_"),
-])
-def test__hide_secret(string, password, expected):
-    """FortiGateBase._hide_secret()"""
-    fgt = FortiGate(host="host", password=password)
-    actual = fgt._hide_secret(string=string)
-    assert actual == expected
-
-
-# =========================== helpers ============================
-
-def test__get_session(api: FortiGate, mocker: MockerFixture):
-    """FortiGateBase._get_session()"""
-    # session
-    api._session = Session()
-    session = api._get_session()
-    assert isinstance(session, Session)
-
-    # login
-    api._session = None
-    mock_response = mocker.Mock()
-    mocker.patch(target="requests.Session.post", return_value=mock_response)
-    mocker.patch(target="requests.Session.get", return_value=tst.crate_response(200))
-    with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value="token"):
-        session = api._get_session()
-        assert isinstance(session, Session) is True
 
 
 # =========================== helpers ============================

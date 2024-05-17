@@ -53,10 +53,10 @@ class FortiGateBase:
         :param str vdom: Name of the virtual domain. Default is `root`.
 
         :param bool logging: Logging REST API response.
-            `Ture` - Enable response logging, `False` - otherwise. Default is `False`.
+            `True` - Enable response logging, `False` - otherwise. Default is `False`.
 
         :param bool logging_error: Logging only the REST API response with error.
-            `Ture` - Enable errors logging, `False` - otherwise. Default is `False`.
+            `True` - Enable errors logging, `False` - otherwise. Default is `False`.
         """
         self.host = str(kwargs.get("host"))
         self.username = str(kwargs.get("username"))
@@ -133,8 +133,8 @@ class FortiGateBase:
     def login(self) -> None:
         """Login to the Fortigate using REST API and creates a Session object.
 
-        - Validate 'token' if object has been initialized with `token` parameter.
-        - Validate  `password` if object has been initialized with `username` parameter.
+        - Validate `token` if object has been initialized with `token` parameter.
+        - Validate `password` if object has been initialized with `username` parameter.
 
         :return: None. Creates Session object.
         """
@@ -144,7 +144,7 @@ class FortiGateBase:
         if self.token:
             try:
                 response: Response = session.get(
-                    url=f"{self.url}/api/v2/cmdb/system/status",
+                    url=f"{self.url}/api/v2/monitor/system/status",
                     headers=self._bearer_token(),
                     verify=self.verify,
                 )
@@ -156,7 +156,7 @@ class FortiGateBase:
 
         # password
         try:
-            session.post(
+            response = session.post(
                 url=f"{self.url}/logincheck",
                 data=urlencode([("username", self.username), ("secretkey", self.password)]),
                 timeout=self.timeout,
@@ -164,12 +164,9 @@ class FortiGateBase:
             )
         except Exception as ex:
             raise self._hide_secret_ex(ex)
-
+        response.raise_for_status()
         token = self._get_token_from_cookies(session)
         session.headers.update({"X-CSRFTOKEN": token})
-
-        response = session.get(url=f"{self.url}/api/v2/cmdb/system/vdom")
-        response.raise_for_status()
         self._session = session
 
     def logout(self) -> None:
@@ -220,21 +217,12 @@ class FortiGateBase:
 
         :raises ValueError: If the ccsrftoken cookie is absent.
         """
-        while True:
-            # fortios < v7
-            cookie_name = "ccsrftoken"
-            if cookies := [o for o in session.cookies if o and o.name == cookie_name]:
-                break
-
-            # fortios >= v7
-            cookie_name += "_"
-            if cookies := [o for o in session.cookies if o and o.name.startswith(cookie_name)]:
-                break
-
-            raise ValueError("Invalid login credentials. Cookie 'ccsrftoken' is missing.")
-
-        token = str(cookies[0].value).strip('"')
-        return token
+        cookie_prefix = "ccsrftoken"
+        if cookies := [o for o in session.cookies if o and o.name.startswith(cookie_prefix)]:
+            token = str(cookies[0].value)
+            token = token.strip('"')
+            return token
+        raise ValueError("Invalid login credentials. Cookie 'ccsrftoken' is missing.")
 
     def _hide_secret(self, string: str) -> str:
         """Hide password, secretkey in text (for safe logging)."""
