@@ -6,6 +6,7 @@
 - Update address data in the Fortigate
 - Delete address from the Fortigate
 - Check for absence of address in the Fortigate
+- Initialize FortiGateAPI with token instead of username and password
 - FortiGateAPI `with` statement
 """
 
@@ -18,6 +19,7 @@ logging.getLogger().setLevel(logging.DEBUG)
 HOST = "host"
 USERNAME = "username"
 PASSWORD = "password"
+TOKEN = "token"
 
 # Initialize FortiGateAPI with optional parameters scheme=`https`, port=443
 api = FortiGateAPI(
@@ -58,6 +60,11 @@ response = api.cmdb.firewall.address.is_exist("ADDRESS")
 print(f"address.is_exist {response}")  # address.is_exist False
 
 api.logout()
+
+# Initialize FortiGateAPI with token instead of username and password
+api = FortiGateAPI(host=HOST, token=TOKEN)
+items = api.cmdb.firewall.address.get(name="ADDRESS")
+print(f"addresses count={len(items)}")  # addresses count=1
 
 # FortiGateAPI `with` statement
 with FortiGateAPI(host=HOST, username=USERNAME, password=PASSWORD) as api:
