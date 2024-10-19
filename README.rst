@@ -1,8 +1,8 @@
 
 .. image:: https://img.shields.io/pypi/v/fortigate-api.svg
    :target: https://pypi.python.org/pypi/fortigate-api
-.. image:: https://img.shields.io/pypi/pyversions/fortigate-api.svg
-   :target: https://pypi.python.org/pypi/fortigate-api
+.. image:: https://img.shields.io/badge/Python-3.8%20%7C%203.9%20%7C%203.10%20%7C%203.11-blue.svg
+   :target: https://pypi.python.org/pypi/logger-color
 .. image:: https://img.shields.io/github/last-commit/vladimirs-git/fortigate-api
    :target: https://pypi.python.org/pypi/fortigate-api
 
