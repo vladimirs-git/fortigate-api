@@ -17,8 +17,9 @@ jobs:
          # python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12", "3.13" ]
     steps:
       # Checkout the code from the following branch
-      - uses: actions/checkout@main
-      # Set up the Python environment on the virtual machine
+      - uses: actions/checkout@v2
+
+      # Set up the Python environment (multiple versions) on the virtual machine
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -31,4 +32,4 @@ jobs:
           poetry install --with test
 
       - name: Run tests
-        run: pytest -v -m "not skip" ./tests
+        run: poetry run pytest -v -m "not skip" ./tests
