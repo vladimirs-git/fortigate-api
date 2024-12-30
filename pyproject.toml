@@ -25,7 +25,7 @@ classifiers = [
     "Natural Language :: English",
 ]
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 requests = "^2.28"
 vhelpers = "^0.1.17"
 
@@ -41,7 +41,7 @@ pydocstyle = "^6.3.0"
 pygments = "^2.18.0"  # rst-lint
 pylint = "^3.3.3"
 pytest = "^8.3.4"
-pytest-cov = "^5.0.0"
+pytest-cov = "^6.0.0"
 pytest-mock = "^3.14.0"
 readthedocs-sphinx-search = "^0.3.2"
 requests-mock = "^1.12.1"
@@ -93,7 +93,7 @@ disable = [
 ]
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.9"
 
 [tool.ruff]
 exclude = [
@@ -112,7 +112,7 @@ exclude = [
 ]
 line-length = 100
 indent-width = 4
-target-version = "py38"
+target-version = "py39"
 
 [tool.ruff.format]
 quote-style = "double"
