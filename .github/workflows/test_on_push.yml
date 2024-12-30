@@ -31,4 +31,4 @@ jobs:
           poetry install --with test
 
       - name: Run tests
-        run: pytest -v -m "not skip" tests
+        run: pytest -v -m "not skip" ./tests
