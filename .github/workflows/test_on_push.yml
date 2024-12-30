@@ -2,7 +2,7 @@ name: Run tests on push event
 on:
   push:
     # Triggered by a push event on the following branches
-    branches: [ 3_12 ]
+    branches: [ main ]
     # Triggered by a tag that starts with "v"
     tags: [ v* ]
   # Triggered by any pull requests
