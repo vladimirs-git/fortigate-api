@@ -9,6 +9,5 @@ class EndpointControlC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init EndpointControlC."""
-
         self.fctems = FctemsEcC(fortigate, **kwargs)
         """:py:class:`.FctemsEcC` cmdb/endpoint-control/fctems."""

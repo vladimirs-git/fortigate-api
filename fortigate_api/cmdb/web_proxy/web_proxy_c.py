@@ -16,7 +16,6 @@ class WebProxyC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init WebProxyC."""
-
         self.debug_url = DebugUrlWpC(fortigate, **kwargs)
         """:py:class:`.DebugUrlWpC` cmdb/web-proxy/debug-url."""
 

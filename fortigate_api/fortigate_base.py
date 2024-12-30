@@ -1,4 +1,5 @@
 """Base for FortiGate, set of private methods."""
+
 from __future__ import annotations
 
 import json

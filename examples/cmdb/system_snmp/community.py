@@ -1,4 +1,4 @@
-"""api/v2/cmdb/system.snmp/community
+"""api/v2/cmdb/system.snmp/community.
 
 - Creates snmp-community
 - Get all snmp-community

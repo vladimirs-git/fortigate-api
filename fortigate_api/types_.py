@@ -39,4 +39,3 @@ DLDAny = Dict[str, LDAny]
 # ipaddress
 DLInet = Dict[str, List[IPv4Network]]
 DSInet = Dict[IPv4Network, SStr]
-

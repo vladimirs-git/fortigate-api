@@ -11,7 +11,6 @@ class FirewallServiceC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init FirewallServiceC."""
-
         self.category = CategoryFsC(fortigate, **kwargs)
         """:py:class:`.CategoryFsC` cmdb/firewall.service/category."""
 

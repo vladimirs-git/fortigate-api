@@ -10,7 +10,6 @@ class DnsfilterC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init DnsfilterC."""
-
         self.domain_filter = DomainFilterDC(fortigate, **kwargs)
         """:py:class:`.DomainFilterDC` cmdb/dnsfilter/domain-filter."""
 

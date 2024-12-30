@@ -13,7 +13,6 @@ class VpnSslWebC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init VpnSslWebC."""
-
         self.host_check_software = HostCheckSoftwareVswC(fortigate, **kwargs)
         """:py:class:`.HostCheckSoftwareVswC` cmdb/vpn.ssl.web/host-check-software."""
 

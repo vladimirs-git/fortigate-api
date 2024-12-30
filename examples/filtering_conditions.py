@@ -1,4 +1,4 @@
-"""Filtering conditions api/v2/cmdb/firewall/address
+"""Filtering conditions api/v2/cmdb/firewall/address.
 
 - Create addresses: `ADDRESS_0`, `ADDRESS_1`, `ADDRESS_2`
 - Get all addresses without filtering

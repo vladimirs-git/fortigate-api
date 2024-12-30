@@ -1,4 +1,4 @@
-"""api/v2/cmdb/firewall/addrgrp
+"""api/v2/cmdb/firewall/addrgrp.
 
 - Creates address and address-group in the Fortigate
 - Get all address-groups from the Fortigate vdom root

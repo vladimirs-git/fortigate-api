@@ -10,7 +10,6 @@ class SwitchControllerInitialConfigC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init SwitchControllerInitialConfigC."""
-
         self.template = TemplateScicC(fortigate, **kwargs)
         """:py:class:`.TemplateScicC` cmdb/switch-controller.initial-config/template."""
 

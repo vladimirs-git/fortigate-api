@@ -9,6 +9,5 @@ class SwitchControllerAutoConfigC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init SwitchControllerAutoConfigC."""
-
         self.default = DefaultScacC(fortigate, **kwargs)
         """:py:class:`.DefaultScacC` cmdb/switch-controller.auto-config/default."""

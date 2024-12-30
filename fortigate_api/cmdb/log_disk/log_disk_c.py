@@ -10,7 +10,6 @@ class LogDiskC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init LogDiskC."""
-
         self.filter = FilterLdC(fortigate, **kwargs)
         """:py:class:`.FilterLdC` cmdb/log.disk/filter."""
 

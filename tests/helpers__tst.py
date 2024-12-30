@@ -160,7 +160,7 @@ def create_response(method: str, url: str, status_code: int, data: Any = None) -
 
 
 def mock_response(mocker: MockerFixture, response: Response) -> Response:
-    """Crate mock based on Response"""
+    """Crate mock based on Response."""
     resp: Response = mocker.Mock(spec=Response)
     resp.url = response.url
     resp.status_code = response.status_code
@@ -173,7 +173,7 @@ def mock_response(mocker: MockerFixture, response: Response) -> Response:
 # ============================= session ==============================
 
 def session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
-    """Mock Session.delete()"""
+    """Mock Session.delete()."""
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
     if app_model in UID_NAME:
@@ -189,7 +189,7 @@ def session_delete(mocker: MockerFixture, url, *args, **kwargs) -> Response:
 
 
 def session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
-    """Mock Session.get()"""
+    """Mock Session.get()."""
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
     if app_model in UID_NAME:
@@ -209,7 +209,7 @@ def session_get(mocker: MockerFixture, url, *args, **kwargs) -> Response:
 
 
 def session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
-    """Mock Session.post(), create"""
+    """Mock Session.post(), create."""
     _ = args, kwargs
     app_model = h.url_to_app_model(url)
     if app_model in UID_NAME:
@@ -225,7 +225,7 @@ def session_post(mocker: MockerFixture, url, *args, **kwargs) -> Response:
 
 
 def session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
-    """Mock Session.put(), update"""
+    """Mock Session.put(), update."""
     _ = args
     app_model = h.url_to_app_model(url)
     if app_model in UID_NAME:
@@ -245,7 +245,7 @@ def session_put(mocker: MockerFixture, url, *args, **kwargs) -> Response:
 # ============================ connector =============================
 
 def connector_delete__name(url: str) -> Response:
-    """Delete"""
+    """Delete."""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
     key = (uid, query)
@@ -257,7 +257,7 @@ def connector_delete__name(url: str) -> Response:
 
 
 def connector_delete__policy(url: str) -> Response:
-    """Delete"""
+    """Delete."""
     uid = h.url_to_uid(url)
     status_code = {
         "1": 200,  # exist
@@ -266,7 +266,7 @@ def connector_delete__policy(url: str) -> Response:
 
 
 def connector_get__name(url: str) -> Response:
-    """Get"""
+    """Get."""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
     key = (uid, query)
@@ -283,7 +283,7 @@ def connector_get__name(url: str) -> Response:
 
 
 def connector_get__id(url: str) -> Response:
-    """Get"""
+    """Get."""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
     key = (uid, query)
@@ -296,7 +296,7 @@ def connector_get__id(url: str) -> Response:
 
 
 def connector_get__policy(url: str) -> Response:
-    """Get"""
+    """Get."""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
     key = (uid, query)
@@ -313,7 +313,7 @@ def connector_get__policy(url: str) -> Response:
 
 
 def connector_get__wo_uid(url: str) -> Response:
-    """Get"""
+    """Get."""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
     key = (uid, query)
@@ -325,7 +325,7 @@ def connector_get__wo_uid(url: str) -> Response:
 
 
 def connector_post__name(url: str, data: dict) -> Response:
-    """Create"""
+    """Create."""
     data = json.loads(data["data"])
     uid = data["name"]
     status_code = {
@@ -336,7 +336,7 @@ def connector_post__name(url: str, data: dict) -> Response:
 
 
 def connector_post__policy(url: str, data: dict) -> Response:
-    """Create"""
+    """Create."""
     data = json.loads(data["data"])
     name = data["name"]
     status_code = {
@@ -346,7 +346,7 @@ def connector_post__policy(url: str, data: dict) -> Response:
 
 
 def connector_put__name(url: str) -> Response:
-    """Update"""
+    """Update."""
     uid = h.url_to_uid(url)
     status_code = {
         "NAME1": 200,  # exist
@@ -355,7 +355,7 @@ def connector_put__name(url: str) -> Response:
 
 
 def connector_put__policy(url: str) -> Response:
-    """Update"""
+    """Update."""
     uid = h.url_to_uid(url)
     status_code = {
         "1": 200,  # exist
@@ -365,7 +365,7 @@ def connector_put__policy(url: str) -> Response:
 
 
 def connector_put__wo_uid(url: str, **kwargs) -> Response:
-    """Update"""
+    """Update."""
     data = kwargs["data"]
     status_code = 404
     if "key" in data:
@@ -374,7 +374,7 @@ def connector_put__wo_uid(url: str, **kwargs) -> Response:
 
 
 def firewall_ipmacbinding_setting_get(url: str) -> Response:
-    """Get"""
+    """Get firewall ip-mac-binding setting."""
     uid = h.url_to_uid(url)
     query = urlparse(url).query
     key = (uid, query)

@@ -12,7 +12,7 @@ from fortigate_api.types_ import LStr
 class FortiGateAPI:
     """FortiGateAPI - Python connector to Fortigate API endpoints."""
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-positional-arguments
         self,
         host: str,
         username: str = "",

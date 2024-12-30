@@ -1,4 +1,5 @@
 """Log scope connectors."""
+
 from fortigate_api.fortigate import FortiGate
 
 

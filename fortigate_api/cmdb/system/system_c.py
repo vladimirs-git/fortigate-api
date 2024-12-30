@@ -105,7 +105,6 @@ class SystemC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init SystemC."""
-
         self.accprofile = AccprofileSC(fortigate, **kwargs)
         """:py:class:`.AccprofileSC` cmdb/system/accprofile."""
 

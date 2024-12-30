@@ -13,7 +13,6 @@ class LogC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init LogC."""
-
         self.custom_field = CustomFieldLC(fortigate, **kwargs)
         """:py:class:`.CustomFieldLC` cmdb/log/custom-field."""
 

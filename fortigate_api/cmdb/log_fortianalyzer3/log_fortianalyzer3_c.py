@@ -12,7 +12,6 @@ class LogFortianalyzer3C:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init LogFortianalyzer3C."""
-
         self.filter = FilterLfC(fortigate, **kwargs)
         """:py:class:`.FilterLfC` cmdb/log.fortianalyzer3/filter."""
 

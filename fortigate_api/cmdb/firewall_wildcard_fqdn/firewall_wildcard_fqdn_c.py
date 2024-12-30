@@ -10,7 +10,6 @@ class FirewallWildcardFqdnC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init FirewallWildcardFqdnC."""
-
         self.custom = CustomFwfC(fortigate, **kwargs)
         """:py:class:`.CustomFwfC` cmdb/firewall.wildcard-fqdn/custom."""
 

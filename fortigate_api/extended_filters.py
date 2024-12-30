@@ -1,4 +1,5 @@
 """Extended Filters."""
+
 import logging
 from collections import Counter
 from functools import wraps

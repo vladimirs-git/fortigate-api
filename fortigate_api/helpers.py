@@ -17,6 +17,7 @@ from fortigate_api.types_ import StrInt, UStr, TLists, T3Str, T2Str
 
 def scope_names(scope: str) -> T3Str:
     """Create class name for scope.
+
     :example:
         scope_names("cmdb") -> "cmdb", "cmdb_s", "CmdbS"
     """
@@ -28,6 +29,7 @@ def scope_names(scope: str) -> T3Str:
 
 def app_names(scope: str, app: str) -> T3Str:
     """Create class name for app.
+
     :example:
         app_names("cmdb", "firewall") -> "firewall", "firewall_c", "FirewallC"
     """
@@ -43,6 +45,7 @@ def app_names(scope: str, app: str) -> T3Str:
 
 def model_names(scope: str, app: str, model: str) -> T2Str:
     """Create class name for model.
+
     :example:
         model_names("cmdb", "firewall", "address") -> address, "AddressFC"
     """
@@ -318,7 +321,7 @@ def rst_code(text: str, code: str = "python") -> str:
 
 
 def highest_response(responses: LResponse) -> Response:
-    """Return Response object with the highest status_code
+    """Return Response object with the highest status_code.
 
     :param responses: List of Response objects.
     :type responses: List[Response]

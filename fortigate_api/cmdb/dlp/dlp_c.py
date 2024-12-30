@@ -13,7 +13,6 @@ class DlpC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init DlpC."""
-
         self.filepattern = FilepatternDC(fortigate, **kwargs)
         """:py:class:`.FilepatternDC` cmdb/dlp/filepattern."""
 

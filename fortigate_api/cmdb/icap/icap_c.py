@@ -10,7 +10,6 @@ class IcapC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init IcapC."""
-
         self.profile = ProfileIC(fortigate, **kwargs)
         """:py:class:`.ProfileIC` cmdb/icap/profile."""
 

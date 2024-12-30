@@ -33,7 +33,6 @@ class RouterC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init RouterC."""
-
         self.access_list = AccessListRC(fortigate, **kwargs)
         """:py:class:`.AccessListRC` cmdb/router/access-list."""
 

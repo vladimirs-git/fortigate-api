@@ -11,7 +11,6 @@ class SystemAutoupdateC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init SystemAutoupdateC."""
-
         self.push_update = PushUpdateSaC(fortigate, **kwargs)
         """:py:class:`.PushUpdateSaC` cmdb/system.autoupdate/push-update."""
 

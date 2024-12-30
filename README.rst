@@ -24,7 +24,7 @@ Fully documented on `Read the Docs`_.
 Requirements
 ============
 
-Python >=3.8,<3.12
+Python >=3.8,<=3.13
 
 
 Quickstart

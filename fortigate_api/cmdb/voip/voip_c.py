@@ -9,6 +9,5 @@ class VoipC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init VoipC."""
-
         self.profile = ProfileVC(fortigate, **kwargs)
         """:py:class:`.ProfileVC` cmdb/voip/profile."""

@@ -13,7 +13,6 @@ class ApplicationC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init ApplicationC."""
-
         self.custom = CustomAC(fortigate, **kwargs)
         """:py:class:`.CustomAC` cmdb/application/custom."""
 

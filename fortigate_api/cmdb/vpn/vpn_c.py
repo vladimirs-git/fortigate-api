@@ -11,7 +11,6 @@ class VpnC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init VpnC."""
-
         self.l2tp = L2tpVC(fortigate, **kwargs)
         """:py:class:`.L2tpVC` cmdb/vpn/l2tp."""
 

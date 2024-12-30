@@ -11,7 +11,6 @@ class FirewallScheduleC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init FirewallScheduleC."""
-
         self.group = GroupFsC(fortigate, **kwargs)
         """:py:class:`.GroupFsC` cmdb/firewall.schedule/group."""
 

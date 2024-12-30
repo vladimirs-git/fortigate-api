@@ -1,4 +1,4 @@
-"""schema/models"""
+"""schema/models."""
 
 from typing import Dict
 

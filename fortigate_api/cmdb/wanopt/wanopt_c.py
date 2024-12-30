@@ -16,7 +16,6 @@ class WanoptC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init WanoptC."""
-
         self.auth_group = AuthGroupWC(fortigate, **kwargs)
         """:py:class:`.AuthGroupWC` cmdb/wanopt/auth-group."""
 

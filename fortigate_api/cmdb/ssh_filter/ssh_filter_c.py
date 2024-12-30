@@ -9,6 +9,5 @@ class SshFilterC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init SshFilterC."""
-
         self.profile = ProfileSfC(fortigate, **kwargs)
         """:py:class:`.ProfileSfC` cmdb/ssh-filter/profile."""

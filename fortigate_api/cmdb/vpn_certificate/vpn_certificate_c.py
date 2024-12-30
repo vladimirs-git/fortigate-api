@@ -14,7 +14,6 @@ class VpnCertificateC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init VpnCertificateC."""
-
         self.ca = CaVcC(fortigate, **kwargs)
         """:py:class:`.CaVcC` cmdb/vpn.certificate/ca."""
 

@@ -11,7 +11,6 @@ class LogMemoryC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init LogMemoryC."""
-
         self.filter = FilterLmC(fortigate, **kwargs)
         """:py:class:`.FilterLmC` cmdb/log.memory/filter."""
 

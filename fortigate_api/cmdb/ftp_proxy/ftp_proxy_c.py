@@ -9,6 +9,5 @@ class FtpProxyC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init FtpProxyC."""
-
         self.explicit = ExplicitFpC(fortigate, **kwargs)
         """:py:class:`.ExplicitFpC` cmdb/ftp-proxy/explicit."""

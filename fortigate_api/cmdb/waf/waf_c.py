@@ -11,7 +11,6 @@ class WafC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init WafC."""
-
         self.main_class = MainClassWC(fortigate, **kwargs)
         """:py:class:`.MainClassWC` cmdb/waf/main-class."""
 

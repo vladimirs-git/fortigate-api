@@ -33,7 +33,6 @@ class WirelessControllerC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init WirelessControllerC."""
-
         self.access_control_list = AccessControlListWcC(fortigate, **kwargs)
         """:py:class:`.AccessControlListWcC` cmdb/wireless-controller/access-control-list."""
 

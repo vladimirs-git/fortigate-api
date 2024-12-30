@@ -1,4 +1,4 @@
-"""api/v2/cmdb/system/interface
+"""api/v2/cmdb/system/interface.
 
 - Get all interfaces from the vdom="VDOM9"
 - Get all interfaces from the vdom="root"

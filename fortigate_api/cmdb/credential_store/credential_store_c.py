@@ -9,6 +9,5 @@ class CredentialStoreC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init CredentialStoreC."""
-
         self.domain_controller = DomainControllerCsC(fortigate, **kwargs)
         """:py:class:`.DomainControllerCsC` cmdb/credential-store/domain-controller."""

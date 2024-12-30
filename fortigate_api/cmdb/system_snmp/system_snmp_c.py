@@ -11,7 +11,6 @@ class SystemSnmpC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init SystemSnmpC."""
-
         self.community = CommunitySsC(fortigate, **kwargs)
         """:py:class:`.CommunitySsC` cmdb/system.snmp/community."""
 

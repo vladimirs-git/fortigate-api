@@ -14,7 +14,6 @@ class ReportC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init ReportC."""
-
         self.chart = ChartRC(fortigate, **kwargs)
         """:py:class:`.ChartRC` cmdb/report/chart."""
 

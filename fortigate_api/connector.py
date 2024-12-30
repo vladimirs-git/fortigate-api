@@ -159,7 +159,7 @@ class Connector:
         return h.highest_response(responses)
 
     def _get_uid(self, data) -> str:
-        """Get UID value based on the UID key
+        """Get UID value based on the UID key.
 
         :param data: A dictionary containing the UID value.
         :return: The UID value extracted from the data.

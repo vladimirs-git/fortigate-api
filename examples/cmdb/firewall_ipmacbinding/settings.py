@@ -1,4 +1,4 @@
-"""api/v2/cmdb/firewall.ipmacbinding/settings
+"""api/v2/cmdb/firewall.ipmacbinding/settings.
 
 - Get setting from the Fortigate
 - Format output data to return only required key values

@@ -1,4 +1,5 @@
 """Custom models."""
+
 from fortigate_api.types_ import DAny
 
 SETTINGS: DAny = {

@@ -16,7 +16,6 @@ class IpsC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init IpsC."""
-
         self.custom = CustomIC(fortigate, **kwargs)
         """:py:class:`.CustomIC` cmdb/ips/custom."""
 

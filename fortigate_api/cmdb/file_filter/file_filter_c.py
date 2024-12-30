@@ -9,6 +9,5 @@ class FileFilterC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init FileFilterC."""
-
         self.profile = ProfileFfC(fortigate, **kwargs)
         """:py:class:`.ProfileFfC` cmdb/file-filter/profile."""

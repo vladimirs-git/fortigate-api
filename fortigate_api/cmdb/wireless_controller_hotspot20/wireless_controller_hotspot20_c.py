@@ -29,7 +29,6 @@ class WirelessControllerHotspot20C:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init WirelessControllerHotspot20C."""
-
         self.anqp_3gpp_cellular = Anqp3gppCellularWchC(fortigate, **kwargs)
         """:py:class:`.Anqp3gppCellularWchC` 
             cmdb/wireless-controller.hotspot20/anqp-3gpp-cellular.

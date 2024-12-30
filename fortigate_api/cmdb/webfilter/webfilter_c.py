@@ -20,7 +20,6 @@ class WebfilterC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init WebfilterC."""
-
         self.content = ContentWC(fortigate, **kwargs)
         """:py:class:`.ContentWC` cmdb/webfilter/content."""
 

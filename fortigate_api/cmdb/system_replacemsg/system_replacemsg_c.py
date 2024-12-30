@@ -22,7 +22,6 @@ class SystemReplacemsgC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init SystemReplacemsgC."""
-
         self.admin = AdminSrC(fortigate, **kwargs)
         """:py:class:`.AdminSrC` cmdb/system.replacemsg/admin."""
 

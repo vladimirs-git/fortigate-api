@@ -10,7 +10,6 @@ class LogNullDeviceC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init LogNullDeviceC."""
-
         self.filter = FilterLndC(fortigate, **kwargs)
         """:py:class:`.FilterLndC` cmdb/log.null-device/filter."""
 

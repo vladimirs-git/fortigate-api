@@ -1,4 +1,5 @@
 """FortiGate - Python wrapper for the FortiOS REST API."""
+
 from __future__ import annotations
 
 from requests import Response
@@ -12,7 +13,7 @@ class FortiGate(FortiGateBase):
     """FortiGate - Python wrapper for the FortiOS REST API."""
 
     # noinspection PyShadowingNames
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-positional-arguments
         self,
         host: str,
         username: str = "",

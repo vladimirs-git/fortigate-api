@@ -83,7 +83,6 @@ class CmdbS:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init CmdbS."""
-
         self.alertemail = AlertemailC(fortigate, **kwargs)
         """:py:class:`.AlertemailC` cmdb/alertemail connectors."""
 

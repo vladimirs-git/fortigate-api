@@ -86,7 +86,7 @@ def process_docstring(app, what, name, obj, options, lines: list):
 
 
 def setup(app):
-    """Setup."""
+    """Change settings for app."""
     app.connect("autodoc-skip-member", skip)
     app.connect("autodoc-process-signature", process_signature)
     app.connect("autodoc-process-docstring", process_docstring)

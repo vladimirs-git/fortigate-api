@@ -12,7 +12,6 @@ class LogSyslogd3C:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init LogSyslogd3C."""
-
         self.filter = FilterLsC(fortigate, **kwargs)
         """:py:class:`.FilterLsC` cmdb/log.syslogd3/filter."""
 

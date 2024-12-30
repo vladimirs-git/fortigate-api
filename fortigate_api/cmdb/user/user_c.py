@@ -29,7 +29,6 @@ class UserC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init UserC."""
-
         self.adgrp = AdgrpUC(fortigate, **kwargs)
         """:py:class:`.AdgrpUC` cmdb/user/adgrp."""
 

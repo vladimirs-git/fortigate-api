@@ -9,6 +9,5 @@ class FirewallSslC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init FirewallSslC."""
-
         self.setting = SettingFsC(fortigate, **kwargs)
         """:py:class:`.SettingFsC` cmdb/firewall.ssl/setting."""

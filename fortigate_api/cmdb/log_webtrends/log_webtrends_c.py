@@ -10,7 +10,6 @@ class LogWebtrendsC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init LogWebtrendsC."""
-
         self.filter = FilterLwC(fortigate, **kwargs)
         """:py:class:`.FilterLwC` cmdb/log.webtrends/filter."""
 

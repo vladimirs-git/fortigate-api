@@ -11,7 +11,6 @@ class AuthenticationC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init AuthenticationC."""
-
         self.rule = RuleAC(fortigate, **kwargs)
         """:py:class:`.RuleAC` cmdb/authentication/rule."""
 

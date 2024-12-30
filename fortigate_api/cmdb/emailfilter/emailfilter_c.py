@@ -16,7 +16,6 @@ class EmailfilterC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init EmailfilterC."""
-
         self.bwl = BwlEC(fortigate, **kwargs)
         """:py:class:`.BwlEC` cmdb/emailfilter/bwl."""
 

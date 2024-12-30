@@ -12,7 +12,6 @@ class AntivirusC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init AntivirusC."""
-
         self.heuristic = HeuristicAC(fortigate, **kwargs)
         """:py:class:`.HeuristicAC` cmdb/antivirus/heuristic."""
 

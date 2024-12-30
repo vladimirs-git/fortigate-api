@@ -9,6 +9,5 @@ class AlertemailC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init AlertemailC."""
-
         self.setting = SettingAC(fortigate, **kwargs)
         """:py:class:`.SettingAC` cmdb/alertemail/setting."""

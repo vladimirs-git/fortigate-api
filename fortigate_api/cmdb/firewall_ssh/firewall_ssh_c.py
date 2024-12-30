@@ -12,7 +12,6 @@ class FirewallSshC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init FirewallSshC."""
-
         self.host_key = HostKeyFsC(fortigate, **kwargs)
         """:py:class:`.HostKeyFsC` cmdb/firewall.ssh/host-key."""
 

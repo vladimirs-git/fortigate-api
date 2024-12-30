@@ -10,7 +10,6 @@ class FirewallShaperC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init FirewallShaperC."""
-
         self.per_ip_shaper = PerIpShaperFsC(fortigate, **kwargs)
         """:py:class:`.PerIpShaperFsC` cmdb/firewall.shaper/per-ip-shaper."""
 

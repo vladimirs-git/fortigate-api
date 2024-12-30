@@ -10,7 +10,6 @@ class FirewallIpmacbindingC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init FirewallIpmacbindingC."""
-
         self.setting = SettingFiC(fortigate, **kwargs)
         """:py:class:`.SettingFiC` cmdb/firewall.ipmacbinding/setting."""
 

@@ -18,8 +18,8 @@ API_DIR = API_CLASS.lower()
 
 
 def create_index() -> None:
-    """Create docs/index.rst"""
-    path: Path = ROOT.joinpath(f"docs/index.rst")
+    """Create docs/index.rst."""
+    path: Path = ROOT.joinpath("docs/index.rst")
     text = path.read_text(encoding="utf-8")
     top = re.search(".+pip install.+?----(-)+", text, re.S)[0]
     bottom = re.search(r"----(-)+\s+Indices and tables.+", text, re.S)[0]
@@ -67,7 +67,7 @@ def create_rest_api_cmdb_rst() -> None:
 
 
 def _create_rest_api_scope_app_yml(version: str, scope: str, app_path: str, schema_d: DAny) -> None:
-    """Create docs/rest_api/version/scope/app.yml (docs/rest_api/6.4.14/cmdb/firewall.yml)"""
+    """Create docs/rest_api/version/scope/app.yml (docs/rest_api/6.4.14/cmdb/firewall.yml)."""
     path_yml: Path = ROOT.joinpath(f"docs/rest_api/{version}/{scope}/{app_path}.yml")
     path_yml.parent.mkdir(parents=True, exist_ok=True)
     with open(path_yml, "w", encoding="utf-8") as file_:
@@ -76,7 +76,7 @@ def _create_rest_api_scope_app_yml(version: str, scope: str, app_path: str, sche
 
 
 def _create_rest_api_scope_app(version: str, scope: str, app_path: str) -> None:
-    """Create docs/rest_api/version/scope/app.rst (docs/rest_api/6.4.14/cmdb/firewall.rst)"""
+    """Create docs/rest_api/version/scope/app.rst (docs/rest_api/6.4.14/cmdb/firewall.rst)."""
     path: Path = ROOT.joinpath(f"docs/rest_api/{version}/{scope}/{app_path}.rst")
     content_j2 = Path("templates/rest_api/scope_app.j2").read_text(encoding="utf-8")
     text = Template(content_j2).render(version=version, scope=scope, app_path=app_path)
@@ -86,7 +86,7 @@ def _create_rest_api_scope_app(version: str, scope: str, app_path: str) -> None:
 
 
 def _create_rest_api_scope(version: str, scope: str, app_paths: LStr) -> None:
-    """Create docs/rest_api/version/scope.rst (docs/rest_api/6.4.14/cmdb.rst)"""
+    """Create docs/rest_api/version/scope.rst (docs/rest_api/6.4.14/cmdb.rst)."""
     content_j2 = Path("templates/rest_api/scope_contents.j2").read_text(encoding="utf-8")
     text = Template(content_j2).render(version=version, scope=scope, app_paths=app_paths)
     path: Path = ROOT.joinpath(f"docs/rest_api/{version}/{scope}.rst")
@@ -110,7 +110,7 @@ def create_fortigateapi_cmdb() -> None:
 
 
 def _create_fortigateapi__scope(scope: str, app_names: LStr) -> None:
-    """Create docs/fortigateapi/cmdb/_contents.rst"""
+    """Create docs/fortigateapi/cmdb/_contents.rst."""
     content_j2 = Path(f"templates/{API_DIR}/scope_contents.j2").read_text(encoding="utf-8")
     text = Template(content_j2).render(
         api_class=API_CLASS,
@@ -124,7 +124,7 @@ def _create_fortigateapi__scope(scope: str, app_names: LStr) -> None:
 
 
 def _create_fortigateapi__scope_app(scope: str, app_name: str, model_names: LStr) -> None:
-    """Create docs/fortigateapi/cmdb/firewall/_contents.rst"""
+    """Create docs/fortigateapi/cmdb/firewall/_contents.rst."""
     content_j2 = Path(f"templates/{API_DIR}/app_contents.j2").read_text(encoding="utf-8")
     text = Template(content_j2).render(
         api_class=API_CLASS,
@@ -139,7 +139,7 @@ def _create_fortigateapi__scope_app(scope: str, app_name: str, model_names: LStr
 
 
 def _create_fortigateapi__scope_app_model(scope: str, app_name: str, model_name: str) -> None:
-    """Create docs/fortigateapi/cmdb/firewall/address.rst"""
+    """Create docs/fortigateapi/cmdb/firewall/address.rst."""
     content_j2 = Path(f"templates/{API_DIR}/model_class.j2").read_text(encoding="utf-8")
     text = Template(content_j2).render(
         package=fortigate_api.__name__,
@@ -166,7 +166,7 @@ def _usage__scope_app_model(scope: str, app_name: str, model_name: str) -> str:
 
 
 def create_fortigate(class_name: str) -> None:
-    """Create docs/fortigateapi/FortiGate.rst or FortiGateAPI.rst"""
+    """Create docs/fortigateapi/FortiGate.rst or FortiGateAPI.rst."""
     content_j2 = Path(f"templates/fortigateapi/class_fortigate.j2").read_text(encoding="utf-8")
     text = Template(content_j2).render(
         package=fortigate_api.__name__,

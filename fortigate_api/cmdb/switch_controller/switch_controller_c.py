@@ -23,7 +23,6 @@ class SwitchControllerC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init SwitchControllerC."""
-
         self.global_ = GlobalScC(fortigate, **kwargs)
         """:py:class:`.GlobalScC` cmdb/switch-controller/global."""
 

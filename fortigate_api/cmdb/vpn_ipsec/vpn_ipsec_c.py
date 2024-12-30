@@ -16,7 +16,6 @@ class VpnIpsecC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init VpnIpsecC."""
-
         self.concentrator = ConcentratorViC(fortigate, **kwargs)
         """:py:class:`.ConcentratorViC` cmdb/vpn.ipsec/concentrator."""
 

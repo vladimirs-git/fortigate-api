@@ -9,6 +9,5 @@ class SystemDhcp6C:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init SystemDhcp6C."""
-
         self.server = ServerSdC(fortigate, **kwargs)
         """:py:class:`.ServerSdC` cmdb/system.dhcp6/server."""

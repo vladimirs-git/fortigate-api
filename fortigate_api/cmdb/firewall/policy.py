@@ -1,4 +1,5 @@
 """Cmdb/firewall/policy connector."""
+
 from requests import Response
 
 from fortigate_api import helpers as h

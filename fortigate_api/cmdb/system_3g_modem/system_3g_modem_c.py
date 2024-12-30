@@ -9,6 +9,5 @@ class System3gModemC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init System3gModemC."""
-
         self.custom = CustomS3mC(fortigate, **kwargs)
         """:py:class:`.CustomS3mC` cmdb/system.3g-modem/custom."""

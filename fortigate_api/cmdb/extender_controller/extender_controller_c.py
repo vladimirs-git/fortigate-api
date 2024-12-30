@@ -10,7 +10,6 @@ class ExtenderControllerC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init ExtenderControllerC."""
-
         self.dataplan = DataplanEcC(fortigate, **kwargs)
         """:py:class:`.DataplanEcC` cmdb/extender-controller/dataplan."""
 

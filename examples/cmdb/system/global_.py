@@ -1,4 +1,4 @@
-"""api/v2/cmdb/system/global
+"""api/v2/cmdb/system/global.
 
 - Update data in the Fortigate
 - Get data from the Fortigate

@@ -12,7 +12,6 @@ class CertificateC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init CertificateC."""
-
         self.ca = CaCC(fortigate, **kwargs)
         """:py:class:`.CaCC` cmdb/certificate/ca."""
 

@@ -9,6 +9,5 @@ class VpnSslC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init VpnSslC."""
-
         self.settings = SettingsVsC(fortigate, **kwargs)
         """:py:class:`.SettingsVsC` cmdb/vpn.ssl/settings."""

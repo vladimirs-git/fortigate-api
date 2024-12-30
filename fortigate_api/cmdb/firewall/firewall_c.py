@@ -79,7 +79,6 @@ class FirewallC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init FirewallC."""
-
         self.dos_policy = DosPolicyFC(fortigate, **kwargs)
         """:py:class:`.DosPolicyFC` cmdb/firewall/DoS-policy."""
 

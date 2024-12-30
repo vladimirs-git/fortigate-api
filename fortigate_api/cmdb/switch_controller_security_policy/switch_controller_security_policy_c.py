@@ -9,6 +9,5 @@ class SwitchControllerSecurityPolicyC:
 
     def __init__(self, fortigate: FortiGate, **kwargs):
         """Init SwitchControllerSecurityPolicyC."""
-
         self._802_1x = _8021xScspC(fortigate, **kwargs)
         """:py:class:`._8021xScspC` cmdb/switch-controller.security-policy/802-1X."""
