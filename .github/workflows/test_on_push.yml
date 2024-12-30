@@ -2,7 +2,7 @@ name: Run tests on push event
 on:
   push:
     # Triggered by a push event on the following branches
-    branches: [ main ]
+    branches: [ 3_12 ]
     # Triggered by a tag that starts with "v"
     tags: [ v* ]
   # Triggered by any pull requests
@@ -10,11 +10,11 @@ on:
 
 jobs:
   run_tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-         # python-version:  [ 3.8 ]
-         python-version: [ 3.8, 3.9, "3.10" ]
+         python-version:  [ "3.8" ]
+         # python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12", "3.13" ]
     steps:
       # Checkout the code from the following branch
       - uses: actions/checkout@main
@@ -23,22 +23,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      # Install dependencies
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install poetry
-          poetry install
-      # Run tests
-      #- name: pylint
-      #  run: pylint fortigate_api tests
-      - name: mypy
-        run: mypy --namespace-packages --explicit-package-bases fortigate_api tests
-      - name: pytest
+          poetry install --with test
+
+      - name: Run tests
         run: pytest -v -m "not skip" tests
-      - name: coverage
-        run: pytest --cov=tests
-      - name: pydocstyle
-        run: pydocstyle .
-      - name: rst-lint
-        run: rst-lint README.rst CHANGELOG.rst

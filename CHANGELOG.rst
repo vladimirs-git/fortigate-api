@@ -12,8 +12,14 @@ Unreleased
 **New:** `FortiGateAPI.monitor` connectors, to work with all `Monitor API` endpoints.
 
 
+2.0.3 (2024-12-30)
+------------------
+**Changed:** .github/workflows
+
+
 2.0.2 (2024-05-17)
 ------------------
+
 **Changed:** FortiGateBase.login() for token check /api/v2/monitor/system/status
 
 **Changed:** FortiGateBase._get_token_from_cookies() cookie_prefix = "ccsrftoken"
@@ -21,6 +27,7 @@ Unreleased
 
 2.0.1 (2024-01-24)
 ------------------
+
 **Fixed:** FortigateAPI `get`, `update` methods for objects without UID
 
 
