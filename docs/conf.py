@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.DEBUG)
 project = "fortigate-api"
 copyright = "2021, Vladimirs Prusakovs"
 author = "Vladimirs Prusakovs"
-release = "2.0.5"
+release = "2.0.6"
 
 extensions = [
     "sphinx.ext.autodoc",

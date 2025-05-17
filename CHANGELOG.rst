@@ -13,7 +13,7 @@ Unreleased
 **New:** `FortiGateAPI.monitor` connectors, to work with all `Monitor API` endpoints.
 
 
-2.0.5 (2025-05-17)
+2.0.6 (2025-05-17)
 ------------------
 
 **Changed:** `FortiGateBase.get_session()`, private to public

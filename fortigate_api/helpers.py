@@ -222,7 +222,7 @@ def pop_lstr(key: str, data: DAny) -> LStr:
     :param data: The dictionary from which the key is to be popped.
     :return: The values as a string. Update `data`, remove `key`.
     """
-    values = vdict.pop(key, data)
+    values = vdict.pop(data, key=key)
     if values is None:
         values = []
     if isinstance(values, str):

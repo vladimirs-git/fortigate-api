@@ -9,15 +9,10 @@ ROOT = Path(__file__).parent.parent.resolve()
 PYPROJECT_D = vdict.pyproject_d(ROOT)
 
 
-def test__version__tar():
-    """Version in tar.gz."""
-    expected = PYPROJECT_D["tool"]["poetry"]["version"]
-    package = PYPROJECT_D["tool"]["poetry"]["name"].replace("_", "-")
-    regex_tar = fr"{package}.+/(.+?)\.tar\.gz"
-
-    # pyproject.toml
-    text = PYPROJECT_D["tool"]["poetry"]["urls"]["Download URL"]
-    actual = vre.find1(regex_tar, text)
+def test__python_version():
+    """Python version in pyproject.toml."""
+    actual = PYPROJECT_D["tool"]["poetry"]["dependencies"]["python"]
+    expected = "^3.8"
     assert actual == expected
 
 
@@ -32,7 +27,6 @@ def test__version__changelog():
     assert actual == expected, f"version in {path=}"
 
 
-# noinspection PyTypeChecker
 def test__version__docs():
     """Version in docs/config.py."""
     path = Path.joinpath(ROOT, "docs", "conf.py")
@@ -44,6 +38,7 @@ def test__version__docs():
         if isinstance(node, ast.Assign):
             for target in node.targets:
                 if isinstance(target, ast.Name) and target.id == "release":
+                    # noinspection PyTypeChecker
                     actual = ast.literal_eval(node.value)
                     break
 
@@ -57,6 +52,6 @@ def test__last_modified_date():
     text = path.read_text(encoding="utf-8")
     regex = r".+\((\d\d\d\d-\d\d-\d\d)\)$"
     actual = vre.find1(regex, text, re.M)
-    files = vpath.get_files(ROOT, ext=".py")
+    files = vpath.get_files(ROOT, pattern="\.py$")
     expected = vdate.last_modified(files)
     assert actual == expected, "last modified file"

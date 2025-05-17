@@ -92,7 +92,7 @@ class Connector:
         :return: List of the fortigate-objects.
         :rtype: List[dict]
         """
-        uid = h.quote(vdict.pop(self.uid, kwargs))
+        uid = h.quote(vdict.pop(kwargs, key=self.uid))
         url = f"{self.url}/{uid}".rstrip("/")
         url = h.join_url_params(url=url, **kwargs)
         if self.uid:
