@@ -197,13 +197,13 @@ class FortiGateBase:
         """Return bearer token."""
         return {"Authorization": f"Bearer {self.token}"}
 
-    def _get_session(self) -> Session:
+    def get_session(self) -> Session:
         """Return an existing session or create a new one."""
         if not self.is_connected:
             self.login()
         session = self._session
         if not isinstance(session, Session):
-            raise TypeError(f"{session=} {Session} expected.")
+            raise TypeError(f"{Session.__name__} expected.")
         return session
 
     @staticmethod
@@ -291,7 +291,7 @@ class FortiGateBase:
         if self.token:
             params["headers"] = self._bearer_token()
 
-        session: Session = self._get_session()
+        session: Session = self.get_session()
         method_: Callable = getattr(session, method)
         try:
             response: Response = method_(**params)

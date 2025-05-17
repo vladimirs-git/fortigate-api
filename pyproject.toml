@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fortigate_api"
-version = "2.0.3"
+version = "2.0.4"
 description = "Python package to configure Fortigate (Fortios) devices using REST API and SSH"
 authors = ["Vladimirs Prusakovs <vladimir.prusakovs@gmail.com>"]
 readme = "README.rst"
@@ -62,7 +62,7 @@ test = ["pytest"]
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/vladimirs-git/fortigate-api/issues"
-"Download URL" = "https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/2.0.3.tar.gz"
+"Download URL" = "https://github.com/vladimirs-git/fortigate-api/archive/refs/tags/2.0.4.tar.gz"
 
 [tool.pylint]
 max-line-length = 100

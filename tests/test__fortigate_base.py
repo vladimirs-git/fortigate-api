@@ -6,7 +6,6 @@ import pytest
 import requests_mock
 from pytest_mock import MockerFixture
 from requests import Session
-from requests_mock import Mocker
 
 from fortigate_api import fortigate_base
 from fortigate_api.fortigate import FortiGate
@@ -16,8 +15,8 @@ QUERY = "api/v2/cmdb/firewall/policy"
 
 
 @pytest.fixture
-def api():
-    """Init FortiGate"""
+def api() -> FortiGate:
+    """Init FortiGate."""
     return FortiGate(host="host")
 
 
@@ -63,7 +62,7 @@ def test__enter__(mocker: MockerFixture):
     session_m = mocker.Mock()
     mocker.patch(target="requests.Session.post", return_value=session_m)
     mocker.patch(target="requests.Session.get", return_value=tst.crate_response(200))
-    with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value="token"):
+    with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value="TOKEN"):
         with FortiGate(host="host") as fgt:
             session = fgt._session
             assert isinstance(session, Session) is True
@@ -125,21 +124,22 @@ def test__login(token, expected, headers):
 
 # =========================== helpers ============================
 
-def test__get_session(api: FortiGate, mocker: MockerFixture):
-    """FortiGateBase._get_session()"""
-    # session
-    api._session = Session()
-    session = api._get_session()
-    assert isinstance(session, Session)
+@pytest.mark.parametrize("session, expected", [
+    (Session(), True),
+    (None, TypeError),
+])
+def test__get_session(api: FortiGate, session, expected):
+    """FortiGateBase.get_session()"""
+    api._session = session
 
-    # login
-    api._session = None
-    mock_response = mocker.Mock()
-    mocker.patch(target="requests.Session.post", return_value=mock_response)
-    mocker.patch(target="requests.Session.get", return_value=tst.crate_response(200))
-    with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value="token"):
-        session = api._get_session()
-        assert isinstance(session, Session) is True
+    if isinstance(expected, bool):
+        session = api.get_session()
+        assert isinstance(session, Session)
+
+    else:
+        with pytest.raises(expected):
+            with patch.object(FortiGate, "login", return_value=None):
+                api.get_session()
 
 
 @pytest.mark.parametrize("name, expected", [

@@ -13,6 +13,14 @@ Unreleased
 **New:** `FortiGateAPI.monitor` connectors, to work with all `Monitor API` endpoints.
 
 
+2.0.4 (2025-05-17)
+------------------
+
+**Changed:** `FortiGateBase.get_session()`, private to public
+
+**Added:** example policy_filter_efilter.py
+
+
 2.0.3 (2024-12-30)
 ------------------
 

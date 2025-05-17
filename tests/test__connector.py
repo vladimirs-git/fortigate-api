@@ -212,6 +212,7 @@ def test__get_uid(connectors_name: list, uid, data, expected: Any):
     """Connector._get_uid()"""
     connector = connectors_name[0]
     connector.uid = uid
+
     if isinstance(expected, str):
         actual = connector._get_uid(data=data)
         assert actual == expected
