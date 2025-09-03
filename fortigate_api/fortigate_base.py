@@ -20,6 +20,7 @@ from fortigate_api.types_ import DAny, ODAny, DStr, Method
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 HTTPS = "https"
+HTTP = "http"
 PORT_443 = 443
 PORT_80 = 80
 TIMEOUT = 15
@@ -251,7 +252,7 @@ class FortiGateBase:
         """Init port, 443 for scheme=`https`, 80 for scheme=`http`."""
         if port := int(kwargs.get("port") or 0):
             return port
-        if self.scheme == "http":
+        if self.scheme == HTTP:
             return PORT_80
         return PORT_443
 
@@ -316,9 +317,9 @@ class FortiGateBase:
 def _init_scheme(**kwargs) -> str:
     """Init scheme `https` or `http`."""
     scheme = str(kwargs.get("scheme") or HTTPS)
-    expected = ["https", "http"]
+    expected = [HTTPS, HTTP]
     if scheme not in expected:
-        raise ValueError(f"{scheme=}, {expected=}.")
+        raise ValueError(f"{scheme=!r}, {expected=!r}.")
     return scheme
 
 
@@ -328,7 +329,7 @@ def _init_token(**kwargs) -> str:
     if not token:
         return ""
     if kwargs.get("username"):
-        raise ValueError("Mutually excluded: username, token.")
+        raise ValueError("A username and a token are mutually exclusive.")
     if kwargs.get("password"):
-        raise ValueError("Mutually excluded: password, token.")
+        raise ValueError("A password and a token are mutually exclusive.")
     return token
