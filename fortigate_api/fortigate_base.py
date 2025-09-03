@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ipaddress
 import json
 import logging
 import re
@@ -60,7 +61,7 @@ class FortiGateBase:
         :param bool logging_error: Logging only the REST API response with error.
             `True` - Enable errors logging, `False` - otherwise. Default is `False`.
         """
-        self.host = str(kwargs.get("host"))
+        self.host = _init_host(**kwargs)
         self.username = str(kwargs.get("username"))
         self.password = str(kwargs.get("password"))
         self.token = _init_token(**kwargs)
@@ -315,7 +316,24 @@ def _init_scheme(**kwargs) -> str:
         raise ValueError(f"{scheme=!r}, {expected=!r}.")
     return scheme
 
-
+def _init_host(**kwargs) -> str:
+    """Init host valid hostname or valid IP"""
+    host = str(kwargs.get("host"))
+    if re.fullmatch(r"\d+\.\d+\.\d+\.\d+", host) or ":" in host:
+        try:
+            ipaddress.ip_address(host)
+            return host
+        except ValueError:
+            raise ValueError(f"{host=!r}, not a valid ip address")
+    if len(host) > 255:
+        raise ValueError(f"{host=!r}, hostname is too long.")
+    if host[-1] == ".":
+        host = host[:-1]
+    allowed = re.compile(r"^(?!-)[A-Z\d-]{1,63}(?<!-)$", re.IGNORECASE)
+    if all(allowed.match(label) for label in host.split(".")):
+        return host
+    raise ValueError(f"{host=!r}, hostname is not RFC compliant.")
+    
 def _init_token(**kwargs) -> str:
     """Init token."""
     token = str(kwargs.get("token") or "")
