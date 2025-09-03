@@ -125,7 +125,7 @@ class FortiGateBase:
     @property
     def url(self) -> str:
         """Return URL to the Fortigate."""
-        return urlunparse((self.scheme, f"{self.host}:{self.port}", "", "", "", ""))
+        return urlunparse((self.scheme, f"{self.host}:{self.port}", "/", "", "", ""))
 
     # ============================ login =============================
 
@@ -143,7 +143,7 @@ class FortiGateBase:
         if self.token:
             try:
                 response: Response = session.get(
-                    url=f"{self.url}/api/v2/monitor/system/status",
+                    url=urljoin(self.url, "/api/v2/monitor/system/status"),
                     headers=self._bearer_token(),
                     verify=self.verify,
                 )
@@ -156,7 +156,7 @@ class FortiGateBase:
         # password
         try:
             response = session.post(
-                url=f"{self.url}/logincheck",
+                url=urljoin(self.url, "/logincheck"),
                 data=urlencode([("username", self.username), ("secretkey", self.password)]),
                 timeout=self.timeout,
                 verify=self.verify,
@@ -180,7 +180,7 @@ class FortiGateBase:
             if not self.token:
                 try:
                     self._session.get(
-                        url=f"{self.url}/logout",
+                        url=urljoin(self.url, "/logout"),
                         timeout=self.timeout,
                         verify=self.verify,
                     )
@@ -278,7 +278,7 @@ class FortiGateBase:
         :rtype: Response
         """
         params: DAny = {
-            "url": self._valid_url(url),
+            "url": urljoin(self.url, url),
             "params": urlencode([("vdom", self.vdom)]),
             "timeout": self.timeout,
             "verify": self.verify,
@@ -295,15 +295,6 @@ class FortiGateBase:
         except Exception as ex:
             raise self._hide_secret_ex(ex)
         return response
-
-    def _valid_url(self, url: str) -> str:
-        """Return a valid URL string.
-
-        Ensures no trailing `/` character.
-        """
-        full_url = urljoin(self.url, url)
-        return full_url.rstrip("/")
-
 
 # =========================== helpers ============================
 

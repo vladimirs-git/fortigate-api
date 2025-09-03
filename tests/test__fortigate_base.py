@@ -199,27 +199,6 @@ def test__init_port(api: FortiGate, kwargs, scheme, expected):
         with pytest.raises(expected):
             api._init_port(**kwargs)
 
-
-@pytest.mark.parametrize("kwargs, url, expected", [
-    ({}, QUERY, f"https://host/{QUERY}"),
-    ({}, f"/{QUERY}/", f"https://host/{QUERY}"),
-    ({}, f"https://host/{QUERY}", f"https://host/{QUERY}"),
-    ({}, f"https://host/{QUERY}/", f"https://host/{QUERY}"),
-    ({"port": 80}, QUERY, f"https://host:80/{QUERY}"),
-    ({"port": 80}, f"https://host:80/{QUERY}", f"https://host:80/{QUERY}"),
-    ({"scheme": "http", "port": 80}, QUERY, f"http://host/{QUERY}"),
-    ({"scheme": "http", "port": 80}, f"http://host/{QUERY}", f"http://host/{QUERY}"),
-])
-def test__valid_url(kwargs, url, expected):
-    """FortiGateBase._valid_url()"""
-    default = dict(host="host", username="username", password="", port=443)
-    kwargs_ = {**default, **kwargs}
-    fgt = FortiGate(**kwargs_)
-
-    actual = fgt._valid_url(url=url)
-    assert actual == expected
-
-
 # =========================== helpers ============================
 
 @pytest.mark.parametrize("kwargs, expected", [
