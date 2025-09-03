@@ -6,7 +6,7 @@ import json
 import logging
 import re
 from typing import Callable, Iterable, Optional
-from urllib.parse import urlencode, urljoin
+from urllib.parse import urlencode, urljoin, urlunparse
 
 import requests
 from requests import Session, Response
@@ -82,7 +82,7 @@ class FortiGateBase:
         host = self.host
         username = self.username
         scheme = self.scheme
-        port = self.port if not (scheme == HTTPS and self.port == PORT_443) else ""
+        port = self.port
         timeout = self.timeout
         verify = self.verify
         vdom = self.vdom
@@ -124,11 +124,7 @@ class FortiGateBase:
     @property
     def url(self) -> str:
         """Return URL to the Fortigate."""
-        if self.scheme == HTTPS and self.port == 443:
-            return f"{self.scheme}://{self.host}"
-        if self.scheme == "http" and self.port == 80:
-            return f"{self.scheme}://{self.host}"
-        return f"{self.scheme}://{self.host}:{self.port}"
+        return urlunparse((self.scheme, f"{self.host}:{self.port}", "", "", "", ""))
 
     # ============================ login =============================
 
@@ -189,7 +185,6 @@ class FortiGateBase:
                     )
                 except SSLError:
                     pass
-            del self._session
         self._session = None
 
     # =========================== helpers ============================
@@ -303,12 +298,10 @@ class FortiGateBase:
     def _valid_url(self, url: str) -> str:
         """Return a valid URL string.
 
-        Add `https://` to `url` if it is absent and remove trailing `/` character.
+        Ensures no trailing `/` character.
         """
-        if re.match("http(s)?://", url):
-            return url.rstrip("/")
-        path = url.strip("/")
-        return urljoin(self.url, path)
+        full_url = urljoin(self.url, url)
+        return full_url.rstrip("/")
 
 
 # =========================== helpers ============================
