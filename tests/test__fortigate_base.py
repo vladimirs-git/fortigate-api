@@ -220,6 +220,50 @@ def test__init_scheme(kwargs, expected):
 
 
 @pytest.mark.parametrize("kwargs, expected", [
+    (dict(host=""), ValueError),
+    (dict(host=" "), ValueError),
+    (dict(host=":"), ValueError),
+    (dict(host=":80"), ValueError),
+    (dict(host="//"), ValueError),
+    (dict(host="/path"), ValueError),
+    (dict(host="///host"), ValueError),
+    (dict(host="https://example.com"), ValueError),
+    (dict(host="host..com"), ValueError),
+    (dict(host="hostname-.com"), ValueError),
+    (dict(host="ho$stname.com"), ValueError),
+    (dict(host="host name.com"), ValueError),
+    (dict(host="hostname." + "a" * 256), ValueError),
+    (dict(host="256.256.256.256"), ValueError),
+    (dict(host="192.168.1.999"), ValueError),
+    (dict(host="[2001:db8:::1]"), ValueError),
+    (dict(host="[2001:db8::1"), ValueError),
+    (dict(host="2001:db8::1]"), ValueError),
+    (dict(host="host<>name.com"), ValueError),
+    (dict(host="host|name.com"), ValueError),
+    (dict(host="host^name.com"), ValueError),
+    (dict(host="host/name.com"), ValueError),
+    (dict(host="host\\name.com"), ValueError),
+    (dict(host="localhost:"), ValueError),
+    (dict(host="localhost:abc"), ValueError),
+    (dict(host="localhost:99999"), ValueError),
+    (dict(host="[::1]:999999"), ValueError),
+    (dict(host="[2001:db8::1]"), "[2001:db8::1]"),
+    (dict(host="2001:db8::1"), "[2001:db8::1]"),
+    (dict(host="192.168.1.1"), "192.168.1.1"),
+    (dict(host="example.com"), "example.com"),
+    (dict(host="sub.example.com"), "sub.example.com"),
+])
+def test__init_host(kwargs, expected):
+    """FortiGateBase._init_port()"""
+    if isinstance(expected, str):
+        actual = fortigate_base._init_host(**kwargs)
+        assert actual == expected
+    else:
+        with pytest.raises(expected):
+            fortigate_base._init_host(**kwargs)
+
+
+@pytest.mark.parametrize("kwargs, expected", [
     ({}, ""),
     (dict(token="token"), "token"),
     (dict(token="token", username="username"), ValueError),
