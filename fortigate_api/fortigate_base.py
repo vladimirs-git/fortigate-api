@@ -320,7 +320,7 @@ def _init_host(**kwargs) -> str:
         try:
             ip = ipaddress.ip_address(host)
             if isinstance(ip, ipaddress.IPv6Address):
-                return f"[{ip}]"
+                return f"[{host}]"
             return host
         except ValueError:
             raise ValueError(f"{host=!r}, not a valid ip address")
