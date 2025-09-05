@@ -254,7 +254,7 @@ def test__init_scheme(kwargs, expected):
     (dict(host="sub.example.com"), "sub.example.com"),
 ])
 def test__init_host(kwargs, expected):
-    """FortiGateBase._init_port()"""
+    """FortiGateBase._init_host()"""
     if isinstance(expected, str):
         actual = fortigate_base._init_host(**kwargs)
         assert actual == expected
