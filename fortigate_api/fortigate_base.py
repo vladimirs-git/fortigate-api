@@ -310,14 +310,20 @@ def _init_scheme(**kwargs) -> str:
 def _init_host(**kwargs) -> str:
     """Init host valid hostname or valid IP"""
     host = str(kwargs.get("host"))
+    if not host:
+        raise ValueError(f"{host=!r}, hostname is not specified.")
+    if len(host) > 255:
+        raise ValueError(f"{host=!r}, hostname is too long.")
+    if host.startswith('[') and host.endswith(']'):
+        host = host[1:-1]
     if re.fullmatch(r"\d+\.\d+\.\d+\.\d+", host) or ":" in host:
         try:
-            ipaddress.ip_address(host)
+            ip = ipaddress.ip_address(host)
+            if isinstance(ip, ipaddress.IPv6Address):
+                return f"[{ip}]"
             return host
         except ValueError:
             raise ValueError(f"{host=!r}, not a valid ip address")
-    if len(host) > 255:
-        raise ValueError(f"{host=!r}, hostname is too long.")
     if host[-1] == ".":
         host = host[:-1]
     allowed = re.compile(r"^(?!-)[A-Z\d-]{1,63}(?<!-)$", re.IGNORECASE)
