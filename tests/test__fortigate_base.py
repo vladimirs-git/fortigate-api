@@ -23,9 +23,9 @@ def api() -> FortiGate:
 @pytest.mark.parametrize("kwargs, expected", [
     # username password
     (dict(host="a", username="b", password="c"),
-     "FortiGate(host='a', username='b')"),
+     "FortiGate(host='a', username='b', port=443)"),
     (dict(host="a", username="b", password="c", scheme="https", port=443, timeout=15, vdom="root"),
-     "FortiGate(host='a', username='b')"),
+     "FortiGate(host='a', username='b', port=443)"),
     (dict(host="a", username="b", password="c", port=80),
      "FortiGate(host='a', username='b', port=80)"),
     (dict(host="a", username="b", password="c", scheme="https", port=80),
@@ -33,17 +33,17 @@ def api() -> FortiGate:
     (dict(host="a", username="b", password="c", scheme="http", port=80),
      "FortiGate(host='a', username='b', scheme='http', port=80)"),
     (dict(host="a", username="b", password="c", timeout=1),
-     "FortiGate(host='a', username='b', timeout=1)"),
+     "FortiGate(host='a', username='b', port=443, timeout=1)"),
     (dict(host="a", username="b", password="c", vdom="d"),
-     "FortiGate(host='a', username='b', vdom='d')"),
+     "FortiGate(host='a', username='b', port=443, vdom='d')"),
     (dict(host="a", username="b", password="c", vdom="d", timeout=1, port=80),
      "FortiGate(host='a', username='b', port=80, timeout=1, vdom='d')"),
     (dict(host="a", username="b", password="c", verify=True),
-     "FortiGate(host='a', username='b', verify=True)"),
+     "FortiGate(host='a', username='b', port=443, verify=True)"),
     (dict(host="a", username="b", password="c", verify=False),
-     "FortiGate(host='a', username='b')"),
+     "FortiGate(host='a', username='b', port=443)"),
     # token
-    (dict(host="a", token="b"), "FortiGate(host='a', username='')"),
+    (dict(host="a", token="b"), "FortiGate(host='a', username='', port=443)"),
 ])
 def test__repr__(kwargs, expected):
     """FortiGateBase.__repr__()"""
@@ -81,17 +81,26 @@ def test__is_connected(api: FortiGate, session, expected):
     assert actual == expected
 
 
-@pytest.mark.parametrize("scheme, host, port, expected", [
-    ("https", "host", 80, "https://host:80"),
-    ("https", "127.0.0.255", 80, "https://127.0.0.255:80"),
-    ("https", "host", 443, "https://host"),
-    ("https", "127.0.0.255", 443, "https://127.0.0.255"),
-    ("http", "host", 80, "http://host"),
-    ("http", "127.0.0.255", 80, "http://127.0.0.255"),
-    ("http", "host", 443, "http://host:443"),
-    ("http", "127.0.0.255", 443, "http://127.0.0.255:443"),
+@pytest.mark.parametrize("host, scheme, port, expected", [
+    # hostnames
+    ("host", "http", 80, "http://host:80/"),
+    ("host", "http", 443, "http://host:443/"),
+    ("host", "https", 80, "https://host:80/"),
+    ("host", "https", 443, "https://host:443/"),
+    # IPv4
+    ("10.0.0.1", "http", 80, "http://10.0.0.1:80/"),
+    ("10.0.0.1", "http", 443, "http://10.0.0.1:443/"),
+    ("10.0.0.1", "https", 80, "https://10.0.0.1:80/"),
+    ("10.0.0.1", "https", 443, "https://10.0.0.1:443/"),
+    # IPv6
+    ("2001:db8::1", "http", 80, "http://[2001:db8::1]:80/"),
+    ("2001:db8::1", "http", 443, "http://[2001:db8::1]:443/"),
+    ("2001:db8::1", "https", 80, "https://[2001:db8::1]:80/"),
+    ("2001:db8::1", "https", 443, "https://[2001:db8::1]:443/"),
+    ("2001:0db8:0000:0000:0000:0000:0000:0001", "https", 443,
+     "https://[2001:0db8:0000:0000:0000:0000:0000:0001]:443/"),
 ])
-def test__url(scheme, host, port, expected):
+def test__url(host, scheme, port, expected):
     """FortiGateBase.url()"""
     fgt = FortiGate(host=host, scheme=scheme, port=port)
     actual = fgt.url
@@ -107,12 +116,12 @@ def test__url(scheme, host, port, expected):
 ])
 def test__login(token, expected, headers):
     """FortiGateBase.login() for username."""
-    api = FortiGate(host="HOST", token=token)
+    api = FortiGate(host="host", token=token)
     with requests_mock.Mocker() as mock:
         if token:
-            mock.get("https://host/api/v2/monitor/system/status")
+            mock.get("https://host:443/api/v2/monitor/system/status")
         else:
-            mock.post("https://host/logincheck")
+            mock.post("https://host:443/logincheck")
 
         with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value=expected):
             api.login()
@@ -200,27 +209,27 @@ def test__init_port(api: FortiGate, kwargs, scheme, expected):
             api._init_port(**kwargs)
 
 
-@pytest.mark.parametrize("kwargs, url, expected", [
-    ({}, QUERY, f"https://host/{QUERY}"),
-    ({}, f"/{QUERY}/", f"https://host/{QUERY}"),
-    ({}, f"https://host/{QUERY}", f"https://host/{QUERY}"),
-    ({}, f"https://host/{QUERY}/", f"https://host/{QUERY}"),
-    ({"port": 80}, QUERY, f"https://host:80/{QUERY}"),
-    ({"port": 80}, f"https://host:80/{QUERY}", f"https://host:80/{QUERY}"),
-    ({"scheme": "http", "port": 80}, QUERY, f"http://host/{QUERY}"),
-    ({"scheme": "http", "port": 80}, f"http://host/{QUERY}", f"http://host/{QUERY}"),
-])
-def test__valid_url(kwargs, url, expected):
-    """FortiGateBase._valid_url()"""
-    default = dict(host="host", username="username", password="", port=443)
-    kwargs_ = {**default, **kwargs}
-    fgt = FortiGate(**kwargs_)
-
-    actual = fgt._valid_url(url=url)
-    assert actual == expected
-
-
 # =========================== helpers ============================
+
+@pytest.mark.parametrize("kwargs, expected", [
+    ({}, ValueError),
+    ({"host": ""}, ValueError),
+    ({"host": "domain.com"}, "domain.com"),
+    ({"host": "domain"}, "domain"),
+    ({"host": "10.0.0.1"}, "10.0.0.1"),
+    ({"host": "2001:db8::1"}, "[2001:db8::1]"),
+    ({"host": "[2001:db8::1]"}, "[2001:db8::1]"),
+])
+def test__init_host(kwargs, expected):
+    """fortigate_base._init_host()"""
+
+    if isinstance(expected, str):
+        actual = fortigate_base._init_host(**kwargs)
+        assert actual == expected
+    else:
+        with pytest.raises(expected):
+            fortigate_base._init_host(**kwargs)
+
 
 @pytest.mark.parametrize("kwargs, expected", [
     ({}, "https"),

@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
+import ipaddress
 import json
 import logging
-import re
 from typing import Callable, Iterable, Optional
-from urllib.parse import urlencode, urljoin
+from urllib.parse import urlencode, urljoin, urlunparse
 
 import requests
 from requests import Session, Response
@@ -19,6 +19,7 @@ from fortigate_api.types_ import DAny, ODAny, DStr, Method
 # noinspection PyUnresolvedReferences
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+HTTP = "http"
 HTTPS = "https"
 PORT_443 = 443
 PORT_80 = 80
@@ -59,7 +60,7 @@ class FortiGateBase:
         :param bool logging_error: Logging only the REST API response with error.
             `True` - Enable errors logging, `False` - otherwise. Default is `False`.
         """
-        self.host = str(kwargs.get("host"))
+        self.host = _init_host(**kwargs)
         self.username = str(kwargs.get("username"))
         self.password = str(kwargs.get("password"))
         self.token = _init_token(**kwargs)
@@ -81,7 +82,7 @@ class FortiGateBase:
         host = self.host
         username = self.username
         scheme = self.scheme
-        port = self.port if not (scheme == HTTPS and self.port == PORT_443) else ""
+        port = self.port
         timeout = self.timeout
         verify = self.verify
         vdom = self.vdom
@@ -123,11 +124,8 @@ class FortiGateBase:
     @property
     def url(self) -> str:
         """Return URL to the Fortigate."""
-        if self.scheme == HTTPS and self.port == 443:
-            return f"{self.scheme}://{self.host}"
-        if self.scheme == "http" and self.port == 80:
-            return f"{self.scheme}://{self.host}"
-        return f"{self.scheme}://{self.host}:{self.port}"
+        components = (self.scheme, f"{self.host}:{self.port}", "/", "", "", "")
+        return urlunparse(components)
 
     # ============================ login =============================
 
@@ -145,7 +143,7 @@ class FortiGateBase:
         if self.token:
             try:
                 response: Response = session.get(
-                    url=f"{self.url}/api/v2/monitor/system/status",
+                    url=urljoin(self.url, "/api/v2/monitor/system/status"),
                     headers=self._bearer_token(),
                     verify=self.verify,
                 )
@@ -158,7 +156,7 @@ class FortiGateBase:
         # password
         try:
             response = session.post(
-                url=f"{self.url}/logincheck",
+                url=urljoin(self.url, "/logincheck"),
                 data=urlencode([("username", self.username), ("secretkey", self.password)]),
                 timeout=self.timeout,
                 verify=self.verify,
@@ -182,13 +180,12 @@ class FortiGateBase:
             if not self.token:
                 try:
                     self._session.get(
-                        url=f"{self.url}/logout",
+                        url=urljoin(self.url, "/logout"),
                         timeout=self.timeout,
                         verify=self.verify,
                     )
                 except SSLError:
                     pass
-            del self._session
         self._session = None
 
     # =========================== helpers ============================
@@ -251,7 +248,7 @@ class FortiGateBase:
         """Init port, 443 for scheme=`https`, 80 for scheme=`http`."""
         if port := int(kwargs.get("port") or 0):
             return port
-        if self.scheme == "http":
+        if self.scheme == HTTP:
             return PORT_80
         return PORT_443
 
@@ -281,7 +278,7 @@ class FortiGateBase:
         :rtype: Response
         """
         params: DAny = {
-            "url": self._valid_url(url),
+            "url": urljoin(self.url, url),
             "params": urlencode([("vdom", self.vdom)]),
             "timeout": self.timeout,
             "verify": self.verify,
@@ -299,26 +296,37 @@ class FortiGateBase:
             raise self._hide_secret_ex(ex)
         return response
 
-    def _valid_url(self, url: str) -> str:
-        """Return a valid URL string.
-
-        Add `https://` to `url` if it is absent and remove trailing `/` character.
-        """
-        if re.match("http(s)?://", url):
-            return url.rstrip("/")
-        path = url.strip("/")
-        return urljoin(self.url, path)
-
 
 # =========================== helpers ============================
+
+
+def _init_host(**kwargs) -> str:
+    """Init host: valid hostname or valid IPv4/IPv6 address."""
+    host = str(kwargs.get("host", "")).strip()
+    if not host:
+        raise ValueError(f"{host=!r}, hostname is not specified.")
+
+    # Strip brackets if provided (IPv6 URL style)
+    if host.startswith("[") and host.endswith("]"):
+        host = host[1:-1]
+
+    # Try IP validation first
+    try:
+        ip = ipaddress.ip_address(host)
+        if isinstance(ip, ipaddress.IPv6Address):
+            host = f"[{host}]"
+    except ValueError:
+        pass  # hostname
+
+    return host
 
 
 def _init_scheme(**kwargs) -> str:
     """Init scheme `https` or `http`."""
     scheme = str(kwargs.get("scheme") or HTTPS)
-    expected = ["https", "http"]
+    expected = [HTTPS, HTTP]
     if scheme not in expected:
-        raise ValueError(f"{scheme=}, {expected=}.")
+        raise ValueError(f"{scheme=!r}, {expected=!r}.")
     return scheme
 
 
@@ -328,7 +336,7 @@ def _init_token(**kwargs) -> str:
     if not token:
         return ""
     if kwargs.get("username"):
-        raise ValueError("Mutually excluded: username, token.")
+        raise ValueError("A username and a token are mutually exclusive.")
     if kwargs.get("password"):
-        raise ValueError("Mutually excluded: password, token.")
+        raise ValueError("A password and a token are mutually exclusive.")
     return token

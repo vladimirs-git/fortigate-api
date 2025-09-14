@@ -13,6 +13,14 @@ Unreleased
 **New:** `FortiGateAPI.monitor` connectors, to work with all `Monitor API` endpoints.
 
 
+2.0.7 (2025-09-14)
+------------------
+
+**Changed:** f-strings to more robustly helpers.url_join()
+
+**Added:** _init_host() Init host: valid hostname or valid IPv4/IPv6 address.
+
+
 2.0.6 (2025-05-17)
 ------------------
 

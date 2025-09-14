@@ -5,6 +5,7 @@ from collections import Counter
 from functools import wraps
 from ipaddress import ip_network, IPv4Network
 from typing import Tuple
+from urllib.parse import urljoin
 
 from vhelpers import vre
 
@@ -62,8 +63,10 @@ def efilter_by_sdst(policies: LDAny, efilter: str, connector) -> None:
         return
     # get addresses and address-groups from the Fortigate
     fortigate = connector.fortigate
-    addresses: LDAny = fortigate.get_results(url=f"{fortigate.url}/api/v2/cmdb/firewall/address")
-    addr_groups: LDAny = fortigate.get_results(url=f"{fortigate.url}/api/v2/cmdb/firewall/addrgrp")
+    url = urljoin(fortigate.url, "/api/v2/cmdb/firewall/address")
+    addresses: LDAny = fortigate.get_results(url)
+    url = urljoin(fortigate.url, "/api/v2/cmdb/firewall/addrgrp")
+    addr_groups: LDAny = fortigate.get_results(url)
     names_subnets_d: DLStr = _get_names_subnets(addresses, addr_groups)
     names_ipnets_d: DLInet = _convert_subnets_to_ipnets(names_subnets_d)
 

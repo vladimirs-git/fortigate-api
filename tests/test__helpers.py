@@ -267,6 +267,27 @@ def test__quote(string, expected):
     assert actual == expected
 
 
+@pytest.mark.parametrize("base, path, expected", [
+    ("a", "", "a"),
+    ("a", "/", "a/"),
+    ("a", "//", "a/"),
+    ("a", "b", "a/b"),
+    ("a", "//b/", "a/b/"),
+    ("a/", "", "a/"),
+    ("a/", "/", "a/"),
+    ("a/", "//", "a/"),
+    ("a/", "b", "a/b"),
+    ("/a//", "//b/", "/a/b/"),
+    ("https://domain.com/api/v2/cmdb/firewall/policy", 1,
+     "https://domain.com/api/v2/cmdb/firewall/policy/1"),
+    ("", "", ""),
+])
+def test__url_join(base, path, expected):
+    """helpers.url_join()"""
+    actual = h.url_join(base=base, path=path)
+    assert actual == expected
+
+
 @pytest.mark.parametrize("url, expected", [
     ("", ""),
     ("https://domain.com/api/v2/cmdb", ""),

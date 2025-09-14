@@ -58,6 +58,6 @@ class PolicyFC(Connector):
             # "secretkey": self.fortigate.password,
             position: neighbor,
         }
-        url = f"{self.url}/{policyid}"
+        url = h.url_join(self.url, policyid)
         url = h.join_url_params(url, **params)
         return self.fortigate.put(url=url, data={})

@@ -251,9 +251,9 @@ def join_url_params(url: str, **params) -> str:
         return: "https://fomain.com?a=a&b=b&b=B"
     """
     url_o: ParseResult = urlparse(url)
-    params_or: DAny = parse_qs(url_o.query)
-    params_: DAny = {**params_or, **params}
-    query: str = urlencode(params_, doseq=True)
+    params_old: DAny = parse_qs(url_o.query)
+    params_new: DAny = {**params_old, **params}
+    query: str = urlencode(params_new, doseq=True)
     url_o = url_o._replace(query=query)
     return url_o.geturl()
 
@@ -268,6 +268,14 @@ def quote(string: Any) -> str:
         return ""
     string = str(string)
     return parse.quote(string=string, safe="")
+
+
+def url_join(base: str, path: StrInt) -> str:
+    """Join path segments to a base URL safely using slash."""
+    path_ = str(path)
+    if not path_:
+        return base
+    return base.rstrip("/") + "/" + path_.lstrip("/")
 
 
 def url_to_app_model(url: str) -> str:

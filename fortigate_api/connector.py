@@ -31,7 +31,7 @@ class Connector:
     @property
     def url(self) -> str:
         """URL to the fortigate-object."""
-        return f"{self.fortigate.url}/{self._path}"
+        return h.url_join(self.fortigate.url, self._path)
 
     def create(self, data: DAny) -> Response:
         """Create the fortigate-object in the Fortigate.
@@ -79,7 +79,7 @@ class Connector:
         if filter:
             return self._delete_by_filter(filter)
         uid = h.quote(uid)
-        url = f"{self.url}/{uid}"
+        url = h.url_join(self.url, uid)
         return self.fortigate.delete(url=url)
 
     def get(self, **kwargs) -> LDAny:
@@ -93,7 +93,7 @@ class Connector:
         :rtype: List[dict]
         """
         uid = h.quote(vdict.pop(kwargs, key=self.uid))
-        url = f"{self.url}/{uid}".rstrip("/")
+        url = h.url_join(self.url, uid)
         url = h.join_url_params(url=url, **kwargs)
         if self.uid:
             items: LDAny = self.fortigate.get_results(url)
@@ -114,7 +114,7 @@ class Connector:
         uid = h.quote(uid)
         if not uid:
             raise ValueError("uid is required.")
-        url = f"{self.url}/{uid}"
+        url = h.url_join(self.url, uid)
         response = self.fortigate.exist(url)
         return response.ok
 
@@ -131,7 +131,7 @@ class Connector:
         :rtype: Response
         """
         uid: str = self._get_uid(data)
-        url = f"{self.url}/{uid}".rstrip("/")
+        url = h.url_join(self.url, uid)
         return self.fortigate.put(url=url, data=data)
 
     # noinspection PyShadowingBuiltins
@@ -153,7 +153,7 @@ class Connector:
         items: LDAny = self.get(filter=filters)
         for data in items:
             uid = h.quote(data[self.uid])
-            url = f"{self.url}/{uid}"
+            url = h.url_join(self.url, uid)
             response = self.fortigate.delete(url=url)
             responses.append(response)
         return h.highest_response(responses)
@@ -168,7 +168,7 @@ class Connector:
         if not self.uid:
             return ""
         if self.uid not in data:
-            raise ValueError(f"{self.uid} value is required.")
+            raise ValueError(f"uid={self.uid!r} value is required in data.")
         uid = str(data[self.uid])
         uid = h.quote(uid)
         return uid
