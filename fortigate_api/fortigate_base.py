@@ -145,6 +145,7 @@ class FortiGateBase:
                 response: Response = session.get(
                     url=urljoin(self.url, "/api/v2/monitor/system/status"),
                     headers=self._bearer_token(),
+                    timeout=self.timeout,
                     verify=self.verify,
                 )
             except Exception as ex:
