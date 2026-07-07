@@ -46,7 +46,7 @@ class FortiGateBase:
 
         :param int port: TCP port. Default is `443` for scheme=`https`, `80` for scheme=`http`.
 
-        :param int timeout: Session timeout (minutes). Default is 15.
+        :param int timeout: Session timeout (seconds). Default is 15.
 
         :param bool verify: Transport Layer Security.
             `True` - A TLS certificate required,
@@ -145,6 +145,7 @@ class FortiGateBase:
                 response: Response = session.get(
                     url=urljoin(self.url, "/api/v2/monitor/system/status"),
                     headers=self._bearer_token(),
+                    timeout=self.timeout,
                     verify=self.verify,
                 )
             except Exception as ex:

@@ -42,7 +42,7 @@ class FortiGate(FortiGateBase):
 
         :param int port: TCP port. Default is `443` for scheme=`https`, `80` for scheme=`http`.
 
-        :param int timeout: Session timeout (minutes). Default is 15.
+        :param int timeout: Session timeout (seconds). Default is 15.
 
         :param bool verify: Transport Layer Security.
             `True` - A trusted TLS certificate is required.
