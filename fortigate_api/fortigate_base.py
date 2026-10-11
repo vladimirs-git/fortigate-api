@@ -153,7 +153,7 @@ class FortiGateBase:
             self._session = session
             return
 
-        # password: try the newer (FortiOS >= 7.6.3) authentication first
+        # password: try the newer authentication method first
         payload = {
             "username": self.username,
             "secretkey": self.password,

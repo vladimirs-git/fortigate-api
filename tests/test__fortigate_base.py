@@ -196,7 +196,7 @@ def test__get_session(api: FortiGate, session, expected):
     ("ccsrftoken", "token"),  # < v7
     ("ccsrftoken_443", "token"),  # >= v7
     ("ccsrftoken_443_3334d10", "token"),  # >= v7
-    ("ccsrf_token_443_3334d10", "token"),  # >= v7.6.3
+    ("ccsrf_token_443_3334d10", "token"),  # mandated in >= v7.6.3
     ("other-name", ValueError),
 ])
 def test__get_token_from_cookies(api: FortiGate, name, expected):
