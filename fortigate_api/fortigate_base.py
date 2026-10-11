@@ -160,7 +160,6 @@ class FortiGateBase:
             "password": self.password,
             "ack_post_disclaimer": True,
             "ack_pre_disclaimer": True,
-            "request_key": True,
         }
         try:
             response = session.post(
