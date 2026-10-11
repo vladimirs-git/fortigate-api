@@ -153,17 +153,41 @@ class FortiGateBase:
             self._session = session
             return
 
-        # password
+        # password: try the newer (FortiOS >= 7.6.3) authentication first
+        payload = {
+            "username": self.username,
+            "secretkey": self.password,
+            "password": self.password,
+            "ack_post_disclaimer": True,
+            "ack_pre_disclaimer": True,
+            "request_key": True,
+        }
         try:
             response = session.post(
-                url=urljoin(self.url, "/logincheck"),
-                data=urlencode([("username", self.username), ("secretkey", self.password)]),
+                url=urljoin(self.url, "/api/v2/authentication"),
+                data=json.dumps(payload),
                 timeout=self.timeout,
                 verify=self.verify,
             )
         except Exception as ex:
             raise self._hide_secret_ex(ex)
-        response.raise_for_status()
+
+        if response.status_code in [401, 404]:
+            # Older firmware: fall back to /logincheck
+            try:
+                response = session.post(
+                    url=urljoin(self.url, "/logincheck"),
+                    data=urlencode([("username", self.username), ("secretkey", self.password)]),
+                    timeout=self.timeout,
+                    verify=self.verify,
+                )
+            except Exception as ex:
+                raise self._hide_secret_ex(ex)
+            response.raise_for_status()
+        else:
+            response.raise_for_status()
+            if "LOGIN_SUCCESS" not in response.text:
+                raise ValueError("Invalid login credentials.")
         token = self._get_token_from_cookies(session)
         session.headers.update({"X-CSRFTOKEN": token})
         self._session = session
@@ -215,7 +239,7 @@ class FortiGateBase:
 
         :raises ValueError: If the ccsrftoken cookie is absent.
         """
-        cookie_prefix = "ccsrftoken"
+        cookie_prefix = ("ccsrftoken", "ccsrf_token")
         if cookies := [o for o in session.cookies if o and o.name.startswith(cookie_prefix)]:
             token = str(cookies[0].value)
             token = token.strip('"')
