@@ -59,7 +59,7 @@ def test__enter__(mocker: MockerFixture):
     assert session is None
 
     # __enter__
-    session_m = mocker.Mock()
+    session_m = mocker.Mock(status_code=200, text="LOGIN_SUCCESS")
     mocker.patch(target="requests.Session.post", return_value=session_m)
     mocker.patch(target="requests.Session.get", return_value=tst.crate_response(200))
     with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value="TOKEN"):
@@ -121,7 +121,7 @@ def test__login(token, expected, headers):
         if token:
             mock.get("https://host:443/api/v2/monitor/system/status")
         else:
-            mock.post("https://host:443/logincheck")
+            mock.post(AUTH_URL, text="LOGIN_SUCCESS")
 
         with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value=expected):
             api.login()
@@ -129,6 +129,47 @@ def test__login(token, expected, headers):
             store: OrderedDict = getattr(api._session.headers, "_store")
             actual = store.get("x-csrftoken")
             assert actual == headers
+
+
+AUTH_URL = "https://host:443/api/v2/authentication"
+LOGINCHECK_URL = "https://host:443/logincheck"
+
+
+@pytest.mark.parametrize("status_code", [401, 404])
+def test__login__fallback(status_code):
+    """FortiGateBase.login() falls back to /logincheck on older firmware."""
+    api = FortiGate(host="host", username="user", password="pass")
+    with requests_mock.Mocker() as mock:
+        auth = mock.post(AUTH_URL, status_code=status_code)
+        logincheck = mock.post(LOGINCHECK_URL, text="1")
+        with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value="TOKEN"):
+            api.login()
+    assert auth.called_once
+    assert logincheck.called_once
+    assert isinstance(api._session, Session)
+
+
+def test__login__api_auth():
+    """FortiGateBase.login() uses /api/v2/authentication when available."""
+    api = FortiGate(host="host", username="user", password="pass")
+    with requests_mock.Mocker() as mock:
+        auth = mock.post(AUTH_URL, text="LOGIN_SUCCESS")
+        logincheck = mock.post(LOGINCHECK_URL, text="1")
+        with patch("fortigate_api.FortiGate._get_token_from_cookies", return_value="TOKEN"):
+            api.login()
+    assert auth.called_once
+    assert logincheck.called is False
+    assert isinstance(api._session, Session)
+
+
+def test__login__api_auth_failed():
+    """FortiGateBase.login() raises if LOGIN_SUCCESS is absent."""
+    api = FortiGate(host="host", username="user", password="pass")
+    with requests_mock.Mocker() as mock:
+        mock.post(AUTH_URL, text="LOGIN_FAILED")
+        with pytest.raises(ValueError):
+            api.login()
+    assert api._session is None
 
 
 # =========================== helpers ============================
@@ -155,6 +196,7 @@ def test__get_session(api: FortiGate, session, expected):
     ("ccsrftoken", "token"),  # < v7
     ("ccsrftoken_443", "token"),  # >= v7
     ("ccsrftoken_443_3334d10", "token"),  # >= v7
+    ("ccsrf_token_443_3334d10", "token"),  # mandated in >= v7.6.3
     ("other-name", ValueError),
 ])
 def test__get_token_from_cookies(api: FortiGate, name, expected):
